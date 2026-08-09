@@ -1,0 +1,2335 @@
+{
+  "operations": [
+    {
+      "id": "iterable.operation.operation",
+      "kind": "composite",
+      "summary": "* /*",
+      "description": "Legacy iterable connector only implements lists/campaigns/templates reads",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "medium",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "* /*"
+        ]
+      }
+    },
+    {
+      "id": "iterable.post.api-auth-jwts-invalidate",
+      "kind": "rest_write",
+      "summary": "POST /api/auth/jwts/invalidate",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/auth/jwts/invalidate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.get.api-campaigns",
+      "kind": "rest_read",
+      "summary": "GET /api/campaigns",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/campaigns",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.post.api-campaigns-abort",
+      "kind": "rest_write",
+      "summary": "POST /api/campaigns/abort",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/campaigns/abort",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.post.api-campaigns-activatetriggered",
+      "kind": "rest_write",
+      "summary": "POST /api/campaigns/activateTriggered",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/campaigns/activateTriggered",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.post.api-campaigns-archive",
+      "kind": "rest_write",
+      "summary": "POST /api/campaigns/archive",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/campaigns/archive",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.post.api-campaigns-cancel",
+      "kind": "rest_write",
+      "summary": "POST /api/campaigns/cancel",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/campaigns/cancel",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.post.api-campaigns-create",
+      "kind": "rest_write",
+      "summary": "POST /api/campaigns/create",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/campaigns/create",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.post.api-campaigns-deactivatetriggered",
+      "kind": "rest_write",
+      "summary": "POST /api/campaigns/deactivateTriggered",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/campaigns/deactivateTriggered",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.get.api-campaigns-metrics",
+      "kind": "rest_read",
+      "summary": "GET /api/campaigns/metrics",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/campaigns/metrics",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.get.api-campaigns-recurring-id-childcampaigns",
+      "kind": "rest_read",
+      "summary": "GET /api/campaigns/recurring/{id}/childCampaigns",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/campaigns/recurring/{id}/childCampaigns",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.post.api-campaigns-trigger",
+      "kind": "rest_write",
+      "summary": "POST /api/campaigns/trigger",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/campaigns/trigger",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.post.api-campaigns-campaignid-schedule",
+      "kind": "rest_write",
+      "summary": "POST /api/campaigns/{campaignId}/schedule",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/campaigns/{campaignId}/schedule",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.post.api-campaigns-campaignid-send",
+      "kind": "rest_write",
+      "summary": "POST /api/campaigns/{campaignId}/send",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/campaigns/{campaignId}/send",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.get.api-campaigns-id",
+      "kind": "rest_read",
+      "summary": "GET /api/campaigns/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/campaigns/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.get.api-catalogs",
+      "kind": "rest_read",
+      "summary": "GET /api/catalogs",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/catalogs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.post.api-catalogs-catalogname",
+      "kind": "rest_write",
+      "summary": "POST /api/catalogs/{catalogName}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/catalogs/{catalogName}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.delete.api-catalogs-catalogname",
+      "kind": "rest_write",
+      "summary": "DELETE /api/catalogs/{catalogName}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/catalogs/{catalogName}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.get.api-catalogs-catalogname-fieldmappings",
+      "kind": "rest_read",
+      "summary": "GET /api/catalogs/{catalogName}/fieldMappings",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/catalogs/{catalogName}/fieldMappings",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.put.api-catalogs-catalogname-fieldmappings",
+      "kind": "rest_write",
+      "summary": "PUT /api/catalogs/{catalogName}/fieldMappings",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/catalogs/{catalogName}/fieldMappings",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.get.api-catalogs-catalogname-items",
+      "kind": "rest_read",
+      "summary": "GET /api/catalogs/{catalogName}/items",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/catalogs/{catalogName}/items",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.post.api-catalogs-catalogname-items",
+      "kind": "rest_write",
+      "summary": "POST /api/catalogs/{catalogName}/items",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/catalogs/{catalogName}/items",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.delete.api-catalogs-catalogname-items",
+      "kind": "rest_write",
+      "summary": "DELETE /api/catalogs/{catalogName}/items",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/catalogs/{catalogName}/items",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.get.api-catalogs-catalogname-items-itemid",
+      "kind": "rest_read",
+      "summary": "GET /api/catalogs/{catalogName}/items/{itemId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/catalogs/{catalogName}/items/{itemId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.put.api-catalogs-catalogname-items-itemid",
+      "kind": "rest_write",
+      "summary": "PUT /api/catalogs/{catalogName}/items/{itemId}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/catalogs/{catalogName}/items/{itemId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.patch.api-catalogs-catalogname-items-itemid",
+      "kind": "rest_write",
+      "summary": "PATCH /api/catalogs/{catalogName}/items/{itemId}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/catalogs/{catalogName}/items/{itemId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.delete.api-catalogs-catalogname-items-itemid",
+      "kind": "rest_write",
+      "summary": "DELETE /api/catalogs/{catalogName}/items/{itemId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/catalogs/{catalogName}/items/{itemId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.get.api-channels",
+      "kind": "rest_read",
+      "summary": "GET /api/channels",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/channels",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.post.api-commerce-trackpurchase",
+      "kind": "rest_write",
+      "summary": "POST /api/commerce/trackPurchase",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/commerce/trackPurchase",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.post.api-commerce-updatecart",
+      "kind": "rest_write",
+      "summary": "POST /api/commerce/updateCart",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/commerce/updateCart",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.post.api-email-cancel",
+      "kind": "rest_write",
+      "summary": "POST /api/email/cancel",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/email/cancel",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.post.api-email-target",
+      "kind": "rest_write",
+      "summary": "POST /api/email/target",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/email/target",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.get.api-email-viewinbrowser",
+      "kind": "rest_read",
+      "summary": "GET /api/email/viewInBrowser",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/email/viewInBrowser",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.post.api-embedded-messaging-events-click",
+      "kind": "rest_write",
+      "summary": "POST /api/embedded-messaging/events/click",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/embedded-messaging/events/click",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.post.api-embedded-messaging-events-received",
+      "kind": "rest_write",
+      "summary": "POST /api/embedded-messaging/events/received",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/embedded-messaging/events/received",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.post.api-embedded-messaging-events-session",
+      "kind": "rest_write",
+      "summary": "POST /api/embedded-messaging/events/session",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/embedded-messaging/events/session",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.get.api-embedded-messaging-messages",
+      "kind": "rest_read",
+      "summary": "GET /api/embedded-messaging/messages",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/embedded-messaging/messages",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.get.api-events-byuserid-userid",
+      "kind": "rest_read",
+      "summary": "GET /api/events/byUserId/{userId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/events/byUserId/{userId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.post.api-events-inappconsume",
+      "kind": "rest_write",
+      "summary": "POST /api/events/inAppConsume",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/events/inAppConsume",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.post.api-events-track",
+      "kind": "rest_write",
+      "summary": "POST /api/events/track",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/events/track",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.post.api-events-trackbulk",
+      "kind": "rest_write",
+      "summary": "POST /api/events/trackBulk",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/events/trackBulk",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.post.api-events-trackinappclick",
+      "kind": "rest_write",
+      "summary": "POST /api/events/trackInAppClick",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/events/trackInAppClick",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.post.api-events-trackinappclose",
+      "kind": "rest_write",
+      "summary": "POST /api/events/trackInAppClose",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/events/trackInAppClose",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.post.api-events-trackinappdelivery",
+      "kind": "rest_write",
+      "summary": "POST /api/events/trackInAppDelivery",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/events/trackInAppDelivery",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.post.api-events-trackinappopen",
+      "kind": "rest_write",
+      "summary": "POST /api/events/trackInAppOpen",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/events/trackInAppOpen",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.post.api-events-trackpushopen",
+      "kind": "rest_write",
+      "summary": "POST /api/events/trackPushOpen",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/events/trackPushOpen",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.post.api-events-trackwebpushclick",
+      "kind": "rest_write",
+      "summary": "POST /api/events/trackWebPushClick",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/events/trackWebPushClick",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.get.api-events-email",
+      "kind": "rest_read",
+      "summary": "GET /api/events/{email}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/events/{email}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.get.api-experiments",
+      "kind": "rest_read",
+      "summary": "GET /api/experiments",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/experiments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.get.api-experiments-metrics",
+      "kind": "rest_read",
+      "summary": "GET /api/experiments/metrics",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/experiments/metrics",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.get.api-experiments-experimentid",
+      "kind": "rest_read",
+      "summary": "GET /api/experiments/{experimentId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/experiments/{experimentId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.get.api-experiments-experimentid-variants",
+      "kind": "rest_read",
+      "summary": "GET /api/experiments/{experimentId}/variants",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/experiments/{experimentId}/variants",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.get.api-export-data-csv",
+      "kind": "rest_read",
+      "summary": "GET /api/export/data.csv",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/export/data.csv",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.get.api-export-data-json",
+      "kind": "rest_read",
+      "summary": "GET /api/export/data.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/export/data.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.get.api-export-jobs",
+      "kind": "rest_read",
+      "summary": "GET /api/export/jobs",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/export/jobs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.post.api-export-start",
+      "kind": "rest_write",
+      "summary": "POST /api/export/start",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/export/start",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.get.api-export-userevents",
+      "kind": "rest_read",
+      "summary": "GET /api/export/userEvents",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/export/userEvents",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.delete.api-export-jobid",
+      "kind": "rest_write",
+      "summary": "DELETE /api/export/{jobId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/export/{jobId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.get.api-export-jobid-files",
+      "kind": "rest_read",
+      "summary": "GET /api/export/{jobId}/files",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/export/{jobId}/files",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.post.api-inapp-cancel",
+      "kind": "rest_write",
+      "summary": "POST /api/inApp/cancel",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/inApp/cancel",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.get.api-inapp-getmessages",
+      "kind": "rest_read",
+      "summary": "GET /api/inApp/getMessages",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/inApp/getMessages",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.get.api-inapp-getprioritymessage",
+      "kind": "rest_read",
+      "summary": "GET /api/inApp/getPriorityMessage",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/inApp/getPriorityMessage",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.post.api-inapp-target",
+      "kind": "rest_write",
+      "summary": "POST /api/inApp/target",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/inApp/target",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.get.api-inapp-web-getmessages",
+      "kind": "rest_read",
+      "summary": "GET /api/inApp/web/getMessages",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/inApp/web/getMessages",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.get.api-journeys",
+      "kind": "rest_read",
+      "summary": "GET /api/journeys",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/journeys",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.get.api-lists",
+      "kind": "rest_read",
+      "summary": "GET /api/lists",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/lists",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.post.api-lists",
+      "kind": "rest_write",
+      "summary": "POST /api/lists",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/lists",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.get.api-lists-getusers",
+      "kind": "rest_read",
+      "summary": "GET /api/lists/getUsers",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/lists/getUsers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.get.api-lists-previewusers",
+      "kind": "rest_read",
+      "summary": "GET /api/lists/previewUsers",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/lists/previewUsers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.post.api-lists-subscribe",
+      "kind": "rest_write",
+      "summary": "POST /api/lists/subscribe",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/lists/subscribe",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.post.api-lists-unsubscribe",
+      "kind": "rest_write",
+      "summary": "POST /api/lists/unsubscribe",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/lists/unsubscribe",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.delete.api-lists-listid",
+      "kind": "rest_write",
+      "summary": "DELETE /api/lists/{listId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/lists/{listId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.get.api-lists-listid-size",
+      "kind": "rest_read",
+      "summary": "GET /api/lists/{listId}/size",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/lists/{listId}/size",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.get.api-messagetypes",
+      "kind": "rest_read",
+      "summary": "GET /api/messageTypes",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/messageTypes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.get.api-metadata",
+      "kind": "rest_read",
+      "summary": "GET /api/metadata",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/metadata",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.get.api-metadata-table",
+      "kind": "rest_read",
+      "summary": "GET /api/metadata/{table}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/metadata/{table}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.delete.api-metadata-table",
+      "kind": "rest_write",
+      "summary": "DELETE /api/metadata/{table}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/metadata/{table}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.get.api-metadata-table-key",
+      "kind": "rest_read",
+      "summary": "GET /api/metadata/{table}/{key}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/metadata/{table}/{key}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.put.api-metadata-table-key",
+      "kind": "rest_write",
+      "summary": "PUT /api/metadata/{table}/{key}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/metadata/{table}/{key}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.delete.api-metadata-table-key",
+      "kind": "rest_write",
+      "summary": "DELETE /api/metadata/{table}/{key}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/metadata/{table}/{key}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.post.api-push-cancel",
+      "kind": "rest_write",
+      "summary": "POST /api/push/cancel",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/push/cancel",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.post.api-push-target",
+      "kind": "rest_write",
+      "summary": "POST /api/push/target",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/push/target",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.post.api-sms-cancel",
+      "kind": "rest_write",
+      "summary": "POST /api/sms/cancel",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/sms/cancel",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.post.api-sms-target",
+      "kind": "rest_write",
+      "summary": "POST /api/sms/target",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/sms/target",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.get.api-snippets",
+      "kind": "rest_read",
+      "summary": "GET /api/snippets",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/snippets",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.post.api-snippets",
+      "kind": "rest_write",
+      "summary": "POST /api/snippets",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/snippets",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.get.api-snippets-identifier",
+      "kind": "rest_read",
+      "summary": "GET /api/snippets/{identifier}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/snippets/{identifier}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.put.api-snippets-identifier",
+      "kind": "rest_write",
+      "summary": "PUT /api/snippets/{identifier}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/snippets/{identifier}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.delete.api-snippets-identifier",
+      "kind": "rest_write",
+      "summary": "DELETE /api/snippets/{identifier}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/snippets/{identifier}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.post.api-subscriptions-subscribetodoubleoptin",
+      "kind": "rest_write",
+      "summary": "POST /api/subscriptions/subscribeToDoubleOptIn",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/subscriptions/subscribeToDoubleOptIn",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.put.api-subscriptions-subscriptiongroup-subscriptiongroupid",
+      "kind": "rest_write",
+      "summary": "PUT /api/subscriptions/{subscriptionGroup}/{subscriptionGroupId}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/subscriptions/{subscriptionGroup}/{subscriptionGroupId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.patch.api-subscriptions-subscriptiongroup-subscriptiongroupid-byuserid-userid",
+      "kind": "rest_write",
+      "summary": "PATCH /api/subscriptions/{subscriptionGroup}/{subscriptionGroupId}/byUserId/{userId}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/subscriptions/{subscriptionGroup}/{subscriptionGroupId}/byUserId/{userId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.delete.api-subscriptions-subscriptiongroup-subscriptiongroupid-byuserid-userid",
+      "kind": "rest_write",
+      "summary": "DELETE /api/subscriptions/{subscriptionGroup}/{subscriptionGroupId}/byUserId/{userId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/subscriptions/{subscriptionGroup}/{subscriptionGroupId}/byUserId/{userId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.patch.api-subscriptions-subscriptiongroup-subscriptiongroupid-user-useremail",
+      "kind": "rest_write",
+      "summary": "PATCH /api/subscriptions/{subscriptionGroup}/{subscriptionGroupId}/user/{userEmail}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/subscriptions/{subscriptionGroup}/{subscriptionGroupId}/user/{userEmail}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.delete.api-subscriptions-subscriptiongroup-subscriptiongroupid-user-useremail",
+      "kind": "rest_write",
+      "summary": "DELETE /api/subscriptions/{subscriptionGroup}/{subscriptionGroupId}/user/{userEmail}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/subscriptions/{subscriptionGroup}/{subscriptionGroupId}/user/{userEmail}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.get.api-templates",
+      "kind": "rest_read",
+      "summary": "GET /api/templates",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/templates",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.post.api-templates-bulkdelete",
+      "kind": "rest_write",
+      "summary": "POST /api/templates/bulkDelete",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/templates/bulkDelete",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.get.api-templates-email-get",
+      "kind": "rest_read",
+      "summary": "GET /api/templates/email/get",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/templates/email/get",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.post.api-templates-email-preview",
+      "kind": "rest_write",
+      "summary": "POST /api/templates/email/preview",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/templates/email/preview",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.post.api-templates-email-proof",
+      "kind": "rest_write",
+      "summary": "POST /api/templates/email/proof",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/templates/email/proof",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.post.api-templates-email-update",
+      "kind": "rest_write",
+      "summary": "POST /api/templates/email/update",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/templates/email/update",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.post.api-templates-email-upsert",
+      "kind": "rest_write",
+      "summary": "POST /api/templates/email/upsert",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/templates/email/upsert",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.get.api-templates-embedded-get",
+      "kind": "rest_read",
+      "summary": "GET /api/templates/embedded/get",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/templates/embedded/get",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.post.api-templates-embedded-update",
+      "kind": "rest_write",
+      "summary": "POST /api/templates/embedded/update",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/templates/embedded/update",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.post.api-templates-embedded-upsert",
+      "kind": "rest_write",
+      "summary": "POST /api/templates/embedded/upsert",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/templates/embedded/upsert",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.get.api-templates-getbyclienttemplateid",
+      "kind": "rest_read",
+      "summary": "GET /api/templates/getByClientTemplateId",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/templates/getByClientTemplateId",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.get.api-templates-inapp-get",
+      "kind": "rest_read",
+      "summary": "GET /api/templates/inapp/get",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/templates/inapp/get",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.post.api-templates-inapp-preview",
+      "kind": "rest_write",
+      "summary": "POST /api/templates/inapp/preview",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/templates/inapp/preview",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.post.api-templates-inapp-proof",
+      "kind": "rest_write",
+      "summary": "POST /api/templates/inapp/proof",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/templates/inapp/proof",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.post.api-templates-inapp-update",
+      "kind": "rest_write",
+      "summary": "POST /api/templates/inapp/update",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/templates/inapp/update",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.post.api-templates-inapp-upsert",
+      "kind": "rest_write",
+      "summary": "POST /api/templates/inapp/upsert",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/templates/inapp/upsert",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.get.api-templates-push-get",
+      "kind": "rest_read",
+      "summary": "GET /api/templates/push/get",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/templates/push/get",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.post.api-templates-push-proof",
+      "kind": "rest_write",
+      "summary": "POST /api/templates/push/proof",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/templates/push/proof",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.post.api-templates-push-update",
+      "kind": "rest_write",
+      "summary": "POST /api/templates/push/update",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/templates/push/update",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.post.api-templates-push-upsert",
+      "kind": "rest_write",
+      "summary": "POST /api/templates/push/upsert",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/templates/push/upsert",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.get.api-templates-sms-get",
+      "kind": "rest_read",
+      "summary": "GET /api/templates/sms/get",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/templates/sms/get",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.post.api-templates-sms-proof",
+      "kind": "rest_write",
+      "summary": "POST /api/templates/sms/proof",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/templates/sms/proof",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.post.api-templates-sms-update",
+      "kind": "rest_write",
+      "summary": "POST /api/templates/sms/update",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/templates/sms/update",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.post.api-templates-sms-upsert",
+      "kind": "rest_write",
+      "summary": "POST /api/templates/sms/upsert",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/templates/sms/upsert",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.post.api-users-bulkupdate",
+      "kind": "rest_write",
+      "summary": "POST /api/users/bulkUpdate",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/users/bulkUpdate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.post.api-users-bulkupdatesubscriptions",
+      "kind": "rest_write",
+      "summary": "POST /api/users/bulkUpdateSubscriptions",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/users/bulkUpdateSubscriptions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.get.api-users-byuserid",
+      "kind": "rest_read",
+      "summary": "GET /api/users/byUserId",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/users/byUserId",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.get.api-users-byuserid-userid",
+      "kind": "rest_read",
+      "summary": "GET /api/users/byUserId/{userId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/users/byUserId/{userId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.delete.api-users-byuserid-userid",
+      "kind": "rest_write",
+      "summary": "DELETE /api/users/byUserId/{userId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/users/byUserId/{userId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.post.api-users-disabledevice",
+      "kind": "rest_write",
+      "summary": "POST /api/users/disableDevice",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/users/disableDevice",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.post.api-users-forget",
+      "kind": "rest_write",
+      "summary": "POST /api/users/forget",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/users/forget",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.get.api-users-forgotten",
+      "kind": "rest_read",
+      "summary": "GET /api/users/forgotten",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/users/forgotten",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.get.api-users-forgottenuserids",
+      "kind": "rest_read",
+      "summary": "GET /api/users/forgottenUserIds",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/users/forgottenUserIds",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.get.api-users-getbyemail",
+      "kind": "rest_read",
+      "summary": "GET /api/users/getByEmail",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/users/getByEmail",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.get.api-users-getfields",
+      "kind": "rest_read",
+      "summary": "GET /api/users/getFields",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/users/getFields",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.get.api-users-getsentmessages",
+      "kind": "rest_read",
+      "summary": "GET /api/users/getSentMessages",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/users/getSentMessages",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.post.api-users-merge",
+      "kind": "rest_write",
+      "summary": "POST /api/users/merge",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/users/merge",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.post.api-users-registerbrowsertoken",
+      "kind": "rest_write",
+      "summary": "POST /api/users/registerBrowserToken",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/users/registerBrowserToken",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.post.api-users-registerdevicetoken",
+      "kind": "rest_write",
+      "summary": "POST /api/users/registerDeviceToken",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/users/registerDeviceToken",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.post.api-users-unforget",
+      "kind": "rest_write",
+      "summary": "POST /api/users/unforget",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/users/unforget",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.post.api-users-update",
+      "kind": "rest_write",
+      "summary": "POST /api/users/update",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/users/update",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.post.api-users-updateemail",
+      "kind": "rest_write",
+      "summary": "POST /api/users/updateEmail",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/users/updateEmail",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.post.api-users-updatesubscriptions",
+      "kind": "rest_write",
+      "summary": "POST /api/users/updateSubscriptions",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/users/updateSubscriptions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.get.api-users-email",
+      "kind": "rest_read",
+      "summary": "GET /api/users/{email}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/users/{email}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.delete.api-users-email",
+      "kind": "rest_write",
+      "summary": "DELETE /api/users/{email}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/users/{email}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.post.api-verify-sms-begin",
+      "kind": "rest_write",
+      "summary": "POST /api/verify/sms/begin",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/verify/sms/begin",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.post.api-verify-sms-check",
+      "kind": "rest_write",
+      "summary": "POST /api/verify/sms/check",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/verify/sms/check",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.post.api-webpush-cancel",
+      "kind": "rest_write",
+      "summary": "POST /api/webPush/cancel",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/webPush/cancel",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.post.api-webpush-target",
+      "kind": "rest_write",
+      "summary": "POST /api/webPush/target",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/webPush/target",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.get.api-webhooks",
+      "kind": "rest_read",
+      "summary": "GET /api/webhooks",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/webhooks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.post.api-webhooks",
+      "kind": "rest_write",
+      "summary": "POST /api/webhooks",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/webhooks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.post.api-whatsapp-cancel",
+      "kind": "rest_write",
+      "summary": "POST /api/whatsApp/cancel",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/whatsApp/cancel",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.post.api-whatsapp-target",
+      "kind": "rest_write",
+      "summary": "POST /api/whatsApp/target",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/whatsApp/target",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "iterable.post.api-workflows-triggerworkflow",
+      "kind": "rest_write",
+      "summary": "POST /api/workflows/triggerWorkflow",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.iterable.com/api-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/workflows/triggerWorkflow",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

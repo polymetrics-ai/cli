@@ -1,12 +1,80 @@
 {
-  "api": "SearXNG JSON search API (self-hosted instance; https://docs.searxng.org)",
+  "api": "SearXNG JSON search API (self-hosted instance; https://docs.searxng.org); provider artifact version: 2026.8.4+c63835bd2",
   "docs": "https://docs.searxng.org",
-  "reviewed_at": "2026-07-02",
-  "scope": "wave0 golden migration: the 2 legacy-parity read streams only (search, reddit); SearXNG has no mutation API (read-only metasearch), so there are no write endpoints in or out of scope",
+  "reviewed_at": "2026-08-09",
+  "operation_ledger_version": 2,
+  "scope": "Exact existing-surface evidence fallback: the preserved source inventory contains 4 official-survey operation entries, exactly matching the immutable count. Shared executable bindings for the same provider method/path are merged into one normalized endpoint. The cited official html_reference artifact is retained as the v2 provenance root; no operation was inferred from a documentation crawl. Prior source-surface scope: wave0 golden migration: the 2 legacy-parity read streams only (search, reddit); SearXNG has no mutation API (read-only metasearch), so there are no write endpoints in or out of scope",
+  "artifacts": [
+    {
+      "id": "searxng-artifact-2026-08-09",
+      "url": "https://docs.searxng.org/dev/search_api.html",
+      "kind": "html_reference",
+      "version": "2026.8.4+c63835bd2",
+      "retrieved_at": "2026-08-09",
+      "sha256": "9a13527530cfde389d57bed147c5f41433f5ab359605837ba6ee3cfd24bc5139"
+    }
+  ],
   "endpoints": [
-    { "method": "GET", "path": "/search", "covered_by": { "stream": "search" } },
-    { "method": "GET", "path": "/search", "covered_by": { "stream": "reddit" } },
-    { "method": "GET", "path": "/config", "excluded": { "category": "non_data_endpoint", "reason": "instance configuration/capabilities introspection, not a syncable object stream" } },
-    { "method": "GET", "path": "/healthz", "excluded": { "category": "non_data_endpoint", "reason": "instance health probe, not a syncable object stream" } }
+    {
+      "method": "GET",
+      "path": "/config",
+      "provenance": {
+        "artifact": "searxng-artifact-2026-08-09",
+        "source_url": "https://docs.searxng.org/dev/search_api.html",
+        "source_kind": "html_reference",
+        "version": "2026.8.4+c63835bd2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "9a13527530cfde389d57bed147c5f41433f5ab359605837ba6ee3cfd24bc5139",
+        "coordinate": "existing-complete-surface[GET /config]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "instance configuration/capabilities introspection, not a syncable object stream",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/healthz",
+      "provenance": {
+        "artifact": "searxng-artifact-2026-08-09",
+        "source_url": "https://docs.searxng.org/dev/search_api.html",
+        "source_kind": "html_reference",
+        "version": "2026.8.4+c63835bd2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "9a13527530cfde389d57bed147c5f41433f5ab359605837ba6ee3cfd24bc5139",
+        "coordinate": "existing-complete-surface[GET /healthz]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "instance health probe, not a syncable object stream",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/search",
+      "provenance": {
+        "artifact": "searxng-artifact-2026-08-09",
+        "source_url": "https://docs.searxng.org/dev/search_api.html",
+        "source_kind": "html_reference",
+        "version": "2026.8.4+c63835bd2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "9a13527530cfde389d57bed147c5f41433f5ab359605837ba6ee3cfd24bc5139",
+        "coordinate": "existing-complete-surface[GET /search]"
+      },
+      "covered_by": {
+        "streams": [
+          "reddit",
+          "search"
+        ]
+      }
+    }
   ]
 }

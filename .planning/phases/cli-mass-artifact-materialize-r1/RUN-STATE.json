@@ -1,0 +1,20 @@
+{
+  "authority": "CAPTAIN-ORDER-unblock-to-mergeable-20260809.md",
+  "counts": {
+    "already_complete": 5,
+    "foundation_pending": 180,
+    "genuinely_blocked": 0,
+    "materialized_total": 194,
+    "newly_materialized": 178,
+    "reachable": 21,
+    "recovered_pilot": 4,
+    "recovered_seven": 7,
+    "remaining": 232,
+    "retry_pending": 232
+  },
+  "execution_mode": "inline_manual_gsd_fallback_single_worker",
+  "phase": "cli-mass-artifact-materialize-r1",
+  "reconstruction_report": "LEDGER-RECONSTRUCTION-20260809.json",
+  "state": "materializing",
+  "target_total": 426
+}

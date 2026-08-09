@@ -1,67 +1,3969 @@
 {
-  "api": "Twelve Data API (https://api.twelvedata.com)",
+  "api": "Twelve Data API (https://api.twelvedata.com); provider artifact version: OpenAPI 3.1.0; Twelve Data API info.version 0.0.1",
   "docs": "https://twelvedata.com/docs",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 4 legacy-parity read-only streams (time_series, quote, stocks, forex_pairs) only, matching internal/connectors/twelve-data's exact endpoint set; the full Twelve Data surface (technical indicators, fundamentals, ETFs, indices, cryptocurrencies, websocket feeds) is out of scope until Pass B",
+  "reviewed_at": "2026-08-09",
+  "operation_ledger_version": 2,
+  "scope": "Provider-artifact inventory generated from the cited openapi artifact (187 documented operations across 1 provider-owned source document(s)). Every documented operation is represented; existing source-surface bindings absent from the artifact are retained and flagged with present-in-surface-absent-from-artifact.",
+  "artifacts": [
+    {
+      "id": "twelve-data-artifact-2026-08-09",
+      "url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "kind": "openapi",
+      "version": "3.1.0",
+      "retrieved_at": "2026-08-09",
+      "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e"
+    }
+  ],
   "endpoints": [
     {
       "method": "GET",
-      "path": "/time_series",
-      "covered_by": {
-        "stream": "time_series"
+      "path": "/ad",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/ad\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
-      "path": "/quote",
-      "covered_by": {
-        "stream": "quote"
+      "path": "/add",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/add\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
-      "path": "/stocks",
-      "covered_by": {
-        "stream": "stocks"
+      "path": "/adosc",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/adosc\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/adx",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/adx\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/adxr",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/adxr\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/analyst_ratings/light",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/analyst_ratings/light\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/analyst_ratings/us_equities",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/analyst_ratings/us_equities\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api_usage",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/api_usage\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/apo",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/apo\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/aroon",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/aroon\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/aroonosc",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/aroonosc\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/atr",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/atr\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/avg",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/avg\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/avgprice",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/avgprice\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/balance_sheet",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/balance_sheet\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/balance_sheet/consolidated",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/balance_sheet/consolidated\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/batch",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/batch\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bbands",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/bbands\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/beta",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/beta\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bonds",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/bonds\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bop",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/bop\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/cash_flow",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/cash_flow\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/cash_flow/consolidated",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/cash_flow/consolidated\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/cci",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/cci\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ceil",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/ceil\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/cmo",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/cmo\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/commodities",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/commodities\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/coppock",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/coppock\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/correl",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/correl\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/countries",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/countries\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/cross_listings",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/cross_listings\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/crsi",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/crsi\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/cryptocurrencies",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/cryptocurrencies\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Not modeled by legacy",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/cryptocurrency_exchanges",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/cryptocurrency_exchanges\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/currency_conversion",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/currency_conversion\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/dema",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/dema\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/direct_holders",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/direct_holders\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/div",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/div\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/dividends",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/dividends\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/dividends_calendar",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/dividends_calendar\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/dpo",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/dpo\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/dx",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/dx\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/earliest_timestamp",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/earliest_timestamp\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/earnings",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/earnings\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/earnings_calendar",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/earnings_calendar\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/earnings_estimate",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/earnings_estimate\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/edgar_filings/archive",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/edgar_filings/archive\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ema",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/ema\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/eod",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/eod\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/eps_revisions",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/eps_revisions\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/eps_trend",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/eps_trend\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/etf",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "OpenAPI 3.1.0; Twelve Data API info.version 0.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "existing-surface[GET /etf]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Not modeled by legacy",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/etfs",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/etfs\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/etfs/family",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/etfs/family\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/etfs/list",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/etfs/list\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/etfs/type",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/etfs/type\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/etfs/world",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/etfs/world\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/etfs/world/composition",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/etfs/world/composition\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/etfs/world/performance",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/etfs/world/performance\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/etfs/world/risk",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/etfs/world/risk\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/etfs/world/summary",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/etfs/world/summary\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/exchange_rate",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/exchange_rate\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/exchange_schedule",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/exchange_schedule\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/exchanges",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/exchanges\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/exp",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/exp\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/floor",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/floor\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/forex_pairs",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/forex_pairs\"].get"
+      },
       "covered_by": {
         "stream": "forex_pairs"
       }
     },
     {
       "method": "GET",
-      "path": "/cryptocurrencies",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Not modeled by legacy"
+      "path": "/fund_holders",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/fund_holders\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/funds",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/funds\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/growth_estimates",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/growth_estimates\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/heikinashicandles",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/heikinashicandles\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/hlc3",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/hlc3\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ht_dcperiod",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/ht_dcperiod\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ht_dcphase",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/ht_dcphase\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ht_phasor",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/ht_phasor\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ht_sine",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/ht_sine\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ht_trendline",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/ht_trendline\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ht_trendmode",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/ht_trendmode\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ichimoku",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/ichimoku\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/income_statement",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/income_statement\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/income_statement/consolidated",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/income_statement/consolidated\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/indices",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Not modeled by legacy"
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "OpenAPI 3.1.0; Twelve Data API info.version 0.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "existing-surface[GET /indices]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Not modeled by legacy",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
-      "path": "/etf",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Not modeled by legacy"
+      "path": "/insider_transactions",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/insider_transactions\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/institutional_holders",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/institutional_holders\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/instrument_type",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/instrument_type\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/intervals",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/intervals\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ipo_calendar",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/ipo_calendar\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/kama",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/kama\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/keltner",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/keltner\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/key_executives",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/key_executives\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/kst",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/kst\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/last_change/{endpoint}",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/last_change/{endpoint}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/linearreg",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/linearreg\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/linearregangle",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/linearregangle\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/linearregintercept",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/linearregintercept\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/linearregslope",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/linearregslope\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ln",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/ln\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/log10",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/log10\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/logo",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/logo\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ma",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/ma\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/macd",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/macd\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/macd_slope",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/macd_slope\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/macdext",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/macdext\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/mama",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/mama\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/market_cap",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/market_cap\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/market_movers/{market}",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/market_movers/{market}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/market_state",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/market_state\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/max",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/max\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/maxindex",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/maxindex\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/mcginley_dynamic",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/mcginley_dynamic\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/medprice",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/medprice\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/mfi",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/mfi\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/midpoint",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/midpoint\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/midprice",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/midprice\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/min",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/min\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/minindex",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/minindex\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/minmax",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/minmax\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/minmaxindex",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/minmaxindex\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/minus_di",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/minus_di\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/minus_dm",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/minus_dm\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/mom",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/mom\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/money_market_funds/list",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/money_market_funds/list\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/money_market_funds/world",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/money_market_funds/world\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/mult",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/mult\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/mutual_funds/family",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/mutual_funds/family\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/mutual_funds/list",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/mutual_funds/list\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/mutual_funds/type",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/mutual_funds/type\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/mutual_funds/world",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/mutual_funds/world\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/mutual_funds/world/composition",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/mutual_funds/world/composition\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/mutual_funds/world/performance",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/mutual_funds/world/performance\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/mutual_funds/world/purchase_info",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/mutual_funds/world/purchase_info\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/mutual_funds/world/ratings",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/mutual_funds/world/ratings\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/mutual_funds/world/risk",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/mutual_funds/world/risk\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/mutual_funds/world/summary",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/mutual_funds/world/summary\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/mutual_funds/world/sustainability",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/mutual_funds/world/sustainability\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/natr",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/natr\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/obv",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/obv\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/percent_b",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/percent_b\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pivot_points_hl",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/pivot_points_hl\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/plus_di",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/plus_di\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/plus_dm",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/plus_dm\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ppo",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/ppo\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/press_releases",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/press_releases\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/price",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/price\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/price_target",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/price_target\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/profile",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/profile\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/quote",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/quote\"].get"
+      },
+      "covered_by": {
+        "stream": "quote"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/recommendations",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/recommendations\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/revenue_estimate",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/revenue_estimate\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/roc",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/roc\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rocp",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/rocp\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rocr",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/rocr\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rocr100",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/rocr100\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/rsi",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Technical indicator endpoints not modeled by legacy"
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/rsi\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Technical indicator endpoints not modeled by legacy",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rvol",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/rvol\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sanctions/{source}",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/sanctions/{source}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sar",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/sar\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sarext",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/sarext\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sma",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/sma\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/splits",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/splits\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/splits_calendar",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/splits_calendar\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sqrt",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/sqrt\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/statistics",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/statistics\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/stddev",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/stddev\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/stoch",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/stoch\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/stochf",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/stochf\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/stochrsi",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/stochrsi\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/stocks",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/stocks\"].get"
+      },
+      "covered_by": {
+        "stream": "stocks"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sub",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/sub\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sum",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/sum\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/supertrend",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/supertrend\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/supertrend_heikinashicandles",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/supertrend_heikinashicandles\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/symbol_search",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/symbol_search\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/t3ma",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/t3ma\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tax_info",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/tax_info\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/technical_indicators",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/technical_indicators\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tema",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/tema\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/time_series",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/time_series\"].get"
+      },
+      "covered_by": {
+        "stream": "time_series"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/time_series/cross",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/time_series/cross\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/trange",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/trange\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/trima",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/trima\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tsf",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/tsf\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/typprice",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/typprice\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ultosc",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/ultosc\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/var",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/var\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/vwap",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/vwap\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/wclprice",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/wclprice\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/willr",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/willr\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/wma",
+      "provenance": {
+        "artifact": "twelve-data-artifact-2026-08-09",
+        "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "47b07a0e8e0e495e320ff3ff7bdae10518214efc48e0b0b8effb4d4c3110459e",
+        "coordinate": "paths[\"/wma\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     }
   ]

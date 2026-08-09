@@ -1,0 +1,806 @@
+{
+  "tagline": "Run Web Scrapper's declared streams and reverse-ETL actions.",
+  "usage": "pm web-scrapper \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "account list",
+        "api get scraping-job id",
+        "api get scraping-job id csv",
+        "api get scraping-job id data-quality",
+        "api get scraping-job id json",
+        "api get scraping-job id xlsx",
+        "api get scraping-job scrapingjobid",
+        "api get scraping-job scrapingjobid data-quality",
+        "api get scraping-job scrapingjobid extension",
+        "api get scraping-job scrapingjobid problematic-urls",
+        "api get sitemap id",
+        "api get sitemap id scheduler",
+        "api get sitemap sitemapid",
+        "api get sitemap sitemapid scheduler",
+        "api get sitemap sitemapid tags",
+        "jobs list",
+        "problematic urls list",
+        "scraping jobs list list",
+        "sitemaps list",
+        "sitemaps list list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "api delete scraping-job scrapingjobid",
+        "api delete sitemap sitemapid",
+        "api delete sitemap sitemapid remove-tag",
+        "api post scraping-job scrapingjobid continue",
+        "api post scraping-job scrapingjobid stop",
+        "api post sitemap id disable-scheduler",
+        "api post sitemap id enable-scheduler",
+        "api post sitemap sitemapid add-tag",
+        "api post sitemap sitemapid disable-scheduler",
+        "api post sitemap sitemapid enable-scheduler",
+        "api put sitemap sitemapid",
+        "api put sitemap sitemapid rename",
+        "create scraping job apply",
+        "create sitemap apply",
+        "delete scraping job apply",
+        "delete sitemap apply",
+        "update sitemap apply"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "account list",
+      "summary": "Run the account ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "account",
+      "source_url": "https://webscraper.io/openapi.yaml",
+      "examples": [
+        "pm web-scrapper account list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/account"
+        }
+      ]
+    },
+    {
+      "path": "api delete scraping-job scrapingjobid",
+      "summary": "Documented DELETE /scraping-job/{scrapingJobId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://webscraper.io/openapi.yaml",
+      "examples": [
+        "pm web-scrapper api delete scraping-job scrapingjobid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/scraping-job/{scrapingJobId}"
+        }
+      ],
+      "operation": "web-scrapper.delete.scraping-job-scrapingjobid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete sitemap sitemapid",
+      "summary": "Documented DELETE /sitemap/{sitemapId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://webscraper.io/openapi.yaml",
+      "examples": [
+        "pm web-scrapper api delete sitemap sitemapid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/sitemap/{sitemapId}"
+        }
+      ],
+      "operation": "web-scrapper.delete.sitemap-sitemapid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete sitemap sitemapid remove-tag",
+      "summary": "Documented DELETE /sitemap/{sitemapId}/remove-tag (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://webscraper.io/openapi.yaml",
+      "examples": [
+        "pm web-scrapper api delete sitemap sitemapid remove-tag --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/sitemap/{sitemapId}/remove-tag"
+        }
+      ],
+      "operation": "web-scrapper.delete.sitemap-sitemapid-remove-tag",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api get scraping-job id",
+      "summary": "Documented GET /scraping-job/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://webscraper.io/openapi.yaml",
+      "examples": [
+        "pm web-scrapper api get scraping-job id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/scraping-job/{id}"
+        }
+      ],
+      "operation": "web-scrapper.get.scraping-job-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get scraping-job id csv",
+      "summary": "Documented GET /scraping-job/{id}/csv (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://webscraper.io/openapi.yaml",
+      "examples": [
+        "pm web-scrapper api get scraping-job id csv --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/scraping-job/{id}/csv"
+        }
+      ],
+      "operation": "web-scrapper.get.scraping-job-id-csv",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get scraping-job id data-quality",
+      "summary": "Documented GET /scraping-job/{id}/data-quality (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://webscraper.io/openapi.yaml",
+      "examples": [
+        "pm web-scrapper api get scraping-job id data-quality --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/scraping-job/{id}/data-quality"
+        }
+      ],
+      "operation": "web-scrapper.get.scraping-job-id-data-quality",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get scraping-job id json",
+      "summary": "Documented GET /scraping-job/{id}/json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://webscraper.io/openapi.yaml",
+      "examples": [
+        "pm web-scrapper api get scraping-job id json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/scraping-job/{id}/json"
+        }
+      ],
+      "operation": "web-scrapper.get.scraping-job-id-json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get scraping-job id xlsx",
+      "summary": "Documented GET /scraping-job/{id}/xlsx (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://webscraper.io/openapi.yaml",
+      "examples": [
+        "pm web-scrapper api get scraping-job id xlsx --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/scraping-job/{id}/xlsx"
+        }
+      ],
+      "operation": "web-scrapper.get.scraping-job-id-xlsx",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get scraping-job scrapingjobid",
+      "summary": "Documented GET /scraping-job/{scrapingJobId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://webscraper.io/openapi.yaml",
+      "examples": [
+        "pm web-scrapper api get scraping-job scrapingjobid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/scraping-job/{scrapingJobId}"
+        }
+      ],
+      "operation": "web-scrapper.get.scraping-job-scrapingjobid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get scraping-job scrapingjobid data-quality",
+      "summary": "Documented GET /scraping-job/{scrapingJobId}/data-quality (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://webscraper.io/openapi.yaml",
+      "examples": [
+        "pm web-scrapper api get scraping-job scrapingjobid data-quality --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/scraping-job/{scrapingJobId}/data-quality"
+        }
+      ],
+      "operation": "web-scrapper.get.scraping-job-scrapingjobid-data-quality",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get scraping-job scrapingjobid extension",
+      "summary": "Documented GET /scraping-job/{scrapingJobId}/{extension} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://webscraper.io/openapi.yaml",
+      "examples": [
+        "pm web-scrapper api get scraping-job scrapingjobid extension --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/scraping-job/{scrapingJobId}/{extension}"
+        }
+      ],
+      "operation": "web-scrapper.get.scraping-job-scrapingjobid-extension",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get scraping-job scrapingjobid problematic-urls",
+      "summary": "Documented GET /scraping-job/{scrapingJobId}/problematic-urls (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://webscraper.io/openapi.yaml",
+      "examples": [
+        "pm web-scrapper api get scraping-job scrapingjobid problematic-urls --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/scraping-job/{scrapingJobId}/problematic-urls"
+        }
+      ],
+      "operation": "web-scrapper.get.scraping-job-scrapingjobid-problematic-urls",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get sitemap id",
+      "summary": "Documented GET /sitemap/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://webscraper.io/openapi.yaml",
+      "examples": [
+        "pm web-scrapper api get sitemap id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/sitemap/{id}"
+        }
+      ],
+      "operation": "web-scrapper.get.sitemap-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get sitemap id scheduler",
+      "summary": "Documented GET /sitemap/{id}/scheduler (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://webscraper.io/openapi.yaml",
+      "examples": [
+        "pm web-scrapper api get sitemap id scheduler --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/sitemap/{id}/scheduler"
+        }
+      ],
+      "operation": "web-scrapper.get.sitemap-id-scheduler",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get sitemap sitemapid",
+      "summary": "Documented GET /sitemap/{sitemapId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://webscraper.io/openapi.yaml",
+      "examples": [
+        "pm web-scrapper api get sitemap sitemapid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/sitemap/{sitemapId}"
+        }
+      ],
+      "operation": "web-scrapper.get.sitemap-sitemapid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get sitemap sitemapid scheduler",
+      "summary": "Documented GET /sitemap/{sitemapId}/scheduler (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://webscraper.io/openapi.yaml",
+      "examples": [
+        "pm web-scrapper api get sitemap sitemapid scheduler --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/sitemap/{sitemapId}/scheduler"
+        }
+      ],
+      "operation": "web-scrapper.get.sitemap-sitemapid-scheduler",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get sitemap sitemapid tags",
+      "summary": "Documented GET /sitemap/{sitemapId}/tags (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://webscraper.io/openapi.yaml",
+      "examples": [
+        "pm web-scrapper api get sitemap sitemapid tags --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/sitemap/{sitemapId}/tags"
+        }
+      ],
+      "operation": "web-scrapper.get.sitemap-sitemapid-tags",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api post scraping-job scrapingjobid continue",
+      "summary": "Documented POST /scraping-job/{scrapingJobId}/continue (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://webscraper.io/openapi.yaml",
+      "examples": [
+        "pm web-scrapper api post scraping-job scrapingjobid continue --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/scraping-job/{scrapingJobId}/continue"
+        }
+      ],
+      "operation": "web-scrapper.post.scraping-job-scrapingjobid-continue",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post scraping-job scrapingjobid stop",
+      "summary": "Documented POST /scraping-job/{scrapingJobId}/stop (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://webscraper.io/openapi.yaml",
+      "examples": [
+        "pm web-scrapper api post scraping-job scrapingjobid stop --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/scraping-job/{scrapingJobId}/stop"
+        }
+      ],
+      "operation": "web-scrapper.post.scraping-job-scrapingjobid-stop",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post sitemap id disable-scheduler",
+      "summary": "Documented POST /sitemap/{id}/disable-scheduler (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://webscraper.io/openapi.yaml",
+      "examples": [
+        "pm web-scrapper api post sitemap id disable-scheduler --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/sitemap/{id}/disable-scheduler"
+        }
+      ],
+      "operation": "web-scrapper.post.sitemap-id-disable-scheduler",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post sitemap id enable-scheduler",
+      "summary": "Documented POST /sitemap/{id}/enable-scheduler (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://webscraper.io/openapi.yaml",
+      "examples": [
+        "pm web-scrapper api post sitemap id enable-scheduler --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/sitemap/{id}/enable-scheduler"
+        }
+      ],
+      "operation": "web-scrapper.post.sitemap-id-enable-scheduler",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post sitemap sitemapid add-tag",
+      "summary": "Documented POST /sitemap/{sitemapId}/add-tag (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://webscraper.io/openapi.yaml",
+      "examples": [
+        "pm web-scrapper api post sitemap sitemapid add-tag --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/sitemap/{sitemapId}/add-tag"
+        }
+      ],
+      "operation": "web-scrapper.post.sitemap-sitemapid-add-tag",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post sitemap sitemapid disable-scheduler",
+      "summary": "Documented POST /sitemap/{sitemapId}/disable-scheduler (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://webscraper.io/openapi.yaml",
+      "examples": [
+        "pm web-scrapper api post sitemap sitemapid disable-scheduler --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/sitemap/{sitemapId}/disable-scheduler"
+        }
+      ],
+      "operation": "web-scrapper.post.sitemap-sitemapid-disable-scheduler",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post sitemap sitemapid enable-scheduler",
+      "summary": "Documented POST /sitemap/{sitemapId}/enable-scheduler (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://webscraper.io/openapi.yaml",
+      "examples": [
+        "pm web-scrapper api post sitemap sitemapid enable-scheduler --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/sitemap/{sitemapId}/enable-scheduler"
+        }
+      ],
+      "operation": "web-scrapper.post.sitemap-sitemapid-enable-scheduler",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put sitemap sitemapid",
+      "summary": "Documented PUT /sitemap/{sitemapId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://webscraper.io/openapi.yaml",
+      "examples": [
+        "pm web-scrapper api put sitemap sitemapid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/sitemap/{sitemapId}"
+        }
+      ],
+      "operation": "web-scrapper.put.sitemap-sitemapid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put sitemap sitemapid rename",
+      "summary": "Documented PUT /sitemap/{sitemapId}/rename (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://webscraper.io/openapi.yaml",
+      "examples": [
+        "pm web-scrapper api put sitemap sitemapid rename --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/sitemap/{sitemapId}/rename"
+        }
+      ],
+      "operation": "web-scrapper.put.sitemap-sitemapid-rename",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "create scraping job apply",
+      "summary": "Plan and execute the create scraping job reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_scraping_job",
+      "source_url": "https://webscraper.io/openapi.yaml",
+      "flags": [
+        {
+          "name": "sitemap_id",
+          "type": "integer",
+          "summary": "Required sitemap id record field.",
+          "maps_to": "record.sitemap_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm web-scrapper create scraping job apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/scraping-job"
+        }
+      ],
+      "risk": "starts a real scraping run against the sitemap's (or start_urls override's) target site(s); consumes page credits from the caller's Web Scraper Cloud account for every page scraped",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create sitemap apply",
+      "summary": "Plan and execute the create sitemap reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_sitemap",
+      "source_url": "https://webscraper.io/openapi.yaml",
+      "examples": [
+        "pm web-scrapper create sitemap apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/sitemap"
+        }
+      ],
+      "risk": "creates a new sitemap (scraper configuration) in the caller's Web Scraper Cloud account; low-risk, does not itself start scraping any site",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete scraping job apply",
+      "summary": "Plan and execute the delete scraping job reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_scraping_job",
+      "source_url": "https://webscraper.io/openapi.yaml",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm web-scrapper delete scraping job apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/scraping-job/{id}"
+        }
+      ],
+      "risk": "permanently removes a scraping job and its scraped data; any already-downloaded export is unaffected, but the job's stored records become unrecoverable through the API",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete sitemap apply",
+      "summary": "Plan and execute the delete sitemap reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_sitemap",
+      "source_url": "https://webscraper.io/openapi.yaml",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm web-scrapper delete sitemap apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/sitemap/{id}"
+        }
+      ],
+      "risk": "permanently removes a sitemap; any scraping job history tied to it is not itself deleted but the configuration can no longer be reused or edited",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "jobs list",
+      "summary": "Run the jobs ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "jobs",
+      "source_url": "https://webscraper.io/openapi.yaml",
+      "examples": [
+        "pm web-scrapper jobs list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/scraping-job"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "problematic urls list",
+      "summary": "Run the problematic urls ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "problematic_urls",
+      "source_url": "https://webscraper.io/openapi.yaml",
+      "examples": [
+        "pm web-scrapper problematic urls list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/scraping-job/{id}/problematic-urls"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "scraping jobs list list",
+      "summary": "Run the scraping jobs list ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "scraping_jobs_list",
+      "source_url": "https://webscraper.io/openapi.yaml",
+      "examples": [
+        "pm web-scrapper scraping jobs list list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/scraping-jobs"
+        }
+      ]
+    },
+    {
+      "path": "sitemaps list",
+      "summary": "Run the sitemaps ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "sitemaps",
+      "source_url": "https://webscraper.io/openapi.yaml",
+      "examples": [
+        "pm web-scrapper sitemaps list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/sitemap"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "sitemaps list list",
+      "summary": "Run the sitemaps list ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "sitemaps_list",
+      "source_url": "https://webscraper.io/openapi.yaml",
+      "examples": [
+        "pm web-scrapper sitemaps list list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/sitemaps"
+        }
+      ]
+    },
+    {
+      "path": "update sitemap apply",
+      "summary": "Plan and execute the update sitemap reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_sitemap",
+      "source_url": "https://webscraper.io/openapi.yaml",
+      "examples": [
+        "pm web-scrapper update sitemap apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/sitemap/{id}"
+        }
+      ],
+      "risk": "overwrites an existing sitemap's start URLs and selector configuration; any scraping job created from this sitemap after the update uses the new configuration",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    }
+  ]
+}

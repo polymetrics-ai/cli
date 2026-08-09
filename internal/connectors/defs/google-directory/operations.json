@@ -1,0 +1,2067 @@
+{
+  "operations": [
+    {
+      "id": "google-directory.get.admin-directory-v1-customer-customerid-devices-chromeos",
+      "kind": "rest_read",
+      "summary": "GET /admin/directory/v1/customer/{customerId}/devices/chromeos",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/admin/directory/v1/customer/{customerId}/devices/chromeos",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.post.admin-directory-v1-customer-customerid-devices-chromeos-movedevicestoou",
+      "kind": "rest_write",
+      "summary": "POST /admin/directory/v1/customer/{customerId}/devices/chromeos/moveDevicesToOu",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/admin/directory/v1/customer/{customerId}/devices/chromeos/moveDevicesToOu",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.get.admin-directory-v1-customer-customerid-devices-chromeos-deviceid",
+      "kind": "rest_read",
+      "summary": "GET /admin/directory/v1/customer/{customerId}/devices/chromeos/{deviceId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/admin/directory/v1/customer/{customerId}/devices/chromeos/{deviceId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.put.admin-directory-v1-customer-customerid-devices-chromeos-deviceid",
+      "kind": "rest_write",
+      "summary": "PUT /admin/directory/v1/customer/{customerId}/devices/chromeos/{deviceId}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/admin/directory/v1/customer/{customerId}/devices/chromeos/{deviceId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.patch.admin-directory-v1-customer-customerid-devices-chromeos-deviceid",
+      "kind": "rest_write",
+      "summary": "PATCH /admin/directory/v1/customer/{customerId}/devices/chromeos/{deviceId}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/admin/directory/v1/customer/{customerId}/devices/chromeos/{deviceId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.get.admin-directory-v1-customer-customerid-devices-chromeos-deviceid-commands-commandid",
+      "kind": "rest_read",
+      "summary": "GET /admin/directory/v1/customer/{customerId}/devices/chromeos/{deviceId}/commands/{commandId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/admin/directory/v1/customer/{customerId}/devices/chromeos/{deviceId}/commands/{commandId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.post.admin-directory-v1-customer-customerid-devices-chromeos-deviceid-issuecommand",
+      "kind": "rest_write",
+      "summary": "POST /admin/directory/v1/customer/{customerId}/devices/chromeos/{deviceId}:issueCommand",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/admin/directory/v1/customer/{customerId}/devices/chromeos/{deviceId}:issueCommand",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.post.admin-directory-v1-customer-customerid-devices-chromeos-resourceid-action",
+      "kind": "rest_write",
+      "summary": "POST /admin/directory/v1/customer/{customerId}/devices/chromeos/{resourceId}/action",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/admin/directory/v1/customer/{customerId}/devices/chromeos/{resourceId}/action",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.post.admin-directory-v1-customer-customerid-devices-chromeos-batchchangestatus",
+      "kind": "rest_write",
+      "summary": "POST /admin/directory/v1/customer/{customerId}/devices/chromeos:batchChangeStatus",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/admin/directory/v1/customer/{customerId}/devices/chromeos:batchChangeStatus",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.get.admin-directory-v1-customer-customerid-devices-chromeos-countchromeosdevices",
+      "kind": "rest_read",
+      "summary": "GET /admin/directory/v1/customer/{customerId}/devices/chromeos:countChromeOsDevices",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/admin/directory/v1/customer/{customerId}/devices/chromeos:countChromeOsDevices",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.get.admin-directory-v1-customer-customerid-devices-mobile",
+      "kind": "rest_read",
+      "summary": "GET /admin/directory/v1/customer/{customerId}/devices/mobile",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/admin/directory/v1/customer/{customerId}/devices/mobile",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.get.admin-directory-v1-customer-customerid-devices-mobile-resourceid",
+      "kind": "rest_read",
+      "summary": "GET /admin/directory/v1/customer/{customerId}/devices/mobile/{resourceId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/admin/directory/v1/customer/{customerId}/devices/mobile/{resourceId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.delete.admin-directory-v1-customer-customerid-devices-mobile-resourceid",
+      "kind": "rest_write",
+      "summary": "DELETE /admin/directory/v1/customer/{customerId}/devices/mobile/{resourceId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/admin/directory/v1/customer/{customerId}/devices/mobile/{resourceId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.post.admin-directory-v1-customer-customerid-devices-mobile-resourceid-action",
+      "kind": "rest_write",
+      "summary": "POST /admin/directory/v1/customer/{customerId}/devices/mobile/{resourceId}/action",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/admin/directory/v1/customer/{customerId}/devices/mobile/{resourceId}/action",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.get.admin-directory-v1-customer-customerid-orgunits",
+      "kind": "rest_read",
+      "summary": "GET /admin/directory/v1/customer/{customerId}/orgunits",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/admin/directory/v1/customer/{customerId}/orgunits",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.post.admin-directory-v1-customer-customerid-orgunits",
+      "kind": "rest_write",
+      "summary": "POST /admin/directory/v1/customer/{customerId}/orgunits",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/admin/directory/v1/customer/{customerId}/orgunits",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.get.admin-directory-v1-customer-customerid-orgunits-orgunitpath",
+      "kind": "rest_read",
+      "summary": "GET /admin/directory/v1/customer/{customerId}/orgunits/{+orgUnitPath}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/admin/directory/v1/customer/{customerId}/orgunits/{+orgUnitPath}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.put.admin-directory-v1-customer-customerid-orgunits-orgunitpath",
+      "kind": "rest_write",
+      "summary": "PUT /admin/directory/v1/customer/{customerId}/orgunits/{+orgUnitPath}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/admin/directory/v1/customer/{customerId}/orgunits/{+orgUnitPath}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.patch.admin-directory-v1-customer-customerid-orgunits-orgunitpath",
+      "kind": "rest_write",
+      "summary": "PATCH /admin/directory/v1/customer/{customerId}/orgunits/{+orgUnitPath}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/admin/directory/v1/customer/{customerId}/orgunits/{+orgUnitPath}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.delete.admin-directory-v1-customer-customerid-orgunits-orgunitpath",
+      "kind": "rest_write",
+      "summary": "DELETE /admin/directory/v1/customer/{customerId}/orgunits/{+orgUnitPath}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/admin/directory/v1/customer/{customerId}/orgunits/{+orgUnitPath}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.get.admin-directory-v1-customer-customerid-schemas",
+      "kind": "rest_read",
+      "summary": "GET /admin/directory/v1/customer/{customerId}/schemas",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/admin/directory/v1/customer/{customerId}/schemas",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.post.admin-directory-v1-customer-customerid-schemas",
+      "kind": "rest_write",
+      "summary": "POST /admin/directory/v1/customer/{customerId}/schemas",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/admin/directory/v1/customer/{customerId}/schemas",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.get.admin-directory-v1-customer-customerid-schemas-schemakey",
+      "kind": "rest_read",
+      "summary": "GET /admin/directory/v1/customer/{customerId}/schemas/{schemaKey}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/admin/directory/v1/customer/{customerId}/schemas/{schemaKey}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.put.admin-directory-v1-customer-customerid-schemas-schemakey",
+      "kind": "rest_write",
+      "summary": "PUT /admin/directory/v1/customer/{customerId}/schemas/{schemaKey}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/admin/directory/v1/customer/{customerId}/schemas/{schemaKey}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.patch.admin-directory-v1-customer-customerid-schemas-schemakey",
+      "kind": "rest_write",
+      "summary": "PATCH /admin/directory/v1/customer/{customerId}/schemas/{schemaKey}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/admin/directory/v1/customer/{customerId}/schemas/{schemaKey}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.delete.admin-directory-v1-customer-customerid-schemas-schemakey",
+      "kind": "rest_write",
+      "summary": "DELETE /admin/directory/v1/customer/{customerId}/schemas/{schemaKey}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/admin/directory/v1/customer/{customerId}/schemas/{schemaKey}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.get.admin-directory-v1-customer-customer-domainaliases",
+      "kind": "rest_read",
+      "summary": "GET /admin/directory/v1/customer/{customer}/domainaliases",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/admin/directory/v1/customer/{customer}/domainaliases",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.post.admin-directory-v1-customer-customer-domainaliases",
+      "kind": "rest_write",
+      "summary": "POST /admin/directory/v1/customer/{customer}/domainaliases",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/admin/directory/v1/customer/{customer}/domainaliases",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.get.admin-directory-v1-customer-customer-domainaliases-domainaliasname",
+      "kind": "rest_read",
+      "summary": "GET /admin/directory/v1/customer/{customer}/domainaliases/{domainAliasName}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/admin/directory/v1/customer/{customer}/domainaliases/{domainAliasName}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.delete.admin-directory-v1-customer-customer-domainaliases-domainaliasname",
+      "kind": "rest_write",
+      "summary": "DELETE /admin/directory/v1/customer/{customer}/domainaliases/{domainAliasName}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/admin/directory/v1/customer/{customer}/domainaliases/{domainAliasName}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.get.admin-directory-v1-customer-customer-domains",
+      "kind": "rest_read",
+      "summary": "GET /admin/directory/v1/customer/{customer}/domains",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/admin/directory/v1/customer/{customer}/domains",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.post.admin-directory-v1-customer-customer-domains",
+      "kind": "rest_write",
+      "summary": "POST /admin/directory/v1/customer/{customer}/domains",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/admin/directory/v1/customer/{customer}/domains",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.get.admin-directory-v1-customer-customer-domains-domainname",
+      "kind": "rest_read",
+      "summary": "GET /admin/directory/v1/customer/{customer}/domains/{domainName}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/admin/directory/v1/customer/{customer}/domains/{domainName}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.delete.admin-directory-v1-customer-customer-domains-domainname",
+      "kind": "rest_write",
+      "summary": "DELETE /admin/directory/v1/customer/{customer}/domains/{domainName}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/admin/directory/v1/customer/{customer}/domains/{domainName}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.get.admin-directory-v1-customer-customer-resources-buildings",
+      "kind": "rest_read",
+      "summary": "GET /admin/directory/v1/customer/{customer}/resources/buildings",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/admin/directory/v1/customer/{customer}/resources/buildings",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.post.admin-directory-v1-customer-customer-resources-buildings",
+      "kind": "rest_write",
+      "summary": "POST /admin/directory/v1/customer/{customer}/resources/buildings",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/admin/directory/v1/customer/{customer}/resources/buildings",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.get.admin-directory-v1-customer-customer-resources-buildings-buildingid",
+      "kind": "rest_read",
+      "summary": "GET /admin/directory/v1/customer/{customer}/resources/buildings/{buildingId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/admin/directory/v1/customer/{customer}/resources/buildings/{buildingId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.put.admin-directory-v1-customer-customer-resources-buildings-buildingid",
+      "kind": "rest_write",
+      "summary": "PUT /admin/directory/v1/customer/{customer}/resources/buildings/{buildingId}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/admin/directory/v1/customer/{customer}/resources/buildings/{buildingId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.patch.admin-directory-v1-customer-customer-resources-buildings-buildingid",
+      "kind": "rest_write",
+      "summary": "PATCH /admin/directory/v1/customer/{customer}/resources/buildings/{buildingId}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/admin/directory/v1/customer/{customer}/resources/buildings/{buildingId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.delete.admin-directory-v1-customer-customer-resources-buildings-buildingid",
+      "kind": "rest_write",
+      "summary": "DELETE /admin/directory/v1/customer/{customer}/resources/buildings/{buildingId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/admin/directory/v1/customer/{customer}/resources/buildings/{buildingId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.get.admin-directory-v1-customer-customer-resources-calendars",
+      "kind": "rest_read",
+      "summary": "GET /admin/directory/v1/customer/{customer}/resources/calendars",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/admin/directory/v1/customer/{customer}/resources/calendars",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.post.admin-directory-v1-customer-customer-resources-calendars",
+      "kind": "rest_write",
+      "summary": "POST /admin/directory/v1/customer/{customer}/resources/calendars",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/admin/directory/v1/customer/{customer}/resources/calendars",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.get.admin-directory-v1-customer-customer-resources-calendars-calendarresourceid",
+      "kind": "rest_read",
+      "summary": "GET /admin/directory/v1/customer/{customer}/resources/calendars/{calendarResourceId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/admin/directory/v1/customer/{customer}/resources/calendars/{calendarResourceId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.put.admin-directory-v1-customer-customer-resources-calendars-calendarresourceid",
+      "kind": "rest_write",
+      "summary": "PUT /admin/directory/v1/customer/{customer}/resources/calendars/{calendarResourceId}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/admin/directory/v1/customer/{customer}/resources/calendars/{calendarResourceId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.patch.admin-directory-v1-customer-customer-resources-calendars-calendarresourceid",
+      "kind": "rest_write",
+      "summary": "PATCH /admin/directory/v1/customer/{customer}/resources/calendars/{calendarResourceId}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/admin/directory/v1/customer/{customer}/resources/calendars/{calendarResourceId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.delete.admin-directory-v1-customer-customer-resources-calendars-calendarresourceid",
+      "kind": "rest_write",
+      "summary": "DELETE /admin/directory/v1/customer/{customer}/resources/calendars/{calendarResourceId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/admin/directory/v1/customer/{customer}/resources/calendars/{calendarResourceId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.get.admin-directory-v1-customer-customer-resources-features",
+      "kind": "rest_read",
+      "summary": "GET /admin/directory/v1/customer/{customer}/resources/features",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/admin/directory/v1/customer/{customer}/resources/features",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.post.admin-directory-v1-customer-customer-resources-features",
+      "kind": "rest_write",
+      "summary": "POST /admin/directory/v1/customer/{customer}/resources/features",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/admin/directory/v1/customer/{customer}/resources/features",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.get.admin-directory-v1-customer-customer-resources-features-featurekey",
+      "kind": "rest_read",
+      "summary": "GET /admin/directory/v1/customer/{customer}/resources/features/{featureKey}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/admin/directory/v1/customer/{customer}/resources/features/{featureKey}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.put.admin-directory-v1-customer-customer-resources-features-featurekey",
+      "kind": "rest_write",
+      "summary": "PUT /admin/directory/v1/customer/{customer}/resources/features/{featureKey}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/admin/directory/v1/customer/{customer}/resources/features/{featureKey}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.patch.admin-directory-v1-customer-customer-resources-features-featurekey",
+      "kind": "rest_write",
+      "summary": "PATCH /admin/directory/v1/customer/{customer}/resources/features/{featureKey}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/admin/directory/v1/customer/{customer}/resources/features/{featureKey}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.delete.admin-directory-v1-customer-customer-resources-features-featurekey",
+      "kind": "rest_write",
+      "summary": "DELETE /admin/directory/v1/customer/{customer}/resources/features/{featureKey}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/admin/directory/v1/customer/{customer}/resources/features/{featureKey}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.post.admin-directory-v1-customer-customer-resources-features-oldname-rename",
+      "kind": "rest_write",
+      "summary": "POST /admin/directory/v1/customer/{customer}/resources/features/{oldName}/rename",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/admin/directory/v1/customer/{customer}/resources/features/{oldName}/rename",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.get.admin-directory-v1-customer-customer-roleassignments",
+      "kind": "rest_read",
+      "summary": "GET /admin/directory/v1/customer/{customer}/roleassignments",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/admin/directory/v1/customer/{customer}/roleassignments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.post.admin-directory-v1-customer-customer-roleassignments",
+      "kind": "rest_write",
+      "summary": "POST /admin/directory/v1/customer/{customer}/roleassignments",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/admin/directory/v1/customer/{customer}/roleassignments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.get.admin-directory-v1-customer-customer-roleassignments-roleassignmentid",
+      "kind": "rest_read",
+      "summary": "GET /admin/directory/v1/customer/{customer}/roleassignments/{roleAssignmentId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/admin/directory/v1/customer/{customer}/roleassignments/{roleAssignmentId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.delete.admin-directory-v1-customer-customer-roleassignments-roleassignmentid",
+      "kind": "rest_write",
+      "summary": "DELETE /admin/directory/v1/customer/{customer}/roleassignments/{roleAssignmentId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/admin/directory/v1/customer/{customer}/roleassignments/{roleAssignmentId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.get.admin-directory-v1-customer-customer-roles",
+      "kind": "rest_read",
+      "summary": "GET /admin/directory/v1/customer/{customer}/roles",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/admin/directory/v1/customer/{customer}/roles",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.post.admin-directory-v1-customer-customer-roles",
+      "kind": "rest_write",
+      "summary": "POST /admin/directory/v1/customer/{customer}/roles",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/admin/directory/v1/customer/{customer}/roles",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.get.admin-directory-v1-customer-customer-roles-all-privileges",
+      "kind": "rest_read",
+      "summary": "GET /admin/directory/v1/customer/{customer}/roles/ALL/privileges",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/admin/directory/v1/customer/{customer}/roles/ALL/privileges",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.get.admin-directory-v1-customer-customer-roles-roleid",
+      "kind": "rest_read",
+      "summary": "GET /admin/directory/v1/customer/{customer}/roles/{roleId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/admin/directory/v1/customer/{customer}/roles/{roleId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.put.admin-directory-v1-customer-customer-roles-roleid",
+      "kind": "rest_write",
+      "summary": "PUT /admin/directory/v1/customer/{customer}/roles/{roleId}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/admin/directory/v1/customer/{customer}/roles/{roleId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.patch.admin-directory-v1-customer-customer-roles-roleid",
+      "kind": "rest_write",
+      "summary": "PATCH /admin/directory/v1/customer/{customer}/roles/{roleId}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/admin/directory/v1/customer/{customer}/roles/{roleId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.delete.admin-directory-v1-customer-customer-roles-roleid",
+      "kind": "rest_write",
+      "summary": "DELETE /admin/directory/v1/customer/{customer}/roles/{roleId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/admin/directory/v1/customer/{customer}/roles/{roleId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.get.admin-directory-v1-customers-customerkey",
+      "kind": "rest_read",
+      "summary": "GET /admin/directory/v1/customers/{customerKey}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/admin/directory/v1/customers/{customerKey}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.put.admin-directory-v1-customers-customerkey",
+      "kind": "rest_write",
+      "summary": "PUT /admin/directory/v1/customers/{customerKey}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/admin/directory/v1/customers/{customerKey}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.patch.admin-directory-v1-customers-customerkey",
+      "kind": "rest_write",
+      "summary": "PATCH /admin/directory/v1/customers/{customerKey}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/admin/directory/v1/customers/{customerKey}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.get.admin-directory-v1-groups",
+      "kind": "rest_read",
+      "summary": "GET /admin/directory/v1/groups",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/admin/directory/v1/groups",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.post.admin-directory-v1-groups",
+      "kind": "rest_write",
+      "summary": "POST /admin/directory/v1/groups",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/admin/directory/v1/groups",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.get.admin-directory-v1-groups-groupkey",
+      "kind": "rest_read",
+      "summary": "GET /admin/directory/v1/groups/{groupKey}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/admin/directory/v1/groups/{groupKey}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.put.admin-directory-v1-groups-groupkey",
+      "kind": "rest_write",
+      "summary": "PUT /admin/directory/v1/groups/{groupKey}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/admin/directory/v1/groups/{groupKey}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.patch.admin-directory-v1-groups-groupkey",
+      "kind": "rest_write",
+      "summary": "PATCH /admin/directory/v1/groups/{groupKey}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/admin/directory/v1/groups/{groupKey}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.delete.admin-directory-v1-groups-groupkey",
+      "kind": "rest_write",
+      "summary": "DELETE /admin/directory/v1/groups/{groupKey}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/admin/directory/v1/groups/{groupKey}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.get.admin-directory-v1-groups-groupkey-aliases",
+      "kind": "rest_read",
+      "summary": "GET /admin/directory/v1/groups/{groupKey}/aliases",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/admin/directory/v1/groups/{groupKey}/aliases",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.post.admin-directory-v1-groups-groupkey-aliases",
+      "kind": "rest_write",
+      "summary": "POST /admin/directory/v1/groups/{groupKey}/aliases",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/admin/directory/v1/groups/{groupKey}/aliases",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.delete.admin-directory-v1-groups-groupkey-aliases-alias",
+      "kind": "rest_write",
+      "summary": "DELETE /admin/directory/v1/groups/{groupKey}/aliases/{alias}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/admin/directory/v1/groups/{groupKey}/aliases/{alias}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.get.admin-directory-v1-groups-groupkey-hasmember-memberkey",
+      "kind": "rest_read",
+      "summary": "GET /admin/directory/v1/groups/{groupKey}/hasMember/{memberKey}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/admin/directory/v1/groups/{groupKey}/hasMember/{memberKey}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.get.admin-directory-v1-groups-groupkey-members",
+      "kind": "rest_read",
+      "summary": "GET /admin/directory/v1/groups/{groupKey}/members",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/admin/directory/v1/groups/{groupKey}/members",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.post.admin-directory-v1-groups-groupkey-members",
+      "kind": "rest_write",
+      "summary": "POST /admin/directory/v1/groups/{groupKey}/members",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/admin/directory/v1/groups/{groupKey}/members",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.get.admin-directory-v1-groups-groupkey-members-memberkey",
+      "kind": "rest_read",
+      "summary": "GET /admin/directory/v1/groups/{groupKey}/members/{memberKey}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/admin/directory/v1/groups/{groupKey}/members/{memberKey}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.put.admin-directory-v1-groups-groupkey-members-memberkey",
+      "kind": "rest_write",
+      "summary": "PUT /admin/directory/v1/groups/{groupKey}/members/{memberKey}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/admin/directory/v1/groups/{groupKey}/members/{memberKey}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.patch.admin-directory-v1-groups-groupkey-members-memberkey",
+      "kind": "rest_write",
+      "summary": "PATCH /admin/directory/v1/groups/{groupKey}/members/{memberKey}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/admin/directory/v1/groups/{groupKey}/members/{memberKey}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.delete.admin-directory-v1-groups-groupkey-members-memberkey",
+      "kind": "rest_write",
+      "summary": "DELETE /admin/directory/v1/groups/{groupKey}/members/{memberKey}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/admin/directory/v1/groups/{groupKey}/members/{memberKey}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.get.admin-directory-v1-users",
+      "kind": "rest_read",
+      "summary": "GET /admin/directory/v1/users",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/admin/directory/v1/users",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.post.admin-directory-v1-users",
+      "kind": "rest_write",
+      "summary": "POST /admin/directory/v1/users",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/admin/directory/v1/users",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.post.admin-directory-v1-users-watch",
+      "kind": "rest_write",
+      "summary": "POST /admin/directory/v1/users/watch",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/admin/directory/v1/users/watch",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.get.admin-directory-v1-users-userkey",
+      "kind": "rest_read",
+      "summary": "GET /admin/directory/v1/users/{userKey}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/admin/directory/v1/users/{userKey}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.put.admin-directory-v1-users-userkey",
+      "kind": "rest_write",
+      "summary": "PUT /admin/directory/v1/users/{userKey}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/admin/directory/v1/users/{userKey}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.patch.admin-directory-v1-users-userkey",
+      "kind": "rest_write",
+      "summary": "PATCH /admin/directory/v1/users/{userKey}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/admin/directory/v1/users/{userKey}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.delete.admin-directory-v1-users-userkey",
+      "kind": "rest_write",
+      "summary": "DELETE /admin/directory/v1/users/{userKey}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/admin/directory/v1/users/{userKey}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.get.admin-directory-v1-users-userkey-aliases",
+      "kind": "rest_read",
+      "summary": "GET /admin/directory/v1/users/{userKey}/aliases",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/admin/directory/v1/users/{userKey}/aliases",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.post.admin-directory-v1-users-userkey-aliases",
+      "kind": "rest_write",
+      "summary": "POST /admin/directory/v1/users/{userKey}/aliases",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/admin/directory/v1/users/{userKey}/aliases",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.post.admin-directory-v1-users-userkey-aliases-watch",
+      "kind": "rest_write",
+      "summary": "POST /admin/directory/v1/users/{userKey}/aliases/watch",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/admin/directory/v1/users/{userKey}/aliases/watch",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.delete.admin-directory-v1-users-userkey-aliases-alias",
+      "kind": "rest_write",
+      "summary": "DELETE /admin/directory/v1/users/{userKey}/aliases/{alias}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/admin/directory/v1/users/{userKey}/aliases/{alias}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.get.admin-directory-v1-users-userkey-asps",
+      "kind": "rest_read",
+      "summary": "GET /admin/directory/v1/users/{userKey}/asps",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/admin/directory/v1/users/{userKey}/asps",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.get.admin-directory-v1-users-userkey-asps-codeid",
+      "kind": "rest_read",
+      "summary": "GET /admin/directory/v1/users/{userKey}/asps/{codeId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/admin/directory/v1/users/{userKey}/asps/{codeId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.delete.admin-directory-v1-users-userkey-asps-codeid",
+      "kind": "rest_write",
+      "summary": "DELETE /admin/directory/v1/users/{userKey}/asps/{codeId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/admin/directory/v1/users/{userKey}/asps/{codeId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.post.admin-directory-v1-users-userkey-makeadmin",
+      "kind": "rest_write",
+      "summary": "POST /admin/directory/v1/users/{userKey}/makeAdmin",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/admin/directory/v1/users/{userKey}/makeAdmin",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.get.admin-directory-v1-users-userkey-photos-thumbnail",
+      "kind": "rest_read",
+      "summary": "GET /admin/directory/v1/users/{userKey}/photos/thumbnail",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/admin/directory/v1/users/{userKey}/photos/thumbnail",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.put.admin-directory-v1-users-userkey-photos-thumbnail",
+      "kind": "rest_write",
+      "summary": "PUT /admin/directory/v1/users/{userKey}/photos/thumbnail",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/admin/directory/v1/users/{userKey}/photos/thumbnail",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.patch.admin-directory-v1-users-userkey-photos-thumbnail",
+      "kind": "rest_write",
+      "summary": "PATCH /admin/directory/v1/users/{userKey}/photos/thumbnail",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/admin/directory/v1/users/{userKey}/photos/thumbnail",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.delete.admin-directory-v1-users-userkey-photos-thumbnail",
+      "kind": "rest_write",
+      "summary": "DELETE /admin/directory/v1/users/{userKey}/photos/thumbnail",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/admin/directory/v1/users/{userKey}/photos/thumbnail",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.post.admin-directory-v1-users-userkey-signout",
+      "kind": "rest_write",
+      "summary": "POST /admin/directory/v1/users/{userKey}/signOut",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/admin/directory/v1/users/{userKey}/signOut",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.get.admin-directory-v1-users-userkey-tokens",
+      "kind": "rest_read",
+      "summary": "GET /admin/directory/v1/users/{userKey}/tokens",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/admin/directory/v1/users/{userKey}/tokens",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.get.admin-directory-v1-users-userkey-tokens-clientid",
+      "kind": "rest_read",
+      "summary": "GET /admin/directory/v1/users/{userKey}/tokens/{clientId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/admin/directory/v1/users/{userKey}/tokens/{clientId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.delete.admin-directory-v1-users-userkey-tokens-clientid",
+      "kind": "rest_write",
+      "summary": "DELETE /admin/directory/v1/users/{userKey}/tokens/{clientId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/admin/directory/v1/users/{userKey}/tokens/{clientId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.post.admin-directory-v1-users-userkey-twostepverification-turnoff",
+      "kind": "rest_write",
+      "summary": "POST /admin/directory/v1/users/{userKey}/twoStepVerification/turnOff",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/admin/directory/v1/users/{userKey}/twoStepVerification/turnOff",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.post.admin-directory-v1-users-userkey-undelete",
+      "kind": "rest_write",
+      "summary": "POST /admin/directory/v1/users/{userKey}/undelete",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/admin/directory/v1/users/{userKey}/undelete",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.get.admin-directory-v1-users-userkey-verificationcodes",
+      "kind": "rest_read",
+      "summary": "GET /admin/directory/v1/users/{userKey}/verificationCodes",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/admin/directory/v1/users/{userKey}/verificationCodes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.post.admin-directory-v1-users-userkey-verificationcodes-generate",
+      "kind": "rest_write",
+      "summary": "POST /admin/directory/v1/users/{userKey}/verificationCodes/generate",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/admin/directory/v1/users/{userKey}/verificationCodes/generate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.post.admin-directory-v1-users-userkey-verificationcodes-invalidate",
+      "kind": "rest_write",
+      "summary": "POST /admin/directory/v1/users/{userKey}/verificationCodes/invalidate",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/admin/directory/v1/users/{userKey}/verificationCodes/invalidate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.post.admin-directory-v1-users-createguest",
+      "kind": "rest_write",
+      "summary": "POST /admin/directory/v1/users:createGuest",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/admin/directory/v1/users:createGuest",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.get.admin-directory-v1-name",
+      "kind": "rest_read",
+      "summary": "GET /admin/directory/v1/{+name}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/admin/directory/v1/{+name}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.get.admin-directory-v1-name-2",
+      "kind": "rest_read",
+      "summary": "GET /admin/directory/v1/{+name}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/admin/directory/v1/{+name}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.patch.admin-directory-v1-name",
+      "kind": "rest_write",
+      "summary": "PATCH /admin/directory/v1/{+name}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/admin/directory/v1/{+name}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.patch.admin-directory-v1-name-2",
+      "kind": "rest_write",
+      "summary": "PATCH /admin/directory/v1/{+name}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/admin/directory/v1/{+name}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.delete.admin-directory-v1-name",
+      "kind": "rest_write",
+      "summary": "DELETE /admin/directory/v1/{+name}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/admin/directory/v1/{+name}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.delete.admin-directory-v1-name-2",
+      "kind": "rest_write",
+      "summary": "DELETE /admin/directory/v1/{+name}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/admin/directory/v1/{+name}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.get.admin-directory-v1-parent-chrome-printservers",
+      "kind": "rest_read",
+      "summary": "GET /admin/directory/v1/{+parent}/chrome/printServers",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/admin/directory/v1/{+parent}/chrome/printServers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.post.admin-directory-v1-parent-chrome-printservers",
+      "kind": "rest_write",
+      "summary": "POST /admin/directory/v1/{+parent}/chrome/printServers",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/admin/directory/v1/{+parent}/chrome/printServers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.post.admin-directory-v1-parent-chrome-printservers-batchcreateprintservers",
+      "kind": "rest_write",
+      "summary": "POST /admin/directory/v1/{+parent}/chrome/printServers:batchCreatePrintServers",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/admin/directory/v1/{+parent}/chrome/printServers:batchCreatePrintServers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.post.admin-directory-v1-parent-chrome-printservers-batchdeleteprintservers",
+      "kind": "rest_write",
+      "summary": "POST /admin/directory/v1/{+parent}/chrome/printServers:batchDeletePrintServers",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/admin/directory/v1/{+parent}/chrome/printServers:batchDeletePrintServers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.get.admin-directory-v1-parent-chrome-printers",
+      "kind": "rest_read",
+      "summary": "GET /admin/directory/v1/{+parent}/chrome/printers",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/admin/directory/v1/{+parent}/chrome/printers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.post.admin-directory-v1-parent-chrome-printers",
+      "kind": "rest_write",
+      "summary": "POST /admin/directory/v1/{+parent}/chrome/printers",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/admin/directory/v1/{+parent}/chrome/printers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.post.admin-directory-v1-parent-chrome-printers-batchcreateprinters",
+      "kind": "rest_write",
+      "summary": "POST /admin/directory/v1/{+parent}/chrome/printers:batchCreatePrinters",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/admin/directory/v1/{+parent}/chrome/printers:batchCreatePrinters",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.post.admin-directory-v1-parent-chrome-printers-batchdeleteprinters",
+      "kind": "rest_write",
+      "summary": "POST /admin/directory/v1/{+parent}/chrome/printers:batchDeletePrinters",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/admin/directory/v1/{+parent}/chrome/printers:batchDeletePrinters",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.get.admin-directory-v1-parent-chrome-printers-listprintermodels",
+      "kind": "rest_read",
+      "summary": "GET /admin/directory/v1/{+parent}/chrome/printers:listPrinterModels",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/admin/directory/v1/{+parent}/chrome/printers:listPrinterModels",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.post.admin-directory-v1-channels-stop",
+      "kind": "rest_write",
+      "summary": "POST /admin/directory_v1/channels/stop",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/admin/directory_v1/channels/stop",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.get.customer-customer-domains",
+      "kind": "rest_read",
+      "summary": "GET /customer/{customer}/domains",
+      "description": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/customer/{customer}/domains",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.get.customer-customer-roles",
+      "kind": "rest_read",
+      "summary": "GET /customer/{customer}/roles",
+      "description": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/customer/{customer}/roles",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.get.groups-groupkey-members",
+      "kind": "rest_read",
+      "summary": "GET /groups/{groupKey}/members",
+      "description": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/groups/{groupKey}/members",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-directory.post.users",
+      "kind": "rest_write",
+      "summary": "POST /users",
+      "description": "not implemented in this bundle; legacy has no write support",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/users",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

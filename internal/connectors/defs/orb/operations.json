@@ -1,0 +1,2263 @@
+{
+  "operations": [
+    {
+      "id": "orb.get.alerts",
+      "kind": "rest_read",
+      "summary": "GET /alerts",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/alerts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.post.alerts-customer-id-customer-id",
+      "kind": "rest_write",
+      "summary": "POST /alerts/customer_id/{customer_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/alerts/customer_id/{customer_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.post.alerts-external-customer-id-external-customer-id",
+      "kind": "rest_write",
+      "summary": "POST /alerts/external_customer_id/{external_customer_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/alerts/external_customer_id/{external_customer_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.post.alerts-plan-id-plan-id",
+      "kind": "rest_write",
+      "summary": "POST /alerts/plan_id/{plan_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/alerts/plan_id/{plan_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.post.alerts-subscription-id-subscription-id",
+      "kind": "rest_write",
+      "summary": "POST /alerts/subscription_id/{subscription_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/alerts/subscription_id/{subscription_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.put.alerts-alert-configuration-id",
+      "kind": "rest_write",
+      "summary": "PUT /alerts/{alert_configuration_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/alerts/{alert_configuration_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.delete.alerts-alert-configuration-id",
+      "kind": "rest_write",
+      "summary": "DELETE /alerts/{alert_configuration_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/alerts/{alert_configuration_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.post.alerts-alert-configuration-id-disable",
+      "kind": "rest_write",
+      "summary": "POST /alerts/{alert_configuration_id}/disable",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/alerts/{alert_configuration_id}/disable",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.post.alerts-alert-configuration-id-enable",
+      "kind": "rest_write",
+      "summary": "POST /alerts/{alert_configuration_id}/enable",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/alerts/{alert_configuration_id}/enable",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.get.alerts-alert-id",
+      "kind": "rest_read",
+      "summary": "GET /alerts/{alert_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/alerts/{alert_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.get.coupons",
+      "kind": "rest_read",
+      "summary": "GET /coupons",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/coupons",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.post.coupons",
+      "kind": "rest_write",
+      "summary": "POST /coupons",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/coupons",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.get.coupons-coupon-id",
+      "kind": "rest_read",
+      "summary": "GET /coupons/{coupon_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/coupons/{coupon_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.post.coupons-coupon-id-archive",
+      "kind": "rest_write",
+      "summary": "POST /coupons/{coupon_id}/archive",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/coupons/{coupon_id}/archive",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.get.coupons-coupon-id-subscriptions",
+      "kind": "rest_read",
+      "summary": "GET /coupons/{coupon_id}/subscriptions",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/coupons/{coupon_id}/subscriptions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.get.credit-blocks-block-id",
+      "kind": "rest_read",
+      "summary": "GET /credit_blocks/{block_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/credit_blocks/{block_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.delete.credit-blocks-block-id",
+      "kind": "rest_write",
+      "summary": "DELETE /credit_blocks/{block_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/credit_blocks/{block_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.get.credit-blocks-block-id-invoices",
+      "kind": "rest_read",
+      "summary": "GET /credit_blocks/{block_id}/invoices",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/credit_blocks/{block_id}/invoices",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.get.credit-notes",
+      "kind": "rest_read",
+      "summary": "GET /credit_notes",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/credit_notes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.post.credit-notes",
+      "kind": "rest_write",
+      "summary": "POST /credit_notes",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/credit_notes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.get.credit-notes-credit-note-id",
+      "kind": "rest_read",
+      "summary": "GET /credit_notes/{credit_note_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/credit_notes/{credit_note_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.get.customers",
+      "kind": "rest_read",
+      "summary": "GET /customers",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/customers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.post.customers",
+      "kind": "rest_write",
+      "summary": "POST /customers",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/customers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.get.customers-external-customer-id-external-customer-id",
+      "kind": "rest_read",
+      "summary": "GET /customers/external_customer_id/{external_customer_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/customers/external_customer_id/{external_customer_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.put.customers-external-customer-id-external-customer-id",
+      "kind": "rest_write",
+      "summary": "PUT /customers/external_customer_id/{external_customer_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/customers/external_customer_id/{external_customer_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.get.customers-external-customer-id-external-customer-id-costs",
+      "kind": "rest_read",
+      "summary": "GET /customers/external_customer_id/{external_customer_id}/costs",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/customers/external_customer_id/{external_customer_id}/costs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.get.customers-external-customer-id-external-customer-id-credits",
+      "kind": "rest_read",
+      "summary": "GET /customers/external_customer_id/{external_customer_id}/credits",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/customers/external_customer_id/{external_customer_id}/credits",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.get.customers-external-customer-id-external-customer-id-credits-ledger",
+      "kind": "rest_read",
+      "summary": "GET /customers/external_customer_id/{external_customer_id}/credits/ledger",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/customers/external_customer_id/{external_customer_id}/credits/ledger",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.post.customers-external-customer-id-external-customer-id-credits-ledger-entry",
+      "kind": "rest_write",
+      "summary": "POST /customers/external_customer_id/{external_customer_id}/credits/ledger_entry",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/customers/external_customer_id/{external_customer_id}/credits/ledger_entry",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.get.customers-external-customer-id-external-customer-id-credits-top-ups",
+      "kind": "rest_read",
+      "summary": "GET /customers/external_customer_id/{external_customer_id}/credits/top_ups",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/customers/external_customer_id/{external_customer_id}/credits/top_ups",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.post.customers-external-customer-id-external-customer-id-credits-top-ups",
+      "kind": "rest_write",
+      "summary": "POST /customers/external_customer_id/{external_customer_id}/credits/top_ups",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/customers/external_customer_id/{external_customer_id}/credits/top_ups",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.delete.customers-external-customer-id-external-customer-id-credits-top-ups-top-up-id",
+      "kind": "rest_write",
+      "summary": "DELETE /customers/external_customer_id/{external_customer_id}/credits/top_ups/{top_up_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/customers/external_customer_id/{external_customer_id}/credits/top_ups/{top_up_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.post.customers-external-customer-id-external-customer-id-portal-sessions",
+      "kind": "rest_write",
+      "summary": "POST /customers/external_customer_id/{external_customer_id}/portal_sessions",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/customers/external_customer_id/{external_customer_id}/portal_sessions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.post.customers-external-customer-id-external-customer-id-sync-payment-methods-from-gateway",
+      "kind": "rest_write",
+      "summary": "POST /customers/external_customer_id/{external_customer_id}/sync_payment_methods_from_gateway",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/customers/external_customer_id/{external_customer_id}/sync_payment_methods_from_gateway",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.get.customers-customer-id",
+      "kind": "rest_read",
+      "summary": "GET /customers/{customer_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/customers/{customer_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.put.customers-customer-id",
+      "kind": "rest_write",
+      "summary": "PUT /customers/{customer_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/customers/{customer_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.delete.customers-customer-id",
+      "kind": "rest_write",
+      "summary": "DELETE /customers/{customer_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/customers/{customer_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.get.customers-customer-id-balance-transactions",
+      "kind": "rest_read",
+      "summary": "GET /customers/{customer_id}/balance_transactions",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/customers/{customer_id}/balance_transactions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.post.customers-customer-id-balance-transactions",
+      "kind": "rest_write",
+      "summary": "POST /customers/{customer_id}/balance_transactions",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/customers/{customer_id}/balance_transactions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.get.customers-customer-id-costs",
+      "kind": "rest_read",
+      "summary": "GET /customers/{customer_id}/costs",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/customers/{customer_id}/costs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.get.customers-customer-id-credits",
+      "kind": "rest_read",
+      "summary": "GET /customers/{customer_id}/credits",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/customers/{customer_id}/credits",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.get.customers-customer-id-credits-ledger",
+      "kind": "rest_read",
+      "summary": "GET /customers/{customer_id}/credits/ledger",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/customers/{customer_id}/credits/ledger",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.post.customers-customer-id-credits-ledger-entry",
+      "kind": "rest_write",
+      "summary": "POST /customers/{customer_id}/credits/ledger_entry",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/customers/{customer_id}/credits/ledger_entry",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.get.customers-customer-id-credits-top-ups",
+      "kind": "rest_read",
+      "summary": "GET /customers/{customer_id}/credits/top_ups",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/customers/{customer_id}/credits/top_ups",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.post.customers-customer-id-credits-top-ups",
+      "kind": "rest_write",
+      "summary": "POST /customers/{customer_id}/credits/top_ups",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/customers/{customer_id}/credits/top_ups",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.delete.customers-customer-id-credits-top-ups-top-up-id",
+      "kind": "rest_write",
+      "summary": "DELETE /customers/{customer_id}/credits/top_ups/{top_up_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/customers/{customer_id}/credits/top_ups/{top_up_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.post.customers-customer-id-portal-sessions",
+      "kind": "rest_write",
+      "summary": "POST /customers/{customer_id}/portal_sessions",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/customers/{customer_id}/portal_sessions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.post.customers-customer-id-sync-payment-methods-from-gateway",
+      "kind": "rest_write",
+      "summary": "POST /customers/{customer_id}/sync_payment_methods_from_gateway",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/customers/{customer_id}/sync_payment_methods_from_gateway",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.get.dimensional-price-groups",
+      "kind": "rest_read",
+      "summary": "GET /dimensional_price_groups",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/dimensional_price_groups",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.post.dimensional-price-groups",
+      "kind": "rest_write",
+      "summary": "POST /dimensional_price_groups",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/dimensional_price_groups",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.get.dimensional-price-groups-external-dimensional-price-group-id-external-dimensional-price-group-id",
+      "kind": "rest_read",
+      "summary": "GET /dimensional_price_groups/external_dimensional_price_group_id/{external_dimensional_price_group_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/dimensional_price_groups/external_dimensional_price_group_id/{external_dimensional_price_group_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.put.dimensional-price-groups-external-dimensional-price-group-id-external-dimensional-price-group-id",
+      "kind": "rest_write",
+      "summary": "PUT /dimensional_price_groups/external_dimensional_price_group_id/{external_dimensional_price_group_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/dimensional_price_groups/external_dimensional_price_group_id/{external_dimensional_price_group_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.get.dimensional-price-groups-dimensional-price-group-id",
+      "kind": "rest_read",
+      "summary": "GET /dimensional_price_groups/{dimensional_price_group_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/dimensional_price_groups/{dimensional_price_group_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.put.dimensional-price-groups-dimensional-price-group-id",
+      "kind": "rest_write",
+      "summary": "PUT /dimensional_price_groups/{dimensional_price_group_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/dimensional_price_groups/{dimensional_price_group_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.get.events-backfills",
+      "kind": "rest_read",
+      "summary": "GET /events/backfills",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/events/backfills",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.post.events-backfills",
+      "kind": "rest_write",
+      "summary": "POST /events/backfills",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/events/backfills",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.get.events-backfills-backfill-id",
+      "kind": "rest_read",
+      "summary": "GET /events/backfills/{backfill_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/events/backfills/{backfill_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.post.events-backfills-backfill-id-close",
+      "kind": "rest_write",
+      "summary": "POST /events/backfills/{backfill_id}/close",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/events/backfills/{backfill_id}/close",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.post.events-backfills-backfill-id-revert",
+      "kind": "rest_write",
+      "summary": "POST /events/backfills/{backfill_id}/revert",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/events/backfills/{backfill_id}/revert",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.post.events-search",
+      "kind": "rest_write",
+      "summary": "POST /events/search",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/events/search",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.get.events-volume",
+      "kind": "rest_read",
+      "summary": "GET /events/volume",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/events/volume",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.put.events-event-id",
+      "kind": "rest_write",
+      "summary": "PUT /events/{event_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/events/{event_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.put.events-event-id-deprecate",
+      "kind": "rest_write",
+      "summary": "PUT /events/{event_id}/deprecate",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/events/{event_id}/deprecate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.post.ingest",
+      "kind": "rest_write",
+      "summary": "POST /ingest",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/ingest",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.post.invoice-line-items",
+      "kind": "rest_write",
+      "summary": "POST /invoice_line_items",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/invoice_line_items",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.get.invoices",
+      "kind": "rest_read",
+      "summary": "GET /invoices",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/invoices",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.post.invoices",
+      "kind": "rest_write",
+      "summary": "POST /invoices",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/invoices",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.get.invoices-summary",
+      "kind": "rest_read",
+      "summary": "GET /invoices/summary",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/invoices/summary",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.post.invoices-summary-invoice-id-issue",
+      "kind": "rest_write",
+      "summary": "POST /invoices/summary/{invoice_id}/issue",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/invoices/summary/{invoice_id}/issue",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.get.invoices-upcoming",
+      "kind": "rest_read",
+      "summary": "GET /invoices/upcoming",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/invoices/upcoming",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.get.invoices-invoice-id",
+      "kind": "rest_read",
+      "summary": "GET /invoices/{invoice_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/invoices/{invoice_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.put.invoices-invoice-id",
+      "kind": "rest_write",
+      "summary": "PUT /invoices/{invoice_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/invoices/{invoice_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.delete.invoices-invoice-id-invoice-line-items-line-item-id",
+      "kind": "rest_write",
+      "summary": "DELETE /invoices/{invoice_id}/invoice_line_items/{line_item_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/invoices/{invoice_id}/invoice_line_items/{line_item_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.post.invoices-invoice-id-issue",
+      "kind": "rest_write",
+      "summary": "POST /invoices/{invoice_id}/issue",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/invoices/{invoice_id}/issue",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.post.invoices-invoice-id-mark-paid",
+      "kind": "rest_write",
+      "summary": "POST /invoices/{invoice_id}/mark_paid",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/invoices/{invoice_id}/mark_paid",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.post.invoices-invoice-id-pay",
+      "kind": "rest_write",
+      "summary": "POST /invoices/{invoice_id}/pay",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/invoices/{invoice_id}/pay",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.post.invoices-invoice-id-regenerate-invoice-pdf",
+      "kind": "rest_write",
+      "summary": "POST /invoices/{invoice_id}/regenerate_invoice_pdf",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/invoices/{invoice_id}/regenerate_invoice_pdf",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.post.invoices-invoice-id-regenerate-receipt-pdf",
+      "kind": "rest_write",
+      "summary": "POST /invoices/{invoice_id}/regenerate_receipt_pdf",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/invoices/{invoice_id}/regenerate_receipt_pdf",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.post.invoices-invoice-id-void",
+      "kind": "rest_write",
+      "summary": "POST /invoices/{invoice_id}/void",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/invoices/{invoice_id}/void",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.get.items",
+      "kind": "rest_read",
+      "summary": "GET /items",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/items",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.post.items",
+      "kind": "rest_write",
+      "summary": "POST /items",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/items",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.get.items-item-id",
+      "kind": "rest_read",
+      "summary": "GET /items/{item_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/items/{item_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.put.items-item-id",
+      "kind": "rest_write",
+      "summary": "PUT /items/{item_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/items/{item_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.post.items-item-id-archive",
+      "kind": "rest_write",
+      "summary": "POST /items/{item_id}/archive",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/items/{item_id}/archive",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.get.license-types",
+      "kind": "rest_read",
+      "summary": "GET /license_types",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/license_types",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.post.license-types",
+      "kind": "rest_write",
+      "summary": "POST /license_types",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/license_types",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.get.license-types-license-type-id",
+      "kind": "rest_read",
+      "summary": "GET /license_types/{license_type_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/license_types/{license_type_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.get.licenses",
+      "kind": "rest_read",
+      "summary": "GET /licenses",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/licenses",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.post.licenses",
+      "kind": "rest_write",
+      "summary": "POST /licenses",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/licenses",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.get.licenses-external-license-id-external-license-id",
+      "kind": "rest_read",
+      "summary": "GET /licenses/external_license_id/{external_license_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/licenses/external_license_id/{external_license_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.get.licenses-external-licenses-external-license-id-usage",
+      "kind": "rest_read",
+      "summary": "GET /licenses/external_licenses/{external_license_id}/usage",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/licenses/external_licenses/{external_license_id}/usage",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.get.licenses-usage",
+      "kind": "rest_read",
+      "summary": "GET /licenses/usage",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/licenses/usage",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.get.licenses-license-id",
+      "kind": "rest_read",
+      "summary": "GET /licenses/{license_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/licenses/{license_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.post.licenses-license-id-deactivate",
+      "kind": "rest_write",
+      "summary": "POST /licenses/{license_id}/deactivate",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/licenses/{license_id}/deactivate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.get.licenses-license-id-usage",
+      "kind": "rest_read",
+      "summary": "GET /licenses/{license_id}/usage",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/licenses/{license_id}/usage",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.get.metrics",
+      "kind": "rest_read",
+      "summary": "GET /metrics",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/metrics",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.post.metrics",
+      "kind": "rest_write",
+      "summary": "POST /metrics",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/metrics",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.get.metrics-metric-id",
+      "kind": "rest_read",
+      "summary": "GET /metrics/{metric_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/metrics/{metric_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.put.metrics-metric-id",
+      "kind": "rest_write",
+      "summary": "PUT /metrics/{metric_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/metrics/{metric_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.get.ping",
+      "kind": "rest_read",
+      "summary": "GET /ping",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/ping",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.get.plans",
+      "kind": "rest_read",
+      "summary": "GET /plans",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/plans",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.post.plans",
+      "kind": "rest_write",
+      "summary": "POST /plans",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/plans",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.get.plans-external-plan-id-external-plan-id",
+      "kind": "rest_read",
+      "summary": "GET /plans/external_plan_id/{external_plan_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/plans/external_plan_id/{external_plan_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.put.plans-external-plan-id-external-plan-id",
+      "kind": "rest_write",
+      "summary": "PUT /plans/external_plan_id/{external_plan_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/plans/external_plan_id/{external_plan_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.post.plans-external-plan-id-external-plan-id-set-default-version",
+      "kind": "rest_write",
+      "summary": "POST /plans/external_plan_id/{external_plan_id}/set_default_version",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/plans/external_plan_id/{external_plan_id}/set_default_version",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.post.plans-external-plan-id-external-plan-id-versions",
+      "kind": "rest_write",
+      "summary": "POST /plans/external_plan_id/{external_plan_id}/versions",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/plans/external_plan_id/{external_plan_id}/versions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.get.plans-external-plan-id-external-plan-id-versions-version",
+      "kind": "rest_read",
+      "summary": "GET /plans/external_plan_id/{external_plan_id}/versions/{version}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/plans/external_plan_id/{external_plan_id}/versions/{version}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.get.plans-plan-id",
+      "kind": "rest_read",
+      "summary": "GET /plans/{plan_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/plans/{plan_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.put.plans-plan-id",
+      "kind": "rest_write",
+      "summary": "PUT /plans/{plan_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/plans/{plan_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.get.plans-plan-id-migrations",
+      "kind": "rest_read",
+      "summary": "GET /plans/{plan_id}/migrations",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/plans/{plan_id}/migrations",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.get.plans-plan-id-migrations-migration-id",
+      "kind": "rest_read",
+      "summary": "GET /plans/{plan_id}/migrations/{migration_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/plans/{plan_id}/migrations/{migration_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.post.plans-plan-id-migrations-migration-id-cancel",
+      "kind": "rest_write",
+      "summary": "POST /plans/{plan_id}/migrations/{migration_id}/cancel",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/plans/{plan_id}/migrations/{migration_id}/cancel",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.post.plans-plan-id-set-default-version",
+      "kind": "rest_write",
+      "summary": "POST /plans/{plan_id}/set_default_version",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/plans/{plan_id}/set_default_version",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.post.plans-plan-id-versions",
+      "kind": "rest_write",
+      "summary": "POST /plans/{plan_id}/versions",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/plans/{plan_id}/versions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.get.plans-plan-id-versions-version",
+      "kind": "rest_read",
+      "summary": "GET /plans/{plan_id}/versions/{version}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/plans/{plan_id}/versions/{version}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.get.prices",
+      "kind": "rest_read",
+      "summary": "GET /prices",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/prices",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.post.prices",
+      "kind": "rest_write",
+      "summary": "POST /prices",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/prices",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.post.prices-evaluate",
+      "kind": "rest_write",
+      "summary": "POST /prices/evaluate",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/prices/evaluate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.post.prices-evaluate-preview-events",
+      "kind": "rest_write",
+      "summary": "POST /prices/evaluate_preview_events",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/prices/evaluate_preview_events",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.get.prices-external-price-id-external-price-id",
+      "kind": "rest_read",
+      "summary": "GET /prices/external_price_id/{external_price_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/prices/external_price_id/{external_price_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.put.prices-external-price-id-external-price-id",
+      "kind": "rest_write",
+      "summary": "PUT /prices/external_price_id/{external_price_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/prices/external_price_id/{external_price_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.get.prices-price-id",
+      "kind": "rest_read",
+      "summary": "GET /prices/{price_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/prices/{price_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.put.prices-price-id",
+      "kind": "rest_write",
+      "summary": "PUT /prices/{price_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/prices/{price_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.post.prices-price-id-evaluate",
+      "kind": "rest_write",
+      "summary": "POST /prices/{price_id}/evaluate",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/prices/{price_id}/evaluate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.get.subscription-changes",
+      "kind": "rest_read",
+      "summary": "GET /subscription_changes",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/subscription_changes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.get.subscription-changes-subscription-change-id",
+      "kind": "rest_read",
+      "summary": "GET /subscription_changes/{subscription_change_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/subscription_changes/{subscription_change_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.post.subscription-changes-subscription-change-id-apply",
+      "kind": "rest_write",
+      "summary": "POST /subscription_changes/{subscription_change_id}/apply",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/subscription_changes/{subscription_change_id}/apply",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.post.subscription-changes-subscription-change-id-cancel",
+      "kind": "rest_write",
+      "summary": "POST /subscription_changes/{subscription_change_id}/cancel",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/subscription_changes/{subscription_change_id}/cancel",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.get.subscriptions",
+      "kind": "rest_read",
+      "summary": "GET /subscriptions",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/subscriptions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.post.subscriptions",
+      "kind": "rest_write",
+      "summary": "POST /subscriptions",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/subscriptions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.get.subscriptions-subscription-id",
+      "kind": "rest_read",
+      "summary": "GET /subscriptions/{subscription_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/subscriptions/{subscription_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.put.subscriptions-subscription-id",
+      "kind": "rest_write",
+      "summary": "PUT /subscriptions/{subscription_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/subscriptions/{subscription_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.post.subscriptions-subscription-id-cancel",
+      "kind": "rest_write",
+      "summary": "POST /subscriptions/{subscription_id}/cancel",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/subscriptions/{subscription_id}/cancel",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.get.subscriptions-subscription-id-costs",
+      "kind": "rest_read",
+      "summary": "GET /subscriptions/{subscription_id}/costs",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/subscriptions/{subscription_id}/costs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.post.subscriptions-subscription-id-price-intervals",
+      "kind": "rest_write",
+      "summary": "POST /subscriptions/{subscription_id}/price_intervals",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/subscriptions/{subscription_id}/price_intervals",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.post.subscriptions-subscription-id-redeem-coupon",
+      "kind": "rest_write",
+      "summary": "POST /subscriptions/{subscription_id}/redeem_coupon",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/subscriptions/{subscription_id}/redeem_coupon",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.get.subscriptions-subscription-id-schedule",
+      "kind": "rest_read",
+      "summary": "GET /subscriptions/{subscription_id}/schedule",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/subscriptions/{subscription_id}/schedule",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.post.subscriptions-subscription-id-schedule-plan-change",
+      "kind": "rest_write",
+      "summary": "POST /subscriptions/{subscription_id}/schedule_plan_change",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/subscriptions/{subscription_id}/schedule_plan_change",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.post.subscriptions-subscription-id-trigger-phase",
+      "kind": "rest_write",
+      "summary": "POST /subscriptions/{subscription_id}/trigger_phase",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/subscriptions/{subscription_id}/trigger_phase",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.post.subscriptions-subscription-id-unschedule-cancellation",
+      "kind": "rest_write",
+      "summary": "POST /subscriptions/{subscription_id}/unschedule_cancellation",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/subscriptions/{subscription_id}/unschedule_cancellation",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.post.subscriptions-subscription-id-unschedule-fixed-fee-quantity-updates",
+      "kind": "rest_write",
+      "summary": "POST /subscriptions/{subscription_id}/unschedule_fixed_fee_quantity_updates",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/subscriptions/{subscription_id}/unschedule_fixed_fee_quantity_updates",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.post.subscriptions-subscription-id-unschedule-pending-plan-changes",
+      "kind": "rest_write",
+      "summary": "POST /subscriptions/{subscription_id}/unschedule_pending_plan_changes",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/subscriptions/{subscription_id}/unschedule_pending_plan_changes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.post.subscriptions-subscription-id-update-fixed-fee-quantity",
+      "kind": "rest_write",
+      "summary": "POST /subscriptions/{subscription_id}/update_fixed_fee_quantity",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/subscriptions/{subscription_id}/update_fixed_fee_quantity",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.post.subscriptions-subscription-id-update-trial",
+      "kind": "rest_write",
+      "summary": "POST /subscriptions/{subscription_id}/update_trial",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/subscriptions/{subscription_id}/update_trial",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "orb.get.subscriptions-subscription-id-usage",
+      "kind": "rest_read",
+      "summary": "GET /subscriptions/{subscription_id}/usage",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/subscriptions/{subscription_id}/usage",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

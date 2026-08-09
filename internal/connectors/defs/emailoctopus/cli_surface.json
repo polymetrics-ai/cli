@@ -1,0 +1,935 @@
+{
+  "tagline": "Run EmailOctopus's declared streams and reverse-ETL actions.",
+  "usage": "pm emailoctopus \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "api get campaigns campaignid reports bounced",
+        "api get campaigns campaignid reports clicked",
+        "api get campaigns campaignid reports complained",
+        "api get campaigns campaignid reports links",
+        "api get campaigns campaignid reports not-clicked",
+        "api get campaigns campaignid reports not-opened",
+        "api get campaigns campaignid reports opened",
+        "api get campaigns campaignid reports sent",
+        "api get campaigns campaignid reports unsubscribed",
+        "api get campaigns id",
+        "api get lists id",
+        "api get lists id contacts email",
+        "api get lists id contacts subscribed",
+        "api get lists id contacts tagged tag",
+        "api get lists id contacts unsubscribed",
+        "campaign summary reports list",
+        "campaigns list",
+        "list contacts list",
+        "list tags list",
+        "lists list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "api put lists id contacts bulk",
+        "create list apply",
+        "create list contact apply",
+        "create list field apply",
+        "create list tag apply",
+        "delete list apply",
+        "delete list contact apply",
+        "delete list field apply",
+        "delete list tag apply",
+        "start automation apply",
+        "update list apply",
+        "update list contact apply",
+        "update list field apply",
+        "update list tag apply"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "api get campaigns campaignid reports bounced",
+      "summary": "Documented GET /campaigns/{campaignId}/reports/bounced (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://emailoctopus.com/api-documentation",
+      "examples": [
+        "pm emailoctopus api get campaigns campaignid reports bounced --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/campaigns/{campaignId}/reports/bounced"
+        }
+      ],
+      "operation": "emailoctopus.get.campaigns-campaignid-reports-bounced",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get campaigns campaignid reports clicked",
+      "summary": "Documented GET /campaigns/{campaignId}/reports/clicked (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://emailoctopus.com/api-documentation",
+      "examples": [
+        "pm emailoctopus api get campaigns campaignid reports clicked --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/campaigns/{campaignId}/reports/clicked"
+        }
+      ],
+      "operation": "emailoctopus.get.campaigns-campaignid-reports-clicked",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get campaigns campaignid reports complained",
+      "summary": "Documented GET /campaigns/{campaignId}/reports/complained (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://emailoctopus.com/api-documentation",
+      "examples": [
+        "pm emailoctopus api get campaigns campaignid reports complained --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/campaigns/{campaignId}/reports/complained"
+        }
+      ],
+      "operation": "emailoctopus.get.campaigns-campaignid-reports-complained",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get campaigns campaignid reports links",
+      "summary": "Documented GET /campaigns/{campaignId}/reports/links (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://emailoctopus.com/api-documentation",
+      "examples": [
+        "pm emailoctopus api get campaigns campaignid reports links --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/campaigns/{campaignId}/reports/links"
+        }
+      ],
+      "operation": "emailoctopus.get.campaigns-campaignid-reports-links",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get campaigns campaignid reports not-clicked",
+      "summary": "Documented GET /campaigns/{campaignId}/reports/not-clicked (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://emailoctopus.com/api-documentation",
+      "examples": [
+        "pm emailoctopus api get campaigns campaignid reports not-clicked --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/campaigns/{campaignId}/reports/not-clicked"
+        }
+      ],
+      "operation": "emailoctopus.get.campaigns-campaignid-reports-not-clicked",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get campaigns campaignid reports not-opened",
+      "summary": "Documented GET /campaigns/{campaignId}/reports/not-opened (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://emailoctopus.com/api-documentation",
+      "examples": [
+        "pm emailoctopus api get campaigns campaignid reports not-opened --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/campaigns/{campaignId}/reports/not-opened"
+        }
+      ],
+      "operation": "emailoctopus.get.campaigns-campaignid-reports-not-opened",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get campaigns campaignid reports opened",
+      "summary": "Documented GET /campaigns/{campaignId}/reports/opened (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://emailoctopus.com/api-documentation",
+      "examples": [
+        "pm emailoctopus api get campaigns campaignid reports opened --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/campaigns/{campaignId}/reports/opened"
+        }
+      ],
+      "operation": "emailoctopus.get.campaigns-campaignid-reports-opened",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get campaigns campaignid reports sent",
+      "summary": "Documented GET /campaigns/{campaignId}/reports/sent (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://emailoctopus.com/api-documentation",
+      "examples": [
+        "pm emailoctopus api get campaigns campaignid reports sent --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/campaigns/{campaignId}/reports/sent"
+        }
+      ],
+      "operation": "emailoctopus.get.campaigns-campaignid-reports-sent",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get campaigns campaignid reports unsubscribed",
+      "summary": "Documented GET /campaigns/{campaignId}/reports/unsubscribed (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://emailoctopus.com/api-documentation",
+      "examples": [
+        "pm emailoctopus api get campaigns campaignid reports unsubscribed --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/campaigns/{campaignId}/reports/unsubscribed"
+        }
+      ],
+      "operation": "emailoctopus.get.campaigns-campaignid-reports-unsubscribed",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get campaigns id",
+      "summary": "Documented GET /campaigns/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://emailoctopus.com/api-documentation",
+      "examples": [
+        "pm emailoctopus api get campaigns id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/campaigns/{id}"
+        }
+      ],
+      "operation": "emailoctopus.get.campaigns-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get lists id",
+      "summary": "Documented GET /lists/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://emailoctopus.com/api-documentation",
+      "examples": [
+        "pm emailoctopus api get lists id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/lists/{id}"
+        }
+      ],
+      "operation": "emailoctopus.get.lists-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get lists id contacts email",
+      "summary": "Documented GET /lists/{id}/contacts/{email} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://emailoctopus.com/api-documentation",
+      "examples": [
+        "pm emailoctopus api get lists id contacts email --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/lists/{id}/contacts/{email}"
+        }
+      ],
+      "operation": "emailoctopus.get.lists-id-contacts-email",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get lists id contacts subscribed",
+      "summary": "Documented GET /lists/{id}/contacts/subscribed (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://emailoctopus.com/api-documentation",
+      "examples": [
+        "pm emailoctopus api get lists id contacts subscribed --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/lists/{id}/contacts/subscribed"
+        }
+      ],
+      "operation": "emailoctopus.get.lists-id-contacts-subscribed",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get lists id contacts tagged tag",
+      "summary": "Documented GET /lists/{id}/contacts/tagged/{tag} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://emailoctopus.com/api-documentation",
+      "examples": [
+        "pm emailoctopus api get lists id contacts tagged tag --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/lists/{id}/contacts/tagged/{tag}"
+        }
+      ],
+      "operation": "emailoctopus.get.lists-id-contacts-tagged-tag",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get lists id contacts unsubscribed",
+      "summary": "Documented GET /lists/{id}/contacts/unsubscribed (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://emailoctopus.com/api-documentation",
+      "examples": [
+        "pm emailoctopus api get lists id contacts unsubscribed --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/lists/{id}/contacts/unsubscribed"
+        }
+      ],
+      "operation": "emailoctopus.get.lists-id-contacts-unsubscribed",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api put lists id contacts bulk",
+      "summary": "Documented PUT /lists/{id}/contacts/bulk (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://emailoctopus.com/api-documentation",
+      "examples": [
+        "pm emailoctopus api put lists id contacts bulk --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/lists/{id}/contacts/bulk"
+        }
+      ],
+      "operation": "emailoctopus.put.lists-id-contacts-bulk",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "campaign summary reports list",
+      "summary": "Run the campaign summary reports ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "campaign_summary_reports",
+      "source_url": "https://emailoctopus.com/api-documentation",
+      "examples": [
+        "pm emailoctopus campaign summary reports list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/campaigns/{campaignId}/reports/summary"
+        }
+      ]
+    },
+    {
+      "path": "campaigns list",
+      "summary": "Run the campaigns ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "campaigns",
+      "source_url": "https://emailoctopus.com/api-documentation",
+      "examples": [
+        "pm emailoctopus campaigns list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/campaigns"
+        }
+      ]
+    },
+    {
+      "path": "create list apply",
+      "summary": "Plan and execute the create list reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_list",
+      "source_url": "https://emailoctopus.com/api-documentation",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm emailoctopus create list apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/lists"
+        }
+      ],
+      "risk": "creates a new contact list; low-risk external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create list contact apply",
+      "summary": "Plan and execute the create list contact reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_list_contact",
+      "source_url": "https://emailoctopus.com/api-documentation",
+      "flags": [
+        {
+          "name": "email_address",
+          "type": "string",
+          "summary": "Required email address record field.",
+          "maps_to": "record.email_address",
+          "required": true
+        },
+        {
+          "name": "list_id",
+          "type": "string",
+          "summary": "Required list id record field.",
+          "maps_to": "record.list_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm emailoctopus create list contact apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/lists/{id}/contacts"
+        }
+      ],
+      "risk": "adds a new contact to a list, immediately eligible to receive future campaigns targeting it (unless status is PENDING on a double opt-in list)",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create list field apply",
+      "summary": "Plan and execute the create list field reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_list_field",
+      "source_url": "https://emailoctopus.com/api-documentation",
+      "flags": [
+        {
+          "name": "label",
+          "type": "string",
+          "summary": "Required label record field.",
+          "maps_to": "record.label",
+          "required": true
+        },
+        {
+          "name": "list_id",
+          "type": "string",
+          "summary": "Required list id record field.",
+          "maps_to": "record.list_id",
+          "required": true
+        },
+        {
+          "name": "tag",
+          "type": "string",
+          "summary": "Required tag record field.",
+          "maps_to": "record.tag",
+          "required": true
+        },
+        {
+          "name": "type",
+          "type": "string",
+          "summary": "Required type record field.",
+          "maps_to": "record.type",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm emailoctopus create list field apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/lists/{id}/fields"
+        }
+      ],
+      "risk": "creates a new custom field on a list; the field's type (NUMBER/TEXT/DATE) cannot be changed after creation",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create list tag apply",
+      "summary": "Plan and execute the create list tag reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_list_tag",
+      "source_url": "https://emailoctopus.com/api-documentation",
+      "flags": [
+        {
+          "name": "list_id",
+          "type": "string",
+          "summary": "Required list id record field.",
+          "maps_to": "record.list_id",
+          "required": true
+        },
+        {
+          "name": "tag",
+          "type": "string",
+          "summary": "Required tag record field.",
+          "maps_to": "record.tag",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm emailoctopus create list tag apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/lists/{id}/tags"
+        }
+      ],
+      "risk": "creates a new tag on a list, up to that list's tag-count limit; low-risk external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete list apply",
+      "summary": "Plan and execute the delete list reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_list",
+      "source_url": "https://emailoctopus.com/api-documentation",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm emailoctopus delete list apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/lists/{id}"
+        }
+      ],
+      "risk": "permanently removes a list and all of its contacts/tags/custom fields",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete list contact apply",
+      "summary": "Plan and execute the delete list contact reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_list_contact",
+      "source_url": "https://emailoctopus.com/api-documentation",
+      "flags": [
+        {
+          "name": "list_id",
+          "type": "string",
+          "summary": "Required list id record field.",
+          "maps_to": "record.list_id",
+          "required": true
+        },
+        {
+          "name": "member_id",
+          "type": "string",
+          "summary": "Required member id record field.",
+          "maps_to": "record.member_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm emailoctopus delete list contact apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/lists/{id}/contacts/{member_id}"
+        }
+      ],
+      "risk": "permanently removes a contact from a list and its subscription/consent history",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete list field apply",
+      "summary": "Plan and execute the delete list field reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_list_field",
+      "source_url": "https://emailoctopus.com/api-documentation",
+      "flags": [
+        {
+          "name": "list_id",
+          "type": "string",
+          "summary": "Required list id record field.",
+          "maps_to": "record.list_id",
+          "required": true
+        },
+        {
+          "name": "tag",
+          "type": "string",
+          "summary": "Required tag record field.",
+          "maps_to": "record.tag",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm emailoctopus delete list field apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/lists/{id}/fields/{tag}"
+        }
+      ],
+      "risk": "permanently removes a custom field and its stored values from every contact on the list",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete list tag apply",
+      "summary": "Plan and execute the delete list tag reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_list_tag",
+      "source_url": "https://emailoctopus.com/api-documentation",
+      "flags": [
+        {
+          "name": "list_id",
+          "type": "string",
+          "summary": "Required list id record field.",
+          "maps_to": "record.list_id",
+          "required": true
+        },
+        {
+          "name": "tag",
+          "type": "string",
+          "summary": "Required tag record field.",
+          "maps_to": "record.tag",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm emailoctopus delete list tag apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/lists/{id}/tags/{tag}"
+        }
+      ],
+      "risk": "permanently removes a tag from a list and from every contact currently carrying it",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "list contacts list",
+      "summary": "Run the list contacts ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "list_contacts",
+      "source_url": "https://emailoctopus.com/api-documentation",
+      "examples": [
+        "pm emailoctopus list contacts list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/lists/{id}/contacts"
+        }
+      ]
+    },
+    {
+      "path": "list tags list",
+      "summary": "Run the list tags ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "list_tags",
+      "source_url": "https://emailoctopus.com/api-documentation",
+      "examples": [
+        "pm emailoctopus list tags list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/lists/{id}/tags"
+        }
+      ]
+    },
+    {
+      "path": "lists list",
+      "summary": "Run the lists ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "lists",
+      "source_url": "https://emailoctopus.com/api-documentation",
+      "examples": [
+        "pm emailoctopus lists list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/lists"
+        }
+      ]
+    },
+    {
+      "path": "start automation apply",
+      "summary": "Plan and execute the start automation reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "start_automation",
+      "source_url": "https://emailoctopus.com/api-documentation",
+      "flags": [
+        {
+          "name": "automation_id",
+          "type": "string",
+          "summary": "Required automation id record field.",
+          "maps_to": "record.automation_id",
+          "required": true
+        },
+        {
+          "name": "list_member_id",
+          "type": "string",
+          "summary": "Required list member id record field.",
+          "maps_to": "record.list_member_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm emailoctopus start automation apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/automations/{automationId}/queue"
+        }
+      ],
+      "risk": "enrolls a contact into a live automation sequence, triggering its configured emails/delays; the automation must already have the 'Started via API' trigger enabled in the EmailOctopus dashboard",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update list apply",
+      "summary": "Plan and execute the update list reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_list",
+      "source_url": "https://emailoctopus.com/api-documentation",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm emailoctopus update list apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/lists/{id}"
+        }
+      ],
+      "risk": "renames an existing list; the id used by campaigns/API integrations to reference it is unchanged",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update list contact apply",
+      "summary": "Plan and execute the update list contact reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_list_contact",
+      "source_url": "https://emailoctopus.com/api-documentation",
+      "flags": [
+        {
+          "name": "list_id",
+          "type": "string",
+          "summary": "Required list id record field.",
+          "maps_to": "record.list_id",
+          "required": true
+        },
+        {
+          "name": "member_id",
+          "type": "string",
+          "summary": "Required member id record field.",
+          "maps_to": "record.member_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm emailoctopus update list contact apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/lists/{id}/contacts/{member_id}"
+        }
+      ],
+      "risk": "mutates an existing contact's email/fields/tags/status; a status change to UNSUBSCRIBED or SUBSCRIBED changes future campaign eligibility for this recipient",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update list field apply",
+      "summary": "Plan and execute the update list field reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_list_field",
+      "source_url": "https://emailoctopus.com/api-documentation",
+      "flags": [
+        {
+          "name": "label",
+          "type": "string",
+          "summary": "Required label record field.",
+          "maps_to": "record.label",
+          "required": true
+        },
+        {
+          "name": "list_id",
+          "type": "string",
+          "summary": "Required list id record field.",
+          "maps_to": "record.list_id",
+          "required": true
+        },
+        {
+          "name": "new_tag",
+          "type": "string",
+          "summary": "Required new tag record field.",
+          "maps_to": "record.new_tag",
+          "required": true
+        },
+        {
+          "name": "tag",
+          "type": "string",
+          "summary": "Required tag record field.",
+          "maps_to": "record.tag",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm emailoctopus update list field apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/lists/{id}/fields/{tag}"
+        }
+      ],
+      "risk": "renames a custom field's label/tag or changes its fallback default; any email template referencing the old field tag stops resolving a value",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update list tag apply",
+      "summary": "Plan and execute the update list tag reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_list_tag",
+      "source_url": "https://emailoctopus.com/api-documentation",
+      "flags": [
+        {
+          "name": "list_id",
+          "type": "string",
+          "summary": "Required list id record field.",
+          "maps_to": "record.list_id",
+          "required": true
+        },
+        {
+          "name": "new_tag",
+          "type": "string",
+          "summary": "Required new tag record field.",
+          "maps_to": "record.new_tag",
+          "required": true
+        },
+        {
+          "name": "tag",
+          "type": "string",
+          "summary": "Required tag record field.",
+          "maps_to": "record.tag",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm emailoctopus update list tag apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/lists/{id}/tags/{tag}"
+        }
+      ],
+      "risk": "renames an existing tag on a list; any external automation/segment referencing the old tag name stops matching contacts by that name",
+      "approval": "requires plan, preview, approval, and execute"
+    }
+  ]
+}

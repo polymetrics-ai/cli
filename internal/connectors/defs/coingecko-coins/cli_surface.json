@@ -1,0 +1,1856 @@
+{
+  "tagline": "Run CoinGecko Coins's declared streams and reverse-ETL actions.",
+  "usage": "pm coingecko-coins \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "api get asset-platforms",
+        "api get coins categories",
+        "api get coins categories list",
+        "api get coins id circulating-supply-chart",
+        "api get coins id circulating-supply-chart range",
+        "api get coins id contract contract-address",
+        "api get coins id contract contract-address market-chart",
+        "api get coins id contract contract-address market-chart range",
+        "api get coins id history",
+        "api get coins id market-chart",
+        "api get coins id market-chart range",
+        "api get coins id ohlc",
+        "api get coins id ohlc range",
+        "api get coins id supply-breakdown",
+        "api get coins id total-supply-chart",
+        "api get coins id total-supply-chart range",
+        "api get coins list",
+        "api get coins list new",
+        "api get coins markets",
+        "api get coins top-gainers-losers",
+        "api get derivatives",
+        "api get derivatives exchanges",
+        "api get derivatives exchanges id",
+        "api get derivatives exchanges list",
+        "api get entities list",
+        "api get entity public-treasury coin-id",
+        "api get exchange-rates",
+        "api get exchanges",
+        "api get exchanges id",
+        "api get exchanges id tickers",
+        "api get exchanges id volume-chart",
+        "api get exchanges id volume-chart range",
+        "api get exchanges list",
+        "api get global",
+        "api get global decentralized-finance-defi",
+        "api get global market-cap-chart",
+        "api get insights",
+        "api get key",
+        "api get news",
+        "api get nfts asset-platform-id contract contract-address",
+        "api get nfts asset-platform-id contract contract-address market-chart",
+        "api get nfts id",
+        "api get nfts id market-chart",
+        "api get nfts id tickers",
+        "api get nfts list",
+        "api get nfts markets",
+        "api get onchain categories",
+        "api get onchain categories category-id pools",
+        "api get onchain networks",
+        "api get onchain networks network dexes",
+        "api get onchain networks network dexes dex pools",
+        "api get onchain networks network new-pools",
+        "api get onchain networks network pools",
+        "api get onchain networks network pools address",
+        "api get onchain networks network pools multi addresses",
+        "api get onchain networks network pools pool-address info",
+        "api get onchain networks network pools pool-address ohlcv timeframe",
+        "api get onchain networks network pools pool-address trades",
+        "api get onchain networks network tokens address",
+        "api get onchain networks network tokens address info",
+        "api get onchain networks network tokens address top-holders",
+        "api get onchain networks network tokens multi addresses",
+        "api get onchain networks network tokens token-address holders-chart",
+        "api get onchain networks network tokens token-address ohlcv timeframe",
+        "api get onchain networks network tokens token-address pools",
+        "api get onchain networks network tokens token-address top-traders",
+        "api get onchain networks network tokens token-address trades",
+        "api get onchain networks network trending-pools",
+        "api get onchain networks network-id tokens token-address top-traders",
+        "api get onchain networks new-pools",
+        "api get onchain networks trending-pools",
+        "api get onchain pools megafilter",
+        "api get onchain pools trending-search",
+        "api get onchain search pools",
+        "api get onchain simple networks network token-price addresses",
+        "api get onchain tokens info-recently-updated",
+        "api get ping",
+        "api get public-treasury entity-id",
+        "api get public-treasury entity-id coin-id holding-chart",
+        "api get public-treasury entity-id transaction-history",
+        "api get search",
+        "api get search trending",
+        "api get simple price",
+        "api get simple supported-vs-currencies",
+        "api get simple token-price id",
+        "api get token-lists asset-platform-id all-json",
+        "coin list",
+        "tickers list"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "api get asset-platforms",
+      "summary": "Documented GET /asset_platforms (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.coingecko.com/openapi-specs/pro-api.json",
+      "examples": [
+        "pm coingecko-coins api get asset-platforms --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/asset_platforms"
+        }
+      ],
+      "operation": "coingecko-coins.get.asset-platforms",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get coins categories",
+      "summary": "Documented GET /coins/categories (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.coingecko.com/openapi-specs/pro-api.json",
+      "examples": [
+        "pm coingecko-coins api get coins categories --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/coins/categories"
+        }
+      ],
+      "operation": "coingecko-coins.get.coins-categories",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get coins categories list",
+      "summary": "Documented GET /coins/categories/list (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.coingecko.com/openapi-specs/pro-api.json",
+      "examples": [
+        "pm coingecko-coins api get coins categories list --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/coins/categories/list"
+        }
+      ],
+      "operation": "coingecko-coins.get.coins-categories-list",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get coins id circulating-supply-chart",
+      "summary": "Documented GET /coins/{id}/circulating_supply_chart (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.coingecko.com/openapi-specs/pro-api.json",
+      "examples": [
+        "pm coingecko-coins api get coins id circulating-supply-chart --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/coins/{id}/circulating_supply_chart"
+        }
+      ],
+      "operation": "coingecko-coins.get.coins-id-circulating-supply-chart",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get coins id circulating-supply-chart range",
+      "summary": "Documented GET /coins/{id}/circulating_supply_chart/range (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.coingecko.com/openapi-specs/pro-api.json",
+      "examples": [
+        "pm coingecko-coins api get coins id circulating-supply-chart range --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/coins/{id}/circulating_supply_chart/range"
+        }
+      ],
+      "operation": "coingecko-coins.get.coins-id-circulating-supply-chart-range",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get coins id contract contract-address",
+      "summary": "Documented GET /coins/{id}/contract/{contract_address} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.coingecko.com/openapi-specs/pro-api.json",
+      "examples": [
+        "pm coingecko-coins api get coins id contract contract-address --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/coins/{id}/contract/{contract_address}"
+        }
+      ],
+      "operation": "coingecko-coins.get.coins-id-contract-contract-address",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get coins id contract contract-address market-chart",
+      "summary": "Documented GET /coins/{id}/contract/{contract_address}/market_chart (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.coingecko.com/openapi-specs/pro-api.json",
+      "examples": [
+        "pm coingecko-coins api get coins id contract contract-address market-chart --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/coins/{id}/contract/{contract_address}/market_chart"
+        }
+      ],
+      "operation": "coingecko-coins.get.coins-id-contract-contract-address-market-chart",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get coins id contract contract-address market-chart range",
+      "summary": "Documented GET /coins/{id}/contract/{contract_address}/market_chart/range (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.coingecko.com/openapi-specs/pro-api.json",
+      "examples": [
+        "pm coingecko-coins api get coins id contract contract-address market-chart range --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/coins/{id}/contract/{contract_address}/market_chart/range"
+        }
+      ],
+      "operation": "coingecko-coins.get.coins-id-contract-contract-address-market-chart-range",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get coins id history",
+      "summary": "Documented GET /coins/{id}/history (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.coingecko.com/openapi-specs/pro-api.json",
+      "examples": [
+        "pm coingecko-coins api get coins id history --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/coins/{id}/history"
+        }
+      ],
+      "operation": "coingecko-coins.get.coins-id-history",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get coins id market-chart",
+      "summary": "Documented GET /coins/{id}/market_chart (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.coingecko.com/openapi-specs/pro-api.json",
+      "examples": [
+        "pm coingecko-coins api get coins id market-chart --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/coins/{id}/market_chart"
+        }
+      ],
+      "operation": "coingecko-coins.get.coins-id-market-chart",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get coins id market-chart range",
+      "summary": "Documented GET /coins/{id}/market_chart/range (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.coingecko.com/openapi-specs/pro-api.json",
+      "examples": [
+        "pm coingecko-coins api get coins id market-chart range --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/coins/{id}/market_chart/range"
+        }
+      ],
+      "operation": "coingecko-coins.get.coins-id-market-chart-range",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get coins id ohlc",
+      "summary": "Documented GET /coins/{id}/ohlc (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.coingecko.com/openapi-specs/pro-api.json",
+      "examples": [
+        "pm coingecko-coins api get coins id ohlc --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/coins/{id}/ohlc"
+        }
+      ],
+      "operation": "coingecko-coins.get.coins-id-ohlc",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get coins id ohlc range",
+      "summary": "Documented GET /coins/{id}/ohlc/range (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.coingecko.com/openapi-specs/pro-api.json",
+      "examples": [
+        "pm coingecko-coins api get coins id ohlc range --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/coins/{id}/ohlc/range"
+        }
+      ],
+      "operation": "coingecko-coins.get.coins-id-ohlc-range",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get coins id supply-breakdown",
+      "summary": "Documented GET /coins/{id}/supply_breakdown (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.coingecko.com/openapi-specs/pro-api.json",
+      "examples": [
+        "pm coingecko-coins api get coins id supply-breakdown --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/coins/{id}/supply_breakdown"
+        }
+      ],
+      "operation": "coingecko-coins.get.coins-id-supply-breakdown",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get coins id total-supply-chart",
+      "summary": "Documented GET /coins/{id}/total_supply_chart (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.coingecko.com/openapi-specs/pro-api.json",
+      "examples": [
+        "pm coingecko-coins api get coins id total-supply-chart --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/coins/{id}/total_supply_chart"
+        }
+      ],
+      "operation": "coingecko-coins.get.coins-id-total-supply-chart",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get coins id total-supply-chart range",
+      "summary": "Documented GET /coins/{id}/total_supply_chart/range (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.coingecko.com/openapi-specs/pro-api.json",
+      "examples": [
+        "pm coingecko-coins api get coins id total-supply-chart range --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/coins/{id}/total_supply_chart/range"
+        }
+      ],
+      "operation": "coingecko-coins.get.coins-id-total-supply-chart-range",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get coins list",
+      "summary": "Documented GET /coins/list (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.coingecko.com/openapi-specs/pro-api.json",
+      "examples": [
+        "pm coingecko-coins api get coins list --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/coins/list"
+        }
+      ],
+      "operation": "coingecko-coins.get.coins-list",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get coins list new",
+      "summary": "Documented GET /coins/list/new (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.coingecko.com/openapi-specs/pro-api.json",
+      "examples": [
+        "pm coingecko-coins api get coins list new --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/coins/list/new"
+        }
+      ],
+      "operation": "coingecko-coins.get.coins-list-new",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get coins markets",
+      "summary": "Documented GET /coins/markets (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.coingecko.com/openapi-specs/pro-api.json",
+      "examples": [
+        "pm coingecko-coins api get coins markets --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/coins/markets"
+        }
+      ],
+      "operation": "coingecko-coins.get.coins-markets",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get coins top-gainers-losers",
+      "summary": "Documented GET /coins/top_gainers_losers (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.coingecko.com/openapi-specs/pro-api.json",
+      "examples": [
+        "pm coingecko-coins api get coins top-gainers-losers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/coins/top_gainers_losers"
+        }
+      ],
+      "operation": "coingecko-coins.get.coins-top-gainers-losers",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get derivatives",
+      "summary": "Documented GET /derivatives (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.coingecko.com/openapi-specs/pro-api.json",
+      "examples": [
+        "pm coingecko-coins api get derivatives --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/derivatives"
+        }
+      ],
+      "operation": "coingecko-coins.get.derivatives",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get derivatives exchanges",
+      "summary": "Documented GET /derivatives/exchanges (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.coingecko.com/openapi-specs/pro-api.json",
+      "examples": [
+        "pm coingecko-coins api get derivatives exchanges --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/derivatives/exchanges"
+        }
+      ],
+      "operation": "coingecko-coins.get.derivatives-exchanges",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get derivatives exchanges id",
+      "summary": "Documented GET /derivatives/exchanges/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.coingecko.com/openapi-specs/pro-api.json",
+      "examples": [
+        "pm coingecko-coins api get derivatives exchanges id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/derivatives/exchanges/{id}"
+        }
+      ],
+      "operation": "coingecko-coins.get.derivatives-exchanges-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get derivatives exchanges list",
+      "summary": "Documented GET /derivatives/exchanges/list (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.coingecko.com/openapi-specs/pro-api.json",
+      "examples": [
+        "pm coingecko-coins api get derivatives exchanges list --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/derivatives/exchanges/list"
+        }
+      ],
+      "operation": "coingecko-coins.get.derivatives-exchanges-list",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get entities list",
+      "summary": "Documented GET /entities/list (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.coingecko.com/openapi-specs/pro-api.json",
+      "examples": [
+        "pm coingecko-coins api get entities list --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/entities/list"
+        }
+      ],
+      "operation": "coingecko-coins.get.entities-list",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get entity public-treasury coin-id",
+      "summary": "Documented GET /{entity}/public_treasury/{coin_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.coingecko.com/openapi-specs/pro-api.json",
+      "examples": [
+        "pm coingecko-coins api get entity public-treasury coin-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/{entity}/public_treasury/{coin_id}"
+        }
+      ],
+      "operation": "coingecko-coins.get.entity-public-treasury-coin-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get exchange-rates",
+      "summary": "Documented GET /exchange_rates (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.coingecko.com/openapi-specs/pro-api.json",
+      "examples": [
+        "pm coingecko-coins api get exchange-rates --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/exchange_rates"
+        }
+      ],
+      "operation": "coingecko-coins.get.exchange-rates",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get exchanges",
+      "summary": "Documented GET /exchanges (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.coingecko.com/openapi-specs/pro-api.json",
+      "examples": [
+        "pm coingecko-coins api get exchanges --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/exchanges"
+        }
+      ],
+      "operation": "coingecko-coins.get.exchanges",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get exchanges id",
+      "summary": "Documented GET /exchanges/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.coingecko.com/openapi-specs/pro-api.json",
+      "examples": [
+        "pm coingecko-coins api get exchanges id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/exchanges/{id}"
+        }
+      ],
+      "operation": "coingecko-coins.get.exchanges-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get exchanges id tickers",
+      "summary": "Documented GET /exchanges/{id}/tickers (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.coingecko.com/openapi-specs/pro-api.json",
+      "examples": [
+        "pm coingecko-coins api get exchanges id tickers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/exchanges/{id}/tickers"
+        }
+      ],
+      "operation": "coingecko-coins.get.exchanges-id-tickers",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get exchanges id volume-chart",
+      "summary": "Documented GET /exchanges/{id}/volume_chart (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.coingecko.com/openapi-specs/pro-api.json",
+      "examples": [
+        "pm coingecko-coins api get exchanges id volume-chart --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/exchanges/{id}/volume_chart"
+        }
+      ],
+      "operation": "coingecko-coins.get.exchanges-id-volume-chart",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get exchanges id volume-chart range",
+      "summary": "Documented GET /exchanges/{id}/volume_chart/range (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.coingecko.com/openapi-specs/pro-api.json",
+      "examples": [
+        "pm coingecko-coins api get exchanges id volume-chart range --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/exchanges/{id}/volume_chart/range"
+        }
+      ],
+      "operation": "coingecko-coins.get.exchanges-id-volume-chart-range",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get exchanges list",
+      "summary": "Documented GET /exchanges/list (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.coingecko.com/openapi-specs/pro-api.json",
+      "examples": [
+        "pm coingecko-coins api get exchanges list --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/exchanges/list"
+        }
+      ],
+      "operation": "coingecko-coins.get.exchanges-list",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get global",
+      "summary": "Documented GET /global (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.coingecko.com/openapi-specs/pro-api.json",
+      "examples": [
+        "pm coingecko-coins api get global --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/global"
+        }
+      ],
+      "operation": "coingecko-coins.get.global",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get global decentralized-finance-defi",
+      "summary": "Documented GET /global/decentralized_finance_defi (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.coingecko.com/openapi-specs/pro-api.json",
+      "examples": [
+        "pm coingecko-coins api get global decentralized-finance-defi --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/global/decentralized_finance_defi"
+        }
+      ],
+      "operation": "coingecko-coins.get.global-decentralized-finance-defi",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get global market-cap-chart",
+      "summary": "Documented GET /global/market_cap_chart (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.coingecko.com/openapi-specs/pro-api.json",
+      "examples": [
+        "pm coingecko-coins api get global market-cap-chart --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/global/market_cap_chart"
+        }
+      ],
+      "operation": "coingecko-coins.get.global-market-cap-chart",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get insights",
+      "summary": "Documented GET /insights (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.coingecko.com/openapi-specs/pro-api.json",
+      "examples": [
+        "pm coingecko-coins api get insights --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/insights"
+        }
+      ],
+      "operation": "coingecko-coins.get.insights",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get key",
+      "summary": "Documented GET /key (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.coingecko.com/openapi-specs/pro-api.json",
+      "examples": [
+        "pm coingecko-coins api get key --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/key"
+        }
+      ],
+      "operation": "coingecko-coins.get.key",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get news",
+      "summary": "Documented GET /news (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.coingecko.com/openapi-specs/pro-api.json",
+      "examples": [
+        "pm coingecko-coins api get news --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/news"
+        }
+      ],
+      "operation": "coingecko-coins.get.news",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get nfts asset-platform-id contract contract-address",
+      "summary": "Documented GET /nfts/{asset_platform_id}/contract/{contract_address} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.coingecko.com/openapi-specs/pro-api.json",
+      "examples": [
+        "pm coingecko-coins api get nfts asset-platform-id contract contract-address --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/nfts/{asset_platform_id}/contract/{contract_address}"
+        }
+      ],
+      "operation": "coingecko-coins.get.nfts-asset-platform-id-contract-contract-address",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get nfts asset-platform-id contract contract-address market-chart",
+      "summary": "Documented GET /nfts/{asset_platform_id}/contract/{contract_address}/market_chart (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.coingecko.com/openapi-specs/pro-api.json",
+      "examples": [
+        "pm coingecko-coins api get nfts asset-platform-id contract contract-address market-chart --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/nfts/{asset_platform_id}/contract/{contract_address}/market_chart"
+        }
+      ],
+      "operation": "coingecko-coins.get.nfts-asset-platform-id-contract-contract-address-market-chart",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get nfts id",
+      "summary": "Documented GET /nfts/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.coingecko.com/openapi-specs/pro-api.json",
+      "examples": [
+        "pm coingecko-coins api get nfts id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/nfts/{id}"
+        }
+      ],
+      "operation": "coingecko-coins.get.nfts-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get nfts id market-chart",
+      "summary": "Documented GET /nfts/{id}/market_chart (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.coingecko.com/openapi-specs/pro-api.json",
+      "examples": [
+        "pm coingecko-coins api get nfts id market-chart --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/nfts/{id}/market_chart"
+        }
+      ],
+      "operation": "coingecko-coins.get.nfts-id-market-chart",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get nfts id tickers",
+      "summary": "Documented GET /nfts/{id}/tickers (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.coingecko.com/openapi-specs/pro-api.json",
+      "examples": [
+        "pm coingecko-coins api get nfts id tickers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/nfts/{id}/tickers"
+        }
+      ],
+      "operation": "coingecko-coins.get.nfts-id-tickers",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get nfts list",
+      "summary": "Documented GET /nfts/list (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.coingecko.com/openapi-specs/pro-api.json",
+      "examples": [
+        "pm coingecko-coins api get nfts list --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/nfts/list"
+        }
+      ],
+      "operation": "coingecko-coins.get.nfts-list",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get nfts markets",
+      "summary": "Documented GET /nfts/markets (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.coingecko.com/openapi-specs/pro-api.json",
+      "examples": [
+        "pm coingecko-coins api get nfts markets --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/nfts/markets"
+        }
+      ],
+      "operation": "coingecko-coins.get.nfts-markets",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get onchain categories",
+      "summary": "Documented GET /onchain/categories (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.coingecko.com/openapi-specs/pro-api.json",
+      "examples": [
+        "pm coingecko-coins api get onchain categories --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/onchain/categories"
+        }
+      ],
+      "operation": "coingecko-coins.get.onchain-categories",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get onchain categories category-id pools",
+      "summary": "Documented GET /onchain/categories/{category_id}/pools (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.coingecko.com/openapi-specs/pro-api.json",
+      "examples": [
+        "pm coingecko-coins api get onchain categories category-id pools --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/onchain/categories/{category_id}/pools"
+        }
+      ],
+      "operation": "coingecko-coins.get.onchain-categories-category-id-pools",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get onchain networks",
+      "summary": "Documented GET /onchain/networks (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.coingecko.com/openapi-specs/pro-api.json",
+      "examples": [
+        "pm coingecko-coins api get onchain networks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/onchain/networks"
+        }
+      ],
+      "operation": "coingecko-coins.get.onchain-networks",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get onchain networks network dexes",
+      "summary": "Documented GET /onchain/networks/{network}/dexes (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.coingecko.com/openapi-specs/pro-api.json",
+      "examples": [
+        "pm coingecko-coins api get onchain networks network dexes --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/onchain/networks/{network}/dexes"
+        }
+      ],
+      "operation": "coingecko-coins.get.onchain-networks-network-dexes",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get onchain networks network dexes dex pools",
+      "summary": "Documented GET /onchain/networks/{network}/dexes/{dex}/pools (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.coingecko.com/openapi-specs/pro-api.json",
+      "examples": [
+        "pm coingecko-coins api get onchain networks network dexes dex pools --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/onchain/networks/{network}/dexes/{dex}/pools"
+        }
+      ],
+      "operation": "coingecko-coins.get.onchain-networks-network-dexes-dex-pools",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get onchain networks network new-pools",
+      "summary": "Documented GET /onchain/networks/{network}/new_pools (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.coingecko.com/openapi-specs/pro-api.json",
+      "examples": [
+        "pm coingecko-coins api get onchain networks network new-pools --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/onchain/networks/{network}/new_pools"
+        }
+      ],
+      "operation": "coingecko-coins.get.onchain-networks-network-new-pools",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get onchain networks network pools",
+      "summary": "Documented GET /onchain/networks/{network}/pools (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.coingecko.com/openapi-specs/pro-api.json",
+      "examples": [
+        "pm coingecko-coins api get onchain networks network pools --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/onchain/networks/{network}/pools"
+        }
+      ],
+      "operation": "coingecko-coins.get.onchain-networks-network-pools",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get onchain networks network pools address",
+      "summary": "Documented GET /onchain/networks/{network}/pools/{address} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.coingecko.com/openapi-specs/pro-api.json",
+      "examples": [
+        "pm coingecko-coins api get onchain networks network pools address --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/onchain/networks/{network}/pools/{address}"
+        }
+      ],
+      "operation": "coingecko-coins.get.onchain-networks-network-pools-address",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get onchain networks network pools multi addresses",
+      "summary": "Documented GET /onchain/networks/{network}/pools/multi/{addresses} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.coingecko.com/openapi-specs/pro-api.json",
+      "examples": [
+        "pm coingecko-coins api get onchain networks network pools multi addresses --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/onchain/networks/{network}/pools/multi/{addresses}"
+        }
+      ],
+      "operation": "coingecko-coins.get.onchain-networks-network-pools-multi-addresses",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get onchain networks network pools pool-address info",
+      "summary": "Documented GET /onchain/networks/{network}/pools/{pool_address}/info (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.coingecko.com/openapi-specs/pro-api.json",
+      "examples": [
+        "pm coingecko-coins api get onchain networks network pools pool-address info --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/onchain/networks/{network}/pools/{pool_address}/info"
+        }
+      ],
+      "operation": "coingecko-coins.get.onchain-networks-network-pools-pool-address-info",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get onchain networks network pools pool-address ohlcv timeframe",
+      "summary": "Documented GET /onchain/networks/{network}/pools/{pool_address}/ohlcv/{timeframe} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.coingecko.com/openapi-specs/pro-api.json",
+      "examples": [
+        "pm coingecko-coins api get onchain networks network pools pool-address ohlcv timeframe --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/onchain/networks/{network}/pools/{pool_address}/ohlcv/{timeframe}"
+        }
+      ],
+      "operation": "coingecko-coins.get.onchain-networks-network-pools-pool-address-ohlcv-timeframe",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get onchain networks network pools pool-address trades",
+      "summary": "Documented GET /onchain/networks/{network}/pools/{pool_address}/trades (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.coingecko.com/openapi-specs/pro-api.json",
+      "examples": [
+        "pm coingecko-coins api get onchain networks network pools pool-address trades --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/onchain/networks/{network}/pools/{pool_address}/trades"
+        }
+      ],
+      "operation": "coingecko-coins.get.onchain-networks-network-pools-pool-address-trades",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get onchain networks network tokens address",
+      "summary": "Documented GET /onchain/networks/{network}/tokens/{address} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.coingecko.com/openapi-specs/pro-api.json",
+      "examples": [
+        "pm coingecko-coins api get onchain networks network tokens address --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/onchain/networks/{network}/tokens/{address}"
+        }
+      ],
+      "operation": "coingecko-coins.get.onchain-networks-network-tokens-address",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get onchain networks network tokens address info",
+      "summary": "Documented GET /onchain/networks/{network}/tokens/{address}/info (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.coingecko.com/openapi-specs/pro-api.json",
+      "examples": [
+        "pm coingecko-coins api get onchain networks network tokens address info --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/onchain/networks/{network}/tokens/{address}/info"
+        }
+      ],
+      "operation": "coingecko-coins.get.onchain-networks-network-tokens-address-info",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get onchain networks network tokens address top-holders",
+      "summary": "Documented GET /onchain/networks/{network}/tokens/{address}/top_holders (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.coingecko.com/openapi-specs/pro-api.json",
+      "examples": [
+        "pm coingecko-coins api get onchain networks network tokens address top-holders --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/onchain/networks/{network}/tokens/{address}/top_holders"
+        }
+      ],
+      "operation": "coingecko-coins.get.onchain-networks-network-tokens-address-top-holders",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get onchain networks network tokens multi addresses",
+      "summary": "Documented GET /onchain/networks/{network}/tokens/multi/{addresses} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.coingecko.com/openapi-specs/pro-api.json",
+      "examples": [
+        "pm coingecko-coins api get onchain networks network tokens multi addresses --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/onchain/networks/{network}/tokens/multi/{addresses}"
+        }
+      ],
+      "operation": "coingecko-coins.get.onchain-networks-network-tokens-multi-addresses",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get onchain networks network tokens token-address holders-chart",
+      "summary": "Documented GET /onchain/networks/{network}/tokens/{token_address}/holders_chart (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.coingecko.com/openapi-specs/pro-api.json",
+      "examples": [
+        "pm coingecko-coins api get onchain networks network tokens token-address holders-chart --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/onchain/networks/{network}/tokens/{token_address}/holders_chart"
+        }
+      ],
+      "operation": "coingecko-coins.get.onchain-networks-network-tokens-token-address-holders-chart",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get onchain networks network tokens token-address ohlcv timeframe",
+      "summary": "Documented GET /onchain/networks/{network}/tokens/{token_address}/ohlcv/{timeframe} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.coingecko.com/openapi-specs/pro-api.json",
+      "examples": [
+        "pm coingecko-coins api get onchain networks network tokens token-address ohlcv timeframe --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/onchain/networks/{network}/tokens/{token_address}/ohlcv/{timeframe}"
+        }
+      ],
+      "operation": "coingecko-coins.get.onchain-networks-network-tokens-token-address-ohlcv-timeframe",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get onchain networks network tokens token-address pools",
+      "summary": "Documented GET /onchain/networks/{network}/tokens/{token_address}/pools (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.coingecko.com/openapi-specs/pro-api.json",
+      "examples": [
+        "pm coingecko-coins api get onchain networks network tokens token-address pools --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/onchain/networks/{network}/tokens/{token_address}/pools"
+        }
+      ],
+      "operation": "coingecko-coins.get.onchain-networks-network-tokens-token-address-pools",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get onchain networks network tokens token-address top-traders",
+      "summary": "Documented GET /onchain/networks/{network}/tokens/{token_address}/top_traders (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.coingecko.com/openapi-specs/pro-api.json",
+      "examples": [
+        "pm coingecko-coins api get onchain networks network tokens token-address top-traders --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/onchain/networks/{network}/tokens/{token_address}/top_traders"
+        }
+      ],
+      "operation": "coingecko-coins.get.onchain-networks-network-tokens-token-address-top-traders",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get onchain networks network tokens token-address trades",
+      "summary": "Documented GET /onchain/networks/{network}/tokens/{token_address}/trades (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.coingecko.com/openapi-specs/pro-api.json",
+      "examples": [
+        "pm coingecko-coins api get onchain networks network tokens token-address trades --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/onchain/networks/{network}/tokens/{token_address}/trades"
+        }
+      ],
+      "operation": "coingecko-coins.get.onchain-networks-network-tokens-token-address-trades",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get onchain networks network trending-pools",
+      "summary": "Documented GET /onchain/networks/{network}/trending_pools (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.coingecko.com/openapi-specs/pro-api.json",
+      "examples": [
+        "pm coingecko-coins api get onchain networks network trending-pools --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/onchain/networks/{network}/trending_pools"
+        }
+      ],
+      "operation": "coingecko-coins.get.onchain-networks-network-trending-pools",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get onchain networks network-id tokens token-address top-traders",
+      "summary": "Documented GET /onchain/networks/{network_id}/tokens/{token_address}/top_traders (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.coingecko.com/openapi-specs/pro-api.json",
+      "examples": [
+        "pm coingecko-coins api get onchain networks network-id tokens token-address top-traders --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/onchain/networks/{network_id}/tokens/{token_address}/top_traders"
+        }
+      ],
+      "operation": "coingecko-coins.get.onchain-networks-network-id-tokens-token-address-top-traders",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get onchain networks new-pools",
+      "summary": "Documented GET /onchain/networks/new_pools (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.coingecko.com/openapi-specs/pro-api.json",
+      "examples": [
+        "pm coingecko-coins api get onchain networks new-pools --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/onchain/networks/new_pools"
+        }
+      ],
+      "operation": "coingecko-coins.get.onchain-networks-new-pools",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get onchain networks trending-pools",
+      "summary": "Documented GET /onchain/networks/trending_pools (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.coingecko.com/openapi-specs/pro-api.json",
+      "examples": [
+        "pm coingecko-coins api get onchain networks trending-pools --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/onchain/networks/trending_pools"
+        }
+      ],
+      "operation": "coingecko-coins.get.onchain-networks-trending-pools",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get onchain pools megafilter",
+      "summary": "Documented GET /onchain/pools/megafilter (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.coingecko.com/openapi-specs/pro-api.json",
+      "examples": [
+        "pm coingecko-coins api get onchain pools megafilter --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/onchain/pools/megafilter"
+        }
+      ],
+      "operation": "coingecko-coins.get.onchain-pools-megafilter",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get onchain pools trending-search",
+      "summary": "Documented GET /onchain/pools/trending_search (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.coingecko.com/openapi-specs/pro-api.json",
+      "examples": [
+        "pm coingecko-coins api get onchain pools trending-search --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/onchain/pools/trending_search"
+        }
+      ],
+      "operation": "coingecko-coins.get.onchain-pools-trending-search",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get onchain search pools",
+      "summary": "Documented GET /onchain/search/pools (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.coingecko.com/openapi-specs/pro-api.json",
+      "examples": [
+        "pm coingecko-coins api get onchain search pools --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/onchain/search/pools"
+        }
+      ],
+      "operation": "coingecko-coins.get.onchain-search-pools",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get onchain simple networks network token-price addresses",
+      "summary": "Documented GET /onchain/simple/networks/{network}/token_price/{addresses} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.coingecko.com/openapi-specs/pro-api.json",
+      "examples": [
+        "pm coingecko-coins api get onchain simple networks network token-price addresses --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/onchain/simple/networks/{network}/token_price/{addresses}"
+        }
+      ],
+      "operation": "coingecko-coins.get.onchain-simple-networks-network-token-price-addresses",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get onchain tokens info-recently-updated",
+      "summary": "Documented GET /onchain/tokens/info_recently_updated (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.coingecko.com/openapi-specs/pro-api.json",
+      "examples": [
+        "pm coingecko-coins api get onchain tokens info-recently-updated --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/onchain/tokens/info_recently_updated"
+        }
+      ],
+      "operation": "coingecko-coins.get.onchain-tokens-info-recently-updated",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get ping",
+      "summary": "Documented GET /ping (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.coingecko.com/openapi-specs/pro-api.json",
+      "examples": [
+        "pm coingecko-coins api get ping --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/ping"
+        }
+      ],
+      "operation": "coingecko-coins.get.ping",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get public-treasury entity-id",
+      "summary": "Documented GET /public_treasury/{entity_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.coingecko.com/openapi-specs/pro-api.json",
+      "examples": [
+        "pm coingecko-coins api get public-treasury entity-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/public_treasury/{entity_id}"
+        }
+      ],
+      "operation": "coingecko-coins.get.public-treasury-entity-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get public-treasury entity-id coin-id holding-chart",
+      "summary": "Documented GET /public_treasury/{entity_id}/{coin_id}/holding_chart (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.coingecko.com/openapi-specs/pro-api.json",
+      "examples": [
+        "pm coingecko-coins api get public-treasury entity-id coin-id holding-chart --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/public_treasury/{entity_id}/{coin_id}/holding_chart"
+        }
+      ],
+      "operation": "coingecko-coins.get.public-treasury-entity-id-coin-id-holding-chart",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get public-treasury entity-id transaction-history",
+      "summary": "Documented GET /public_treasury/{entity_id}/transaction_history (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.coingecko.com/openapi-specs/pro-api.json",
+      "examples": [
+        "pm coingecko-coins api get public-treasury entity-id transaction-history --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/public_treasury/{entity_id}/transaction_history"
+        }
+      ],
+      "operation": "coingecko-coins.get.public-treasury-entity-id-transaction-history",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get search",
+      "summary": "Documented GET /search (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.coingecko.com/openapi-specs/pro-api.json",
+      "examples": [
+        "pm coingecko-coins api get search --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/search"
+        }
+      ],
+      "operation": "coingecko-coins.get.search",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get search trending",
+      "summary": "Documented GET /search/trending (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.coingecko.com/openapi-specs/pro-api.json",
+      "examples": [
+        "pm coingecko-coins api get search trending --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/search/trending"
+        }
+      ],
+      "operation": "coingecko-coins.get.search-trending",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get simple price",
+      "summary": "Documented GET /simple/price (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.coingecko.com/openapi-specs/pro-api.json",
+      "examples": [
+        "pm coingecko-coins api get simple price --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/simple/price"
+        }
+      ],
+      "operation": "coingecko-coins.get.simple-price",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get simple supported-vs-currencies",
+      "summary": "Documented GET /simple/supported_vs_currencies (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.coingecko.com/openapi-specs/pro-api.json",
+      "examples": [
+        "pm coingecko-coins api get simple supported-vs-currencies --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/simple/supported_vs_currencies"
+        }
+      ],
+      "operation": "coingecko-coins.get.simple-supported-vs-currencies",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get simple token-price id",
+      "summary": "Documented GET /simple/token_price/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.coingecko.com/openapi-specs/pro-api.json",
+      "examples": [
+        "pm coingecko-coins api get simple token-price id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/simple/token_price/{id}"
+        }
+      ],
+      "operation": "coingecko-coins.get.simple-token-price-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get token-lists asset-platform-id all-json",
+      "summary": "Documented GET /token_lists/{asset_platform_id}/all.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.coingecko.com/openapi-specs/pro-api.json",
+      "examples": [
+        "pm coingecko-coins api get token-lists asset-platform-id all-json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/token_lists/{asset_platform_id}/all.json"
+        }
+      ],
+      "operation": "coingecko-coins.get.token-lists-asset-platform-id-all-json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "coin list",
+      "summary": "Run the coin ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "coin",
+      "source_url": "https://docs.coingecko.com/openapi-specs/pro-api.json",
+      "examples": [
+        "pm coingecko-coins coin list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/coins/{id}"
+        }
+      ]
+    },
+    {
+      "path": "tickers list",
+      "summary": "Run the tickers ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tickers",
+      "source_url": "https://docs.coingecko.com/openapi-specs/pro-api.json",
+      "examples": [
+        "pm coingecko-coins tickers list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/coins/{id}/tickers"
+        }
+      ]
+    }
+  ]
+}

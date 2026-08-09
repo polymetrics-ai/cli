@@ -1,0 +1,2780 @@
+{
+  "operations": [
+    {
+      "id": "twelve-data.get.ad",
+      "kind": "rest_read",
+      "summary": "GET /ad",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/ad",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.add",
+      "kind": "rest_read",
+      "summary": "GET /add",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/add",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.adosc",
+      "kind": "rest_read",
+      "summary": "GET /adosc",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/adosc",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.adx",
+      "kind": "rest_read",
+      "summary": "GET /adx",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/adx",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.adxr",
+      "kind": "rest_read",
+      "summary": "GET /adxr",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/adxr",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.analyst-ratings-light",
+      "kind": "rest_read",
+      "summary": "GET /analyst_ratings/light",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/analyst_ratings/light",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.analyst-ratings-us-equities",
+      "kind": "rest_read",
+      "summary": "GET /analyst_ratings/us_equities",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/analyst_ratings/us_equities",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.api-usage",
+      "kind": "rest_read",
+      "summary": "GET /api_usage",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api_usage",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.apo",
+      "kind": "rest_read",
+      "summary": "GET /apo",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/apo",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.aroon",
+      "kind": "rest_read",
+      "summary": "GET /aroon",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/aroon",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.aroonosc",
+      "kind": "rest_read",
+      "summary": "GET /aroonosc",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/aroonosc",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.atr",
+      "kind": "rest_read",
+      "summary": "GET /atr",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/atr",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.avg",
+      "kind": "rest_read",
+      "summary": "GET /avg",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/avg",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.avgprice",
+      "kind": "rest_read",
+      "summary": "GET /avgprice",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/avgprice",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.balance-sheet",
+      "kind": "rest_read",
+      "summary": "GET /balance_sheet",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/balance_sheet",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.balance-sheet-consolidated",
+      "kind": "rest_read",
+      "summary": "GET /balance_sheet/consolidated",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/balance_sheet/consolidated",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.post.batch",
+      "kind": "rest_write",
+      "summary": "POST /batch",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/batch",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.bbands",
+      "kind": "rest_read",
+      "summary": "GET /bbands",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/bbands",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.beta",
+      "kind": "rest_read",
+      "summary": "GET /beta",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/beta",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.bonds",
+      "kind": "rest_read",
+      "summary": "GET /bonds",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/bonds",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.bop",
+      "kind": "rest_read",
+      "summary": "GET /bop",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/bop",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.cash-flow",
+      "kind": "rest_read",
+      "summary": "GET /cash_flow",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/cash_flow",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.cash-flow-consolidated",
+      "kind": "rest_read",
+      "summary": "GET /cash_flow/consolidated",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/cash_flow/consolidated",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.cci",
+      "kind": "rest_read",
+      "summary": "GET /cci",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/cci",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.ceil",
+      "kind": "rest_read",
+      "summary": "GET /ceil",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/ceil",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.cmo",
+      "kind": "rest_read",
+      "summary": "GET /cmo",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/cmo",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.commodities",
+      "kind": "rest_read",
+      "summary": "GET /commodities",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/commodities",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.coppock",
+      "kind": "rest_read",
+      "summary": "GET /coppock",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/coppock",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.correl",
+      "kind": "rest_read",
+      "summary": "GET /correl",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/correl",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.countries",
+      "kind": "rest_read",
+      "summary": "GET /countries",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/countries",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.cross-listings",
+      "kind": "rest_read",
+      "summary": "GET /cross_listings",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/cross_listings",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.crsi",
+      "kind": "rest_read",
+      "summary": "GET /crsi",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/crsi",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.cryptocurrencies",
+      "kind": "rest_read",
+      "summary": "GET /cryptocurrencies",
+      "description": "Not modeled by legacy",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/cryptocurrencies",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.cryptocurrency-exchanges",
+      "kind": "rest_read",
+      "summary": "GET /cryptocurrency_exchanges",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/cryptocurrency_exchanges",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.currency-conversion",
+      "kind": "rest_read",
+      "summary": "GET /currency_conversion",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/currency_conversion",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.dema",
+      "kind": "rest_read",
+      "summary": "GET /dema",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/dema",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.direct-holders",
+      "kind": "rest_read",
+      "summary": "GET /direct_holders",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/direct_holders",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.div",
+      "kind": "rest_read",
+      "summary": "GET /div",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/div",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.dividends",
+      "kind": "rest_read",
+      "summary": "GET /dividends",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/dividends",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.dividends-calendar",
+      "kind": "rest_read",
+      "summary": "GET /dividends_calendar",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/dividends_calendar",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.dpo",
+      "kind": "rest_read",
+      "summary": "GET /dpo",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/dpo",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.dx",
+      "kind": "rest_read",
+      "summary": "GET /dx",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/dx",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.earliest-timestamp",
+      "kind": "rest_read",
+      "summary": "GET /earliest_timestamp",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/earliest_timestamp",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.earnings",
+      "kind": "rest_read",
+      "summary": "GET /earnings",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/earnings",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.earnings-calendar",
+      "kind": "rest_read",
+      "summary": "GET /earnings_calendar",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/earnings_calendar",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.earnings-estimate",
+      "kind": "rest_read",
+      "summary": "GET /earnings_estimate",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/earnings_estimate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.edgar-filings-archive",
+      "kind": "rest_read",
+      "summary": "GET /edgar_filings/archive",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/edgar_filings/archive",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.ema",
+      "kind": "rest_read",
+      "summary": "GET /ema",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/ema",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.eod",
+      "kind": "rest_read",
+      "summary": "GET /eod",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/eod",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.eps-revisions",
+      "kind": "rest_read",
+      "summary": "GET /eps_revisions",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/eps_revisions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.eps-trend",
+      "kind": "rest_read",
+      "summary": "GET /eps_trend",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/eps_trend",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.etf",
+      "kind": "rest_read",
+      "summary": "GET /etf",
+      "description": "Not modeled by legacy",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/etf",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.etfs",
+      "kind": "rest_read",
+      "summary": "GET /etfs",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/etfs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.etfs-family",
+      "kind": "rest_read",
+      "summary": "GET /etfs/family",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/etfs/family",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.etfs-list",
+      "kind": "rest_read",
+      "summary": "GET /etfs/list",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/etfs/list",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.etfs-type",
+      "kind": "rest_read",
+      "summary": "GET /etfs/type",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/etfs/type",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.etfs-world",
+      "kind": "rest_read",
+      "summary": "GET /etfs/world",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/etfs/world",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.etfs-world-composition",
+      "kind": "rest_read",
+      "summary": "GET /etfs/world/composition",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/etfs/world/composition",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.etfs-world-performance",
+      "kind": "rest_read",
+      "summary": "GET /etfs/world/performance",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/etfs/world/performance",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.etfs-world-risk",
+      "kind": "rest_read",
+      "summary": "GET /etfs/world/risk",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/etfs/world/risk",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.etfs-world-summary",
+      "kind": "rest_read",
+      "summary": "GET /etfs/world/summary",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/etfs/world/summary",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.exchange-rate",
+      "kind": "rest_read",
+      "summary": "GET /exchange_rate",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/exchange_rate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.exchange-schedule",
+      "kind": "rest_read",
+      "summary": "GET /exchange_schedule",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/exchange_schedule",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.exchanges",
+      "kind": "rest_read",
+      "summary": "GET /exchanges",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/exchanges",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.exp",
+      "kind": "rest_read",
+      "summary": "GET /exp",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/exp",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.floor",
+      "kind": "rest_read",
+      "summary": "GET /floor",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/floor",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.fund-holders",
+      "kind": "rest_read",
+      "summary": "GET /fund_holders",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/fund_holders",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.funds",
+      "kind": "rest_read",
+      "summary": "GET /funds",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/funds",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.growth-estimates",
+      "kind": "rest_read",
+      "summary": "GET /growth_estimates",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/growth_estimates",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.heikinashicandles",
+      "kind": "rest_read",
+      "summary": "GET /heikinashicandles",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/heikinashicandles",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.hlc3",
+      "kind": "rest_read",
+      "summary": "GET /hlc3",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/hlc3",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.ht-dcperiod",
+      "kind": "rest_read",
+      "summary": "GET /ht_dcperiod",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/ht_dcperiod",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.ht-dcphase",
+      "kind": "rest_read",
+      "summary": "GET /ht_dcphase",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/ht_dcphase",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.ht-phasor",
+      "kind": "rest_read",
+      "summary": "GET /ht_phasor",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/ht_phasor",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.ht-sine",
+      "kind": "rest_read",
+      "summary": "GET /ht_sine",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/ht_sine",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.ht-trendline",
+      "kind": "rest_read",
+      "summary": "GET /ht_trendline",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/ht_trendline",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.ht-trendmode",
+      "kind": "rest_read",
+      "summary": "GET /ht_trendmode",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/ht_trendmode",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.ichimoku",
+      "kind": "rest_read",
+      "summary": "GET /ichimoku",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/ichimoku",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.income-statement",
+      "kind": "rest_read",
+      "summary": "GET /income_statement",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/income_statement",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.income-statement-consolidated",
+      "kind": "rest_read",
+      "summary": "GET /income_statement/consolidated",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/income_statement/consolidated",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.indices",
+      "kind": "rest_read",
+      "summary": "GET /indices",
+      "description": "Not modeled by legacy",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/indices",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.insider-transactions",
+      "kind": "rest_read",
+      "summary": "GET /insider_transactions",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/insider_transactions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.institutional-holders",
+      "kind": "rest_read",
+      "summary": "GET /institutional_holders",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/institutional_holders",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.instrument-type",
+      "kind": "rest_read",
+      "summary": "GET /instrument_type",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/instrument_type",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.intervals",
+      "kind": "rest_read",
+      "summary": "GET /intervals",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/intervals",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.ipo-calendar",
+      "kind": "rest_read",
+      "summary": "GET /ipo_calendar",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/ipo_calendar",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.kama",
+      "kind": "rest_read",
+      "summary": "GET /kama",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/kama",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.keltner",
+      "kind": "rest_read",
+      "summary": "GET /keltner",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/keltner",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.key-executives",
+      "kind": "rest_read",
+      "summary": "GET /key_executives",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/key_executives",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.kst",
+      "kind": "rest_read",
+      "summary": "GET /kst",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/kst",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.last-change-endpoint",
+      "kind": "rest_read",
+      "summary": "GET /last_change/{endpoint}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/last_change/{endpoint}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.linearreg",
+      "kind": "rest_read",
+      "summary": "GET /linearreg",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/linearreg",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.linearregangle",
+      "kind": "rest_read",
+      "summary": "GET /linearregangle",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/linearregangle",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.linearregintercept",
+      "kind": "rest_read",
+      "summary": "GET /linearregintercept",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/linearregintercept",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.linearregslope",
+      "kind": "rest_read",
+      "summary": "GET /linearregslope",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/linearregslope",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.ln",
+      "kind": "rest_read",
+      "summary": "GET /ln",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/ln",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.log10",
+      "kind": "rest_read",
+      "summary": "GET /log10",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/log10",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.logo",
+      "kind": "rest_read",
+      "summary": "GET /logo",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/logo",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.ma",
+      "kind": "rest_read",
+      "summary": "GET /ma",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/ma",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.macd",
+      "kind": "rest_read",
+      "summary": "GET /macd",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/macd",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.macd-slope",
+      "kind": "rest_read",
+      "summary": "GET /macd_slope",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/macd_slope",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.macdext",
+      "kind": "rest_read",
+      "summary": "GET /macdext",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/macdext",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.mama",
+      "kind": "rest_read",
+      "summary": "GET /mama",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/mama",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.market-cap",
+      "kind": "rest_read",
+      "summary": "GET /market_cap",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/market_cap",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.market-movers-market",
+      "kind": "rest_read",
+      "summary": "GET /market_movers/{market}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/market_movers/{market}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.market-state",
+      "kind": "rest_read",
+      "summary": "GET /market_state",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/market_state",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.max",
+      "kind": "rest_read",
+      "summary": "GET /max",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/max",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.maxindex",
+      "kind": "rest_read",
+      "summary": "GET /maxindex",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/maxindex",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.mcginley-dynamic",
+      "kind": "rest_read",
+      "summary": "GET /mcginley_dynamic",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/mcginley_dynamic",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.medprice",
+      "kind": "rest_read",
+      "summary": "GET /medprice",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/medprice",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.mfi",
+      "kind": "rest_read",
+      "summary": "GET /mfi",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/mfi",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.midpoint",
+      "kind": "rest_read",
+      "summary": "GET /midpoint",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/midpoint",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.midprice",
+      "kind": "rest_read",
+      "summary": "GET /midprice",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/midprice",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.min",
+      "kind": "rest_read",
+      "summary": "GET /min",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/min",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.minindex",
+      "kind": "rest_read",
+      "summary": "GET /minindex",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/minindex",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.minmax",
+      "kind": "rest_read",
+      "summary": "GET /minmax",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/minmax",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.minmaxindex",
+      "kind": "rest_read",
+      "summary": "GET /minmaxindex",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/minmaxindex",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.minus-di",
+      "kind": "rest_read",
+      "summary": "GET /minus_di",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/minus_di",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.minus-dm",
+      "kind": "rest_read",
+      "summary": "GET /minus_dm",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/minus_dm",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.mom",
+      "kind": "rest_read",
+      "summary": "GET /mom",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/mom",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.money-market-funds-list",
+      "kind": "rest_read",
+      "summary": "GET /money_market_funds/list",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/money_market_funds/list",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.money-market-funds-world",
+      "kind": "rest_read",
+      "summary": "GET /money_market_funds/world",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/money_market_funds/world",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.mult",
+      "kind": "rest_read",
+      "summary": "GET /mult",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/mult",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.mutual-funds-family",
+      "kind": "rest_read",
+      "summary": "GET /mutual_funds/family",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/mutual_funds/family",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.mutual-funds-list",
+      "kind": "rest_read",
+      "summary": "GET /mutual_funds/list",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/mutual_funds/list",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.mutual-funds-type",
+      "kind": "rest_read",
+      "summary": "GET /mutual_funds/type",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/mutual_funds/type",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.mutual-funds-world",
+      "kind": "rest_read",
+      "summary": "GET /mutual_funds/world",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/mutual_funds/world",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.mutual-funds-world-composition",
+      "kind": "rest_read",
+      "summary": "GET /mutual_funds/world/composition",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/mutual_funds/world/composition",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.mutual-funds-world-performance",
+      "kind": "rest_read",
+      "summary": "GET /mutual_funds/world/performance",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/mutual_funds/world/performance",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.mutual-funds-world-purchase-info",
+      "kind": "rest_read",
+      "summary": "GET /mutual_funds/world/purchase_info",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/mutual_funds/world/purchase_info",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.mutual-funds-world-ratings",
+      "kind": "rest_read",
+      "summary": "GET /mutual_funds/world/ratings",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/mutual_funds/world/ratings",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.mutual-funds-world-risk",
+      "kind": "rest_read",
+      "summary": "GET /mutual_funds/world/risk",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/mutual_funds/world/risk",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.mutual-funds-world-summary",
+      "kind": "rest_read",
+      "summary": "GET /mutual_funds/world/summary",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/mutual_funds/world/summary",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.mutual-funds-world-sustainability",
+      "kind": "rest_read",
+      "summary": "GET /mutual_funds/world/sustainability",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/mutual_funds/world/sustainability",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.natr",
+      "kind": "rest_read",
+      "summary": "GET /natr",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/natr",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.obv",
+      "kind": "rest_read",
+      "summary": "GET /obv",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/obv",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.percent-b",
+      "kind": "rest_read",
+      "summary": "GET /percent_b",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/percent_b",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.pivot-points-hl",
+      "kind": "rest_read",
+      "summary": "GET /pivot_points_hl",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/pivot_points_hl",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.plus-di",
+      "kind": "rest_read",
+      "summary": "GET /plus_di",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/plus_di",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.plus-dm",
+      "kind": "rest_read",
+      "summary": "GET /plus_dm",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/plus_dm",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.ppo",
+      "kind": "rest_read",
+      "summary": "GET /ppo",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/ppo",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.press-releases",
+      "kind": "rest_read",
+      "summary": "GET /press_releases",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/press_releases",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.price",
+      "kind": "rest_read",
+      "summary": "GET /price",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/price",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.price-target",
+      "kind": "rest_read",
+      "summary": "GET /price_target",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/price_target",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.profile",
+      "kind": "rest_read",
+      "summary": "GET /profile",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/profile",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.recommendations",
+      "kind": "rest_read",
+      "summary": "GET /recommendations",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/recommendations",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.revenue-estimate",
+      "kind": "rest_read",
+      "summary": "GET /revenue_estimate",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/revenue_estimate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.roc",
+      "kind": "rest_read",
+      "summary": "GET /roc",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/roc",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.rocp",
+      "kind": "rest_read",
+      "summary": "GET /rocp",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/rocp",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.rocr",
+      "kind": "rest_read",
+      "summary": "GET /rocr",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/rocr",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.rocr100",
+      "kind": "rest_read",
+      "summary": "GET /rocr100",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/rocr100",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.rsi",
+      "kind": "rest_read",
+      "summary": "GET /rsi",
+      "description": "Technical indicator endpoints not modeled by legacy",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/rsi",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.rvol",
+      "kind": "rest_read",
+      "summary": "GET /rvol",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/rvol",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.sanctions-source",
+      "kind": "rest_read",
+      "summary": "GET /sanctions/{source}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/sanctions/{source}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.sar",
+      "kind": "rest_read",
+      "summary": "GET /sar",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/sar",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.sarext",
+      "kind": "rest_read",
+      "summary": "GET /sarext",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/sarext",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.sma",
+      "kind": "rest_read",
+      "summary": "GET /sma",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/sma",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.splits",
+      "kind": "rest_read",
+      "summary": "GET /splits",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/splits",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.splits-calendar",
+      "kind": "rest_read",
+      "summary": "GET /splits_calendar",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/splits_calendar",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.sqrt",
+      "kind": "rest_read",
+      "summary": "GET /sqrt",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/sqrt",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.statistics",
+      "kind": "rest_read",
+      "summary": "GET /statistics",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/statistics",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.stddev",
+      "kind": "rest_read",
+      "summary": "GET /stddev",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/stddev",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.stoch",
+      "kind": "rest_read",
+      "summary": "GET /stoch",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/stoch",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.stochf",
+      "kind": "rest_read",
+      "summary": "GET /stochf",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/stochf",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.stochrsi",
+      "kind": "rest_read",
+      "summary": "GET /stochrsi",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/stochrsi",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.sub",
+      "kind": "rest_read",
+      "summary": "GET /sub",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/sub",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.sum",
+      "kind": "rest_read",
+      "summary": "GET /sum",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/sum",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.supertrend",
+      "kind": "rest_read",
+      "summary": "GET /supertrend",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/supertrend",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.supertrend-heikinashicandles",
+      "kind": "rest_read",
+      "summary": "GET /supertrend_heikinashicandles",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/supertrend_heikinashicandles",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.symbol-search",
+      "kind": "rest_read",
+      "summary": "GET /symbol_search",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/symbol_search",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.t3ma",
+      "kind": "rest_read",
+      "summary": "GET /t3ma",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/t3ma",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.tax-info",
+      "kind": "rest_read",
+      "summary": "GET /tax_info",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/tax_info",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.technical-indicators",
+      "kind": "rest_read",
+      "summary": "GET /technical_indicators",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/technical_indicators",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.tema",
+      "kind": "rest_read",
+      "summary": "GET /tema",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/tema",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.time-series-cross",
+      "kind": "rest_read",
+      "summary": "GET /time_series/cross",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/time_series/cross",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.trange",
+      "kind": "rest_read",
+      "summary": "GET /trange",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/trange",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.trima",
+      "kind": "rest_read",
+      "summary": "GET /trima",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/trima",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.tsf",
+      "kind": "rest_read",
+      "summary": "GET /tsf",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/tsf",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.typprice",
+      "kind": "rest_read",
+      "summary": "GET /typprice",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/typprice",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.ultosc",
+      "kind": "rest_read",
+      "summary": "GET /ultosc",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/ultosc",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.var",
+      "kind": "rest_read",
+      "summary": "GET /var",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/var",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.vwap",
+      "kind": "rest_read",
+      "summary": "GET /vwap",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/vwap",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.wclprice",
+      "kind": "rest_read",
+      "summary": "GET /wclprice",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/wclprice",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.willr",
+      "kind": "rest_read",
+      "summary": "GET /willr",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/willr",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twelve-data.get.wma",
+      "kind": "rest_read",
+      "summary": "GET /wma",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/wma",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

@@ -1,0 +1,1290 @@
+{
+  "operations": [
+    {
+      "id": "invoiced.post.charges-id-refunds",
+      "kind": "rest_write",
+      "summary": "POST /charges/:id/refunds",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.invoiced.com/api/refunds",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/charges/:id/refunds",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "invoiced.get.coupons-id",
+      "kind": "rest_read",
+      "summary": "GET /coupons/:id",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.invoiced.com/api/coupons",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/coupons/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "invoiced.patch.coupons-id",
+      "kind": "rest_write",
+      "summary": "PATCH /coupons/:id",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.invoiced.com/api/coupons",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/coupons/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "invoiced.delete.coupons-id",
+      "kind": "rest_write",
+      "summary": "DELETE /coupons/:id",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.invoiced.com/api/coupons",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/coupons/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "invoiced.get.credit-balance-adjustments-id",
+      "kind": "rest_read",
+      "summary": "GET /credit_balance_adjustments/:id",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.invoiced.com/api/credit-balances",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/credit_balance_adjustments/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "invoiced.patch.credit-balance-adjustments-id",
+      "kind": "rest_write",
+      "summary": "PATCH /credit_balance_adjustments/:id",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.invoiced.com/api/credit-balances",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/credit_balance_adjustments/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "invoiced.delete.credit-balance-adjustments-id",
+      "kind": "rest_write",
+      "summary": "DELETE /credit_balance_adjustments/:id",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.invoiced.com/api/credit-balances",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/credit_balance_adjustments/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "invoiced.get.credit-notes-id",
+      "kind": "rest_read",
+      "summary": "GET /credit_notes/:id",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.invoiced.com/api/credit-notes",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/credit_notes/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "invoiced.patch.credit-notes-id",
+      "kind": "rest_write",
+      "summary": "PATCH /credit_notes/:id",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.invoiced.com/api/credit-notes",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/credit_notes/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "invoiced.delete.credit-notes-id",
+      "kind": "rest_write",
+      "summary": "DELETE /credit_notes/:id",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.invoiced.com/api/credit-notes",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/credit_notes/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "invoiced.get.credit-notes-id-attachments",
+      "kind": "rest_read",
+      "summary": "GET /credit_notes/:id/attachments",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.invoiced.com/api/credit-notes",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/credit_notes/:id/attachments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "invoiced.post.credit-notes-id-emails",
+      "kind": "rest_write",
+      "summary": "POST /credit_notes/:id/emails",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.invoiced.com/api/credit-notes",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/credit_notes/:id/emails",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "invoiced.post.credit-notes-id-void",
+      "kind": "rest_write",
+      "summary": "POST /credit_notes/:id/void",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.invoiced.com/api/credit-notes",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/credit_notes/:id/void",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "invoiced.get.customer-id-notes",
+      "kind": "rest_read",
+      "summary": "GET /customer/:id/notes",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.invoiced.com/api/notes",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/customer/:id/notes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "invoiced.delete.customers-customer-id-bank-accounts-id",
+      "kind": "rest_write",
+      "summary": "DELETE /customers/:customer_id/bank_accounts/:id",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.invoiced.com/api/payment-sources",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/customers/:customer_id/bank_accounts/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "invoiced.delete.customers-customer-id-cards-id",
+      "kind": "rest_write",
+      "summary": "DELETE /customers/:customer_id/cards/:id",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.invoiced.com/api/payment-sources",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/customers/:customer_id/cards/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "invoiced.get.customers-customer-id-contacts",
+      "kind": "rest_read",
+      "summary": "GET /customers/:customer_id/contacts",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.invoiced.com/api/contacts",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/customers/:customer_id/contacts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "invoiced.post.customers-customer-id-contacts",
+      "kind": "rest_write",
+      "summary": "POST /customers/:customer_id/contacts",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.invoiced.com/api/contacts",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/customers/:customer_id/contacts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "invoiced.get.customers-customer-id-contacts-id",
+      "kind": "rest_read",
+      "summary": "GET /customers/:customer_id/contacts/:id",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.invoiced.com/api/contacts",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/customers/:customer_id/contacts/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "invoiced.patch.customers-customer-id-contacts-id",
+      "kind": "rest_write",
+      "summary": "PATCH /customers/:customer_id/contacts/:id",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.invoiced.com/api/contacts",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/customers/:customer_id/contacts/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "invoiced.delete.customers-customer-id-contacts-id",
+      "kind": "rest_write",
+      "summary": "DELETE /customers/:customer_id/contacts/:id",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.invoiced.com/api/contacts",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/customers/:customer_id/contacts/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "invoiced.post.customers-customer-id-invoices",
+      "kind": "rest_write",
+      "summary": "POST /customers/:customer_id/invoices",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.invoiced.com/api/metered-billing",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/customers/:customer_id/invoices",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "invoiced.get.customers-customer-id-line-items",
+      "kind": "rest_read",
+      "summary": "GET /customers/:customer_id/line_items",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.invoiced.com/api/metered-billing",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/customers/:customer_id/line_items",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "invoiced.post.customers-customer-id-line-items",
+      "kind": "rest_write",
+      "summary": "POST /customers/:customer_id/line_items",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.invoiced.com/api/metered-billing",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/customers/:customer_id/line_items",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "invoiced.get.customers-customer-id-line-items-id",
+      "kind": "rest_read",
+      "summary": "GET /customers/:customer_id/line_items/:id",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.invoiced.com/api/metered-billing",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/customers/:customer_id/line_items/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "invoiced.patch.customers-customer-id-line-items-id",
+      "kind": "rest_write",
+      "summary": "PATCH /customers/:customer_id/line_items/:id",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.invoiced.com/api/metered-billing",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/customers/:customer_id/line_items/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "invoiced.delete.customers-customer-id-line-items-id",
+      "kind": "rest_write",
+      "summary": "DELETE /customers/:customer_id/line_items/:id",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.invoiced.com/api/metered-billing",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/customers/:customer_id/line_items/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "invoiced.get.customers-customer-id-payment-sources",
+      "kind": "rest_read",
+      "summary": "GET /customers/:customer_id/payment_sources",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.invoiced.com/api/payment-sources",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/customers/:customer_id/payment_sources",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "invoiced.get.customers-id",
+      "kind": "rest_read",
+      "summary": "GET /customers/:id",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.invoiced.com/api/customers",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/customers/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "invoiced.patch.customers-id",
+      "kind": "rest_write",
+      "summary": "PATCH /customers/:id",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.invoiced.com/api/customers",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/customers/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "invoiced.delete.customers-id",
+      "kind": "rest_write",
+      "summary": "DELETE /customers/:id",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.invoiced.com/api/customers",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/customers/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "invoiced.get.customers-id-balance",
+      "kind": "rest_read",
+      "summary": "GET /customers/:id/balance",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.invoiced.com/api/customers",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/customers/:id/balance",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "invoiced.post.customers-id-consolidate-invoices",
+      "kind": "rest_write",
+      "summary": "POST /customers/:id/consolidate_invoices",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.invoiced.com/api/invoices",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/customers/:id/consolidate_invoices",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "invoiced.post.customers-id-emails",
+      "kind": "rest_write",
+      "summary": "POST /customers/:id/emails",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.invoiced.com/api/customers",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/customers/:id/emails",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "invoiced.post.customers-id-letters",
+      "kind": "rest_write",
+      "summary": "POST /customers/:id/letters",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.invoiced.com/api/customers",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/customers/:id/letters",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "invoiced.post.customers-id-payment-sources",
+      "kind": "rest_write",
+      "summary": "POST /customers/:id/payment_sources",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.invoiced.com/api/payment-sources",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/customers/:id/payment_sources",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "invoiced.post.customers-id-text-messages",
+      "kind": "rest_write",
+      "summary": "POST /customers/:id/text_messages",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.invoiced.com/api/customers",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/customers/:id/text_messages",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "invoiced.post.estimates-estimate-id-invoice",
+      "kind": "rest_write",
+      "summary": "POST /estimates/:estimate_id/invoice",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.invoiced.com/api/estimates",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/estimates/:estimate_id/invoice",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "invoiced.get.estimates-id",
+      "kind": "rest_read",
+      "summary": "GET /estimates/:id",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.invoiced.com/api/estimates",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/estimates/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "invoiced.patch.estimates-id",
+      "kind": "rest_write",
+      "summary": "PATCH /estimates/:id",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.invoiced.com/api/estimates",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/estimates/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "invoiced.delete.estimates-id",
+      "kind": "rest_write",
+      "summary": "DELETE /estimates/:id",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.invoiced.com/api/estimates",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/estimates/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "invoiced.get.estimates-id-attachments",
+      "kind": "rest_read",
+      "summary": "GET /estimates/:id/attachments",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.invoiced.com/api/estimates",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/estimates/:id/attachments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "invoiced.post.estimates-id-emails",
+      "kind": "rest_write",
+      "summary": "POST /estimates/:id/emails",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.invoiced.com/api/estimates",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/estimates/:id/emails",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "invoiced.post.estimates-id-void",
+      "kind": "rest_write",
+      "summary": "POST /estimates/:id/void",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.invoiced.com/api/estimates",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/estimates/:id/void",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "invoiced.get.events-id",
+      "kind": "rest_read",
+      "summary": "GET /events/:id",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.invoiced.com/api/events",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/events/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "invoiced.post.files",
+      "kind": "rest_write",
+      "summary": "POST /files",
+      "description": "The documented file upload requires multipart/form-data with a file part; the declarative write dialect supports JSON/form fields only.",
+      "source_url": "https://developer.invoiced.com/api/files",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/files",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "invoiced.get.files-id",
+      "kind": "rest_read",
+      "summary": "GET /files/:id",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.invoiced.com/api/files",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/files/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "invoiced.delete.files-id",
+      "kind": "rest_write",
+      "summary": "DELETE /files/:id",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.invoiced.com/api/files",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/files/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "invoiced.get.invoice-id-notes",
+      "kind": "rest_read",
+      "summary": "GET /invoice/:id/notes",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.invoiced.com/api/notes",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/invoice/:id/notes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "invoiced.get.invoices-id",
+      "kind": "rest_read",
+      "summary": "GET /invoices/:id",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.invoiced.com/api/invoices",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/invoices/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "invoiced.patch.invoices-id",
+      "kind": "rest_write",
+      "summary": "PATCH /invoices/:id",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.invoiced.com/api/invoices",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/invoices/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "invoiced.delete.invoices-id",
+      "kind": "rest_write",
+      "summary": "DELETE /invoices/:id",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.invoiced.com/api/invoices",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/invoices/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "invoiced.get.invoices-id-attachments",
+      "kind": "rest_read",
+      "summary": "GET /invoices/:id/attachments",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.invoiced.com/api/invoices",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/invoices/:id/attachments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "invoiced.post.invoices-id-emails",
+      "kind": "rest_write",
+      "summary": "POST /invoices/:id/emails",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.invoiced.com/api/invoices",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/invoices/:id/emails",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "invoiced.post.invoices-id-letters",
+      "kind": "rest_write",
+      "summary": "POST /invoices/:id/letters",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.invoiced.com/api/invoices",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/invoices/:id/letters",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "invoiced.post.invoices-id-pay",
+      "kind": "rest_write",
+      "summary": "POST /invoices/:id/pay",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.invoiced.com/api/invoices",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/invoices/:id/pay",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "invoiced.get.invoices-id-payment-plan",
+      "kind": "rest_read",
+      "summary": "GET /invoices/:id/payment_plan",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.invoiced.com/api/payment-plans",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/invoices/:id/payment_plan",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "invoiced.put.invoices-id-payment-plan",
+      "kind": "rest_write",
+      "summary": "PUT /invoices/:id/payment_plan",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.invoiced.com/api/payment-plans",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/invoices/:id/payment_plan",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "invoiced.delete.invoices-id-payment-plan",
+      "kind": "rest_write",
+      "summary": "DELETE /invoices/:id/payment_plan",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.invoiced.com/api/payment-plans",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/invoices/:id/payment_plan",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "invoiced.post.invoices-id-text-messages",
+      "kind": "rest_write",
+      "summary": "POST /invoices/:id/text_messages",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.invoiced.com/api/invoices",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/invoices/:id/text_messages",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "invoiced.post.invoices-id-void",
+      "kind": "rest_write",
+      "summary": "POST /invoices/:id/void",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.invoiced.com/api/invoices",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/invoices/:id/void",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "invoiced.get.items-id",
+      "kind": "rest_read",
+      "summary": "GET /items/:id",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.invoiced.com/api/items",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/items/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "invoiced.patch.items-id",
+      "kind": "rest_write",
+      "summary": "PATCH /items/:id",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.invoiced.com/api/items",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/items/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "invoiced.delete.items-id",
+      "kind": "rest_write",
+      "summary": "DELETE /items/:id",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.invoiced.com/api/items",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/items/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "invoiced.patch.notes-id",
+      "kind": "rest_write",
+      "summary": "PATCH /notes/:id",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.invoiced.com/api/notes",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/notes/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "invoiced.delete.notes-id",
+      "kind": "rest_write",
+      "summary": "DELETE /notes/:id",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.invoiced.com/api/notes",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/notes/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "invoiced.get.payments-id",
+      "kind": "rest_read",
+      "summary": "GET /payments/:id",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.invoiced.com/api/payments",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/payments/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "invoiced.patch.payments-id",
+      "kind": "rest_write",
+      "summary": "PATCH /payments/:id",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.invoiced.com/api/payments",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/payments/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "invoiced.delete.payments-id",
+      "kind": "rest_write",
+      "summary": "DELETE /payments/:id",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.invoiced.com/api/payments",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/payments/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "invoiced.post.payments-id-emails",
+      "kind": "rest_write",
+      "summary": "POST /payments/:id/emails",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.invoiced.com/api/payments",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/payments/:id/emails",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "invoiced.get.plans-id",
+      "kind": "rest_read",
+      "summary": "GET /plans/:id",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.invoiced.com/api/plans",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/plans/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "invoiced.patch.plans-id",
+      "kind": "rest_write",
+      "summary": "PATCH /plans/:id",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.invoiced.com/api/plans",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/plans/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "invoiced.delete.plans-id",
+      "kind": "rest_write",
+      "summary": "DELETE /plans/:id",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.invoiced.com/api/plans",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/plans/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "invoiced.get.subscriptions-id",
+      "kind": "rest_read",
+      "summary": "GET /subscriptions/:id",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.invoiced.com/api/subscriptions",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/subscriptions/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "invoiced.patch.subscriptions-id",
+      "kind": "rest_write",
+      "summary": "PATCH /subscriptions/:id",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.invoiced.com/api/subscriptions",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/subscriptions/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "invoiced.delete.subscriptions-id",
+      "kind": "rest_write",
+      "summary": "DELETE /subscriptions/:id",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.invoiced.com/api/subscriptions",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/subscriptions/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "invoiced.get.tasks-id",
+      "kind": "rest_read",
+      "summary": "GET /tasks/:id",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.invoiced.com/api/tasks",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/tasks/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "invoiced.patch.tasks-id",
+      "kind": "rest_write",
+      "summary": "PATCH /tasks/:id",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.invoiced.com/api/tasks",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/tasks/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "invoiced.delete.tasks-id",
+      "kind": "rest_write",
+      "summary": "DELETE /tasks/:id",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.invoiced.com/api/tasks",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/tasks/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "invoiced.get.tax-rates-id",
+      "kind": "rest_read",
+      "summary": "GET /tax_rates/:id",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.invoiced.com/api/tax-rates",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/tax_rates/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "invoiced.patch.tax-rates-id",
+      "kind": "rest_write",
+      "summary": "PATCH /tax_rates/:id",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.invoiced.com/api/tax-rates",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/tax_rates/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "invoiced.delete.tax-rates-id",
+      "kind": "rest_write",
+      "summary": "DELETE /tax_rates/:id",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.invoiced.com/api/tax-rates",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/tax_rates/:id",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

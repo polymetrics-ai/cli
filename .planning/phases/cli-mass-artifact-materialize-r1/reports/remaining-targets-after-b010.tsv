@@ -1,0 +1,60 @@
+zoom	skipped	html_reference	https://developers.zoom.us/docs/api/		public	1913
+square	done	openapi	https://raw.githubusercontent.com/square/connect-api-specification/master/api.json		public	334
+marketo	done	html_reference	https://experienceleague.adobe.com/en/docs/marketo-developer/marketo/rest/endpoint-reference		public	322
+monday	done	html_reference	https://developer.monday.com/api-reference/reference/about-the-api-reference		public	280
+trello	done	swagger	https://developer.atlassian.com/cloud/trello/swagger.v3.json		public	261
+front	done	openapi	https://github.com/frontapp/front-api-specs		public	255
+reddit	done	html_reference	https://www.reddit.com/dev/api/		public	145
+gorgias	done	html_reference	https://developers.gorgias.com/reference		public	114
+airtable	done	html_reference	https://airtable.com/developers/web/api/introduction		public	103
+mixpanel	done	html_reference	https://docs.mixpanel.com/reference/overview		public	105
+aws-cloudtrail	done	html_reference	https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_Operations.html		public	60
+dynamodb	done	html_reference	https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Operations.html		public	57
+notion	done	html_reference	https://developers.notion.com/reference/intro		public	50
+google-analytics-data-api	skipped	openapi	https://analyticsdata.googleapis.com/$discovery/rest?version=v1beta	v1beta and v1alpha	public	24
+youtube-analytics	done	openapi	https://youtubeanalytics.googleapis.com/$discovery/rest?version=v2	v2 plus Reporting v1	public	16
+segment	done	html_reference	https://docs.segmentapis.com/		public	197
+gong	done	openapi	https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=		public	69
+freshchat	skipped	html_reference	https://developers.freshchat.com/api/		public	34
+amazon-sqs	done	html_reference	https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_Operations.html		public	23
+bitbucket	done	swagger	https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json		public	331
+google-ads	done	openapi	https://googleads.googleapis.com/$discovery/rest?version=v22	v22	public	163
+google-search-console	done	openapi	https://searchconsole.googleapis.com/$discovery/rest?version=v1	v1	public	11
+hubplanner	done	openapi	https://github.com/hubplanner/API		public	98
+ashby	done	html_reference	https://developers.ashbyhq.com/reference		public	186
+bamboo-hr	done	html_reference	https://documentation.bamboohr.com/reference/getting-started		public	311
+adjust	done	html_reference	https://dev.adjust.com/en/api/rs-api/		public	6
+alpha-vantage	done	html_reference	https://www.alphavantage.co/documentation/		public	126
+assemblyai	done	html_reference	https://www.assemblyai.com/docs/api-reference/overview		public	24
+awin-advertiser	done	html_reference	https://help.awin.com/apidocs/for-advertisers		partner_gated	11
+bing-ads	done	html_reference	https://learn.microsoft.com/en-us/advertising/campaign-management-service/campaign-management-service-operations?view=bingads-13	v13	public	222
+braze	done	html_reference	https://www.braze.com/docs/api/llms.txt		public	129
+bunny-inc	done	html_reference	https://docs.bunny.com/developer/llms.txt		public	455
+care-quality-commission	done	html_reference	https://api-portal.service.cqc.org.uk/developer/apis/syndication?export=true&format=openapi%2Bjson&api-version=2022-04-01-preview	Syndication API; portal exposes OpenAPI 3.0.1 export	public	14
+castor-edc	done	swagger	https://data.castoredc.com/api/swagger?format=json	OpenAPI/Swagger 2.0; Castor EDC API Documentation 2026.1.4.0	public	172
+churnkey	done	html_reference	https://docs.churnkey.co/llms.txt		public	9
+confluence	done	openapi	https://dac-static.atlassian.com/cloud/confluence/openapi-v2.v3.json?_v=1.8516.73	Confluence Cloud REST API v2; OpenAPI 3.0.3; info.version 2.0.0	public	218
+employment-hero	done	postman	https://developer.employmenthero.com/postman-collection.json		enterprise	124
+faker	skipped	none	https://faker.readthedocs.io/en/master/		none_found	0
+fillout	done	html_reference	https://www.fillout.com/help/fillout-rest-api		public	8
+flowlu	done	openapi	https://www.flowlu.com/api/json/openapien.json?ver=1785972282755	Flowlu Rest API Documentation 1.0 (OpenAPI 3.0.1)	public	608
+google-classroom	done	openapi	https://classroom.googleapis.com/$discovery/rest?version=v1	Google Classroom API v1; discovery revision 20260803	public	104
+google-directory	done	openapi	https://admin.googleapis.com/$discovery/rest?version=directory_v1	Admin SDK Directory API directory_v1; discovery revision 20260802	enterprise	128
+google-forms	done	openapi	https://forms.googleapis.com/$discovery/rest?version=v1	Google Forms API v1; discovery revision 20260729	public	10
+google-pagespeed-insights	done	openapi	https://pagespeedonline.googleapis.com/$discovery/rest?version=v5	PageSpeed Insights API v5; discovery revision 20260804	public	1
+guru	done	openapi	https://developer.getguru.com/getguru/api-next/v2/branches/1.0/reference/postv1searchkeyworddocumentsearch?reduce=false	Guru API v1; OpenAPI 3.1.0	public	251
+hibob	done	openapi	https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_people-search?reduce=false	Employee data API v1.0.0; OpenAPI 3.1.1	enterprise	61
+insightful	done	postman	https://developers.insightful.io/api/collections/10755095/Szzq4Eoa?environment=10754747-cee77158-1d26-446e-a4ab-fe597277f032&segregateAuth=true&versionTag=latest	Insightful Developer Portal | Insightful API Postman collection Szzq4Eoa (latest)	public	112
+mailersend	done	openapi	https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true	1.0.0-oas3.1 (OpenAPI 3.1.0)	public	97
+mailgun	done	openapi	https://documentation.mailgun.com/_bundle/docs/mailgun/api-reference/send/mailgun.json?download	3.0.0 (OpenAPI 3.1.0)	public	239
+mendeley	done	openapi	https://api.mendeley.com/apidocs/apis?convertToOpenApi=true	Mendeley API Documentation v1 catalog (with current v2 Groups and Profiles resource specifications)	public	67
+mixmax	done	openapi	https://developer.mixmax.com/mixmax/api-next/v2/branches/1.0/reference/reportsdatatable?reduce=false	Mixmax REST API v1.0 (OpenAPI 3.1.0 embedded in provider reference)	public	83
+pendo	done	postman	https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true&versionTag=latest	Pendo API Postman Collection, latest	enterprise	65
+pipeliner	done	openapi	http://pipeliner-api-doc.s3-website-eu-west-1.amazonaws.com/latest/rest/space/openapi.json	Pipeliner Cloud API v100; OpenAPI 3.1.0; artifact Last-Modified 2026-07-01	public	1510
+productive	done	openapi	https://developer.productive.io/reference/download_spec?format=json	Productive API v2 current reference; OpenAPI 3.1.0	public	648
+retailexpress-by-maropost	done	html_reference	https://developer.retailexpress.com.au/api-details#api=retail-express-api-v21	Retail Express API v2.1; current provider portal revision 16 (Release 3.19.04)	partner_gated	199
+ringcentral	done	openapi	https://assets-developers.ringcentral.com/dpw/api-reference/specs/public/office/rc-platform.yml?v=2026080620260803-0657	RingCentral API 1.0.60-20260730-142b4d22; OpenAPI 3.0.3	public	499
+smartsheets	done	openapi	https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download	OpenAPI 3.0.3; Smartsheet OpenAPI Reference 2.0.0	enterprise	180
+teamtailor	done	postman	https://docs.teamtailor.com/api/collections/14157246/TVzSiGxA?environment=14157246-0a1d21ed-80bf-49dc-afe7-a54fc680be99&segregateAuth=true&versionTag=latest	Teamtailor API public Postman Collection v2.0.0 (versionTag=latest)	public	129
+teamwork	done	swagger	https://apidocs.teamwork.com/api/oas/download?slug=teamwork&api_version=v3	Teamwork API V3 v3.0 (Swagger 2.0)	public	404
+whisky-hunter	done	swagger	https://whiskyhunter.net/api/?format=openapi	Swagger 2.0; Whisky Hunter API v1	public	5

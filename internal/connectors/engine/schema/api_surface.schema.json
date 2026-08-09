@@ -71,7 +71,15 @@
             "additionalProperties": false,
             "properties": {
               "stream": { "type": "string" },
+              "streams": {
+                "type": "array",
+                "items": { "type": "string" }
+              },
               "write": { "type": "string" },
+              "writes": {
+                "type": "array",
+                "items": { "type": "string" }
+              },
               "direct_read": { "type": "string" },
               "direct_reads": {
                 "type": "array",

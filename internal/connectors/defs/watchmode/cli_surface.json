@@ -1,0 +1,933 @@
+{
+  "tagline": "Run Watchmode's declared streams and reverse-ETL actions.",
+  "usage": "pm watchmode \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "api get autocomplete-search",
+        "api get changes new-people",
+        "api get changes new-titles",
+        "api get changes titles-details-changed",
+        "api get changes titles-episodes-changed",
+        "api get changes titles-sources-changed",
+        "api get genres",
+        "api get list-titles",
+        "api get networks",
+        "api get person person-id",
+        "api get regions",
+        "api get releases",
+        "api get search",
+        "api get sources",
+        "api get status",
+        "api get title title-id cast-crew",
+        "api get title title-id details",
+        "api get title title-id episodes",
+        "api get title title-id episodes episode-id",
+        "api get title title-id incorrect-data",
+        "api get title title-id seasons",
+        "api get title title-id sources",
+        "api get title-release-dates",
+        "api get v1 autocomplete-search",
+        "api get v1 changes new-people",
+        "api get v1 changes new-titles",
+        "api get v1 changes titles-details-changed",
+        "api get v1 changes titles-episodes-changed",
+        "api get v1 changes titles-sources-changed",
+        "api get v1 status",
+        "api get v1 title title-id incorrect-data",
+        "api get v1 title-release-dates",
+        "genres list",
+        "networks list",
+        "person details list",
+        "regions list",
+        "releases list",
+        "search list",
+        "sources list",
+        "title cast crew list",
+        "title details list",
+        "title episodes list",
+        "title seasons list",
+        "title sources list",
+        "titles list"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "api get autocomplete-search",
+      "summary": "Documented GET /autocomplete-search (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.watchmode.com/openapi.json",
+      "examples": [
+        "pm watchmode api get autocomplete-search --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/autocomplete-search"
+        }
+      ],
+      "operation": "watchmode.get.autocomplete-search",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get changes new-people",
+      "summary": "Documented GET /changes/new_people (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.watchmode.com/openapi.json",
+      "examples": [
+        "pm watchmode api get changes new-people --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/changes/new_people"
+        }
+      ],
+      "operation": "watchmode.get.changes-new-people",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get changes new-titles",
+      "summary": "Documented GET /changes/new_titles (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.watchmode.com/openapi.json",
+      "examples": [
+        "pm watchmode api get changes new-titles --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/changes/new_titles"
+        }
+      ],
+      "operation": "watchmode.get.changes-new-titles",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get changes titles-details-changed",
+      "summary": "Documented GET /changes/titles_details_changed (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.watchmode.com/openapi.json",
+      "examples": [
+        "pm watchmode api get changes titles-details-changed --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/changes/titles_details_changed"
+        }
+      ],
+      "operation": "watchmode.get.changes-titles-details-changed",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get changes titles-episodes-changed",
+      "summary": "Documented GET /changes/titles_episodes_changed (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.watchmode.com/openapi.json",
+      "examples": [
+        "pm watchmode api get changes titles-episodes-changed --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/changes/titles_episodes_changed"
+        }
+      ],
+      "operation": "watchmode.get.changes-titles-episodes-changed",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get changes titles-sources-changed",
+      "summary": "Documented GET /changes/titles_sources_changed (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.watchmode.com/openapi.json",
+      "examples": [
+        "pm watchmode api get changes titles-sources-changed --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/changes/titles_sources_changed"
+        }
+      ],
+      "operation": "watchmode.get.changes-titles-sources-changed",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get genres",
+      "summary": "Documented GET /genres (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.watchmode.com/openapi.json",
+      "examples": [
+        "pm watchmode api get genres --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/genres"
+        }
+      ],
+      "operation": "watchmode.get.genres",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get list-titles",
+      "summary": "Documented GET /list-titles (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.watchmode.com/openapi.json",
+      "examples": [
+        "pm watchmode api get list-titles --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/list-titles"
+        }
+      ],
+      "operation": "watchmode.get.list-titles",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get networks",
+      "summary": "Documented GET /networks (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.watchmode.com/openapi.json",
+      "examples": [
+        "pm watchmode api get networks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/networks"
+        }
+      ],
+      "operation": "watchmode.get.networks",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get person person-id",
+      "summary": "Documented GET /person/{person_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.watchmode.com/openapi.json",
+      "examples": [
+        "pm watchmode api get person person-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/person/{person_id}"
+        }
+      ],
+      "operation": "watchmode.get.person-person-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get regions",
+      "summary": "Documented GET /regions (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.watchmode.com/openapi.json",
+      "examples": [
+        "pm watchmode api get regions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/regions"
+        }
+      ],
+      "operation": "watchmode.get.regions",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get releases",
+      "summary": "Documented GET /releases (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.watchmode.com/openapi.json",
+      "examples": [
+        "pm watchmode api get releases --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/releases"
+        }
+      ],
+      "operation": "watchmode.get.releases",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get search",
+      "summary": "Documented GET /search (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.watchmode.com/openapi.json",
+      "examples": [
+        "pm watchmode api get search --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/search"
+        }
+      ],
+      "operation": "watchmode.get.search",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get sources",
+      "summary": "Documented GET /sources (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.watchmode.com/openapi.json",
+      "examples": [
+        "pm watchmode api get sources --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/sources"
+        }
+      ],
+      "operation": "watchmode.get.sources",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get status",
+      "summary": "Documented GET /status (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.watchmode.com/openapi.json",
+      "examples": [
+        "pm watchmode api get status --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/status"
+        }
+      ],
+      "operation": "watchmode.get.status",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get title title-id cast-crew",
+      "summary": "Documented GET /title/{title_id}/cast-crew (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.watchmode.com/openapi.json",
+      "examples": [
+        "pm watchmode api get title title-id cast-crew --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/title/{title_id}/cast-crew"
+        }
+      ],
+      "operation": "watchmode.get.title-title-id-cast-crew",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get title title-id details",
+      "summary": "Documented GET /title/{title_id}/details (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.watchmode.com/openapi.json",
+      "examples": [
+        "pm watchmode api get title title-id details --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/title/{title_id}/details"
+        }
+      ],
+      "operation": "watchmode.get.title-title-id-details",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get title title-id episodes",
+      "summary": "Documented GET /title/{title_id}/episodes (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.watchmode.com/openapi.json",
+      "examples": [
+        "pm watchmode api get title title-id episodes --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/title/{title_id}/episodes"
+        }
+      ],
+      "operation": "watchmode.get.title-title-id-episodes",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get title title-id episodes episode-id",
+      "summary": "Documented GET /title/{title_id}/episodes/{episode_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.watchmode.com/openapi.json",
+      "examples": [
+        "pm watchmode api get title title-id episodes episode-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/title/{title_id}/episodes/{episode_id}"
+        }
+      ],
+      "operation": "watchmode.get.title-title-id-episodes-episode-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get title title-id incorrect-data",
+      "summary": "Documented GET /title/{title_id}/incorrect-data (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.watchmode.com/openapi.json",
+      "examples": [
+        "pm watchmode api get title title-id incorrect-data --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/title/{title_id}/incorrect-data"
+        }
+      ],
+      "operation": "watchmode.get.title-title-id-incorrect-data",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get title title-id seasons",
+      "summary": "Documented GET /title/{title_id}/seasons (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.watchmode.com/openapi.json",
+      "examples": [
+        "pm watchmode api get title title-id seasons --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/title/{title_id}/seasons"
+        }
+      ],
+      "operation": "watchmode.get.title-title-id-seasons",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get title title-id sources",
+      "summary": "Documented GET /title/{title_id}/sources (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.watchmode.com/openapi.json",
+      "examples": [
+        "pm watchmode api get title title-id sources --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/title/{title_id}/sources"
+        }
+      ],
+      "operation": "watchmode.get.title-title-id-sources",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get title-release-dates",
+      "summary": "Documented GET /title-release-dates (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.watchmode.com/openapi.json",
+      "examples": [
+        "pm watchmode api get title-release-dates --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/title-release-dates"
+        }
+      ],
+      "operation": "watchmode.get.title-release-dates",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 autocomplete-search",
+      "summary": "Documented GET /v1/autocomplete-search/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.watchmode.com/openapi.json",
+      "examples": [
+        "pm watchmode api get v1 autocomplete-search --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/autocomplete-search/"
+        }
+      ],
+      "operation": "watchmode.get.v1-autocomplete-search",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 changes new-people",
+      "summary": "Documented GET /v1/changes/new_people/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.watchmode.com/openapi.json",
+      "examples": [
+        "pm watchmode api get v1 changes new-people --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/changes/new_people/"
+        }
+      ],
+      "operation": "watchmode.get.v1-changes-new-people",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 changes new-titles",
+      "summary": "Documented GET /v1/changes/new_titles/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.watchmode.com/openapi.json",
+      "examples": [
+        "pm watchmode api get v1 changes new-titles --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/changes/new_titles/"
+        }
+      ],
+      "operation": "watchmode.get.v1-changes-new-titles",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 changes titles-details-changed",
+      "summary": "Documented GET /v1/changes/titles_details_changed/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.watchmode.com/openapi.json",
+      "examples": [
+        "pm watchmode api get v1 changes titles-details-changed --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/changes/titles_details_changed/"
+        }
+      ],
+      "operation": "watchmode.get.v1-changes-titles-details-changed",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 changes titles-episodes-changed",
+      "summary": "Documented GET /v1/changes/titles_episodes_changed/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.watchmode.com/openapi.json",
+      "examples": [
+        "pm watchmode api get v1 changes titles-episodes-changed --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/changes/titles_episodes_changed/"
+        }
+      ],
+      "operation": "watchmode.get.v1-changes-titles-episodes-changed",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 changes titles-sources-changed",
+      "summary": "Documented GET /v1/changes/titles_sources_changed/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.watchmode.com/openapi.json",
+      "examples": [
+        "pm watchmode api get v1 changes titles-sources-changed --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/changes/titles_sources_changed/"
+        }
+      ],
+      "operation": "watchmode.get.v1-changes-titles-sources-changed",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 status",
+      "summary": "Documented GET /v1/status/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.watchmode.com/openapi.json",
+      "examples": [
+        "pm watchmode api get v1 status --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/status/"
+        }
+      ],
+      "operation": "watchmode.get.v1-status",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 title title-id incorrect-data",
+      "summary": "Documented GET /v1/title/{title_id}/incorrect-data/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.watchmode.com/openapi.json",
+      "examples": [
+        "pm watchmode api get v1 title title-id incorrect-data --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/title/{title_id}/incorrect-data/"
+        }
+      ],
+      "operation": "watchmode.get.v1-title-title-id-incorrect-data",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 title-release-dates",
+      "summary": "Documented GET /v1/title-release-dates/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.watchmode.com/openapi.json",
+      "examples": [
+        "pm watchmode api get v1 title-release-dates --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/title-release-dates/"
+        }
+      ],
+      "operation": "watchmode.get.v1-title-release-dates",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "genres list",
+      "summary": "Run the genres ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "genres",
+      "source_url": "https://api.watchmode.com/openapi.json",
+      "examples": [
+        "pm watchmode genres list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/genres/"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "networks list",
+      "summary": "Run the networks ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "networks",
+      "source_url": "https://api.watchmode.com/openapi.json",
+      "examples": [
+        "pm watchmode networks list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/networks/"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "person details list",
+      "summary": "Run the person details ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "person_details",
+      "source_url": "https://api.watchmode.com/openapi.json",
+      "examples": [
+        "pm watchmode person details list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/person/{person_id}/"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "regions list",
+      "summary": "Run the regions ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "regions",
+      "source_url": "https://api.watchmode.com/openapi.json",
+      "examples": [
+        "pm watchmode regions list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/regions/"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "releases list",
+      "summary": "Run the releases ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "releases",
+      "source_url": "https://api.watchmode.com/openapi.json",
+      "examples": [
+        "pm watchmode releases list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/releases/"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "search list",
+      "summary": "Run the search ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "search",
+      "source_url": "https://api.watchmode.com/openapi.json",
+      "examples": [
+        "pm watchmode search list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/search/"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "sources list",
+      "summary": "Run the sources ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "sources",
+      "source_url": "https://api.watchmode.com/openapi.json",
+      "examples": [
+        "pm watchmode sources list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/sources/"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "title cast crew list",
+      "summary": "Run the title cast crew ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "title_cast_crew",
+      "source_url": "https://api.watchmode.com/openapi.json",
+      "examples": [
+        "pm watchmode title cast crew list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/title/{title_id}/cast-crew/"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "title details list",
+      "summary": "Run the title details ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "title_details",
+      "source_url": "https://api.watchmode.com/openapi.json",
+      "examples": [
+        "pm watchmode title details list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/title/{title_id}/details/"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "title episodes list",
+      "summary": "Run the title episodes ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "title_episodes",
+      "source_url": "https://api.watchmode.com/openapi.json",
+      "examples": [
+        "pm watchmode title episodes list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/title/{title_id}/episodes/"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "title seasons list",
+      "summary": "Run the title seasons ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "title_seasons",
+      "source_url": "https://api.watchmode.com/openapi.json",
+      "examples": [
+        "pm watchmode title seasons list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/title/{title_id}/seasons/"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "title sources list",
+      "summary": "Run the title sources ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "title_sources",
+      "source_url": "https://api.watchmode.com/openapi.json",
+      "examples": [
+        "pm watchmode title sources list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/title/{title_id}/sources/"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "titles list",
+      "summary": "Run the titles ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "titles",
+      "source_url": "https://api.watchmode.com/openapi.json",
+      "examples": [
+        "pm watchmode titles list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/list-titles/"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    }
+  ]
+}

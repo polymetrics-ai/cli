@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "batch": "batch-012",
+  "outcomes": [
+    {
+      "connector": "faker",
+      "state": "retry_pending",
+      "stage": "artifact_admission",
+      "reason": "The immutable primary ledger record has artifact_kind none, so it cannot enter the supported static materializer. Official OpenAPI/Swagger, Postman/SDK, and reference-traversal routes remain required.",
+      "evidence": "batches/batch-012-preflight.json"
+    },
+    {
+      "connector": "pipeliner",
+      "state": "retry_pending",
+      "stage": "artifact_admission",
+      "reason": "The immutable primary ledger artifact URL is HTTP and static materialization admits HTTPS only. Official HTTPS OpenAPI/Swagger, SDK, and reference-traversal routes remain required.",
+      "evidence": "batches/batch-012-preflight.json"
+    }
+  ]
+}

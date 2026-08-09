@@ -1,0 +1,264 @@
+{
+  "tagline": "Run Plausible's declared streams and reverse-ETL actions.",
+  "usage": "pm plausible \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "aggregate list",
+        "api get api v1 stats aggregate",
+        "api get api v1 stats breakdown",
+        "api get api v1 stats realtime visitors",
+        "api get api v1 stats timeseries",
+        "api get v1 stats goal breakdown",
+        "api get v1 stats realtime visitors",
+        "breakdown list",
+        "sites list",
+        "timeseries list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "api delete v1 sites",
+        "api post v1 sites"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "aggregate list",
+      "summary": "Run the aggregate ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "aggregate",
+      "source_url": "https://plausible.io/docs/stats-api-v1",
+      "examples": [
+        "pm plausible aggregate list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/stats/aggregate"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "api delete v1 sites",
+      "summary": "Documented DELETE /v1/sites (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://plausible.io/docs/stats-api-v1",
+      "examples": [
+        "pm plausible api delete v1 sites --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/sites"
+        }
+      ],
+      "operation": "plausible.delete.v1-sites",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api get api v1 stats aggregate",
+      "summary": "Documented GET /api/v1/stats/aggregate (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://plausible.io/docs/stats-api-v1",
+      "examples": [
+        "pm plausible api get api v1 stats aggregate --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/stats/aggregate"
+        }
+      ],
+      "operation": "plausible.get.api-v1-stats-aggregate",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v1 stats breakdown",
+      "summary": "Documented GET /api/v1/stats/breakdown (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://plausible.io/docs/stats-api-v1",
+      "examples": [
+        "pm plausible api get api v1 stats breakdown --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/stats/breakdown"
+        }
+      ],
+      "operation": "plausible.get.api-v1-stats-breakdown",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v1 stats realtime visitors",
+      "summary": "Documented GET /api/v1/stats/realtime/visitors (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://plausible.io/docs/stats-api-v1",
+      "examples": [
+        "pm plausible api get api v1 stats realtime visitors --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/stats/realtime/visitors"
+        }
+      ],
+      "operation": "plausible.get.api-v1-stats-realtime-visitors",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v1 stats timeseries",
+      "summary": "Documented GET /api/v1/stats/timeseries (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://plausible.io/docs/stats-api-v1",
+      "examples": [
+        "pm plausible api get api v1 stats timeseries --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/stats/timeseries"
+        }
+      ],
+      "operation": "plausible.get.api-v1-stats-timeseries",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 stats goal breakdown",
+      "summary": "Documented GET /v1/stats/goal/breakdown (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://plausible.io/docs/stats-api-v1",
+      "examples": [
+        "pm plausible api get v1 stats goal breakdown --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/stats/goal/breakdown"
+        }
+      ],
+      "operation": "plausible.get.v1-stats-goal-breakdown",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 stats realtime visitors",
+      "summary": "Documented GET /v1/stats/realtime/visitors (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://plausible.io/docs/stats-api-v1",
+      "examples": [
+        "pm plausible api get v1 stats realtime visitors --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/stats/realtime/visitors"
+        }
+      ],
+      "operation": "plausible.get.v1-stats-realtime-visitors",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api post v1 sites",
+      "summary": "Documented POST /v1/sites (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://plausible.io/docs/stats-api-v1",
+      "examples": [
+        "pm plausible api post v1 sites --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/sites"
+        }
+      ],
+      "operation": "plausible.post.v1-sites",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "breakdown list",
+      "summary": "Run the breakdown ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "breakdown",
+      "source_url": "https://plausible.io/docs/stats-api-v1",
+      "examples": [
+        "pm plausible breakdown list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/stats/breakdown"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "sites list",
+      "summary": "Run the sites ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "sites",
+      "source_url": "https://plausible.io/docs/stats-api-v1",
+      "examples": [
+        "pm plausible sites list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/sites"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "timeseries list",
+      "summary": "Run the timeseries ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "timeseries",
+      "source_url": "https://plausible.io/docs/stats-api-v1",
+      "examples": [
+        "pm plausible timeseries list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/stats/timeseries"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    }
+  ]
+}

@@ -1,72 +1,2260 @@
 {
-  "api": "Drip API v2 (https://api.getdrip.com/v2)",
+  "api": "Drip API v2 (https://api.getdrip.com/v2); provider artifact version: Drip REST API v2",
   "docs": "https://developer.drip.com/",
-  "reviewed_at": "2026-07-04",
-  "scope": "Pass B full-surface expansion, re-researched against developer.drip.com's full endpoint index (accounts, single-email/email-series campaigns, custom fields, conversions/goals, events, forms, orders (legacy)/shopper-activity (v3), subscribers, tags, users, workflows/workflow-triggers, webhooks) plus the drip-ruby/drip-php SDK sources for exact request/response shapes. 7 read streams (the 4 pre-existing plus workflows/forms/webhooks) and 14 write actions covering subscriber/tag/event/broadcast/workflow-state/webhook lifecycle mutation. Excluded: email-series campaign activate/pause/subscribe (a distinct, more complex multi-step drip-sequence resource than the modeled workflow/broadcast shapes, and not part of legacy's original 4 streams), legacy orders + v3 shopper-activity batch endpoints (e-commerce event ingestion requiring a cart/product/order domain model this bundle does not otherwise touch), custom_field_identifiers/goals/event_actions (schema-introspection lists, not object data), users/me (authenticated-user identity, not account data), and the tags list endpoint (GET /tags returns a BARE JSON STRING ARRAY {\"tags\": [\"a\", \"b\"]}, which connsdk.RecordsAt silently yields ZERO records for — the exact same non-object-array-element gap documented for ip2whois's nameservers field in conventions.md §5 ledger item 12 — so tags are covered only via the apply_tag/remove_tag WRITE actions, which need no list extraction).",
+  "reviewed_at": "2026-08-09",
+  "operation_ledger_version": 2,
+  "scope": "Provider-artifact inventory generated from the cited html_reference artifact (57 documented operations across 1 provider-owned source document(s)). Every documented operation is represented; existing source-surface bindings absent from the artifact are retained and flagged with present-in-surface-absent-from-artifact.",
+  "artifacts": [
+    {
+      "id": "drip-artifact-2026-08-09",
+      "url": "https://developer.drip.com/",
+      "kind": "html_reference",
+      "version": "Drip REST API v2",
+      "retrieved_at": "2026-08-09",
+      "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d"
+    }
+  ],
   "endpoints": [
-    { "method": "GET", "path": "/{account_id}/subscribers", "covered_by": { "stream": "subscribers" } },
-    { "method": "GET", "path": "/{account_id}/subscribers/{subscriber_id}", "excluded": { "category": "duplicate_of", "reason": "single-subscriber detail; identical record shape to the subscribers list stream's per-item object, already covered by that stream" } },
-    { "method": "GET", "path": "/{account_id}/subscribers/{subscriber_id}/campaign_subscriptions", "excluded": { "category": "out_of_scope", "reason": "per-subscriber campaign-membership sub-resource; a join view derivable from the subscribers/campaigns streams already synced, not a distinct top-level object" } },
-    { "method": "POST", "path": "/{account_id}/subscribers", "covered_by": { "write": "create_or_update_subscriber" } },
-    { "method": "POST", "path": "/{account_id}/subscribers/batches", "excluded": { "category": "out_of_scope", "reason": "bulk multi-subscriber batch upsert over the same collection create_or_update_subscriber already covers per-record; this dialect's per-record write model already expresses the single-subscriber shape this endpoint's batch array wraps" } },
-    { "method": "DELETE", "path": "/{account_id}/subscribers/{subscriber_id}", "covered_by": { "write": "delete_subscriber" } },
-    { "method": "POST", "path": "/{account_id}/unsubscribes", "covered_by": { "write": "unsubscribe_subscriber" } },
-    { "method": "POST", "path": "/{account_id}/unsubscribes/batches", "excluded": { "category": "out_of_scope", "reason": "bulk multi-subscriber batch unsubscribe; unsubscribe_subscriber already covers the single-subscriber shape this endpoint's batch array wraps" } },
-
-    { "method": "GET", "path": "/{account_id}/tags", "excluded": { "category": "out_of_scope", "reason": "returns a BARE JSON STRING ARRAY ({\"tags\": [\"Customer\", \"SEO\"]}), not an array of objects; connsdk.RecordsAt only extracts array elements that decode as a JSON object, so every element here would be silently dropped, yielding zero records — the identical gap class documented for ip2whois's nameservers field (conventions.md ledger item 12), not a scoping choice. Tag mutation is still covered via apply_tag/remove_tag below, which operate per-subscriber and need no list extraction." } },
-    { "method": "POST", "path": "/{account_id}/subscribers/{subscriber_id}/tags", "covered_by": { "write": "apply_tag" } },
-    { "method": "DELETE", "path": "/{account_id}/subscribers/{subscriber_id}/tags/{tag}", "covered_by": { "write": "remove_tag" } },
-
-    { "method": "GET", "path": "/{account_id}/custom_field_identifiers", "excluded": { "category": "non_data_endpoint", "reason": "lists the names of custom fields ever set on any subscriber; schema/field-name introspection, not object data itself" } },
-
-    { "method": "GET", "path": "/{account_id}/goals", "excluded": { "category": "out_of_scope", "reason": "conversion-goal definition list; marketing-analytics configuration, not core CRM/subscriber-shaped data prioritized this pass" } },
-    { "method": "GET", "path": "/{account_id}/goals/{conversion_id}", "excluded": { "category": "duplicate_of", "reason": "single-conversion-goal detail; same scope narrowing as the goals list" } },
-
-    { "method": "POST", "path": "/{account_id}/events", "covered_by": { "write": "record_event" } },
-    { "method": "POST", "path": "/{account_id}/events/batches", "excluded": { "category": "out_of_scope", "reason": "bulk multi-event batch recording; record_event already covers the single-event shape this endpoint's batch array wraps" } },
-    { "method": "GET", "path": "/{account_id}/event_actions", "excluded": { "category": "non_data_endpoint", "reason": "lists the distinct custom event action names ever recorded; schema/name introspection, not event object data itself" } },
-
-    { "method": "GET", "path": "/{account_id}/forms", "covered_by": { "stream": "forms" } },
-    { "method": "GET", "path": "/{account_id}/forms/{form_id}", "excluded": { "category": "duplicate_of", "reason": "single-form detail; identical record shape to the forms list stream's per-item object, already covered by that stream" } },
-
-    { "method": "POST", "path": "/{account_id}/orders", "excluded": { "category": "out_of_scope", "reason": "legacy e-commerce order-tracking API; superseded by the v3 shopper_activity endpoints and not part of a CRM-shaped record/mutation model this pass targets" } },
-    { "method": "POST", "path": "/{account_id}/orders/batches", "excluded": { "category": "out_of_scope", "reason": "legacy batch order-tracking; same scope narrowing as the single-order endpoint" } },
-    { "method": "POST", "path": "/{account_id}/shopper_activity/cart/batch", "excluded": { "category": "out_of_scope", "reason": "e-commerce cart-activity ingestion; requires a cart/line-item domain model this connector's read streams do not otherwise expose or need" } },
-    { "method": "POST", "path": "/{account_id}/shopper_activity/order/batch", "excluded": { "category": "out_of_scope", "reason": "e-commerce order-activity ingestion; same domain-model scope narrowing as cart/batch" } },
-    { "method": "POST", "path": "/{account_id}/shopper_activity/product/batch", "excluded": { "category": "out_of_scope", "reason": "e-commerce product-activity ingestion; same domain-model scope narrowing as cart/batch" } },
-
-    { "method": "GET", "path": "/{account_id}/campaigns", "covered_by": { "stream": "campaigns" } },
-    { "method": "GET", "path": "/{account_id}/campaigns/{campaign_id}", "excluded": { "category": "duplicate_of", "reason": "single-campaign detail; identical record shape to the campaigns list stream's per-item object, already covered by that stream" } },
-    { "method": "POST", "path": "/{account_id}/campaigns/{campaign_id}/activate", "excluded": { "category": "out_of_scope", "reason": "activates an email-series (drip-sequence) campaign; campaigns were not part of legacy's write surface and this multi-step-sequence resource is out of scope for this pass's write coverage, unlike the simpler single-broadcast and single-workflow state toggles this pass does cover" } },
-    { "method": "POST", "path": "/{account_id}/campaigns/{campaign_id}/pause", "excluded": { "category": "out_of_scope", "reason": "pauses an email-series campaign; same scope narrowing as activate" } },
-    { "method": "GET", "path": "/{account_id}/campaigns/{campaign_id}/subscribers", "excluded": { "category": "duplicate_of", "reason": "campaign-scoped filtered view of the same subscriber records the subscribers stream already reads in full" } },
-    { "method": "POST", "path": "/{account_id}/campaigns/{campaign_id}/subscribers", "excluded": { "category": "out_of_scope", "reason": "subscribes a person to an email-series campaign; same email-series-write scope narrowing as activate/pause" } },
-
-    { "method": "GET", "path": "/{account_id}/broadcasts", "covered_by": { "stream": "broadcasts" } },
-    { "method": "GET", "path": "/{account_id}/broadcasts/{broadcast_id}", "excluded": { "category": "duplicate_of", "reason": "single-broadcast detail; identical record shape to the broadcasts list stream's per-item object, already covered by that stream" } },
-    { "method": "POST", "path": "/{account_id}/broadcasts", "covered_by": { "write": "create_broadcast" } },
-    { "method": "PATCH", "path": "/{account_id}/broadcasts/{broadcast_id}", "covered_by": { "write": "update_broadcast" } },
-    { "method": "DELETE", "path": "/{account_id}/broadcasts/{broadcast_id}", "covered_by": { "write": "delete_broadcast" } },
-    { "method": "POST", "path": "/{account_id}/broadcasts/{broadcast_id}/send_test", "excluded": { "category": "out_of_scope", "reason": "sends a one-off test-send copy of a draft broadcast to a preview address; a preview/QA action, not a syncable record mutation" } },
-
-    { "method": "GET", "path": "/{account_id}/workflows", "covered_by": { "stream": "workflows" } },
-    { "method": "GET", "path": "/{account_id}/workflows/{workflow_id}", "excluded": { "category": "duplicate_of", "reason": "single-workflow detail; identical record shape to the workflows list stream's per-item object, already covered by that stream" } },
-    { "method": "POST", "path": "/{account_id}/workflows/{workflow_id}/activate", "covered_by": { "write": "activate_workflow" } },
-    { "method": "POST", "path": "/{account_id}/workflows/{workflow_id}/pause", "covered_by": { "write": "pause_workflow" } },
-    { "method": "POST", "path": "/{account_id}/workflows/{workflow_id}/subscribers", "excluded": { "category": "out_of_scope", "reason": "starts a specific person on a workflow, a distinct enrollment action from the workflow-level activate/pause state toggles this pass covers; out of scope for this pass's write coverage" } },
-    { "method": "POST", "path": "/{account_id}/workflows/{workflow_id}/subscribers/{subscriber_id}/remove", "excluded": { "category": "out_of_scope", "reason": "removes one person from a workflow; same per-enrollment scope narrowing as the subscribe endpoint" } },
-    { "method": "GET", "path": "/{account_id}/workflow_triggers", "excluded": { "category": "out_of_scope", "reason": "workflow-trigger configuration list; automation-config metadata, not CRM-shaped object data" } },
-    { "method": "POST", "path": "/{account_id}/workflow_triggers", "excluded": { "category": "out_of_scope", "reason": "creates a workflow trigger; automation-config mutation, out of scope for this pass" } },
-    { "method": "POST", "path": "/{account_id}/workflow_triggers/{trigger_id}", "excluded": { "category": "out_of_scope", "reason": "updates a workflow trigger; automation-config mutation, out of scope for this pass" } },
-
-    { "method": "GET", "path": "/{account_id}/webhooks", "covered_by": { "stream": "webhooks" } },
-    { "method": "GET", "path": "/{account_id}/webhooks/{webhook_id}", "excluded": { "category": "duplicate_of", "reason": "single-webhook detail; identical record shape to the webhooks list stream's per-item object, already covered by that stream" } },
-    { "method": "POST", "path": "/{account_id}/webhooks", "covered_by": { "write": "create_webhook" } },
-    { "method": "DELETE", "path": "/{account_id}/webhooks/{webhook_id}", "covered_by": { "write": "delete_webhook" } },
-
-    { "method": "GET", "path": "/accounts", "covered_by": { "stream": "accounts" } },
-    { "method": "GET", "path": "/accounts/{account_id}", "excluded": { "category": "duplicate_of", "reason": "single-account detail; identical record shape to the accounts list stream's per-item object, already covered by that stream" } },
-
-    { "method": "GET", "path": "/users/me", "excluded": { "category": "non_data_endpoint", "reason": "authenticated-user identity introspection, not a syncable object stream" } }
+    {
+      "method": "DELETE",
+      "path": "/:account_id/subscribers/:email/tags/:tag",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "https://developer.drip.com/#DELETE /:account_id/subscribers/:email/tags/:tag"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/accounts",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "existing-surface[GET /accounts]"
+      },
+      "covered_by": {
+        "stream": "accounts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/accounts/{account_id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "existing-surface[GET /accounts/{account_id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-account detail; identical record shape to the accounts list stream's per-item object, already covered by that stream",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/me",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "existing-surface[GET /users/me]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "authenticated-user identity introspection, not a syncable object stream",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/:account_id/broadcasts",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "https://developer.drip.com/#GET /v2/:account_id/broadcasts"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/:account_id/broadcasts",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "https://developer.drip.com/#POST /v2/:account_id/broadcasts"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/:account_id/broadcasts/:broadcast_id",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "https://developer.drip.com/#GET /v2/:account_id/broadcasts/:broadcast_id"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v2/:account_id/broadcasts/:broadcast_id",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "https://developer.drip.com/#PATCH /v2/:account_id/broadcasts/:broadcast_id"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/:account_id/broadcasts/:broadcast_id",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "https://developer.drip.com/#DELETE /v2/:account_id/broadcasts/:broadcast_id"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/:account_id/broadcasts/:broadcast_id/send_test",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "https://developer.drip.com/#POST /v2/:account_id/broadcasts/:broadcast_id/send_test"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/:account_id/campaigns",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "https://developer.drip.com/#GET /v2/:account_id/campaigns"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/:account_id/campaigns/:campaign_id",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "https://developer.drip.com/#GET /v2/:account_id/campaigns/:campaign_id"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/:account_id/campaigns/:campaign_id/activate",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "https://developer.drip.com/#POST /v2/:account_id/campaigns/:campaign_id/activate"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/:account_id/campaigns/:campaign_id/pause",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "https://developer.drip.com/#POST /v2/:account_id/campaigns/:campaign_id/pause"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/:account_id/campaigns/:campaign_id/subscribers",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "https://developer.drip.com/#GET /v2/:account_id/campaigns/:campaign_id/subscribers"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/:account_id/campaigns/:campaign_id/subscribers",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "https://developer.drip.com/#POST /v2/:account_id/campaigns/:campaign_id/subscribers"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/:account_id/custom_field_identifiers",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "https://developer.drip.com/#GET /v2/:account_id/custom_field_identifiers"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/:account_id/event_actions",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "https://developer.drip.com/#GET /v2/:account_id/event_actions"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/:account_id/events",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "https://developer.drip.com/#POST /v2/:account_id/events"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/:account_id/events/batches",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "https://developer.drip.com/#POST /v2/:account_id/events/batches"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/:account_id/forms",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "https://developer.drip.com/#GET /v2/:account_id/forms"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/:account_id/forms/:form_id",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "https://developer.drip.com/#GET /v2/:account_id/forms/:form_id"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/:account_id/goals",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "https://developer.drip.com/#GET /v2/:account_id/goals"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/:account_id/goals/:conversion_id",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "https://developer.drip.com/#GET /v2/:account_id/goals/:conversion_id"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/:account_id/orders",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "https://developer.drip.com/#POST /v2/:account_id/orders"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/:account_id/orders/batches",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "https://developer.drip.com/#POST /v2/:account_id/orders/batches"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/:account_id/refunds",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "https://developer.drip.com/#POST /v2/:account_id/refunds"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/:account_id/subscribers",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "https://developer.drip.com/#GET /v2/:account_id/subscribers"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/:account_id/subscribers",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "https://developer.drip.com/#POST /v2/:account_id/subscribers"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/:account_id/subscribers/:id_or_email",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "https://developer.drip.com/#DELETE /v2/:account_id/subscribers/:id_or_email"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/:account_id/subscribers/:id_or_email/remove",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "https://developer.drip.com/#POST /v2/:account_id/subscribers/:id_or_email/remove"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/:account_id/subscribers/:id_or_email/unsubscribe_all",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "https://developer.drip.com/#POST /v2/:account_id/subscribers/:id_or_email/unsubscribe_all"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/:account_id/subscribers/:id_or_email_or_visitor_uuid",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "https://developer.drip.com/#GET /v2/:account_id/subscribers/:id_or_email_or_visitor_uuid"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/:account_id/subscribers/:subscriber_id/campaign_subscriptions",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "https://developer.drip.com/#GET /v2/:account_id/subscribers/:subscriber_id/campaign_subscriptions"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/:account_id/subscribers/batches",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "https://developer.drip.com/#POST /v2/:account_id/subscribers/batches"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/:account_id/tags",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "https://developer.drip.com/#GET /v2/:account_id/tags"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/:account_id/tags",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "https://developer.drip.com/#POST /v2/:account_id/tags"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/:account_id/unsubscribes/batches",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "https://developer.drip.com/#POST /v2/:account_id/unsubscribes/batches"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/:account_id/webhooks",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "https://developer.drip.com/#GET /v2/:account_id/webhooks"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/:account_id/webhooks",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "https://developer.drip.com/#POST /v2/:account_id/webhooks"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/:account_id/webhooks/:webhook_id",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "https://developer.drip.com/#GET /v2/:account_id/webhooks/:webhook_id"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/:account_id/webhooks/:webhook_id",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "https://developer.drip.com/#DELETE /v2/:account_id/webhooks/:webhook_id"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/:account_id/workflows",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "https://developer.drip.com/#GET /v2/:account_id/workflows"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/:account_id/workflows/:workflow_id",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "https://developer.drip.com/#GET /v2/:account_id/workflows/:workflow_id"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/:account_id/workflows/:workflow_id/activate",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "https://developer.drip.com/#POST /v2/:account_id/workflows/:workflow_id/activate"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/:account_id/workflows/:workflow_id/pause",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "https://developer.drip.com/#POST /v2/:account_id/workflows/:workflow_id/pause"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/:account_id/workflows/:workflow_id/subscribers",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "https://developer.drip.com/#POST /v2/:account_id/workflows/:workflow_id/subscribers"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/:account_id/workflows/:workflow_id/subscribers/:id_or_email",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "https://developer.drip.com/#DELETE /v2/:account_id/workflows/:workflow_id/subscribers/:id_or_email"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/:account_id/workflows/:workflow_id/triggers",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "https://developer.drip.com/#GET /v2/:account_id/workflows/:workflow_id/triggers"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/:account_id/workflows/:workflow_id/triggers",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "https://developer.drip.com/#POST /v2/:account_id/workflows/:workflow_id/triggers"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/:account_id/workflows/:workflow_id/triggers/:trigger_id",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "https://developer.drip.com/#PUT /v2/:account_id/workflows/:workflow_id/triggers/:trigger_id"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/accounts",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "https://developer.drip.com/#GET /v2/accounts"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/accounts/:account_id",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "https://developer.drip.com/#GET /v2/accounts/:account_id"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/user",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "https://developer.drip.com/#GET /v2/user"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/:account_id/shopper_activity/cart",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "https://developer.drip.com/#POST /v3/:account_id/shopper_activity/cart"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/:account_id/shopper_activity/cart/batch",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "https://developer.drip.com/#POST /v3/:account_id/shopper_activity/cart/batch"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/:account_id/shopper_activity/order",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "https://developer.drip.com/#POST /v3/:account_id/shopper_activity/order"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/:account_id/shopper_activity/order/batch",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "https://developer.drip.com/#POST /v3/:account_id/shopper_activity/order/batch"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/:account_id/shopper_activity/product",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "https://developer.drip.com/#POST /v3/:account_id/shopper_activity/product"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/:account_id/shopper_activity/product/batch",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "https://developer.drip.com/#POST /v3/:account_id/shopper_activity/product/batch"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{account_id}/broadcasts",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "existing-surface[GET /{account_id}/broadcasts]"
+      },
+      "covered_by": {
+        "stream": "broadcasts"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/{account_id}/broadcasts",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "existing-surface[POST /{account_id}/broadcasts]"
+      },
+      "covered_by": {
+        "write": "create_broadcast"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{account_id}/broadcasts/{broadcast_id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "existing-surface[GET /{account_id}/broadcasts/{broadcast_id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-broadcast detail; identical record shape to the broadcasts list stream's per-item object, already covered by that stream",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/{account_id}/broadcasts/{broadcast_id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "existing-surface[PATCH /{account_id}/broadcasts/{broadcast_id}]"
+      },
+      "covered_by": {
+        "write": "update_broadcast"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/{account_id}/broadcasts/{broadcast_id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "existing-surface[DELETE /{account_id}/broadcasts/{broadcast_id}]"
+      },
+      "covered_by": {
+        "write": "delete_broadcast"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/{account_id}/broadcasts/{broadcast_id}/send_test",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "existing-surface[POST /{account_id}/broadcasts/{broadcast_id}/send_test]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "sends a one-off test-send copy of a draft broadcast to a preview address; a preview/QA action, not a syncable record mutation",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{account_id}/campaigns",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "existing-surface[GET /{account_id}/campaigns]"
+      },
+      "covered_by": {
+        "stream": "campaigns"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{account_id}/campaigns/{campaign_id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "existing-surface[GET /{account_id}/campaigns/{campaign_id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-campaign detail; identical record shape to the campaigns list stream's per-item object, already covered by that stream",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/{account_id}/campaigns/{campaign_id}/activate",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "existing-surface[POST /{account_id}/campaigns/{campaign_id}/activate]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "activates an email-series (drip-sequence) campaign; campaigns were not part of legacy's write surface and this multi-step-sequence resource is out of scope for this pass's write coverage, unlike the simpler single-broadcast and single-workflow state toggles this pass does cover",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/{account_id}/campaigns/{campaign_id}/pause",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "existing-surface[POST /{account_id}/campaigns/{campaign_id}/pause]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "pauses an email-series campaign; same scope narrowing as activate",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{account_id}/campaigns/{campaign_id}/subscribers",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "existing-surface[GET /{account_id}/campaigns/{campaign_id}/subscribers]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "campaign-scoped filtered view of the same subscriber records the subscribers stream already reads in full",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/{account_id}/campaigns/{campaign_id}/subscribers",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "existing-surface[POST /{account_id}/campaigns/{campaign_id}/subscribers]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "subscribes a person to an email-series campaign; same email-series-write scope narrowing as activate/pause",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{account_id}/custom_field_identifiers",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "existing-surface[GET /{account_id}/custom_field_identifiers]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "lists the names of custom fields ever set on any subscriber; schema/field-name introspection, not object data itself",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{account_id}/event_actions",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "existing-surface[GET /{account_id}/event_actions]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "lists the distinct custom event action names ever recorded; schema/name introspection, not event object data itself",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/{account_id}/events",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "existing-surface[POST /{account_id}/events]"
+      },
+      "covered_by": {
+        "write": "record_event"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/{account_id}/events/batches",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "existing-surface[POST /{account_id}/events/batches]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "bulk multi-event batch recording; record_event already covers the single-event shape this endpoint's batch array wraps",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{account_id}/forms",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "existing-surface[GET /{account_id}/forms]"
+      },
+      "covered_by": {
+        "stream": "forms"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{account_id}/forms/{form_id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "existing-surface[GET /{account_id}/forms/{form_id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-form detail; identical record shape to the forms list stream's per-item object, already covered by that stream",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{account_id}/goals",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "existing-surface[GET /{account_id}/goals]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "conversion-goal definition list; marketing-analytics configuration, not core CRM/subscriber-shaped data prioritized this pass",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{account_id}/goals/{conversion_id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "existing-surface[GET /{account_id}/goals/{conversion_id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-conversion-goal detail; same scope narrowing as the goals list",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/{account_id}/orders",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "existing-surface[POST /{account_id}/orders]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "legacy e-commerce order-tracking API; superseded by the v3 shopper_activity endpoints and not part of a CRM-shaped record/mutation model this pass targets",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/{account_id}/orders/batches",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "existing-surface[POST /{account_id}/orders/batches]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "legacy batch order-tracking; same scope narrowing as the single-order endpoint",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/{account_id}/shopper_activity/cart/batch",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "existing-surface[POST /{account_id}/shopper_activity/cart/batch]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "e-commerce cart-activity ingestion; requires a cart/line-item domain model this connector's read streams do not otherwise expose or need",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/{account_id}/shopper_activity/order/batch",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "existing-surface[POST /{account_id}/shopper_activity/order/batch]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "e-commerce order-activity ingestion; same domain-model scope narrowing as cart/batch",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/{account_id}/shopper_activity/product/batch",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "existing-surface[POST /{account_id}/shopper_activity/product/batch]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "e-commerce product-activity ingestion; same domain-model scope narrowing as cart/batch",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{account_id}/subscribers",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "existing-surface[GET /{account_id}/subscribers]"
+      },
+      "covered_by": {
+        "stream": "subscribers"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/{account_id}/subscribers",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "existing-surface[POST /{account_id}/subscribers]"
+      },
+      "covered_by": {
+        "write": "create_or_update_subscriber"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/{account_id}/subscribers/batches",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "existing-surface[POST /{account_id}/subscribers/batches]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "bulk multi-subscriber batch upsert over the same collection create_or_update_subscriber already covers per-record; this dialect's per-record write model already expresses the single-subscriber shape this endpoint's batch array wraps",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{account_id}/subscribers/{subscriber_id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "existing-surface[GET /{account_id}/subscribers/{subscriber_id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-subscriber detail; identical record shape to the subscribers list stream's per-item object, already covered by that stream",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/{account_id}/subscribers/{subscriber_id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "existing-surface[DELETE /{account_id}/subscribers/{subscriber_id}]"
+      },
+      "covered_by": {
+        "write": "delete_subscriber"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{account_id}/subscribers/{subscriber_id}/campaign_subscriptions",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "existing-surface[GET /{account_id}/subscribers/{subscriber_id}/campaign_subscriptions]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "per-subscriber campaign-membership sub-resource; a join view derivable from the subscribers/campaigns streams already synced, not a distinct top-level object",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/{account_id}/subscribers/{subscriber_id}/tags",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "existing-surface[POST /{account_id}/subscribers/{subscriber_id}/tags]"
+      },
+      "covered_by": {
+        "write": "apply_tag"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/{account_id}/subscribers/{subscriber_id}/tags/{tag}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "existing-surface[DELETE /{account_id}/subscribers/{subscriber_id}/tags/{tag}]"
+      },
+      "covered_by": {
+        "write": "remove_tag"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{account_id}/tags",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "existing-surface[GET /{account_id}/tags]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "returns a BARE JSON STRING ARRAY ({\"tags\": [\"Customer\", \"SEO\"]}), not an array of objects; connsdk.RecordsAt only extracts array elements that decode as a JSON object, so every element here would be silently dropped, yielding zero records — the identical gap class documented for ip2whois's nameservers field (conventions.md ledger item 12), not a scoping choice. Tag mutation is still covered via apply_tag/remove_tag below, which operate per-subscriber and need no list extraction.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/{account_id}/unsubscribes",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "existing-surface[POST /{account_id}/unsubscribes]"
+      },
+      "covered_by": {
+        "write": "unsubscribe_subscriber"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/{account_id}/unsubscribes/batches",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "existing-surface[POST /{account_id}/unsubscribes/batches]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "bulk multi-subscriber batch unsubscribe; unsubscribe_subscriber already covers the single-subscriber shape this endpoint's batch array wraps",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{account_id}/webhooks",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "existing-surface[GET /{account_id}/webhooks]"
+      },
+      "covered_by": {
+        "stream": "webhooks"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/{account_id}/webhooks",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "existing-surface[POST /{account_id}/webhooks]"
+      },
+      "covered_by": {
+        "write": "create_webhook"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{account_id}/webhooks/{webhook_id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "existing-surface[GET /{account_id}/webhooks/{webhook_id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-webhook detail; identical record shape to the webhooks list stream's per-item object, already covered by that stream",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/{account_id}/webhooks/{webhook_id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "existing-surface[DELETE /{account_id}/webhooks/{webhook_id}]"
+      },
+      "covered_by": {
+        "write": "delete_webhook"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{account_id}/workflow_triggers",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "existing-surface[GET /{account_id}/workflow_triggers]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "workflow-trigger configuration list; automation-config metadata, not CRM-shaped object data",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/{account_id}/workflow_triggers",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "existing-surface[POST /{account_id}/workflow_triggers]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "creates a workflow trigger; automation-config mutation, out of scope for this pass",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/{account_id}/workflow_triggers/{trigger_id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "existing-surface[POST /{account_id}/workflow_triggers/{trigger_id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "updates a workflow trigger; automation-config mutation, out of scope for this pass",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{account_id}/workflows",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "existing-surface[GET /{account_id}/workflows]"
+      },
+      "covered_by": {
+        "stream": "workflows"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{account_id}/workflows/{workflow_id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "existing-surface[GET /{account_id}/workflows/{workflow_id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-workflow detail; identical record shape to the workflows list stream's per-item object, already covered by that stream",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/{account_id}/workflows/{workflow_id}/activate",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "existing-surface[POST /{account_id}/workflows/{workflow_id}/activate]"
+      },
+      "covered_by": {
+        "write": "activate_workflow"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/{account_id}/workflows/{workflow_id}/pause",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "existing-surface[POST /{account_id}/workflows/{workflow_id}/pause]"
+      },
+      "covered_by": {
+        "write": "pause_workflow"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/{account_id}/workflows/{workflow_id}/subscribers",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "existing-surface[POST /{account_id}/workflows/{workflow_id}/subscribers]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "starts a specific person on a workflow, a distinct enrollment action from the workflow-level activate/pause state toggles this pass covers; out of scope for this pass's write coverage",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/{account_id}/workflows/{workflow_id}/subscribers/{subscriber_id}/remove",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "drip-artifact-2026-08-09",
+        "source_url": "https://developer.drip.com/",
+        "source_kind": "html_reference",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d",
+        "coordinate": "existing-surface[POST /{account_id}/workflows/{workflow_id}/subscribers/{subscriber_id}/remove]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "removes one person from a workflow; same per-enrollment scope narrowing as the subscribe endpoint",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    }
   ]
 }

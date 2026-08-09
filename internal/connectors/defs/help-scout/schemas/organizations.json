@@ -1,0 +1,73 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "organizations",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "required": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": [
+        "integer",
+        "string"
+      ]
+    },
+    "name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "website": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "description": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "location": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "logoUrl": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "note": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "domains": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "phones": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "brandColor": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

@@ -1,0 +1,104 @@
+{
+  "tagline": "Run Weatherstack's declared streams and reverse-ETL actions.",
+  "usage": "pm weatherstack \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "autocomplete list",
+        "current list",
+        "forecast list",
+        "historical list",
+        "marine list"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "autocomplete list",
+      "summary": "Run the autocomplete ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "autocomplete",
+      "source_url": "https://docs.apilayer.com/weatherstack/docs/api-documentation",
+      "examples": [
+        "pm weatherstack autocomplete list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/autocomplete"
+        }
+      ]
+    },
+    {
+      "path": "current list",
+      "summary": "Run the current ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "current",
+      "source_url": "https://docs.apilayer.com/weatherstack/docs/api-documentation",
+      "examples": [
+        "pm weatherstack current list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/current"
+        }
+      ]
+    },
+    {
+      "path": "forecast list",
+      "summary": "Run the forecast ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "forecast",
+      "source_url": "https://docs.apilayer.com/weatherstack/docs/api-documentation",
+      "examples": [
+        "pm weatherstack forecast list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/forecast"
+        }
+      ]
+    },
+    {
+      "path": "historical list",
+      "summary": "Run the historical ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "historical",
+      "source_url": "https://docs.apilayer.com/weatherstack/docs/api-documentation",
+      "examples": [
+        "pm weatherstack historical list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/historical"
+        }
+      ]
+    },
+    {
+      "path": "marine list",
+      "summary": "Run the marine ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "marine",
+      "source_url": "https://docs.apilayer.com/weatherstack/docs/api-documentation",
+      "examples": [
+        "pm weatherstack marine list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/marine"
+        }
+      ]
+    }
+  ]
+}

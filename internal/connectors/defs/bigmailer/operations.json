@@ -1,0 +1,592 @@
+{
+  "operations": [
+    {
+      "id": "bigmailer.get.v1-brands-brand-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/brands/{brand_id}",
+      "description": "single-brand lookup by id; fully covered by the brands list stream",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/brands/{brand_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bigmailer.post.v1-brands-brand-id-bulk-campaigns",
+      "kind": "rest_write",
+      "summary": "POST /v1/brands/{brand_id}/bulk-campaigns",
+      "description": "creates a bulk email campaign that (once scheduled/sent) dispatches real outbound email to real contacts; read-only sync of campaign metadata is in scope, authoring/scheduling sends is not",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/brands/{brand_id}/bulk-campaigns",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bigmailer.get.v1-brands-brand-id-bulk-campaigns-campaign-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/brands/{brand_id}/bulk-campaigns/{campaign_id}",
+      "description": "single-bulk-campaign lookup by id; fully covered by the bulk_campaigns list stream",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/brands/{brand_id}/bulk-campaigns/{campaign_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bigmailer.post.v1-brands-brand-id-bulk-campaigns-campaign-id",
+      "kind": "rest_write",
+      "summary": "POST /v1/brands/{brand_id}/bulk-campaigns/{campaign_id}",
+      "description": "updates a bulk campaign that may already be scheduled/sending; see POST /bulk-campaigns",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/brands/{brand_id}/bulk-campaigns/{campaign_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bigmailer.post.v1-brands-brand-id-contacts-batches",
+      "kind": "rest_write",
+      "summary": "POST /v1/brands/{brand_id}/contacts/batches",
+      "description": "uploads a batch file of up to 1,000 contacts processed asynchronously; the declarative write dialect has no multipart/file-upload body construction and no async job-polling mechanism (a single writes.json action is a synchronous per-record HTTP request)",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/brands/{brand_id}/contacts/batches",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bigmailer.get.v1-brands-brand-id-contacts-batches-batch-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/brands/{brand_id}/contacts/batches/{batch_id}",
+      "description": "polls the status of an async contact-batch upload job; meaningless without the batch-upload write action itself, which is excluded above",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/brands/{brand_id}/contacts/batches/{batch_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bigmailer.get.v1-brands-brand-id-contacts-contact-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/brands/{brand_id}/contacts/{contact_id}",
+      "description": "single-contact lookup by id/email; fully covered by the contacts list stream",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/brands/{brand_id}/contacts/{contact_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bigmailer.get.v1-brands-brand-id-fields-field-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/brands/{brand_id}/fields/{field_id}",
+      "description": "single-field lookup by id; fully covered by the fields list stream",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/brands/{brand_id}/fields/{field_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bigmailer.get.v1-brands-brand-id-lists-list-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/brands/{brand_id}/lists/{list_id}",
+      "description": "single-list lookup by id; fully covered by the lists list stream",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/brands/{brand_id}/lists/{list_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bigmailer.get.v1-brands-brand-id-message-types-message-type-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/brands/{brand_id}/message-types/{message_type_id}",
+      "description": "single-message-type lookup by id; fully covered by the message_types list stream",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/brands/{brand_id}/message-types/{message_type_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bigmailer.get.v1-brands-brand-id-properties",
+      "kind": "rest_read",
+      "summary": "GET /v1/brands/{brand_id}/properties",
+      "description": "brand properties are an account-configuration namespace (arbitrary key/value settings), not a contact/CRM data resource meaningfully synced alongside brands/contacts; not part of this pass's scope",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/brands/{brand_id}/properties",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bigmailer.post.v1-brands-brand-id-properties",
+      "kind": "rest_write",
+      "summary": "POST /v1/brands/{brand_id}/properties",
+      "description": "see GET /properties",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/brands/{brand_id}/properties",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bigmailer.get.v1-brands-brand-id-properties-brand-property-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/brands/{brand_id}/properties/{brand_property_id}",
+      "description": "see GET /properties",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/brands/{brand_id}/properties/{brand_property_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bigmailer.post.v1-brands-brand-id-properties-brand-property-id",
+      "kind": "rest_write",
+      "summary": "POST /v1/brands/{brand_id}/properties/{brand_property_id}",
+      "description": "see GET /properties",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/brands/{brand_id}/properties/{brand_property_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bigmailer.delete.v1-brands-brand-id-properties-brand-property-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/brands/{brand_id}/properties/{brand_property_id}",
+      "description": "see GET /properties",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/brands/{brand_id}/properties/{brand_property_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bigmailer.post.v1-brands-brand-id-rss-campaigns",
+      "kind": "rest_write",
+      "summary": "POST /v1/brands/{brand_id}/rss-campaigns",
+      "description": "creates a recurring RSS-triggered email campaign that dispatches real outbound email on every feed update; see POST /bulk-campaigns",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/brands/{brand_id}/rss-campaigns",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bigmailer.get.v1-brands-brand-id-rss-campaigns-campaign-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/brands/{brand_id}/rss-campaigns/{campaign_id}",
+      "description": "single-RSS-campaign lookup by id; fully covered by the rss_campaigns list stream",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/brands/{brand_id}/rss-campaigns/{campaign_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bigmailer.post.v1-brands-brand-id-rss-campaigns-campaign-id",
+      "kind": "rest_write",
+      "summary": "POST /v1/brands/{brand_id}/rss-campaigns/{campaign_id}",
+      "description": "updates an active/recurring RSS campaign; see POST /rss-campaigns",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/brands/{brand_id}/rss-campaigns/{campaign_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bigmailer.post.v1-brands-brand-id-rss-campaigns-campaign-id-pause",
+      "kind": "rest_write",
+      "summary": "POST /v1/brands/{brand_id}/rss-campaigns/{campaign_id}/pause",
+      "description": "pauses a live recurring send schedule; a lifecycle-control action, not a data-record mutation",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/brands/{brand_id}/rss-campaigns/{campaign_id}/pause",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bigmailer.post.v1-brands-brand-id-rss-campaigns-campaign-id-unpause",
+      "kind": "rest_write",
+      "summary": "POST /v1/brands/{brand_id}/rss-campaigns/{campaign_id}/unpause",
+      "description": "resumes a live recurring send schedule (immediately re-enables real outbound email dispatch); see pause",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/brands/{brand_id}/rss-campaigns/{campaign_id}/unpause",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bigmailer.get.v1-brands-brand-id-rss-campaigns-parent-id-updates",
+      "kind": "rest_read",
+      "summary": "GET /v1/brands/{brand_id}/rss-campaigns/{parent_id}/updates",
+      "description": "auto-generated per-feed-update campaign instances derived from the parent RSS campaign, not an independently authored data resource",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/brands/{brand_id}/rss-campaigns/{parent_id}/updates",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bigmailer.get.v1-brands-brand-id-rss-campaigns-parent-id-updates-campaign-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/brands/{brand_id}/rss-campaigns/{parent_id}/updates/{campaign_id}",
+      "description": "single auto-generated RSS-update-campaign lookup; see the list form",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/brands/{brand_id}/rss-campaigns/{parent_id}/updates/{campaign_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bigmailer.get.v1-brands-brand-id-segments-segment-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/brands/{brand_id}/segments/{segment_id}",
+      "description": "single-segment lookup by id; fully covered by the segments list stream",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/brands/{brand_id}/segments/{segment_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bigmailer.get.v1-brands-brand-id-senders-sender-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/brands/{brand_id}/senders/{sender_id}",
+      "description": "single-sender lookup by id; fully covered by the senders list stream",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/brands/{brand_id}/senders/{sender_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bigmailer.post.v1-brands-brand-id-senders-sender-id-bounce-domains",
+      "kind": "rest_write",
+      "summary": "POST /v1/brands/{brand_id}/senders/{sender_id}/bounce-domains",
+      "description": "adds a bounce (MAIL FROM) DNS domain to a sender; a DNS-infrastructure side effect, not a BigMailer data resource mutation the declarative write dialect models",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/brands/{brand_id}/senders/{sender_id}/bounce-domains",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bigmailer.post.v1-brands-brand-id-senders-sender-id-bounce-domains-verify",
+      "kind": "rest_write",
+      "summary": "POST /v1/brands/{brand_id}/senders/{sender_id}/bounce-domains/verify",
+      "description": "triggers external DNS record verification; a polling/side-effect action with no data record to write, not a fit for the create/update/delete write shape",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/brands/{brand_id}/senders/{sender_id}/bounce-domains/verify",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bigmailer.post.v1-brands-brand-id-senders-sender-id-verify",
+      "kind": "rest_write",
+      "summary": "POST /v1/brands/{brand_id}/senders/{sender_id}/verify",
+      "description": "triggers external DNS record verification for the sender identity itself; same reasoning as bounce-domains/verify",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/brands/{brand_id}/senders/{sender_id}/verify",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bigmailer.post.v1-brands-brand-id-suppression-lists",
+      "kind": "rest_write",
+      "summary": "POST /v1/brands/{brand_id}/suppression-lists",
+      "description": "uploads a suppression list as a file; the declarative write dialect has no multipart/file-upload body construction",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/brands/{brand_id}/suppression-lists",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bigmailer.get.v1-brands-brand-id-suppression-lists-suppression-list-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/brands/{brand_id}/suppression-lists/{suppression_list_id}",
+      "description": "single-suppression-list lookup by id; fully covered by the suppression_lists list stream",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/brands/{brand_id}/suppression-lists/{suppression_list_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bigmailer.get.v1-brands-brand-id-templates-template-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/brands/{brand_id}/templates/{template_id}",
+      "description": "single-template lookup by id; fully covered by the templates list stream",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/brands/{brand_id}/templates/{template_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bigmailer.post.v1-brands-brand-id-test-campaigns",
+      "kind": "rest_write",
+      "summary": "POST /v1/brands/{brand_id}/test-campaigns",
+      "description": "sends a real test email to real recipient addresses immediately (this endpoint both creates AND sends in one call); not a safe data mutation",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/brands/{brand_id}/test-campaigns",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bigmailer.get.v1-brands-brand-id-test-campaigns-campaign-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/brands/{brand_id}/test-campaigns/{campaign_id}",
+      "description": "single-test-campaign lookup by id; fully covered by the test_campaigns list stream",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/brands/{brand_id}/test-campaigns/{campaign_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bigmailer.post.v1-brands-brand-id-transactional-campaigns",
+      "kind": "rest_write",
+      "summary": "POST /v1/brands/{brand_id}/transactional-campaigns",
+      "description": "creates a transactional campaign template that a later send action dispatches to real recipients; see POST /bulk-campaigns",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/brands/{brand_id}/transactional-campaigns",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bigmailer.get.v1-brands-brand-id-transactional-campaigns-campaign-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/brands/{brand_id}/transactional-campaigns/{campaign_id}",
+      "description": "single-transactional-campaign lookup by id; fully covered by the transactional_campaigns list stream",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/brands/{brand_id}/transactional-campaigns/{campaign_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bigmailer.post.v1-brands-brand-id-transactional-campaigns-campaign-id",
+      "kind": "rest_write",
+      "summary": "POST /v1/brands/{brand_id}/transactional-campaigns/{campaign_id}",
+      "description": "updates a live transactional campaign; see POST /transactional-campaigns",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/brands/{brand_id}/transactional-campaigns/{campaign_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bigmailer.post.v1-brands-brand-id-transactional-campaigns-campaign-id-send",
+      "kind": "rest_write",
+      "summary": "POST /v1/brands/{brand_id}/transactional-campaigns/{campaign_id}/send",
+      "description": "sends a real transactional email to a real recipient immediately; the archetypal unsafe reverse-ETL action for an email platform",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/brands/{brand_id}/transactional-campaigns/{campaign_id}/send",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bigmailer.get.v1-connections-connection-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/connections/{connection_id}",
+      "description": "single-connection lookup by id; fully covered by the connections list stream",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/connections/{connection_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bigmailer.get.v1-users-user-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/users/{user_id}",
+      "description": "single-user lookup by id; fully covered by the users list stream",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/users/{user_id}",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

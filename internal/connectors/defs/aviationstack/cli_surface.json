@@ -1,0 +1,251 @@
+{
+  "tagline": "Run Aviationstack's declared streams and reverse-ETL actions.",
+  "usage": "pm aviationstack \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "airlines list",
+        "airplanes list",
+        "airports list",
+        "api get v1 aircraft-types",
+        "api get v1 cities",
+        "api get v1 flightsfuture",
+        "api get v1 historical",
+        "api get v1 routes",
+        "api get v1 taxes",
+        "api get v1 timetable",
+        "countries list",
+        "flights list"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "airlines list",
+      "summary": "Run the airlines ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "airlines",
+      "source_url": "https://api.swaggerhub.com/apis/apilayer-863/AviationstackAPI/1.0.0/swagger.json",
+      "examples": [
+        "pm aviationstack airlines list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/airlines"
+        }
+      ]
+    },
+    {
+      "path": "airplanes list",
+      "summary": "Run the airplanes ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "airplanes",
+      "source_url": "https://api.swaggerhub.com/apis/apilayer-863/AviationstackAPI/1.0.0/swagger.json",
+      "examples": [
+        "pm aviationstack airplanes list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/airplanes"
+        }
+      ]
+    },
+    {
+      "path": "airports list",
+      "summary": "Run the airports ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "airports",
+      "source_url": "https://api.swaggerhub.com/apis/apilayer-863/AviationstackAPI/1.0.0/swagger.json",
+      "examples": [
+        "pm aviationstack airports list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/airports"
+        }
+      ]
+    },
+    {
+      "path": "api get v1 aircraft-types",
+      "summary": "Documented GET /v1/aircraft_types (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/apilayer-863/AviationstackAPI/1.0.0/swagger.json",
+      "examples": [
+        "pm aviationstack api get v1 aircraft-types --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/aircraft_types"
+        }
+      ],
+      "operation": "aviationstack.get.v1-aircraft-types",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 cities",
+      "summary": "Documented GET /v1/cities (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/apilayer-863/AviationstackAPI/1.0.0/swagger.json",
+      "examples": [
+        "pm aviationstack api get v1 cities --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/cities"
+        }
+      ],
+      "operation": "aviationstack.get.v1-cities",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 flightsfuture",
+      "summary": "Documented GET /v1/flightsFuture (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/apilayer-863/AviationstackAPI/1.0.0/swagger.json",
+      "examples": [
+        "pm aviationstack api get v1 flightsfuture --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/flightsFuture"
+        }
+      ],
+      "operation": "aviationstack.get.v1-flightsfuture",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 historical",
+      "summary": "Documented GET /v1/historical (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/apilayer-863/AviationstackAPI/1.0.0/swagger.json",
+      "examples": [
+        "pm aviationstack api get v1 historical --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/historical"
+        }
+      ],
+      "operation": "aviationstack.get.v1-historical",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 routes",
+      "summary": "Documented GET /v1/routes (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/apilayer-863/AviationstackAPI/1.0.0/swagger.json",
+      "examples": [
+        "pm aviationstack api get v1 routes --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/routes"
+        }
+      ],
+      "operation": "aviationstack.get.v1-routes",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 taxes",
+      "summary": "Documented GET /v1/taxes (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/apilayer-863/AviationstackAPI/1.0.0/swagger.json",
+      "examples": [
+        "pm aviationstack api get v1 taxes --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/taxes"
+        }
+      ],
+      "operation": "aviationstack.get.v1-taxes",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 timetable",
+      "summary": "Documented GET /v1/timetable (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/apilayer-863/AviationstackAPI/1.0.0/swagger.json",
+      "examples": [
+        "pm aviationstack api get v1 timetable --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/timetable"
+        }
+      ],
+      "operation": "aviationstack.get.v1-timetable",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "countries list",
+      "summary": "Run the countries ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "countries",
+      "source_url": "https://api.swaggerhub.com/apis/apilayer-863/AviationstackAPI/1.0.0/swagger.json",
+      "examples": [
+        "pm aviationstack countries list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/countries"
+        }
+      ]
+    },
+    {
+      "path": "flights list",
+      "summary": "Run the flights ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "flights",
+      "source_url": "https://api.swaggerhub.com/apis/apilayer-863/AviationstackAPI/1.0.0/swagger.json",
+      "examples": [
+        "pm aviationstack flights list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/flights"
+        }
+      ]
+    }
+  ]
+}

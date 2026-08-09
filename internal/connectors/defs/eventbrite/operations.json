@@ -1,0 +1,1635 @@
+{
+  "operations": [
+    {
+      "id": "eventbrite.get.balance",
+      "kind": "rest_read",
+      "summary": "GET /balance/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/balance/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.get.categories",
+      "kind": "rest_read",
+      "summary": "GET /categories/]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/categories/]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.get.categories-id",
+      "kind": "rest_read",
+      "summary": "GET /categories/{id}/]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/categories/{id}/]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.get.discounts-discount-id",
+      "kind": "rest_read",
+      "summary": "GET /discounts/{discount_id}/]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/discounts/{discount_id}/]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.post.discounts-discount-id",
+      "kind": "rest_write",
+      "summary": "POST /discounts/{discount_id}/]",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/discounts/{discount_id}/]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.delete.discounts-discount-id",
+      "kind": "rest_write",
+      "summary": "DELETE /discounts/{discount_id}/]",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/discounts/{discount_id}/]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.get.event-event-id-canned-questions-question-id",
+      "kind": "rest_read",
+      "summary": "GET /event/{event_id}/canned_questions/{question_id}]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/event/{event_id}/canned_questions/{question_id}]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.post.event-event-id-canned-questions-question-id",
+      "kind": "rest_write",
+      "summary": "POST /event/{event_id}/canned_questions/{question_id}]",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/event/{event_id}/canned_questions/{question_id}]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.delete.event-event-id-canned-questions-question-id",
+      "kind": "rest_write",
+      "summary": "DELETE /event/{event_id}/canned_questions/{question_id}]",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/event/{event_id}/canned_questions/{question_id}]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.get.events-search",
+      "kind": "rest_read",
+      "summary": "GET /events/search/]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/events/search/]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.get.events-event-id",
+      "kind": "rest_read",
+      "summary": "GET /events/{event_id}/]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/events/{event_id}/]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.post.events-event-id",
+      "kind": "rest_write",
+      "summary": "POST /events/{event_id}/]",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/events/{event_id}/]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.delete.events-event-id",
+      "kind": "rest_write",
+      "summary": "DELETE /events/{event_id}/]",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/events/{event_id}/]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.get.events-event-id-attendees",
+      "kind": "rest_read",
+      "summary": "GET /events/{event_id}/attendees/]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/events/{event_id}/attendees/]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.get.events-event-id-attendees-attendee-id",
+      "kind": "rest_read",
+      "summary": "GET /events/{event_id}/attendees/{attendee_id}/]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/events/{event_id}/attendees/{attendee_id}/]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.post.events-event-id-cancel",
+      "kind": "rest_write",
+      "summary": "POST /events/{event_id}/cancel/]",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/events/{event_id}/cancel/]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.get.events-event-id-canned-questions",
+      "kind": "rest_read",
+      "summary": "GET /events/{event_id}/canned_questions/]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/events/{event_id}/canned_questions/]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.post.events-event-id-canned-questions",
+      "kind": "rest_write",
+      "summary": "POST /events/{event_id}/canned_questions/]",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/events/{event_id}/canned_questions/]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.get.events-event-id-capacity-tier",
+      "kind": "rest_read",
+      "summary": "GET /events/{event_id}/capacity_tier/]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/events/{event_id}/capacity_tier/]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.post.events-event-id-capacity-tier",
+      "kind": "rest_write",
+      "summary": "POST /events/{event_id}/capacity_tier/]",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/events/{event_id}/capacity_tier/]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.post.events-event-id-copy",
+      "kind": "rest_write",
+      "summary": "POST /events/{event_id}/copy/]",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/events/{event_id}/copy/]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.get.events-event-id-description",
+      "kind": "rest_read",
+      "summary": "GET /events/{event_id}/description/]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/events/{event_id}/description/]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.get.events-event-id-display-settings",
+      "kind": "rest_read",
+      "summary": "GET /events/{event_id}/display_settings/]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/events/{event_id}/display_settings/]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.post.events-event-id-display-settings",
+      "kind": "rest_write",
+      "summary": "POST /events/{event_id}/display_settings/]",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/events/{event_id}/display_settings/]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.get.events-event-id-inventory-tiers",
+      "kind": "rest_read",
+      "summary": "GET /events/{event_id}/inventory_tiers/]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/events/{event_id}/inventory_tiers/]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.post.events-event-id-inventory-tiers",
+      "kind": "rest_write",
+      "summary": "POST /events/{event_id}/inventory_tiers/]",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/events/{event_id}/inventory_tiers/]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.get.events-event-id-inventory-tiers-inventory-tier-id",
+      "kind": "rest_read",
+      "summary": "GET /events/{event_id}/inventory_tiers/{inventory_tier_id}/]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/events/{event_id}/inventory_tiers/{inventory_tier_id}/]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.post.events-event-id-inventory-tiers-inventory-tier-id",
+      "kind": "rest_write",
+      "summary": "POST /events/{event_id}/inventory_tiers/{inventory_tier_id}/]",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/events/{event_id}/inventory_tiers/{inventory_tier_id}/]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.delete.events-event-id-inventory-tiers-inventory-tier-id",
+      "kind": "rest_write",
+      "summary": "DELETE /events/{event_id}/inventory_tiers/{inventory_tier_id}/]",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/events/{event_id}/inventory_tiers/{inventory_tier_id}/]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.get.events-event-id-orders",
+      "kind": "rest_read",
+      "summary": "GET /events/{event_id}/orders/]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/events/{event_id}/orders/]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.post.events-event-id-publish",
+      "kind": "rest_write",
+      "summary": "POST /events/{event_id}/publish/]",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/events/{event_id}/publish/]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.get.events-event-id-questions",
+      "kind": "rest_read",
+      "summary": "GET /events/{event_id}/questions/]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/events/{event_id}/questions/]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.post.events-event-id-questions",
+      "kind": "rest_write",
+      "summary": "POST /events/{event_id}/questions/]",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/events/{event_id}/questions/]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.get.events-event-id-questions-question-id",
+      "kind": "rest_read",
+      "summary": "GET /events/{event_id}/questions/{question_id}/]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/events/{event_id}/questions/{question_id}/]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.delete.events-event-id-questions-question-id",
+      "kind": "rest_write",
+      "summary": "DELETE /events/{event_id}/questions/{question_id}/]",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/events/{event_id}/questions/{question_id}/]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.post.events-event-id-schedules",
+      "kind": "rest_write",
+      "summary": "POST /events/{event_id}/schedules/]",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/events/{event_id}/schedules/]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.post.events-event-id-seatmaps",
+      "kind": "rest_write",
+      "summary": "POST /events/{event_id}/seatmaps/]",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/events/{event_id}/seatmaps/]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.get.events-event-id-teams",
+      "kind": "rest_read",
+      "summary": "GET /events/{event_id}/teams/]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/events/{event_id}/teams/]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.post.events-event-id-teams-create",
+      "kind": "rest_write",
+      "summary": "POST /events/{event_id}/teams/create/]",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/events/{event_id}/teams/create/]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.get.events-event-id-teams-search",
+      "kind": "rest_read",
+      "summary": "GET /events/{event_id}/teams/search/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/events/{event_id}/teams/search/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.get.events-event-id-teams-team-id",
+      "kind": "rest_read",
+      "summary": "GET /events/{event_id}/teams/{team_id}/]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/events/{event_id}/teams/{team_id}/]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.get.events-event-id-teams-team-id-attendees",
+      "kind": "rest_read",
+      "summary": "GET /events/{event_id}/teams/{team_id}/attendees/]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/events/{event_id}/teams/{team_id}/attendees/]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.post.events-event-id-teams-team-id-check-password",
+      "kind": "rest_write",
+      "summary": "POST /events/{event_id}/teams/{team_id}/check_password/]",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/events/{event_id}/teams/{team_id}/check_password/]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.get.events-event-id-ticket-buyer-settings",
+      "kind": "rest_read",
+      "summary": "GET /events/{event_id}/ticket_buyer_settings/]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/events/{event_id}/ticket_buyer_settings/]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.post.events-event-id-ticket-buyer-settings",
+      "kind": "rest_write",
+      "summary": "POST /events/{event_id}/ticket_buyer_settings/]",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/events/{event_id}/ticket_buyer_settings/]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.get.events-event-id-ticket-classes",
+      "kind": "rest_read",
+      "summary": "GET /events/{event_id}/ticket_classes/]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/events/{event_id}/ticket_classes/]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.post.events-event-id-ticket-classes",
+      "kind": "rest_write",
+      "summary": "POST /events/{event_id}/ticket_classes/]",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/events/{event_id}/ticket_classes/]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.get.events-event-id-ticket-classes-for-sale",
+      "kind": "rest_read",
+      "summary": "GET /events/{event_id}/ticket_classes/for_sale/]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/events/{event_id}/ticket_classes/for_sale/]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.get.events-event-id-ticket-classes-ticket-class-id",
+      "kind": "rest_read",
+      "summary": "GET /events/{event_id}/ticket_classes/{ticket_class_id}/]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/events/{event_id}/ticket_classes/{ticket_class_id}/]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.post.events-event-id-ticket-classes-ticket-class-id",
+      "kind": "rest_write",
+      "summary": "POST /events/{event_id}/ticket_classes/{ticket_class_id}/]",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/events/{event_id}/ticket_classes/{ticket_class_id}/]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.post.events-event-id-unpublish",
+      "kind": "rest_write",
+      "summary": "POST /events/{event_id}/unpublish/]",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/events/{event_id}/unpublish/]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.get.events-id-structured-content",
+      "kind": "rest_read",
+      "summary": "GET /events/{id}/structured_content/]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/events/{id}/structured_content/]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.get.events-id-structured-content-edit",
+      "kind": "rest_read",
+      "summary": "GET /events/{id}/structured_content/edit/]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/events/{id}/structured_content/edit/]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.post.events-id-structured-content-version",
+      "kind": "rest_write",
+      "summary": "POST /events/{id}/structured_content/{version}/]",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/events/{id}/structured_content/{version}/]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.get.formats",
+      "kind": "rest_read",
+      "summary": "GET /formats/]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/formats/]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.get.formats-format-id",
+      "kind": "rest_read",
+      "summary": "GET /formats/{format_id}/]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/formats/{format_id}/]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.get.media-upload",
+      "kind": "rest_read",
+      "summary": "GET /media/upload/]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/media/upload/]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.post.media-upload",
+      "kind": "rest_write",
+      "summary": "POST /media/upload/]",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/media/upload/]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.get.media-media-id",
+      "kind": "rest_read",
+      "summary": "GET /media/{media_id}/{",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/media/{media_id}/{",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.get.orders-order-id",
+      "kind": "rest_read",
+      "summary": "GET /orders/{order_id}/]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/orders/{order_id}/]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.get.organizations-organization-id-attendees",
+      "kind": "rest_read",
+      "summary": "GET /organizations/{organization_id}/attendees/]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/organizations/{organization_id}/attendees/]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.post.organizations-organization-id-discounts",
+      "kind": "rest_write",
+      "summary": "POST /organizations/{organization_id}/discounts/]",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/organizations/{organization_id}/discounts/]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.get.organizations-organization-id-discounts",
+      "kind": "rest_read",
+      "summary": "GET /organizations/{organization_id}/discounts/{",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/organizations/{organization_id}/discounts/{",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.get.organizations-organization-id-events",
+      "kind": "rest_read",
+      "summary": "GET /organizations/{organization_id}/events/]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/organizations/{organization_id}/events/]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.post.organizations-organization-id-events",
+      "kind": "rest_write",
+      "summary": "POST /organizations/{organization_id}/events/]",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/organizations/{organization_id}/events/]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.post.organizations-organization-id-events-event-id-ticket-classes-ticket-class-id-ticket-groups",
+      "kind": "rest_write",
+      "summary": "POST /organizations/{organization_id}/events/{event_id}/ticket_classes/{ticket_class_id}/ticket_groups/]",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/organizations/{organization_id}/events/{event_id}/ticket_classes/{ticket_class_id}/ticket_groups/]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.get.organizations-organization-id-members",
+      "kind": "rest_read",
+      "summary": "GET /organizations/{organization_id}/members/]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/organizations/{organization_id}/members/]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.get.organizations-organization-id-orders",
+      "kind": "rest_read",
+      "summary": "GET /organizations/{organization_id}/orders/]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/organizations/{organization_id}/orders/]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.get.organizations-organization-id-roles",
+      "kind": "rest_read",
+      "summary": "GET /organizations/{organization_id}/roles/]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/organizations/{organization_id}/roles/]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.get.organizations-organization-id-seatmaps",
+      "kind": "rest_read",
+      "summary": "GET /organizations/{organization_id}/seatmaps/{",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/organizations/{organization_id}/seatmaps/{",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.post.organizations-organization-id-text-overrides",
+      "kind": "rest_write",
+      "summary": "POST /organizations/{organization_id}/text_overrides/]",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/organizations/{organization_id}/text_overrides/]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.get.organizations-organization-id-text-overrides",
+      "kind": "rest_read",
+      "summary": "GET /organizations/{organization_id}/text_overrides/{",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/organizations/{organization_id}/text_overrides/{",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.get.organizations-organization-id-ticket-groups",
+      "kind": "rest_read",
+      "summary": "GET /organizations/{organization_id}/ticket_groups/]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/organizations/{organization_id}/ticket_groups/]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.post.organizations-organization-id-ticket-groups",
+      "kind": "rest_write",
+      "summary": "POST /organizations/{organization_id}/ticket_groups/]",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/organizations/{organization_id}/ticket_groups/]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.get.organizations-organization-id-venues",
+      "kind": "rest_read",
+      "summary": "GET /organizations/{organization_id}/venues/]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/organizations/{organization_id}/venues/]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.post.organizations-organization-id-venues",
+      "kind": "rest_write",
+      "summary": "POST /organizations/{organization_id}/venues/]",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/organizations/{organization_id}/venues/]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.get.organizations-organization-id-webhooks",
+      "kind": "rest_read",
+      "summary": "GET /organizations/{organization_id}/webhooks/]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/organizations/{organization_id}/webhooks/]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.post.organizations-organization-id-webhooks",
+      "kind": "rest_write",
+      "summary": "POST /organizations/{organization_id}/webhooks/]",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/organizations/{organization_id}/webhooks/]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.post.pricing-calculate-price-for-item",
+      "kind": "rest_write",
+      "summary": "POST /pricing/calculate_price_for_item/]",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/pricing/calculate_price_for_item/]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.get.pricing-fee-rates",
+      "kind": "rest_read",
+      "summary": "GET /pricing/fee_rates{",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/pricing/fee_rates{",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.get.reports-attendees",
+      "kind": "rest_read",
+      "summary": "GET /reports/attendees/]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/reports/attendees/]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.get.reports-sales",
+      "kind": "rest_read",
+      "summary": "GET /reports/sales/]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/reports/sales/]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.get.series-event-series-id",
+      "kind": "rest_read",
+      "summary": "GET /series/{event_series_id}/]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/series/{event_series_id}/]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.get.series-event-series-id-events",
+      "kind": "rest_read",
+      "summary": "GET /series/{event_series_id}/events/]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/series/{event_series_id}/events/]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.get.subcategories",
+      "kind": "rest_read",
+      "summary": "GET /subcategories/]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/subcategories/]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.get.subcategories-subcategory-id",
+      "kind": "rest_read",
+      "summary": "GET /subcategories/{subcategory_id}/]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/subcategories/{subcategory_id}/]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.get.ticket-groups-ticket-group-id",
+      "kind": "rest_read",
+      "summary": "GET /ticket_groups/{ticket_group_id}/]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/ticket_groups/{ticket_group_id}/]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.post.ticket-groups-ticket-group-id",
+      "kind": "rest_write",
+      "summary": "POST /ticket_groups/{ticket_group_id}/]",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/ticket_groups/{ticket_group_id}/]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.delete.ticket-groups-ticket-group-id",
+      "kind": "rest_write",
+      "summary": "DELETE /ticket_groups/{ticket_group_id}/]",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/ticket_groups/{ticket_group_id}/]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.get.users-me",
+      "kind": "rest_read",
+      "summary": "GET /users/me/]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/users/me/]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.get.users-me-organizations",
+      "kind": "rest_read",
+      "summary": "GET /users/me/organizations/]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/users/me/organizations/]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.get.users-user-id",
+      "kind": "rest_read",
+      "summary": "GET /users/{user_id}/]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/users/{user_id}/]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.get.users-user-id-orders",
+      "kind": "rest_read",
+      "summary": "GET /users/{user_id}/orders/]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/users/{user_id}/orders/]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.get.users-user-id-organizations",
+      "kind": "rest_read",
+      "summary": "GET /users/{user_id}/organizations/]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/users/{user_id}/organizations/]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.get.v3-events-12345",
+      "kind": "rest_read",
+      "summary": "GET /v3/events/12345/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/events/12345/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.get.v3-events-event-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/events/{event_id}/",
+      "description": "/v3/events/{event_id}/ is a detail or scoped sub-resource endpoint requiring caller-supplied identifiers or fan-out beyond this bundle's current spec; the implemented list streams cover the configured collection surface where applicable",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/events/{event_id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.get.v3-events-event-id-attendees-attendee-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/events/{event_id}/attendees/{attendee_id}/",
+      "description": "single-attendee lookup; covered by the attendees list stream",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/events/{event_id}/attendees/{attendee_id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.post.v3-organizations-organization-id-events",
+      "kind": "rest_write",
+      "summary": "POST /v3/organizations/{organization_id}/events/",
+      "description": "/v3/organizations/{organization_id}/events/ is a mutation endpoint; this bundle has no reviewed write record schema, approval risk, or legacy write contract for that operation",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/organizations/{organization_id}/events/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.get.v3-users-me",
+      "kind": "rest_read",
+      "summary": "GET /v3/users/me/",
+      "description": "/v3/users/me/ is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/users/me/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.get.v3-venues-venue-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/venues/{venue_id}/",
+      "description": "/v3/venues/{venue_id}/ is a detail or scoped sub-resource endpoint requiring caller-supplied identifiers or fan-out beyond this bundle's current spec; the implemented list streams cover the configured collection surface where applicable",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/venues/{venue_id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.get.venues-venue-id",
+      "kind": "rest_read",
+      "summary": "GET /venues/{venue_id}/]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/venues/{venue_id}/]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.post.venues-venue-id",
+      "kind": "rest_write",
+      "summary": "POST /venues/{venue_id}/]",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/venues/{venue_id}/]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.get.venues-venue-id-events",
+      "kind": "rest_read",
+      "summary": "GET /venues/{venue_id}/events/]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/venues/{venue_id}/events/]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.get.webhooks",
+      "kind": "rest_read",
+      "summary": "GET /webhooks/]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/webhooks/]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.post.webhooks",
+      "kind": "rest_write",
+      "summary": "POST /webhooks/]",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/webhooks/]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "eventbrite.delete.webhooks-id",
+      "kind": "rest_write",
+      "summary": "DELETE /webhooks/{id}/]",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/webhooks/{id}/]",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

@@ -1,33 +1,2089 @@
 {
-  "api": "Eventbrite API v3 (https://www.eventbriteapi.com/v3)",
+  "api": "Eventbrite API v3 (https://www.eventbriteapi.com/v3); provider artifact version: Eventbrite API v3 (provider-linked Apiary API Blueprint)",
   "docs": "https://www.eventbrite.com/platform/api",
-  "reviewed_at": "2026-07-03",
-  "scope": "full legacy-parity migration: all 5 legacy read streams (organizations, events, attendees, orders, ticket_classes); Eventbrite is read-only in legacy (no reverse-ETL writes), so there are no write endpoints in or out of scope",
+  "reviewed_at": "2026-08-09",
+  "operation_ledger_version": 2,
+  "scope": "Provider-artifact inventory generated from the cited html_reference artifact (101 documented operations across 1 provider-owned source document(s)). Every documented operation is represented; existing source-surface bindings absent from the artifact are retained and flagged with present-in-surface-absent-from-artifact.",
+  "artifacts": [
+    {
+      "id": "eventbrite-artifact-2026-08-09",
+      "url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "kind": "html_reference",
+      "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+      "retrieved_at": "2026-08-09",
+      "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b"
+    }
+  ],
   "endpoints": [
     {
       "method": "GET",
-      "path": "/v3/users/me/organizations/",
-      "covered_by": {
-        "stream": "organizations"
+      "path": "/balance/",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#GET /balance/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
-      "path": "/v3/organizations/{organization_id}/events/",
-      "covered_by": {
-        "stream": "events"
+      "path": "/categories/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#GET /categories/]"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/categories/{id}/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#GET /categories/{id}/]"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/discounts/{discount_id}/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#GET /discounts/{discount_id}/]"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/discounts/{discount_id}/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#POST /discounts/{discount_id}/]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/discounts/{discount_id}/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#DELETE /discounts/{discount_id}/]"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/event/{event_id}/canned_questions/{question_id}]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#GET /event/{event_id}/canned_questions/{question_id}]"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/event/{event_id}/canned_questions/{question_id}]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#POST /event/{event_id}/canned_questions/{question_id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/event/{event_id}/canned_questions/{question_id}]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#DELETE /event/{event_id}/canned_questions/{question_id}]"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/events/search/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#GET /events/search/]"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/events/{event_id}/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#GET /events/{event_id}/]"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/events/{event_id}/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#POST /events/{event_id}/]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/events/{event_id}/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#DELETE /events/{event_id}/]"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/events/{event_id}/attendees/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#GET /events/{event_id}/attendees/]"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/events/{event_id}/attendees/{attendee_id}/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#GET /events/{event_id}/attendees/{attendee_id}/]"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/events/{event_id}/cancel/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#POST /events/{event_id}/cancel/]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/events/{event_id}/canned_questions/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#GET /events/{event_id}/canned_questions/]"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/events/{event_id}/canned_questions/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#POST /events/{event_id}/canned_questions/]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/events/{event_id}/capacity_tier/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#GET /events/{event_id}/capacity_tier/]"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/events/{event_id}/capacity_tier/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#POST /events/{event_id}/capacity_tier/]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/events/{event_id}/copy/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#POST /events/{event_id}/copy/]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/events/{event_id}/description/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#GET /events/{event_id}/description/]"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/events/{event_id}/display_settings/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#GET /events/{event_id}/display_settings/]"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/events/{event_id}/display_settings/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#POST /events/{event_id}/display_settings/]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/events/{event_id}/inventory_tiers/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#GET /events/{event_id}/inventory_tiers/]"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/events/{event_id}/inventory_tiers/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#POST /events/{event_id}/inventory_tiers/]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/events/{event_id}/inventory_tiers/{inventory_tier_id}/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#GET /events/{event_id}/inventory_tiers/{inventory_tier_id}/]"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/events/{event_id}/inventory_tiers/{inventory_tier_id}/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#POST /events/{event_id}/inventory_tiers/{inventory_tier_id}/]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/events/{event_id}/inventory_tiers/{inventory_tier_id}/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#DELETE /events/{event_id}/inventory_tiers/{inventory_tier_id}/]"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/events/{event_id}/orders/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#GET /events/{event_id}/orders/]"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/events/{event_id}/publish/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#POST /events/{event_id}/publish/]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/events/{event_id}/questions/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#GET /events/{event_id}/questions/]"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/events/{event_id}/questions/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#POST /events/{event_id}/questions/]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/events/{event_id}/questions/{question_id}/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#GET /events/{event_id}/questions/{question_id}/]"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/events/{event_id}/questions/{question_id}/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#DELETE /events/{event_id}/questions/{question_id}/]"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/events/{event_id}/schedules/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#POST /events/{event_id}/schedules/]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/events/{event_id}/seatmaps/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#POST /events/{event_id}/seatmaps/]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/events/{event_id}/teams/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#GET /events/{event_id}/teams/]"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/events/{event_id}/teams/create/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#POST /events/{event_id}/teams/create/]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/events/{event_id}/teams/search/",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#GET /events/{event_id}/teams/search/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/events/{event_id}/teams/{team_id}/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#GET /events/{event_id}/teams/{team_id}/]"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/events/{event_id}/teams/{team_id}/attendees/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#GET /events/{event_id}/teams/{team_id}/attendees/]"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/events/{event_id}/teams/{team_id}/check_password/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#POST /events/{event_id}/teams/{team_id}/check_password/]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/events/{event_id}/ticket_buyer_settings/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#GET /events/{event_id}/ticket_buyer_settings/]"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/events/{event_id}/ticket_buyer_settings/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#POST /events/{event_id}/ticket_buyer_settings/]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/events/{event_id}/ticket_classes/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#GET /events/{event_id}/ticket_classes/]"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/events/{event_id}/ticket_classes/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#POST /events/{event_id}/ticket_classes/]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/events/{event_id}/ticket_classes/for_sale/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#GET /events/{event_id}/ticket_classes/for_sale/]"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/events/{event_id}/ticket_classes/{ticket_class_id}/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#GET /events/{event_id}/ticket_classes/{ticket_class_id}/]"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/events/{event_id}/ticket_classes/{ticket_class_id}/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#POST /events/{event_id}/ticket_classes/{ticket_class_id}/]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/events/{event_id}/unpublish/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#POST /events/{event_id}/unpublish/]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/events/{id}/structured_content/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#GET /events/{id}/structured_content/]"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/events/{id}/structured_content/edit/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#GET /events/{id}/structured_content/edit/]"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/events/{id}/structured_content/{version}/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#POST /events/{id}/structured_content/{version}/]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/formats/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#GET /formats/]"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/formats/{format_id}/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#GET /formats/{format_id}/]"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/media/upload/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#GET /media/upload/]"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/media/upload/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#POST /media/upload/]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/media/{media_id}/{",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#GET /media/{media_id}/{"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orders/{order_id}/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#GET /orders/{order_id}/]"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{organization_id}/attendees/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#GET /organizations/{organization_id}/attendees/]"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/organizations/{organization_id}/discounts/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#POST /organizations/{organization_id}/discounts/]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{organization_id}/discounts/{",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#GET /organizations/{organization_id}/discounts/{"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{organization_id}/events/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#GET /organizations/{organization_id}/events/]"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/organizations/{organization_id}/events/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#POST /organizations/{organization_id}/events/]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/organizations/{organization_id}/events/{event_id}/ticket_classes/{ticket_class_id}/ticket_groups/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#POST /organizations/{organization_id}/events/{event_id}/ticket_classes/{ticket_class_id}/ticket_groups/]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{organization_id}/members/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#GET /organizations/{organization_id}/members/]"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{organization_id}/orders/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#GET /organizations/{organization_id}/orders/]"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{organization_id}/roles/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#GET /organizations/{organization_id}/roles/]"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{organization_id}/seatmaps/{",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#GET /organizations/{organization_id}/seatmaps/{"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/organizations/{organization_id}/text_overrides/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#POST /organizations/{organization_id}/text_overrides/]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{organization_id}/text_overrides/{",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#GET /organizations/{organization_id}/text_overrides/{"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{organization_id}/ticket_groups/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#GET /organizations/{organization_id}/ticket_groups/]"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/organizations/{organization_id}/ticket_groups/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#POST /organizations/{organization_id}/ticket_groups/]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{organization_id}/venues/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#GET /organizations/{organization_id}/venues/]"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/organizations/{organization_id}/venues/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#POST /organizations/{organization_id}/venues/]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{organization_id}/webhooks/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#GET /organizations/{organization_id}/webhooks/]"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/organizations/{organization_id}/webhooks/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#POST /organizations/{organization_id}/webhooks/]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pricing/calculate_price_for_item/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#POST /pricing/calculate_price_for_item/]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pricing/fee_rates{",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#GET /pricing/fee_rates{"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/reports/attendees/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#GET /reports/attendees/]"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/reports/sales/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#GET /reports/sales/]"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/series/{event_series_id}/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#GET /series/{event_series_id}/]"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/series/{event_series_id}/events/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#GET /series/{event_series_id}/events/]"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/subcategories/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#GET /subcategories/]"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/subcategories/{subcategory_id}/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#GET /subcategories/{subcategory_id}/]"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ticket_groups/{ticket_group_id}/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#GET /ticket_groups/{ticket_group_id}/]"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ticket_groups/{ticket_group_id}/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#POST /ticket_groups/{ticket_group_id}/]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/ticket_groups/{ticket_group_id}/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#DELETE /ticket_groups/{ticket_group_id}/]"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/me/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#GET /users/me/]"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/me/organizations/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#GET /users/me/organizations/]"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{user_id}/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#GET /users/{user_id}/]"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{user_id}/orders/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#GET /users/{user_id}/orders/]"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{user_id}/organizations/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#GET /users/{user_id}/organizations/]"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/events/12345/",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#GET /v3/events/12345/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/events/{event_id}/",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "existing-surface[GET /v3/events/{event_id}/]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "/v3/events/{event_id}/ is a detail or scoped sub-resource endpoint requiring caller-supplied identifiers or fan-out beyond this bundle's current spec; the implemented list streams cover the configured collection surface where applicable",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/v3/events/{event_id}/attendees/",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "existing-surface[GET /v3/events/{event_id}/attendees/]"
+      },
       "covered_by": {
         "stream": "attendees"
       }
     },
     {
       "method": "GET",
+      "path": "/v3/events/{event_id}/attendees/{attendee_id}/",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "existing-surface[GET /v3/events/{event_id}/attendees/{attendee_id}/]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-attendee lookup; covered by the attendees list stream",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/v3/events/{event_id}/orders/",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "existing-surface[GET /v3/events/{event_id}/orders/]"
+      },
       "covered_by": {
         "stream": "orders"
       }
@@ -35,48 +2091,244 @@
     {
       "method": "GET",
       "path": "/v3/events/{event_id}/ticket_classes/",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "existing-surface[GET /v3/events/{event_id}/ticket_classes/]"
+      },
       "covered_by": {
         "stream": "ticket_classes"
       }
     },
     {
       "method": "GET",
-      "path": "/v3/users/me/",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "/v3/users/me/ is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v3/venues/{venue_id}/",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "/v3/venues/{venue_id}/ is a detail or scoped sub-resource endpoint requiring caller-supplied identifiers or fan-out beyond this bundle's current spec; the implemented list streams cover the configured collection surface where applicable"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v3/events/{event_id}/",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "/v3/events/{event_id}/ is a detail or scoped sub-resource endpoint requiring caller-supplied identifiers or fan-out beyond this bundle's current spec; the implemented list streams cover the configured collection surface where applicable"
+      "path": "/v3/organizations/{organization_id}/events/",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "existing-surface[GET /v3/organizations/{organization_id}/events/]"
+      },
+      "covered_by": {
+        "stream": "events"
       }
     },
     {
       "method": "POST",
       "path": "/v3/organizations/{organization_id}/events/",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "/v3/organizations/{organization_id}/events/ is a mutation endpoint; this bundle has no reviewed write record schema, approval risk, or legacy write contract for that operation"
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "existing-surface[POST /v3/organizations/{organization_id}/events/]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "/v3/organizations/{organization_id}/events/ is a mutation endpoint; this bundle has no reviewed write record schema, approval risk, or legacy write contract for that operation",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     },
     {
       "method": "GET",
-      "path": "/v3/events/{event_id}/attendees/{attendee_id}/",
-      "excluded": {
-        "category": "duplicate_of",
-        "reason": "single-attendee lookup; covered by the attendees list stream"
+      "path": "/v3/users/me/",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "existing-surface[GET /v3/users/me/]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "/v3/users/me/ is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/users/me/organizations/",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "existing-surface[GET /v3/users/me/organizations/]"
+      },
+      "covered_by": {
+        "stream": "organizations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/venues/{venue_id}/",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "existing-surface[GET /v3/venues/{venue_id}/]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "/v3/venues/{venue_id}/ is a detail or scoped sub-resource endpoint requiring caller-supplied identifiers or fan-out beyond this bundle's current spec; the implemented list streams cover the configured collection surface where applicable",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/venues/{venue_id}/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#GET /venues/{venue_id}/]"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/venues/{venue_id}/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#POST /venues/{venue_id}/]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/venues/{venue_id}/events/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#GET /venues/{venue_id}/events/]"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/webhooks/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#GET /webhooks/]"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/webhooks/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#POST /webhooks/]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/webhooks/{id}/]",
+      "provenance": {
+        "artifact": "eventbrite-artifact-2026-08-09",
+        "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+        "source_kind": "html_reference",
+        "version": "Eventbrite API v3 (provider-linked Apiary API Blueprint)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b4aba060bee949cd3dcb83668709b8de94ff4e9b6692efcd98a4753647d6e66b",
+        "coordinate": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source#DELETE /webhooks/{id}/]"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     }
   ]

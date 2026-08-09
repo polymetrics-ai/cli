@@ -1,0 +1,2111 @@
+{
+  "tagline": "Run Nutshell's declared streams and reverse-ETL actions.",
+  "usage": "pm nutshell \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "account custom field attributes list",
+        "account custom fields list",
+        "account list",
+        "account list fields list",
+        "account list items list",
+        "account types list",
+        "accounts list",
+        "activities list",
+        "activity list",
+        "activity types list",
+        "api get stagesets id export",
+        "audiences list",
+        "competitor list",
+        "competitor map list",
+        "competitor maps list",
+        "competitors list",
+        "contact custom field attributes list",
+        "contact custom fields list",
+        "contact list",
+        "contact list fields list",
+        "contact list items list",
+        "contacts list",
+        "deleted events list",
+        "edition list",
+        "editions list",
+        "email list",
+        "events list",
+        "form field list",
+        "form list",
+        "forms list",
+        "industries list",
+        "industry list",
+        "invoice list",
+        "invoices list",
+        "lead custom field attributes list",
+        "lead custom fields list",
+        "lead installments list",
+        "lead list",
+        "lead list fields list",
+        "lead list items list",
+        "lead outcome list",
+        "lead outcomes list",
+        "lead reports list",
+        "lead stages list",
+        "leads list",
+        "market list",
+        "markets list",
+        "note list",
+        "notes list",
+        "pipelines list",
+        "product categories list",
+        "product category list",
+        "product list",
+        "product map list",
+        "product maps list",
+        "products list",
+        "quote list",
+        "quotes list",
+        "saved filters list",
+        "sources list",
+        "stages list",
+        "tags list",
+        "task list",
+        "tasks list",
+        "territories list",
+        "user list",
+        "users list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "api patch accounts id",
+        "api patch competitormaps id",
+        "api patch contacts id",
+        "api patch leads id",
+        "api patch productmaps id",
+        "api patch tasks id",
+        "api post leads id installments",
+        "create account apply",
+        "create account custom field apply",
+        "create activity apply",
+        "create audience apply",
+        "create contact apply",
+        "create contact custom field apply",
+        "create lead apply",
+        "create lead custom field apply",
+        "create note apply",
+        "create product category apply",
+        "create source apply",
+        "create tag apply",
+        "create task apply",
+        "delete account apply",
+        "delete competitor map apply",
+        "delete contact apply",
+        "delete lead apply",
+        "delete note apply",
+        "delete product apply",
+        "delete product map apply",
+        "delete source apply",
+        "delete tag apply",
+        "delete task apply",
+        "reopen lead apply",
+        "set lead pipeline apply",
+        "undelete account apply",
+        "undelete contact apply",
+        "undelete lead apply",
+        "undelete note apply",
+        "undelete product apply",
+        "undelete source apply",
+        "undelete tag apply",
+        "update activity apply",
+        "update lead status apply",
+        "watch lead apply"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "account custom field attributes list",
+      "summary": "Run the account custom field attributes ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "account_custom_field_attributes",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell account custom field attributes list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/accounts/customfields/attributes"
+        }
+      ]
+    },
+    {
+      "path": "account custom fields list",
+      "summary": "Run the account custom fields ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "account_custom_fields",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell account custom fields list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/accounts/{id}/customfields"
+        }
+      ]
+    },
+    {
+      "path": "account list",
+      "summary": "Run the account ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "account",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell account list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/accounts/{id}"
+        }
+      ]
+    },
+    {
+      "path": "account list fields list",
+      "summary": "Run the account list fields ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "account_list_fields",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell account list fields list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/accounts/list/fields"
+        }
+      ]
+    },
+    {
+      "path": "account list items list",
+      "summary": "Run the account list items ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "account_list_items",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell account list items list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/accounts/list"
+        }
+      ]
+    },
+    {
+      "path": "account types list",
+      "summary": "Run the account types ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "account_types",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell account types list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/accounttypes"
+        }
+      ]
+    },
+    {
+      "path": "accounts list",
+      "summary": "Run the accounts ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "accounts",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell accounts list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/accounts"
+        }
+      ]
+    },
+    {
+      "path": "activities list",
+      "summary": "Run the activities ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "activities",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell activities list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/activities"
+        }
+      ]
+    },
+    {
+      "path": "activity list",
+      "summary": "Run the activity ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "activity",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell activity list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/activities/{id}"
+        }
+      ]
+    },
+    {
+      "path": "activity types list",
+      "summary": "Run the activity types ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "activity_types",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell activity types list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/activitytypes"
+        }
+      ]
+    },
+    {
+      "path": "api get stagesets id export",
+      "summary": "Documented GET /stagesets/{id}/export (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell api get stagesets id export --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/stagesets/{id}/export"
+        }
+      ],
+      "operation": "nutshell.get.stagesets-id-export",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api patch accounts id",
+      "summary": "Documented PATCH /accounts/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell api patch accounts id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/accounts/{id}"
+        }
+      ],
+      "operation": "nutshell.patch.accounts-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch competitormaps id",
+      "summary": "Documented PATCH /competitormaps/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell api patch competitormaps id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/competitormaps/{id}"
+        }
+      ],
+      "operation": "nutshell.patch.competitormaps-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch contacts id",
+      "summary": "Documented PATCH /contacts/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell api patch contacts id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/contacts/{id}"
+        }
+      ],
+      "operation": "nutshell.patch.contacts-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch leads id",
+      "summary": "Documented PATCH /leads/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell api patch leads id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/leads/{id}"
+        }
+      ],
+      "operation": "nutshell.patch.leads-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch productmaps id",
+      "summary": "Documented PATCH /productmaps/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell api patch productmaps id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/productmaps/{id}"
+        }
+      ],
+      "operation": "nutshell.patch.productmaps-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch tasks id",
+      "summary": "Documented PATCH /tasks/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell api patch tasks id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/tasks/{id}"
+        }
+      ],
+      "operation": "nutshell.patch.tasks-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post leads id installments",
+      "summary": "Documented POST /leads/{id}/installments (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell api post leads id installments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/leads/{id}/installments"
+        }
+      ],
+      "operation": "nutshell.post.leads-id-installments",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "audiences list",
+      "summary": "Run the audiences ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "audiences",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell audiences list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/audiences"
+        }
+      ]
+    },
+    {
+      "path": "competitor list",
+      "summary": "Run the competitor ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "competitor",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell competitor list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/competitors/{id}"
+        }
+      ]
+    },
+    {
+      "path": "competitor map list",
+      "summary": "Run the competitor map ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "competitor_map",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell competitor map list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/competitormaps/{id}"
+        }
+      ]
+    },
+    {
+      "path": "competitor maps list",
+      "summary": "Run the competitor maps ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "competitor_maps",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell competitor maps list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/competitormaps"
+        }
+      ]
+    },
+    {
+      "path": "competitors list",
+      "summary": "Run the competitors ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "competitors",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell competitors list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/competitors"
+        }
+      ]
+    },
+    {
+      "path": "contact custom field attributes list",
+      "summary": "Run the contact custom field attributes ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "contact_custom_field_attributes",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell contact custom field attributes list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/contacts/customfields/attributes"
+        }
+      ]
+    },
+    {
+      "path": "contact custom fields list",
+      "summary": "Run the contact custom fields ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "contact_custom_fields",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell contact custom fields list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/contacts/{id}/customfields"
+        }
+      ]
+    },
+    {
+      "path": "contact list",
+      "summary": "Run the contact ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "contact",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell contact list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/contacts/{id}"
+        }
+      ]
+    },
+    {
+      "path": "contact list fields list",
+      "summary": "Run the contact list fields ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "contact_list_fields",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell contact list fields list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/contacts/list/fields"
+        }
+      ]
+    },
+    {
+      "path": "contact list items list",
+      "summary": "Run the contact list items ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "contact_list_items",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell contact list items list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/contacts/list"
+        }
+      ]
+    },
+    {
+      "path": "contacts list",
+      "summary": "Run the contacts ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "contacts",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell contacts list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/contacts"
+        }
+      ]
+    },
+    {
+      "path": "create account apply",
+      "summary": "Plan and execute the create account reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_account",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell create account apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/accounts"
+        }
+      ],
+      "risk": "creates company/account records in Nutshell",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create account custom field apply",
+      "summary": "Plan and execute the create account custom field reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_account_custom_field",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell create account custom field apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/accounts/customfield"
+        }
+      ],
+      "risk": "creates an account custom field definition",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create activity apply",
+      "summary": "Plan and execute the create activity reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_activity",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell create activity apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/activities"
+        }
+      ],
+      "risk": "creates Nutshell activity records",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create audience apply",
+      "summary": "Plan and execute the create audience reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_audience",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell create audience apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/audiences"
+        }
+      ],
+      "risk": "creates a Nutshell email marketing audience",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create contact apply",
+      "summary": "Plan and execute the create contact reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_contact",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell create contact apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/contacts"
+        }
+      ],
+      "risk": "creates person/contact records in Nutshell",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create contact custom field apply",
+      "summary": "Plan and execute the create contact custom field reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_contact_custom_field",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell create contact custom field apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/contacts/customfield"
+        }
+      ],
+      "risk": "creates a contact custom field definition",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create lead apply",
+      "summary": "Plan and execute the create lead reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_lead",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell create lead apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/leads"
+        }
+      ],
+      "risk": "creates Nutshell lead records",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create lead custom field apply",
+      "summary": "Plan and execute the create lead custom field reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_lead_custom_field",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell create lead custom field apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/leads/customfield"
+        }
+      ],
+      "risk": "creates a lead custom field definition",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create note apply",
+      "summary": "Plan and execute the create note reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_note",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell create note apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/notes"
+        }
+      ],
+      "risk": "creates a note attached to a Nutshell entity",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create product category apply",
+      "summary": "Plan and execute the create product category reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_product_category",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell create product category apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/productcategories"
+        }
+      ],
+      "risk": "creates a Nutshell product category",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create source apply",
+      "summary": "Plan and execute the create source reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_source",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell create source apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/sources"
+        }
+      ],
+      "risk": "creates a lead source in Nutshell",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create tag apply",
+      "summary": "Plan and execute the create tag reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_tag",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell create tag apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/tags"
+        }
+      ],
+      "risk": "creates a Nutshell tag and optionally links entities",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create task apply",
+      "summary": "Plan and execute the create task reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_task",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell create task apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/tasks"
+        }
+      ],
+      "risk": "creates a task in Nutshell",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete account apply",
+      "summary": "Plan and execute the delete account reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_account",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell delete account apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/accounts/{id}"
+        }
+      ],
+      "risk": "deletes a Nutshell account/company; recoverable only through the undelete endpoint for a limited period",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete competitor map apply",
+      "summary": "Plan and execute the delete competitor map reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_competitor_map",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell delete competitor map apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/competitormaps/{id}"
+        }
+      ],
+      "risk": "deletes a lead-competitor relationship",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete contact apply",
+      "summary": "Plan and execute the delete contact reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_contact",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell delete contact apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/contacts/{id}"
+        }
+      ],
+      "risk": "deletes a Nutshell contact/person; recoverable only through the undelete endpoint for a limited period",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete lead apply",
+      "summary": "Plan and execute the delete lead reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_lead",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell delete lead apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/leads/{id}"
+        }
+      ],
+      "risk": "deletes a Nutshell lead; recoverable only through the undelete endpoint for a limited period",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete note apply",
+      "summary": "Plan and execute the delete note reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_note",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell delete note apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/notes/{id}"
+        }
+      ],
+      "risk": "deletes a Nutshell note; recoverable only through the undelete endpoint for a limited period",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete product apply",
+      "summary": "Plan and execute the delete product reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_product",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell delete product apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/products/{id}"
+        }
+      ],
+      "risk": "deletes a Nutshell product; recoverable only through the undelete endpoint for a limited period",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete product map apply",
+      "summary": "Plan and execute the delete product map reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_product_map",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell delete product map apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/productMaps/{id}"
+        }
+      ],
+      "risk": "deletes a product mapping from a lead",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete source apply",
+      "summary": "Plan and execute the delete source reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_source",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell delete source apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/sources/{id}"
+        }
+      ],
+      "risk": "deletes a lead source; recoverable only through the undelete endpoint for a limited period",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete tag apply",
+      "summary": "Plan and execute the delete tag reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_tag",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell delete tag apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/tags/{id}"
+        }
+      ],
+      "risk": "deletes a Nutshell tag; recoverable only through the undelete endpoint for a limited period",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete task apply",
+      "summary": "Plan and execute the delete task reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_task",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell delete task apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/tasks/{id}"
+        }
+      ],
+      "risk": "deletes a Nutshell task",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "deleted events list",
+      "summary": "Run the deleted events ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "deleted_events",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell deleted events list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/events/deleted"
+        }
+      ]
+    },
+    {
+      "path": "edition list",
+      "summary": "Run the edition ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "edition",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell edition list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/editions/{id}"
+        }
+      ]
+    },
+    {
+      "path": "editions list",
+      "summary": "Run the editions ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "editions",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell editions list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/editions"
+        }
+      ]
+    },
+    {
+      "path": "email list",
+      "summary": "Run the email ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "email",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell email list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/emails/{id}"
+        }
+      ]
+    },
+    {
+      "path": "events list",
+      "summary": "Run the events ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "events",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell events list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/events"
+        }
+      ]
+    },
+    {
+      "path": "form field list",
+      "summary": "Run the form field ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "form_field",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell form field list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/forms/{fieldId}"
+        }
+      ]
+    },
+    {
+      "path": "form list",
+      "summary": "Run the form ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "form",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell form list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/forms/{id}"
+        }
+      ]
+    },
+    {
+      "path": "forms list",
+      "summary": "Run the forms ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "forms",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell forms list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/forms"
+        }
+      ]
+    },
+    {
+      "path": "industries list",
+      "summary": "Run the industries ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "industries",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell industries list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/industries"
+        }
+      ]
+    },
+    {
+      "path": "industry list",
+      "summary": "Run the industry ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "industry",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell industry list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/industries/{id}"
+        }
+      ]
+    },
+    {
+      "path": "invoice list",
+      "summary": "Run the invoice ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "invoice",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell invoice list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/invoices/{id}"
+        }
+      ]
+    },
+    {
+      "path": "invoices list",
+      "summary": "Run the invoices ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "invoices",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell invoices list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/invoices"
+        }
+      ]
+    },
+    {
+      "path": "lead custom field attributes list",
+      "summary": "Run the lead custom field attributes ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "lead_custom_field_attributes",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell lead custom field attributes list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/leads/customfields/attributes"
+        }
+      ]
+    },
+    {
+      "path": "lead custom fields list",
+      "summary": "Run the lead custom fields ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "lead_custom_fields",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell lead custom fields list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/leads/{id}/customfields"
+        }
+      ]
+    },
+    {
+      "path": "lead installments list",
+      "summary": "Run the lead installments ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "lead_installments",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell lead installments list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/leads/{id}/installments"
+        }
+      ]
+    },
+    {
+      "path": "lead list",
+      "summary": "Run the lead ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "lead",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell lead list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/leads/{id}"
+        }
+      ]
+    },
+    {
+      "path": "lead list fields list",
+      "summary": "Run the lead list fields ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "lead_list_fields",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell lead list fields list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/leads/list/fields"
+        }
+      ]
+    },
+    {
+      "path": "lead list items list",
+      "summary": "Run the lead list items ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "lead_list_items",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell lead list items list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/leads/list"
+        }
+      ]
+    },
+    {
+      "path": "lead outcome list",
+      "summary": "Run the lead outcome ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "lead_outcome",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell lead outcome list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/outcomes/{id}"
+        }
+      ]
+    },
+    {
+      "path": "lead outcomes list",
+      "summary": "Run the lead outcomes ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "lead_outcomes",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell lead outcomes list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/outcomes"
+        }
+      ]
+    },
+    {
+      "path": "lead reports list",
+      "summary": "Run the lead reports ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "lead_reports",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell lead reports list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/leads/report"
+        }
+      ]
+    },
+    {
+      "path": "lead stages list",
+      "summary": "Run the lead stages ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "lead_stages",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell lead stages list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/leads/{id}/stages"
+        }
+      ]
+    },
+    {
+      "path": "leads list",
+      "summary": "Run the leads ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "leads",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell leads list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/leads"
+        }
+      ]
+    },
+    {
+      "path": "market list",
+      "summary": "Run the market ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "market",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell market list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/markets/{id}"
+        }
+      ]
+    },
+    {
+      "path": "markets list",
+      "summary": "Run the markets ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "markets",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell markets list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/markets"
+        }
+      ]
+    },
+    {
+      "path": "note list",
+      "summary": "Run the note ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "note",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell note list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/notes/{id}"
+        }
+      ]
+    },
+    {
+      "path": "notes list",
+      "summary": "Run the notes ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "notes",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell notes list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/notes"
+        }
+      ]
+    },
+    {
+      "path": "pipelines list",
+      "summary": "Run the pipelines ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "pipelines",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell pipelines list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/stagesets"
+        }
+      ]
+    },
+    {
+      "path": "product categories list",
+      "summary": "Run the product categories ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "product_categories",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell product categories list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/productcategories"
+        }
+      ]
+    },
+    {
+      "path": "product category list",
+      "summary": "Run the product category ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "product_category",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell product category list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/productcategories/{id}"
+        }
+      ]
+    },
+    {
+      "path": "product list",
+      "summary": "Run the product ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "product",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell product list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/products/{id}"
+        }
+      ]
+    },
+    {
+      "path": "product map list",
+      "summary": "Run the product map ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "product_map",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell product map list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/productmaps/{id}"
+        }
+      ]
+    },
+    {
+      "path": "product maps list",
+      "summary": "Run the product maps ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "product_maps",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell product maps list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/productmaps"
+        }
+      ]
+    },
+    {
+      "path": "products list",
+      "summary": "Run the products ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "products",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell products list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/products"
+        }
+      ]
+    },
+    {
+      "path": "quote list",
+      "summary": "Run the quote ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "quote",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell quote list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/quotes/{id}"
+        }
+      ]
+    },
+    {
+      "path": "quotes list",
+      "summary": "Run the quotes ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "quotes",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell quotes list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/quotes"
+        }
+      ]
+    },
+    {
+      "path": "reopen lead apply",
+      "summary": "Plan and execute the reopen lead reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "reopen_lead",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell reopen lead apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/leads/{id}/reopen"
+        }
+      ],
+      "risk": "reopens a previously closed Nutshell lead",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "saved filters list",
+      "summary": "Run the saved filters ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "saved_filters",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell saved filters list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/filters"
+        }
+      ]
+    },
+    {
+      "path": "set lead pipeline apply",
+      "summary": "Plan and execute the set lead pipeline reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "set_lead_pipeline",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell set lead pipeline apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/leads/{id}/stageset"
+        }
+      ],
+      "risk": "changes the pipeline/stageset assigned to a lead",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "sources list",
+      "summary": "Run the sources ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "sources",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell sources list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/sources"
+        }
+      ]
+    },
+    {
+      "path": "stages list",
+      "summary": "Run the stages ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "stages",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell stages list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/stages"
+        }
+      ]
+    },
+    {
+      "path": "tags list",
+      "summary": "Run the tags ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tags",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell tags list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tags"
+        }
+      ]
+    },
+    {
+      "path": "task list",
+      "summary": "Run the task ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "task",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell task list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tasks/{id}"
+        }
+      ]
+    },
+    {
+      "path": "tasks list",
+      "summary": "Run the tasks ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tasks",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell tasks list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tasks"
+        }
+      ]
+    },
+    {
+      "path": "territories list",
+      "summary": "Run the territories ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "territories",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell territories list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/territories"
+        }
+      ]
+    },
+    {
+      "path": "undelete account apply",
+      "summary": "Plan and execute the undelete account reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "undelete_account",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell undelete account apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/accounts/{id}/undelete"
+        }
+      ],
+      "risk": "restores a deleted Nutshell account/company",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "undelete contact apply",
+      "summary": "Plan and execute the undelete contact reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "undelete_contact",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell undelete contact apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/contacts/{id}/undelete"
+        }
+      ],
+      "risk": "restores a deleted Nutshell contact/person",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "undelete lead apply",
+      "summary": "Plan and execute the undelete lead reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "undelete_lead",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell undelete lead apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/leads/{id}/undelete"
+        }
+      ],
+      "risk": "restores a deleted Nutshell lead",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "undelete note apply",
+      "summary": "Plan and execute the undelete note reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "undelete_note",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell undelete note apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/notes/{id}/undelete"
+        }
+      ],
+      "risk": "restores a deleted Nutshell note",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "undelete product apply",
+      "summary": "Plan and execute the undelete product reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "undelete_product",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell undelete product apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/products/{id}/undelete"
+        }
+      ],
+      "risk": "restores a deleted Nutshell product",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "undelete source apply",
+      "summary": "Plan and execute the undelete source reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "undelete_source",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell undelete source apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/sources/{id}/undelete"
+        }
+      ],
+      "risk": "restores a deleted lead source",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "undelete tag apply",
+      "summary": "Plan and execute the undelete tag reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "undelete_tag",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell undelete tag apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/tags/{id}/undelete"
+        }
+      ],
+      "risk": "restores a deleted Nutshell tag",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update activity apply",
+      "summary": "Plan and execute the update activity reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_activity",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell update activity apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/activities/{id}"
+        }
+      ],
+      "risk": "updates an existing Nutshell activity",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update lead status apply",
+      "summary": "Plan and execute the update lead status reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_lead_status",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell update lead status apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/leads/{id}/status"
+        }
+      ],
+      "risk": "updates a lead status/outcome and optional competitor/product maps",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "user list",
+      "summary": "Run the user ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "user",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell user list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users/{id}"
+        }
+      ]
+    },
+    {
+      "path": "users list",
+      "summary": "Run the users ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "users",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell users list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users"
+        }
+      ]
+    },
+    {
+      "path": "watch lead apply",
+      "summary": "Plan and execute the watch lead reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "watch_lead",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "examples": [
+        "pm nutshell watch lead apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/leads/{id}/watch"
+        }
+      ],
+      "risk": "toggles watch notifications for the authenticated user on a lead",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    }
+  ]
+}

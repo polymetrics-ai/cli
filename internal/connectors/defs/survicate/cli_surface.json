@@ -1,0 +1,200 @@
+{
+  "tagline": "Run Survicate's declared streams and reverse-ETL actions.",
+  "usage": "pm survicate \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "api get v2 personal-data",
+        "api get v2 respondents respondent-uuid attributes",
+        "api get v2 respondents respondent-uuid responses",
+        "api get v2 surveys survey-id",
+        "api get v2 surveys survey-id responses response-uuid",
+        "responses list",
+        "survey questions list",
+        "surveys list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "api delete v2 personal-data"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "api delete v2 personal-data",
+      "summary": "Documented DELETE /v2/personal-data (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.survicate.com/data-export/",
+      "examples": [
+        "pm survicate api delete v2 personal-data --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/personal-data"
+        }
+      ],
+      "operation": "survicate.delete.v2-personal-data",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api get v2 personal-data",
+      "summary": "Documented GET /v2/personal-data (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.survicate.com/data-export/",
+      "examples": [
+        "pm survicate api get v2 personal-data --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/personal-data"
+        }
+      ],
+      "operation": "survicate.get.v2-personal-data",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 respondents respondent-uuid attributes",
+      "summary": "Documented GET /v2/respondents/{respondent_uuid}/attributes (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.survicate.com/data-export/",
+      "examples": [
+        "pm survicate api get v2 respondents respondent-uuid attributes --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/respondents/{respondent_uuid}/attributes"
+        }
+      ],
+      "operation": "survicate.get.v2-respondents-respondent-uuid-attributes",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 respondents respondent-uuid responses",
+      "summary": "Documented GET /v2/respondents/{respondent_uuid}/responses (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.survicate.com/data-export/",
+      "examples": [
+        "pm survicate api get v2 respondents respondent-uuid responses --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/respondents/{respondent_uuid}/responses"
+        }
+      ],
+      "operation": "survicate.get.v2-respondents-respondent-uuid-responses",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 surveys survey-id",
+      "summary": "Documented GET /v2/surveys/{survey_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.survicate.com/data-export/",
+      "examples": [
+        "pm survicate api get v2 surveys survey-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/surveys/{survey_id}"
+        }
+      ],
+      "operation": "survicate.get.v2-surveys-survey-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 surveys survey-id responses response-uuid",
+      "summary": "Documented GET /v2/surveys/{survey_id}/responses/{response_uuid} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.survicate.com/data-export/",
+      "examples": [
+        "pm survicate api get v2 surveys survey-id responses response-uuid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/surveys/{survey_id}/responses/{response_uuid}"
+        }
+      ],
+      "operation": "survicate.get.v2-surveys-survey-id-responses-response-uuid",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "responses list",
+      "summary": "Run the responses ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "responses",
+      "source_url": "https://developers.survicate.com/data-export/",
+      "examples": [
+        "pm survicate responses list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/surveys/{survey_id}/responses"
+        }
+      ]
+    },
+    {
+      "path": "survey questions list",
+      "summary": "Run the survey questions ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "survey_questions",
+      "source_url": "https://developers.survicate.com/data-export/",
+      "examples": [
+        "pm survicate survey questions list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/surveys/{survey_id}/questions"
+        }
+      ]
+    },
+    {
+      "path": "surveys list",
+      "summary": "Run the surveys ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "surveys",
+      "source_url": "https://developers.survicate.com/data-export/",
+      "examples": [
+        "pm survicate surveys list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/surveys"
+        }
+      ]
+    }
+  ]
+}

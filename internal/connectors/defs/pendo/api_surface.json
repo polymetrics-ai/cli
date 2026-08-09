@@ -1,112 +1,50 @@
 {
-  "api": "Pendo Engage API v1 (https://app.pendo.io/api/v1 plus data.pendo.io event ingestion)",
+  "api": "Pendo Engage API v1 (https://app.pendo.io/api/v1 plus data.pendo.io event ingestion); provider artifact version: Pendo API Postman Collection, latest",
   "docs": "https://engageapi.pendo.io/",
-  "reviewed_at": "2026-07-04",
-  "scope": "Pass B expansion of the documented Pendo Postman collection. JSON GET list/detail endpoints are covered as streams when they return object or array JSON; safe object/no-body mutations are covered as write actions; binary, scalar, credential, destructive-admin, per-action-auth, and POST aggregation DSL endpoints are explicitly excluded with typed reasons.",
+  "reviewed_at": "2026-08-09",
+  "operation_ledger_version": 2,
+  "scope": "Provider-artifact inventory generated from the cited postman artifact (65 documented operations across 1 provider-owned source document(s)). Every documented operation is represented; existing source-surface bindings absent from the artifact are retained and flagged with present-in-surface-absent-from-artifact.",
+  "artifacts": [
+    {
+      "id": "pendo-artifact-2026-08-09",
+      "url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "kind": "postman",
+      "version": "Pendo API Postman Collection, latest",
+      "retrieved_at": "2026-08-09",
+      "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8"
+    }
+  ],
   "endpoints": [
     {
       "method": "GET",
-      "path": "/visitor",
-      "covered_by": {
-        "stream": "visitors"
-      }
-    },
-    {
-      "method": "GET",
       "path": "/account",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "existing-surface[GET /account]"
+      },
       "covered_by": {
         "stream": "accounts"
       }
     },
     {
       "method": "GET",
-      "path": "/page",
-      "covered_by": {
-        "stream": "pages"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/page?id={page_id}",
-      "covered_by": {
-        "stream": "page_by_id"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/page?id={page_ids}",
-      "covered_by": {
-        "stream": "pages_by_ids"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/feature",
-      "covered_by": {
-        "stream": "features"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/feature?id={feature_id}",
-      "covered_by": {
-        "stream": "feature_by_id"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/feature?id={feature_ids}",
-      "covered_by": {
-        "stream": "features_by_ids"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/tracktype",
-      "covered_by": {
-        "stream": "tracktypes"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/tracktype?id={tracktype_id}",
-      "covered_by": {
-        "stream": "tracktype_by_id"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "https://data.pendo.io/data/track",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "requires a different per-action x-pendo-integration-key track-event shared secret on data.pendo.io; the current write dialect shares the bundle base authenticator across all actions"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/visitor/{visitorId}",
-      "covered_by": {
-        "stream": "visitor_by_id"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/visitor/{b64_id}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "base64 visitor lookup requires the per-request x-pendo-base64-encoded-params: true header, but stream specs only support global base headers"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/visitor/{visitorId}/history?starttime={epochTimestamp}",
-      "covered_by": {
-        "stream": "visitor_history"
-      }
-    },
-    {
-      "method": "GET",
       "path": "/account/{accountId}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "existing-surface[GET /account/{accountId}]"
+      },
       "covered_by": {
         "stream": "account_by_id"
       }
@@ -114,323 +52,1383 @@
     {
       "method": "GET",
       "path": "/account/{b64_id}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "base64 account lookup requires the per-request x-pendo-base64-encoded-params: true header, but stream specs only support global base headers"
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "existing-surface[GET /account/{b64_id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "base64 account lookup requires the per-request x-pendo-base64-encoded-params: true header, but stream specs only support global base headers",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "POST",
-      "path": "/bulkdelete/visitor",
-      "excluded": {
-        "category": "destructive_admin",
-        "reason": "bulk GDPR/CCPA visitor deletion is irreversible administrative erasure, not exposed as a reverse-ETL write action"
+      "path": "/aggregation",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "existing-surface[POST /aggregation]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Pendo aggregation is a semantic read/report DSL carried in a POST JSON body; the current declarative read path does not transmit stream.body and generic user-supplied aggregation queries are not safe write actions",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/account/{accountId}",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "collection.item[4].item[0].request.url"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/account/{b64_id}",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "collection.item[4].item[1].request.url"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "POST",
-      "path": "/bulkdelete/account",
-      "excluded": {
-        "category": "destructive_admin",
-        "reason": "bulk GDPR/CCPA account deletion is irreversible administrative erasure, not exposed as a reverse-ETL write action"
+      "path": "/api/v1/aggregation",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "collection.item[15].item[2].item[0].request.url"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     },
     {
       "method": "GET",
-      "path": "/bulkdelete",
-      "covered_by": {
-        "stream": "bulkdelete_requests"
+      "path": "/api/v1/blacklist",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "collection.item[10].item[0].request.url"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
-      "path": "/bulkdelete/{id}",
-      "covered_by": {
-        "stream": "bulkdelete_request"
+      "path": "/api/v1/blacklist/type/{type}",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "collection.item[10].item[1].request.url"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
-      "path": "/segment",
-      "covered_by": {
-        "stream": "segments"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/segment/{id}",
-      "covered_by": {
-        "stream": "segment_by_id"
+      "path": "/api/v1/bulkdelete",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "collection.item[5].item[2].request.url"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "POST",
-      "path": "/segment/{segmentId}/visitors",
-      "covered_by": {
-        "write": "start_segment_visitor_export"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/segment/{segmentId}/visitors/{jobId}/status",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "async export status returns a scalar status string rather than JSON object records"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/segment/{segmentId}/visitors/{jobId}/results/{contentType}",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "segment export results are documented as downloadable CSV-style payloads rather than JSON object records"
+      "path": "/api/v1/bulkdelete/account",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "collection.item[5].item[1].request.url"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     },
     {
       "method": "POST",
-      "path": "/segment/upload",
-      "covered_by": {
-        "write": "create_segment"
+      "path": "/api/v1/bulkdelete/visitor",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "collection.item[5].item[0].request.url"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     },
     {
       "method": "GET",
-      "path": "/segment/{segmentId}/status",
-      "covered_by": {
-        "stream": "segment_status"
+      "path": "/api/v1/bulkdelete/{id}",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "collection.item[5].item[3].request.url"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "PUT",
-      "path": "/segment/{segmentId}",
-      "covered_by": {
-        "write": "update_segment"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/segment/{segmentId}",
-      "covered_by": {
-        "write": "delete_segment"
+      "path": "/api/v1/datasync/storageTypes/azure/destinations/Default/credentials",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "collection.item[11].item[2].request.url"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     },
     {
       "method": "PUT",
-      "path": "/segment/{segmentId}/visitor/{visitorId}",
-      "covered_by": {
-        "write": "add_segment_visitor"
+      "path": "/api/v1/datasync/storageTypes/gcs/destinations/Default/credentials",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "collection.item[11].item[0].request.url"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/datasync/storageTypes/s3/destinations/Default/credentials",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "collection.item[11].item[1].request.url"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/feature",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "collection.item[1].item[0].request.url"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/feedback",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "collection.item[12].item[1].request.url"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     },
     {
       "method": "DELETE",
-      "path": "/segment/{segmentId}/visitor/{visitorId}",
-      "covered_by": {
-        "write": "remove_segment_visitor"
+      "path": "/api/v1/feedback",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "collection.item[12].item[3].request.url"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/feedback/options",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "collection.item[12].item[0].request.url"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "PATCH",
-      "path": "/segment/{segmentId}/visitor",
-      "covered_by": {
-        "write": "patch_segment_visitors"
+      "path": "/api/v1/feedback/{id}",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "collection.item[12].item[2].request.url"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     },
     {
       "method": "GET",
-      "path": "/report",
-      "covered_by": {
-        "stream": "reports"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/report/{reportId}/results.json",
-      "covered_by": {
-        "stream": "report_results_json"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/report/{reportId}/results.csv",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "report CSV export is a non-JSON payload and requires CSV parsing outside the declarative stream dialect"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/guide",
-      "covered_by": {
-        "stream": "guides"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/guide?id={guide_id}",
-      "covered_by": {
-        "stream": "guide_by_id"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/guide/{guideId}/history",
-      "covered_by": {
-        "stream": "guide_history"
+      "path": "/api/v1/guide",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "collection.item[8].item[0].request.url"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "POST",
-      "path": "/guide/{guideId}/visitor/{visitorId}/reset",
-      "covered_by": {
-        "write": "reset_guide_for_visitor"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/guide/all/visitor/{visitorId}/reset",
-      "covered_by": {
-        "write": "reset_all_guides_for_visitor"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/guide/{guideId}/reset",
-      "covered_by": {
-        "write": "reset_staged_guide"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/guide/staged/reset",
-      "covered_by": {
-        "write": "reset_all_staged_guides"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/guide/{guideId}/experiment/export",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "guide experiment export returns CSV, not a JSON mutation response or record stream"
+      "path": "/api/v1/guide/all/visitor/{visitorId}/reset",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "collection.item[8].item[4].request.url"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     },
     {
       "method": "GET",
-      "path": "/guide/localization/export?guideids={guide_ids}",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "bulk localization export returns XLIFF/XML content rather than JSON records"
+      "path": "/api/v1/guide/localization/export",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "collection.item[8].item[8].request.url"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "POST",
-      "path": "/guide/localization/import",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "bulk localization import requires raw XLIFF/XML request bodies; writes.json can only construct JSON/form/object bodies"
+      "path": "/api/v1/guide/localization/import",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "collection.item[8].item[9].request.url"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     },
     {
       "method": "GET",
-      "path": "/guide/order",
-      "covered_by": {
-        "stream": "guide_order"
+      "path": "/api/v1/guide/order",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "collection.item[8].item[10].request.url"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/guide/staged/reset",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "collection.item[8].item[6].request.url"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/guide/{guideId}/experiment/export",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "collection.item[8].item[7].request.url"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/guide/{guideId}/history",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "collection.item[8].item[2].request.url"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/guide/{guideId}/reset",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "collection.item[8].item[5].request.url"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     },
     {
       "method": "PUT",
-      "path": "/guide/{guideId}/segment",
-      "covered_by": {
-        "write": "change_guide_segment"
+      "path": "/api/v1/guide/{guideId}/segment",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "collection.item[8].item[11].request.url"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     },
     {
       "method": "PUT",
-      "path": "/guide/{guideId}/state",
-      "covered_by": {
-        "write": "change_guide_state"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/metadata/schema/{kind}",
-      "covered_by": {
-        "stream": "metadata_schema"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/metadata/{kind}/{group}/value/{id}/{fieldName}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "the endpoint returns a raw JSON scalar metadata value; declarative streams emit JSON object records only"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/metadata/{kind}/pendo/value/{id}/blacklistguides",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "privacy/guide-display opt-out mutation requires a raw boolean body and changes compliance-sensitive visitor/account handling"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/metadata/{kind}/pendo/value/{id}/donotprocess",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "Do Not Process mutation requires a raw boolean body and changes compliance-sensitive visitor/account processing"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/metadata/{kind}/{group}/value/{id}/{fieldName}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "single metadata value update accepts an arbitrary raw JSON value body, including scalars, which writes.json cannot model safely as a record-object body"
+      "path": "/api/v1/guide/{guideId}/state",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "collection.item[8].item[12].request.url"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     },
     {
       "method": "POST",
-      "path": "/metadata/{kind}/{group}/value",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "bulk metadata value update requires a root JSON array body; writes.json cannot serialize records as a root array"
+      "path": "/api/v1/guide/{guideId}/visitor/{visitorId}/reset",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "collection.item[8].item[3].request.url"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/metadata/dependencies",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "collection.item[9].item[8].request.url"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/metadata/dependencies/{kind}/{group}/{fieldName}",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "collection.item[9].item[9].request.url"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/metadata/schema/{kind}",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "collection.item[9].item[0].request.url"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "POST",
-      "path": "/metadata/schema/{kind}/{group}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "metadata field creation requires a root JSON array body; writes.json cannot serialize records as a root array"
+      "path": "/api/v1/metadata/schema/{kind}/{group}",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "collection.item[9].item[6].request.url"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     },
     {
       "method": "DELETE",
-      "path": "/metadata/schema/{kind}/{group}/{field}",
-      "excluded": {
-        "category": "destructive_admin",
-        "reason": "deleting metadata schema fields is an administrative data-model change and can affect downstream reports/segments"
+      "path": "/api/v1/metadata/schema/{kind}/{group}/{field}",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "collection.item[9].item[7].request.url"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/metadata/{kind}/pendo/value/{id}/blacklistguides",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "collection.item[9].item[2].request.url"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/metadata/{kind}/pendo/value/{id}/donotprocess",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "collection.item[9].item[3].request.url"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/metadata/{kind}/{group}/value",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "collection.item[9].item[5].request.url"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     },
     {
       "method": "GET",
-      "path": "/metadata/dependencies",
-      "covered_by": {
-        "stream": "metadata_dependencies"
+      "path": "/api/v1/metadata/{kind}/{group}/value/{id}/{fieldName}",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "collection.item[9].item[1].request.url"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/metadata/{kind}/{group}/value/{id}/{fieldName}",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "collection.item[9].item[4].request.url"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     },
     {
       "method": "GET",
-      "path": "/metadata/dependencies/{kind}/{group}/{fieldName}",
-      "covered_by": {
-        "stream": "metadata_field_dependencies"
+      "path": "/api/v1/page",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "collection.item[0].item[0].request.url"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/report",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "collection.item[7].item[0].request.url"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/report/{reportId}/results.csv",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "collection.item[7].item[2].request.url"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/report/{reportId}/results.json",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "collection.item[7].item[1].request.url"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/segment",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "collection.item[6].item[0].request.url"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/segment/upload",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "collection.item[6].item[5].request.url"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/segment/{id}",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "collection.item[6].item[1].request.url"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/segment/{segmentId}",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "collection.item[6].item[7].request.url"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/segment/{segmentId}",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "collection.item[6].item[8].request.url"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/segment/{segmentId}/status",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "collection.item[6].item[6].request.url"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/segment/{segmentId}/visitor",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "collection.item[6].item[11].request.url"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/segment/{segmentId}/visitor/{visitorId}",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "collection.item[6].item[9].request.url"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/segment/{segmentId}/visitor/{visitorId}",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "collection.item[6].item[10].request.url"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/segment/{segmentId}/visitors",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "collection.item[6].item[2].request.url"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/segment/{segmentId}/visitors/{jobId}/results/{contentType}",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "collection.item[6].item[4].request.url"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/segment/{segmentId}/visitors/{jobId}/status",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "collection.item[6].item[3].request.url"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/servername",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "collection.item[10].item[2].request.url"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/servername/flag/{flagname}",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "collection.item[10].item[4].request.url"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/servername/{name}",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "collection.item[10].item[3].request.url"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/token/verify",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "collection.item[14].item[0].request.url"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/tracktype",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "collection.item[2].item[1].request.url"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/visitor/{b64_id}",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "collection.item[3].item[1].request.url"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/visitor/{visitorId}",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "collection.item[3].item[0].request.url"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/visitor/{visitorId}/history",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "collection.item[3].item[2].request.url"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/blacklist",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "existing-surface[GET /blacklist]"
+      },
       "covered_by": {
         "stream": "blacklist"
       }
@@ -438,105 +1436,1309 @@
     {
       "method": "GET",
       "path": "/blacklist/type/{type}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "existing-surface[GET /blacklist/type/{type}]"
+      },
       "covered_by": {
         "stream": "blacklist_by_type"
       }
     },
     {
       "method": "GET",
+      "path": "/bulkdelete",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "existing-surface[GET /bulkdelete]"
+      },
+      "covered_by": {
+        "stream": "bulkdelete_requests"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/bulkdelete/account",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "existing-surface[POST /bulkdelete/account]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "bulk GDPR/CCPA account deletion is irreversible administrative erasure, not exposed as a reverse-ETL write action",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/bulkdelete/visitor",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "existing-surface[POST /bulkdelete/visitor]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "bulk GDPR/CCPA visitor deletion is irreversible administrative erasure, not exposed as a reverse-ETL write action",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bulkdelete/{id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "existing-surface[GET /bulkdelete/{id}]"
+      },
+      "covered_by": {
+        "stream": "bulkdelete_request"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/data/agentic",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "collection.item[13].item[0].request.url"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/data/track",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "collection.item[2].item[0].request.url"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/datasync/storageTypes/azure/destinations/Default/credentials",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "existing-surface[PUT /datasync/storageTypes/azure/destinations/Default/credentials]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "rotates external Azure credentials and requires client secret material in the request body",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/datasync/storageTypes/gcs/destinations/Default/credentials",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "existing-surface[PUT /datasync/storageTypes/gcs/destinations/Default/credentials]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "rotates external GCS credentials and requires secret material in the request body",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/datasync/storageTypes/s3/destinations/Default/credentials",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "existing-surface[PUT /datasync/storageTypes/s3/destinations/Default/credentials]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "rotates external S3 credentials and requires secret access key material in the request body",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/feature",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "existing-surface[GET /feature]"
+      },
+      "covered_by": {
+        "stream": "features"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/feature?id={feature_ids}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "existing-surface[GET /feature?id={feature_ids}]"
+      },
+      "covered_by": {
+        "stream": "features_by_ids"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/feature?id={feature_id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "existing-surface[GET /feature?id={feature_id}]"
+      },
+      "covered_by": {
+        "stream": "feature_by_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/feedback",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "existing-surface[POST /feedback]"
+      },
+      "covered_by": {
+        "write": "create_feedback"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/feedback",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "existing-surface[DELETE /feedback]"
+      },
+      "covered_by": {
+        "write": "delete_feedback"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/feedback/options",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "existing-surface[GET /feedback/options]"
+      },
+      "covered_by": {
+        "stream": "feedback_options"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/feedback/{id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "existing-surface[PATCH /feedback/{id}]"
+      },
+      "covered_by": {
+        "write": "update_feedback"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/guide",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "existing-surface[GET /guide]"
+      },
+      "covered_by": {
+        "stream": "guides"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/guide/all/visitor/{visitorId}/reset",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "existing-surface[POST /guide/all/visitor/{visitorId}/reset]"
+      },
+      "covered_by": {
+        "write": "reset_all_guides_for_visitor"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/guide/localization/export?guideids={guide_ids}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "existing-surface[GET /guide/localization/export?guideids={guide_ids}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "bulk localization export returns XLIFF/XML content rather than JSON records",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/guide/localization/import",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "existing-surface[POST /guide/localization/import]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "bulk localization import requires raw XLIFF/XML request bodies; writes.json can only construct JSON/form/object bodies",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/guide/order",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "existing-surface[GET /guide/order]"
+      },
+      "covered_by": {
+        "stream": "guide_order"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/guide/staged/reset",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "existing-surface[POST /guide/staged/reset]"
+      },
+      "covered_by": {
+        "write": "reset_all_staged_guides"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/guide/{guideId}/experiment/export",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "existing-surface[POST /guide/{guideId}/experiment/export]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "guide experiment export returns CSV, not a JSON mutation response or record stream",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/guide/{guideId}/history",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "existing-surface[GET /guide/{guideId}/history]"
+      },
+      "covered_by": {
+        "stream": "guide_history"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/guide/{guideId}/reset",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "existing-surface[POST /guide/{guideId}/reset]"
+      },
+      "covered_by": {
+        "write": "reset_staged_guide"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/guide/{guideId}/segment",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "existing-surface[PUT /guide/{guideId}/segment]"
+      },
+      "covered_by": {
+        "write": "change_guide_segment"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/guide/{guideId}/state",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "existing-surface[PUT /guide/{guideId}/state]"
+      },
+      "covered_by": {
+        "write": "change_guide_state"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/guide/{guideId}/visitor/{visitorId}/reset",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "existing-surface[POST /guide/{guideId}/visitor/{visitorId}/reset]"
+      },
+      "covered_by": {
+        "write": "reset_guide_for_visitor"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/guide?id={guide_id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "existing-surface[GET /guide?id={guide_id}]"
+      },
+      "covered_by": {
+        "stream": "guide_by_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/metadata/dependencies",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "existing-surface[GET /metadata/dependencies]"
+      },
+      "covered_by": {
+        "stream": "metadata_dependencies"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/metadata/dependencies/{kind}/{group}/{fieldName}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "existing-surface[GET /metadata/dependencies/{kind}/{group}/{fieldName}]"
+      },
+      "covered_by": {
+        "stream": "metadata_field_dependencies"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/metadata/schema/{kind}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "existing-surface[GET /metadata/schema/{kind}]"
+      },
+      "covered_by": {
+        "stream": "metadata_schema"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/metadata/schema/{kind}/{group}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "existing-surface[POST /metadata/schema/{kind}/{group}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "metadata field creation requires a root JSON array body; writes.json cannot serialize records as a root array",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/metadata/schema/{kind}/{group}/{field}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "existing-surface[DELETE /metadata/schema/{kind}/{group}/{field}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "deleting metadata schema fields is an administrative data-model change and can affect downstream reports/segments",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/metadata/{kind}/pendo/value/{id}/blacklistguides",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "existing-surface[PUT /metadata/{kind}/pendo/value/{id}/blacklistguides]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "privacy/guide-display opt-out mutation requires a raw boolean body and changes compliance-sensitive visitor/account handling",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/metadata/{kind}/pendo/value/{id}/donotprocess",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "existing-surface[PUT /metadata/{kind}/pendo/value/{id}/donotprocess]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Do Not Process mutation requires a raw boolean body and changes compliance-sensitive visitor/account processing",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/metadata/{kind}/{group}/value",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "existing-surface[POST /metadata/{kind}/{group}/value]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "bulk metadata value update requires a root JSON array body; writes.json cannot serialize records as a root array",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/metadata/{kind}/{group}/value/{id}/{fieldName}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "existing-surface[GET /metadata/{kind}/{group}/value/{id}/{fieldName}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "the endpoint returns a raw JSON scalar metadata value; declarative streams emit JSON object records only",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/metadata/{kind}/{group}/value/{id}/{fieldName}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "existing-surface[PUT /metadata/{kind}/{group}/value/{id}/{fieldName}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "single metadata value update accepts an arbitrary raw JSON value body, including scalars, which writes.json cannot model safely as a record-object body",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/page",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "existing-surface[GET /page]"
+      },
+      "covered_by": {
+        "stream": "pages"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/page?id={page_ids}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "existing-surface[GET /page?id={page_ids}]"
+      },
+      "covered_by": {
+        "stream": "pages_by_ids"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/page?id={page_id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "existing-surface[GET /page?id={page_id}]"
+      },
+      "covered_by": {
+        "stream": "page_by_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/report",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "existing-surface[GET /report]"
+      },
+      "covered_by": {
+        "stream": "reports"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/report/{reportId}/results.csv",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "existing-surface[GET /report/{reportId}/results.csv]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "report CSV export is a non-JSON payload and requires CSV parsing outside the declarative stream dialect",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/report/{reportId}/results.json",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "existing-surface[GET /report/{reportId}/results.json]"
+      },
+      "covered_by": {
+        "stream": "report_results_json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/segment",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "existing-surface[GET /segment]"
+      },
+      "covered_by": {
+        "stream": "segments"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/segment/upload",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "existing-surface[POST /segment/upload]"
+      },
+      "covered_by": {
+        "write": "create_segment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/segment/{id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "existing-surface[GET /segment/{id}]"
+      },
+      "covered_by": {
+        "stream": "segment_by_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/segment/{segmentId}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "existing-surface[PUT /segment/{segmentId}]"
+      },
+      "covered_by": {
+        "write": "update_segment"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/segment/{segmentId}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "existing-surface[DELETE /segment/{segmentId}]"
+      },
+      "covered_by": {
+        "write": "delete_segment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/segment/{segmentId}/status",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "existing-surface[GET /segment/{segmentId}/status]"
+      },
+      "covered_by": {
+        "stream": "segment_status"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/segment/{segmentId}/visitor",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "existing-surface[PATCH /segment/{segmentId}/visitor]"
+      },
+      "covered_by": {
+        "write": "patch_segment_visitors"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/segment/{segmentId}/visitor/{visitorId}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "existing-surface[PUT /segment/{segmentId}/visitor/{visitorId}]"
+      },
+      "covered_by": {
+        "write": "add_segment_visitor"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/segment/{segmentId}/visitor/{visitorId}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "existing-surface[DELETE /segment/{segmentId}/visitor/{visitorId}]"
+      },
+      "covered_by": {
+        "write": "remove_segment_visitor"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/segment/{segmentId}/visitors",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "existing-surface[POST /segment/{segmentId}/visitors]"
+      },
+      "covered_by": {
+        "write": "start_segment_visitor_export"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/segment/{segmentId}/visitors/{jobId}/results/{contentType}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "existing-surface[GET /segment/{segmentId}/visitors/{jobId}/results/{contentType}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "segment export results are documented as downloadable CSV-style payloads rather than JSON object records",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/segment/{segmentId}/visitors/{jobId}/status",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "existing-surface[GET /segment/{segmentId}/visitors/{jobId}/status]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "async export status returns a scalar status string rather than JSON object records",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/servername",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "existing-surface[GET /servername]"
+      },
       "covered_by": {
         "stream": "servers"
       }
     },
     {
       "method": "GET",
+      "path": "/servername/flag/{flagname}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "existing-surface[GET /servername/flag/{flagname}]"
+      },
+      "covered_by": {
+        "stream": "servers_by_flag"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/servername/{name}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "existing-surface[GET /servername/{name}]"
+      },
       "covered_by": {
         "stream": "server_by_name"
       }
     },
     {
       "method": "GET",
-      "path": "/servername/flag/{flagname}",
-      "covered_by": {
-        "stream": "servers_by_flag"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/datasync/storageTypes/gcs/destinations/Default/credentials",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "rotates external GCS credentials and requires secret material in the request body"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/datasync/storageTypes/s3/destinations/Default/credentials",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "rotates external S3 credentials and requires secret access key material in the request body"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/datasync/storageTypes/azure/destinations/Default/credentials",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "rotates external Azure credentials and requires client secret material in the request body"
+      "path": "/token/verify",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "existing-surface[GET /token/verify]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "integration-key validity probe, not a syncable data resource",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
-      "path": "/feedback/options",
+      "path": "/tracktype",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "existing-surface[GET /tracktype]"
+      },
       "covered_by": {
-        "stream": "feedback_options"
+        "stream": "tracktypes"
       }
     },
     {
-      "method": "POST",
-      "path": "/feedback",
+      "method": "GET",
+      "path": "/tracktype?id={tracktype_id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "existing-surface[GET /tracktype?id={tracktype_id}]"
+      },
       "covered_by": {
-        "write": "create_feedback"
+        "stream": "tracktype_by_id"
       }
     },
     {
-      "method": "PATCH",
-      "path": "/feedback/{id}",
+      "method": "GET",
+      "path": "/visitor",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "existing-surface[GET /visitor]"
+      },
       "covered_by": {
-        "write": "update_feedback"
+        "stream": "visitors"
       }
     },
     {
-      "method": "DELETE",
-      "path": "/feedback",
+      "method": "GET",
+      "path": "/visitor/{b64_id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "existing-surface[GET /visitor/{b64_id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "base64 visitor lookup requires the per-request x-pendo-base64-encoded-params: true header, but stream specs only support global base headers",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/visitor/{visitorId}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "existing-surface[GET /visitor/{visitorId}]"
+      },
       "covered_by": {
-        "write": "delete_feedback"
+        "stream": "visitor_by_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/visitor/{visitorId}/history?starttime={epochTimestamp}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "existing-surface[GET /visitor/{visitorId}/history?starttime={epochTimestamp}]"
+      },
+      "covered_by": {
+        "stream": "visitor_history"
       }
     },
     {
       "method": "POST",
       "path": "https://data.pendo.io/data/agentic",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "requires a different per-action x-pendo-integration-key track-event shared secret on data.pendo.io; the current write dialect shares the bundle base authenticator across all actions"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/token/verify",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "integration-key validity probe, not a syncable data resource"
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "existing-surface[POST https://data.pendo.io/data/agentic]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "requires a different per-action x-pendo-integration-key track-event shared secret on data.pendo.io; the current write dialect shares the bundle base authenticator across all actions",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     },
     {
       "method": "POST",
-      "path": "/aggregation",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Pendo aggregation is a semantic read/report DSL carried in a POST JSON body; the current declarative read path does not transmit stream.body and generic user-supplied aggregation queries are not safe write actions"
+      "path": "https://data.pendo.io/data/track",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pendo-artifact-2026-08-09",
+        "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "source_kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8",
+        "coordinate": "existing-surface[POST https://data.pendo.io/data/track]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "requires a different per-action x-pendo-integration-key track-event shared secret on data.pendo.io; the current write dialect shares the bundle base authenticator across all actions",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     }
   ]

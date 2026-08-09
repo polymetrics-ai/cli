@@ -149,7 +149,7 @@ func runBatch(args []string, stdout, stderr io.Writer) int {
 func batchUsage() string {
 	return `usage:
   connectorgen batch plan --ledger <path> --out <path> [--size <1-40>] [--connector <name>] [--min-operations <n>] [--max-operations <n>]
-  connectorgen batch materialize --manifest <path> --source-defs-root <path> --retrieved-at <YYYY-MM-DD> --report <path> [--defs-root <path>] [--artifact-dir <path>] [--connector <name>]
+  connectorgen batch materialize --manifest <path> --source-defs-root <path> --retrieved-at <YYYY-MM-DD> --report <path> [--defs-root <path>] [--artifact-dir <path>] [--connector <name>] [--existing-surface-evidence]
   connectorgen batch gate --manifest <path> --report <path> [--defs-root <path>] [--connector <name>]`
 }
 
@@ -815,11 +815,25 @@ func validateBatchManifest(manifest BatchManifest) error {
 		if _, err := time.Parse("2006-01-02", candidate.Artifact.RetrievedAt); err != nil {
 			return fmt.Errorf("manifest connector %q: artifact.retrieved_at must be an ISO full date: %w", candidate.Connector, err)
 		}
-		if strings.TrimSpace(candidate.AuthModel) == "" || candidate.AccessModel != "public" || strings.TrimSpace(candidate.EvidenceSource) == "" || strings.TrimSpace(candidate.CountingNote) == "" || strings.TrimSpace(candidate.ProcessedAt) == "" || strings.TrimSpace(candidate.SelectionReason) == "" {
+		if strings.TrimSpace(candidate.AuthModel) == "" || !documentedBatchAccessModel(candidate.AccessModel) || strings.TrimSpace(candidate.EvidenceSource) == "" || strings.TrimSpace(candidate.CountingNote) == "" || strings.TrimSpace(candidate.ProcessedAt) == "" || strings.TrimSpace(candidate.SelectionReason) == "" {
 			return fmt.Errorf("manifest connector %q is missing required evidence", candidate.Connector)
 		}
 	}
 	return nil
+}
+
+// documentedBatchAccessModel permits a manually evidenced artifact manifest
+// for APIs whose accounts are partner- or enterprise-gated while their
+// provider-owned API reference remains publicly retrievable. Automatic batch
+// selection intentionally stays public-only; this is solely the fast static
+// materialization path for an already cited official source.
+func documentedBatchAccessModel(accessModel string) bool {
+	switch accessModel {
+	case "public", "partner_gated", "enterprise":
+		return true
+	default:
+		return false
+	}
 }
 
 func gateBatchConnector(defsRoot string, candidate BatchManifestConnector) (BatchGateIncluded, *BatchGateDrop) {
@@ -1041,7 +1055,7 @@ func batchSurfaceSplit(surface *engine.APISurface) (BatchOperationSplit, error) 
 		}
 		switch {
 		case endpoint.CoveredBy != nil:
-			if endpoint.CoveredBy.Stream == "" && endpoint.CoveredBy.Write == "" && endpoint.CoveredBy.DirectRead == "" && len(endpoint.CoveredBy.DirectReads) == 0 {
+			if len(endpoint.CoveredBy.StreamTargets()) == 0 && len(endpoint.CoveredBy.WriteTargets()) == 0 && len(coveredDirectReadTargets(endpoint.CoveredBy)) == 0 {
 				return BatchOperationSplit{}, fmt.Errorf("endpoint %d (%s %s) has an empty covered_by classifier", i, endpoint.Method, endpoint.Path)
 			}
 			split.Executable++

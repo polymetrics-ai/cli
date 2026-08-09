@@ -1,425 +1,50 @@
 {
-  "api": "n8n public REST API v1 ({instance}/api/v1)",
+  "api": "n8n public REST API v1 ({instance}/api/v1); provider artifact version: n8n Public API 1.1.1 (OpenAPI 3.0.0)",
   "docs": "https://docs.n8n.io/connect/n8n-api/api-reference",
-  "reviewed_at": "2026-07-04",
-  "scope": "Pass B expansion over the current n8n public REST API reference. Expressible read endpoints are streams and expressible non-secret, non-destructive mutations are write actions; destructive/admin/secret-body or dialect-blocked endpoints are explicitly excluded.",
+  "reviewed_at": "2026-08-09",
+  "operation_ledger_version": 2,
+  "scope": "Provider-artifact inventory generated from the cited openapi artifact (109 documented operations across 1 provider-owned source document(s)). Every documented operation is represented; existing source-surface bindings absent from the artifact are retained and flagged with present-in-surface-absent-from-artifact.",
+  "artifacts": [
+    {
+      "id": "n8n-artifact-2026-08-09",
+      "url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "kind": "openapi",
+      "version": "3.0.0",
+      "retrieved_at": "2026-08-09",
+      "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5"
+    }
+  ],
   "endpoints": [
     {
-      "method": "GET",
-      "path": "/api/v1/workflows",
-      "covered_by": {
-        "stream": "workflows"
-      }
-    },
-    {
       "method": "POST",
-      "path": "/api/v1/workflows",
+      "path": "/api/v1/audit",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "n8n Public API 1.1.1 (OpenAPI 3.0.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "existing-surface[POST /api/v1/audit]"
+      },
       "covered_by": {
-        "write": "create_workflow"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/v1/workflows/{id}",
-      "covered_by": {
-        "stream": "workflow"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/api/v1/workflows/{id}",
-      "covered_by": {
-        "write": "update_workflow"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/api/v1/workflows/{id}",
-      "excluded": {
-        "category": "destructive_admin",
-        "reason": "Deletes a workflow from the n8n instance; destructive administrative lifecycle actions are not exposed as reverse-ETL writes."
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/v1/workflows/{id}/{versionId}",
-      "covered_by": {
-        "stream": "workflow_version"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/api/v1/workflows/{id}/activate",
-      "covered_by": {
-        "write": "publish_workflow"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/api/v1/workflows/{id}/deactivate",
-      "covered_by": {
-        "write": "deactivate_workflow"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/api/v1/workflows/{id}/archive",
-      "covered_by": {
-        "write": "archive_workflow"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/api/v1/workflows/{id}/unarchive",
-      "covered_by": {
-        "write": "unarchive_workflow"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/api/v1/workflows/{id}/transfer",
-      "covered_by": {
-        "write": "transfer_workflow"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/v1/workflows/{id}/tags",
-      "covered_by": {
-        "stream": "workflow_tags"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/api/v1/workflows/{id}/tags",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Blocked by n8n ENGINE_GAP in docs/migration/quarantine.json: this endpoint requires a root JSON array body, but writes.json can only construct object bodies from record fields."
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/v1/executions",
-      "covered_by": {
-        "stream": "executions"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/v1/executions/{id}",
-      "covered_by": {
-        "stream": "execution"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/api/v1/executions/{id}",
-      "excluded": {
-        "category": "destructive_admin",
-        "reason": "Deletes execution history from the n8n instance; destructive administrative deletes are not exposed as reverse-ETL writes."
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/api/v1/executions/{id}/retry",
-      "covered_by": {
-        "write": "retry_execution"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/api/v1/executions/{id}/stop",
-      "covered_by": {
-        "write": "stop_execution"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/api/v1/executions/stop",
-      "covered_by": {
-        "write": "stop_executions"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/v1/executions/{id}/tags",
-      "covered_by": {
-        "stream": "execution_tags"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/api/v1/executions/{id}/tags",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Blocked by n8n ENGINE_GAP in docs/migration/quarantine.json: this endpoint requires a root JSON array body, but writes.json can only construct object bodies from record fields."
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/v1/users",
-      "covered_by": {
-        "stream": "users"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/api/v1/users",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "Creates/invites n8n users and requires instance user administration; the request body is also a root array, which the current write dialect cannot construct."
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/v1/users/{id}",
-      "covered_by": {
-        "stream": "user"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/api/v1/users/{id}",
-      "excluded": {
-        "category": "destructive_admin",
-        "reason": "Deletes an n8n user account; destructive user-administration actions are not exposed as reverse-ETL writes."
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/api/v1/users/{id}/role",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "Changes a user global role and requires elevated instance administration."
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/v1/tags",
-      "covered_by": {
-        "stream": "tags"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/api/v1/tags",
-      "covered_by": {
-        "write": "create_tag"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/v1/tags/{id}",
-      "covered_by": {
-        "stream": "tag"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/api/v1/tags/{id}",
-      "covered_by": {
-        "write": "update_tag"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/api/v1/tags/{id}",
-      "excluded": {
-        "category": "destructive_admin",
-        "reason": "Deletes a tag from the n8n instance; destructive deletes are not exposed as reverse-ETL writes."
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/v1/variables",
-      "covered_by": {
-        "stream": "variables"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/api/v1/variables",
-      "covered_by": {
-        "write": "create_variable"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/api/v1/variables/{id}",
-      "covered_by": {
-        "write": "update_variable"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/api/v1/variables/{id}",
-      "excluded": {
-        "category": "destructive_admin",
-        "reason": "Deletes an n8n variable; destructive deletes are not exposed as reverse-ETL writes."
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/v1/projects",
-      "covered_by": {
-        "stream": "projects"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/api/v1/projects",
-      "covered_by": {
-        "write": "create_project"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/api/v1/projects/{projectId}",
-      "covered_by": {
-        "write": "update_project"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/api/v1/projects/{projectId}",
-      "excluded": {
-        "category": "destructive_admin",
-        "reason": "Deletes an n8n project; destructive project-administration deletes are not exposed as reverse-ETL writes."
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/v1/projects/{projectId}/users",
-      "covered_by": {
-        "stream": "project_members"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/api/v1/projects/{projectId}/users",
-      "covered_by": {
-        "write": "add_project_users"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/api/v1/projects/{projectId}/users/{userId}",
-      "excluded": {
-        "category": "destructive_admin",
-        "reason": "Removes a user from a project; destructive membership removals are not exposed as reverse-ETL writes."
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/api/v1/projects/{projectId}/users/{userId}",
-      "covered_by": {
-        "write": "change_project_user_role"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/v1/data-tables",
-      "covered_by": {
-        "stream": "data_tables"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/api/v1/data-tables",
-      "covered_by": {
-        "write": "create_data_table"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/v1/data-tables/{dataTableId}",
-      "covered_by": {
-        "stream": "data_table"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/api/v1/data-tables/{dataTableId}",
-      "excluded": {
-        "category": "destructive_admin",
-        "reason": "Deletes a data table; destructive table deletes are not exposed as reverse-ETL writes."
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/api/v1/data-tables/{dataTableId}",
-      "covered_by": {
-        "write": "update_data_table"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/v1/data-tables/{dataTableId}/rows",
-      "covered_by": {
-        "stream": "data_table_rows"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/api/v1/data-tables/{dataTableId}/rows",
-      "covered_by": {
-        "write": "insert_data_table_rows"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/api/v1/data-tables/{dataTableId}/rows/update",
-      "covered_by": {
-        "write": "update_data_table_rows"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/api/v1/data-tables/{dataTableId}/rows/upsert",
-      "covered_by": {
-        "write": "upsert_data_table_row"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/api/v1/data-tables/{dataTableId}/rows/delete",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Blocked by n8n ENGINE_GAP in docs/migration/quarantine.json: this DELETE operation carries filter/returnData/dryRun as query parameters, but writes.json has no query field."
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/v1/data-tables/{dataTableId}/columns",
-      "covered_by": {
-        "stream": "data_table_columns"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/api/v1/data-tables/{dataTableId}/columns",
-      "covered_by": {
-        "write": "add_data_table_column"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/api/v1/data-tables/{dataTableId}/columns/{columnId}",
-      "excluded": {
-        "category": "destructive_admin",
-        "reason": "Deletes a data table column; destructive schema deletes are not exposed as reverse-ETL writes."
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/api/v1/data-tables/{dataTableId}/columns/{columnId}",
-      "covered_by": {
-        "write": "update_data_table_column"
+        "write": "generate_audit"
       }
     },
     {
       "method": "GET",
       "path": "/api/v1/credentials",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "n8n Public API 1.1.1 (OpenAPI 3.0.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "existing-surface[GET /api/v1/credentials]"
+      },
       "covered_by": {
         "stream": "credentials"
       }
@@ -427,67 +52,3480 @@
     {
       "method": "POST",
       "path": "/api/v1/credentials",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "Creates credentials with write-only secret data; connector rules prohibit requesting or storing secret values in write records."
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/v1/credentials/{id}",
-      "covered_by": {
-        "stream": "credential"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/api/v1/credentials/{id}",
-      "excluded": {
-        "category": "destructive_admin",
-        "reason": "Deletes a credential from the n8n instance; destructive credential deletes are not exposed as reverse-ETL writes."
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/api/v1/credentials/{id}",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "Updates credentials and can carry write-only secret data; connector rules prohibit requesting or storing secret values in write records."
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/api/v1/credentials/{id}/test",
-      "covered_by": {
-        "write": "test_credential"
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "n8n Public API 1.1.1 (OpenAPI 3.0.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "existing-surface[POST /api/v1/credentials]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Creates credentials with write-only secret data; connector rules prohibit requesting or storing secret values in write records.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     },
     {
       "method": "GET",
       "path": "/api/v1/credentials/schema/{credentialTypeName}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "n8n Public API 1.1.1 (OpenAPI 3.0.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "existing-surface[GET /api/v1/credentials/schema/{credentialTypeName}]"
+      },
       "covered_by": {
         "stream": "credential_schema"
       }
     },
     {
+      "method": "GET",
+      "path": "/api/v1/credentials/{id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "n8n Public API 1.1.1 (OpenAPI 3.0.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "existing-surface[GET /api/v1/credentials/{id}]"
+      },
+      "covered_by": {
+        "stream": "credential"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/credentials/{id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "n8n Public API 1.1.1 (OpenAPI 3.0.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "existing-surface[PATCH /api/v1/credentials/{id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Updates credentials and can carry write-only secret data; connector rules prohibit requesting or storing secret values in write records.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/credentials/{id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "n8n Public API 1.1.1 (OpenAPI 3.0.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "existing-surface[DELETE /api/v1/credentials/{id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Deletes a credential from the n8n instance; destructive credential deletes are not exposed as reverse-ETL writes.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/credentials/{id}/test",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "n8n Public API 1.1.1 (OpenAPI 3.0.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "existing-surface[POST /api/v1/credentials/{id}/test]"
+      },
+      "covered_by": {
+        "write": "test_credential"
+      }
+    },
+    {
       "method": "PUT",
       "path": "/api/v1/credentials/{id}/transfer",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "n8n Public API 1.1.1 (OpenAPI 3.0.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "existing-surface[PUT /api/v1/credentials/{id}/transfer]"
+      },
       "covered_by": {
         "write": "transfer_credential"
       }
     },
     {
+      "method": "GET",
+      "path": "/api/v1/data-tables",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "n8n Public API 1.1.1 (OpenAPI 3.0.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "existing-surface[GET /api/v1/data-tables]"
+      },
+      "covered_by": {
+        "stream": "data_tables"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/data-tables",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "n8n Public API 1.1.1 (OpenAPI 3.0.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "existing-surface[POST /api/v1/data-tables]"
+      },
+      "covered_by": {
+        "write": "create_data_table"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/data-tables/{dataTableId}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "n8n Public API 1.1.1 (OpenAPI 3.0.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "existing-surface[GET /api/v1/data-tables/{dataTableId}]"
+      },
+      "covered_by": {
+        "stream": "data_table"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/data-tables/{dataTableId}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "n8n Public API 1.1.1 (OpenAPI 3.0.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "existing-surface[PATCH /api/v1/data-tables/{dataTableId}]"
+      },
+      "covered_by": {
+        "write": "update_data_table"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/data-tables/{dataTableId}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "n8n Public API 1.1.1 (OpenAPI 3.0.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "existing-surface[DELETE /api/v1/data-tables/{dataTableId}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Deletes a data table; destructive table deletes are not exposed as reverse-ETL writes.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/data-tables/{dataTableId}/columns",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "n8n Public API 1.1.1 (OpenAPI 3.0.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "existing-surface[GET /api/v1/data-tables/{dataTableId}/columns]"
+      },
+      "covered_by": {
+        "stream": "data_table_columns"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/data-tables/{dataTableId}/columns",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "n8n Public API 1.1.1 (OpenAPI 3.0.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "existing-surface[POST /api/v1/data-tables/{dataTableId}/columns]"
+      },
+      "covered_by": {
+        "write": "add_data_table_column"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/data-tables/{dataTableId}/columns/{columnId}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "n8n Public API 1.1.1 (OpenAPI 3.0.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "existing-surface[PATCH /api/v1/data-tables/{dataTableId}/columns/{columnId}]"
+      },
+      "covered_by": {
+        "write": "update_data_table_column"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/data-tables/{dataTableId}/columns/{columnId}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "n8n Public API 1.1.1 (OpenAPI 3.0.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "existing-surface[DELETE /api/v1/data-tables/{dataTableId}/columns/{columnId}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Deletes a data table column; destructive schema deletes are not exposed as reverse-ETL writes.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/data-tables/{dataTableId}/rows",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "n8n Public API 1.1.1 (OpenAPI 3.0.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "existing-surface[GET /api/v1/data-tables/{dataTableId}/rows]"
+      },
+      "covered_by": {
+        "stream": "data_table_rows"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/data-tables/{dataTableId}/rows",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "n8n Public API 1.1.1 (OpenAPI 3.0.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "existing-surface[POST /api/v1/data-tables/{dataTableId}/rows]"
+      },
+      "covered_by": {
+        "write": "insert_data_table_rows"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/data-tables/{dataTableId}/rows/delete",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "n8n Public API 1.1.1 (OpenAPI 3.0.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "existing-surface[DELETE /api/v1/data-tables/{dataTableId}/rows/delete]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Blocked by n8n ENGINE_GAP in docs/migration/quarantine.json: this DELETE operation carries filter/returnData/dryRun as query parameters, but writes.json has no query field.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/data-tables/{dataTableId}/rows/update",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "n8n Public API 1.1.1 (OpenAPI 3.0.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "existing-surface[PATCH /api/v1/data-tables/{dataTableId}/rows/update]"
+      },
+      "covered_by": {
+        "write": "update_data_table_rows"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/data-tables/{dataTableId}/rows/upsert",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "n8n Public API 1.1.1 (OpenAPI 3.0.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "existing-surface[POST /api/v1/data-tables/{dataTableId}/rows/upsert]"
+      },
+      "covered_by": {
+        "write": "upsert_data_table_row"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/executions",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "n8n Public API 1.1.1 (OpenAPI 3.0.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "existing-surface[GET /api/v1/executions]"
+      },
+      "covered_by": {
+        "stream": "executions"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/executions/stop",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "n8n Public API 1.1.1 (OpenAPI 3.0.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "existing-surface[POST /api/v1/executions/stop]"
+      },
+      "covered_by": {
+        "write": "stop_executions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/executions/{id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "n8n Public API 1.1.1 (OpenAPI 3.0.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "existing-surface[GET /api/v1/executions/{id}]"
+      },
+      "covered_by": {
+        "stream": "execution"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/executions/{id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "n8n Public API 1.1.1 (OpenAPI 3.0.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "existing-surface[DELETE /api/v1/executions/{id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Deletes execution history from the n8n instance; destructive administrative deletes are not exposed as reverse-ETL writes.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/executions/{id}/retry",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "n8n Public API 1.1.1 (OpenAPI 3.0.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "existing-surface[POST /api/v1/executions/{id}/retry]"
+      },
+      "covered_by": {
+        "write": "retry_execution"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/executions/{id}/stop",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "n8n Public API 1.1.1 (OpenAPI 3.0.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "existing-surface[POST /api/v1/executions/{id}/stop]"
+      },
+      "covered_by": {
+        "write": "stop_execution"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/executions/{id}/tags",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "n8n Public API 1.1.1 (OpenAPI 3.0.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "existing-surface[GET /api/v1/executions/{id}/tags]"
+      },
+      "covered_by": {
+        "stream": "execution_tags"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/executions/{id}/tags",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "n8n Public API 1.1.1 (OpenAPI 3.0.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "existing-surface[PUT /api/v1/executions/{id}/tags]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Blocked by n8n ENGINE_GAP in docs/migration/quarantine.json: this endpoint requires a root JSON array body, but writes.json can only construct object bodies from record fields.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/projects",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "n8n Public API 1.1.1 (OpenAPI 3.0.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "existing-surface[GET /api/v1/projects]"
+      },
+      "covered_by": {
+        "stream": "projects"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/projects",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "n8n Public API 1.1.1 (OpenAPI 3.0.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "existing-surface[POST /api/v1/projects]"
+      },
+      "covered_by": {
+        "write": "create_project"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/projects/{projectId}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "n8n Public API 1.1.1 (OpenAPI 3.0.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "existing-surface[PUT /api/v1/projects/{projectId}]"
+      },
+      "covered_by": {
+        "write": "update_project"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/projects/{projectId}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "n8n Public API 1.1.1 (OpenAPI 3.0.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "existing-surface[DELETE /api/v1/projects/{projectId}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Deletes an n8n project; destructive project-administration deletes are not exposed as reverse-ETL writes.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/projects/{projectId}/users",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "n8n Public API 1.1.1 (OpenAPI 3.0.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "existing-surface[GET /api/v1/projects/{projectId}/users]"
+      },
+      "covered_by": {
+        "stream": "project_members"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/projects/{projectId}/users",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "n8n Public API 1.1.1 (OpenAPI 3.0.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "existing-surface[POST /api/v1/projects/{projectId}/users]"
+      },
+      "covered_by": {
+        "write": "add_project_users"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/projects/{projectId}/users/{userId}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "n8n Public API 1.1.1 (OpenAPI 3.0.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "existing-surface[PATCH /api/v1/projects/{projectId}/users/{userId}]"
+      },
+      "covered_by": {
+        "write": "change_project_user_role"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/projects/{projectId}/users/{userId}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "n8n Public API 1.1.1 (OpenAPI 3.0.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "existing-surface[DELETE /api/v1/projects/{projectId}/users/{userId}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Removes a user from a project; destructive membership removals are not exposed as reverse-ETL writes.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
       "method": "POST",
       "path": "/api/v1/source-control/pull",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "n8n Public API 1.1.1 (OpenAPI 3.0.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "existing-surface[POST /api/v1/source-control/pull]"
+      },
       "covered_by": {
         "write": "pull_source_control"
       }
     },
     {
-      "method": "POST",
-      "path": "/api/v1/audit",
+      "method": "GET",
+      "path": "/api/v1/tags",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "n8n Public API 1.1.1 (OpenAPI 3.0.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "existing-surface[GET /api/v1/tags]"
+      },
       "covered_by": {
-        "write": "generate_audit"
+        "stream": "tags"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/tags",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "n8n Public API 1.1.1 (OpenAPI 3.0.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "existing-surface[POST /api/v1/tags]"
+      },
+      "covered_by": {
+        "write": "create_tag"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/tags/{id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "n8n Public API 1.1.1 (OpenAPI 3.0.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "existing-surface[GET /api/v1/tags/{id}]"
+      },
+      "covered_by": {
+        "stream": "tag"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/tags/{id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "n8n Public API 1.1.1 (OpenAPI 3.0.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "existing-surface[PUT /api/v1/tags/{id}]"
+      },
+      "covered_by": {
+        "write": "update_tag"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/tags/{id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "n8n Public API 1.1.1 (OpenAPI 3.0.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "existing-surface[DELETE /api/v1/tags/{id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Deletes a tag from the n8n instance; destructive deletes are not exposed as reverse-ETL writes.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/users",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "n8n Public API 1.1.1 (OpenAPI 3.0.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "existing-surface[GET /api/v1/users]"
+      },
+      "covered_by": {
+        "stream": "users"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/users",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "n8n Public API 1.1.1 (OpenAPI 3.0.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "existing-surface[POST /api/v1/users]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Creates/invites n8n users and requires instance user administration; the request body is also a root array, which the current write dialect cannot construct.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/users/{id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "n8n Public API 1.1.1 (OpenAPI 3.0.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "existing-surface[GET /api/v1/users/{id}]"
+      },
+      "covered_by": {
+        "stream": "user"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/users/{id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "n8n Public API 1.1.1 (OpenAPI 3.0.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "existing-surface[DELETE /api/v1/users/{id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Deletes an n8n user account; destructive user-administration actions are not exposed as reverse-ETL writes.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/users/{id}/role",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "n8n Public API 1.1.1 (OpenAPI 3.0.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "existing-surface[PATCH /api/v1/users/{id}/role]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Changes a user global role and requires elevated instance administration.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/variables",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "n8n Public API 1.1.1 (OpenAPI 3.0.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "existing-surface[GET /api/v1/variables]"
+      },
+      "covered_by": {
+        "stream": "variables"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/variables",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "n8n Public API 1.1.1 (OpenAPI 3.0.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "existing-surface[POST /api/v1/variables]"
+      },
+      "covered_by": {
+        "write": "create_variable"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/variables/{id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "n8n Public API 1.1.1 (OpenAPI 3.0.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "existing-surface[PUT /api/v1/variables/{id}]"
+      },
+      "covered_by": {
+        "write": "update_variable"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/variables/{id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "n8n Public API 1.1.1 (OpenAPI 3.0.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "existing-surface[DELETE /api/v1/variables/{id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Deletes an n8n variable; destructive deletes are not exposed as reverse-ETL writes.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflows",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "n8n Public API 1.1.1 (OpenAPI 3.0.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "existing-surface[GET /api/v1/workflows]"
+      },
+      "covered_by": {
+        "stream": "workflows"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/workflows",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "n8n Public API 1.1.1 (OpenAPI 3.0.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "existing-surface[POST /api/v1/workflows]"
+      },
+      "covered_by": {
+        "write": "create_workflow"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflows/{id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "n8n Public API 1.1.1 (OpenAPI 3.0.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "existing-surface[GET /api/v1/workflows/{id}]"
+      },
+      "covered_by": {
+        "stream": "workflow"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/workflows/{id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "n8n Public API 1.1.1 (OpenAPI 3.0.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "existing-surface[PUT /api/v1/workflows/{id}]"
+      },
+      "covered_by": {
+        "write": "update_workflow"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/workflows/{id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "n8n Public API 1.1.1 (OpenAPI 3.0.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "existing-surface[DELETE /api/v1/workflows/{id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Deletes a workflow from the n8n instance; destructive administrative lifecycle actions are not exposed as reverse-ETL writes.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/workflows/{id}/activate",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "n8n Public API 1.1.1 (OpenAPI 3.0.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "existing-surface[POST /api/v1/workflows/{id}/activate]"
+      },
+      "covered_by": {
+        "write": "publish_workflow"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/workflows/{id}/archive",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "n8n Public API 1.1.1 (OpenAPI 3.0.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "existing-surface[POST /api/v1/workflows/{id}/archive]"
+      },
+      "covered_by": {
+        "write": "archive_workflow"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/workflows/{id}/deactivate",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "n8n Public API 1.1.1 (OpenAPI 3.0.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "existing-surface[POST /api/v1/workflows/{id}/deactivate]"
+      },
+      "covered_by": {
+        "write": "deactivate_workflow"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflows/{id}/tags",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "n8n Public API 1.1.1 (OpenAPI 3.0.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "existing-surface[GET /api/v1/workflows/{id}/tags]"
+      },
+      "covered_by": {
+        "stream": "workflow_tags"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/workflows/{id}/tags",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "n8n Public API 1.1.1 (OpenAPI 3.0.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "existing-surface[PUT /api/v1/workflows/{id}/tags]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Blocked by n8n ENGINE_GAP in docs/migration/quarantine.json: this endpoint requires a root JSON array body, but writes.json can only construct object bodies from record fields.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/workflows/{id}/transfer",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "n8n Public API 1.1.1 (OpenAPI 3.0.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "existing-surface[PUT /api/v1/workflows/{id}/transfer]"
+      },
+      "covered_by": {
+        "write": "transfer_workflow"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/workflows/{id}/unarchive",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "n8n Public API 1.1.1 (OpenAPI 3.0.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "existing-surface[POST /api/v1/workflows/{id}/unarchive]"
+      },
+      "covered_by": {
+        "write": "unarchive_workflow"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflows/{id}/{versionId}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "n8n Public API 1.1.1 (OpenAPI 3.0.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "existing-surface[GET /api/v1/workflows/{id}/{versionId}]"
+      },
+      "covered_by": {
+        "stream": "workflow_version"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/audit",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/audit\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/community-packages",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/community-packages\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/community-packages",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/community-packages\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/community-packages/{name}",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/community-packages/{name}\"].patch"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/community-packages/{name}",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/community-packages/{name}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/credentials",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/credentials\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/credentials",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/credentials\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/credentials/schema/{credentialTypeName}",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/credentials/schema/{credentialTypeName}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/credentials/{id}",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/credentials/{id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/credentials/{id}",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/credentials/{id}\"].patch"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/credentials/{id}",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/credentials/{id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/credentials/{id}/test",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/credentials/{id}/test\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/credentials/{id}/transfer",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/credentials/{id}/transfer\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/data-tables",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/data-tables\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/data-tables",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/data-tables\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/data-tables/{dataTableId}",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/data-tables/{dataTableId}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/data-tables/{dataTableId}",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/data-tables/{dataTableId}\"].patch"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/data-tables/{dataTableId}",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/data-tables/{dataTableId}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/data-tables/{dataTableId}/columns",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/data-tables/{dataTableId}/columns\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/data-tables/{dataTableId}/columns",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/data-tables/{dataTableId}/columns\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/data-tables/{dataTableId}/columns/{columnId}",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/data-tables/{dataTableId}/columns/{columnId}\"].patch"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/data-tables/{dataTableId}/columns/{columnId}",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/data-tables/{dataTableId}/columns/{columnId}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/data-tables/{dataTableId}/rows",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/data-tables/{dataTableId}/rows\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/data-tables/{dataTableId}/rows",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/data-tables/{dataTableId}/rows\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/data-tables/{dataTableId}/rows/clear",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/data-tables/{dataTableId}/rows/clear\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/data-tables/{dataTableId}/rows/delete",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/data-tables/{dataTableId}/rows/delete\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/data-tables/{dataTableId}/rows/update",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/data-tables/{dataTableId}/rows/update\"].patch"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/data-tables/{dataTableId}/rows/upsert",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/data-tables/{dataTableId}/rows/upsert\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/discover",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/discover\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/executions",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/executions\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/executions/stop",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/executions/stop\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/executions/{id}",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/executions/{id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/executions/{id}",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/executions/{id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/executions/{id}/retry",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/executions/{id}/retry\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/executions/{id}/stop",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/executions/{id}/stop\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/executions/{id}/tags",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/executions/{id}/tags\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/executions/{id}/tags",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/executions/{id}/tags\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/insights/summary",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/insights/summary\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/n8n-packages/export",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/n8n-packages/export\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/n8n-packages/import",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/n8n-packages/import\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/projects\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/projects\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/projects/{projectId}",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/projects/{projectId}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/projects/{projectId}",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/projects/{projectId}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{projectId}/folders",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/projects/{projectId}/folders\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects/{projectId}/folders",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/projects/{projectId}/folders\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{projectId}/folders/{folderId}",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/projects/{projectId}/folders/{folderId}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/projects/{projectId}/folders/{folderId}",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/projects/{projectId}/folders/{folderId}\"].patch"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/projects/{projectId}/folders/{folderId}",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/projects/{projectId}/folders/{folderId}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{projectId}/users",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/projects/{projectId}/users\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects/{projectId}/users",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/projects/{projectId}/users\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/projects/{projectId}/users/{userId}",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/projects/{projectId}/users/{userId}\"].patch"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/projects/{projectId}/users/{userId}",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/projects/{projectId}/users/{userId}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/settings/ldap",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/settings/ldap\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/settings/ldap",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/settings/ldap\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/settings/ldap/sync",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/settings/ldap/sync\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/settings/ldap/sync",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/settings/ldap/sync\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/settings/log-streaming/destinations",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/settings/log-streaming/destinations\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/settings/log-streaming/destinations",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/settings/log-streaming/destinations\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/settings/log-streaming/destinations/{id}",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/settings/log-streaming/destinations/{id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/settings/log-streaming/destinations/{id}",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/settings/log-streaming/destinations/{id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/settings/log-streaming/destinations/{id}",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/settings/log-streaming/destinations/{id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/settings/log-streaming/destinations/{id}/test",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/settings/log-streaming/destinations/{id}/test\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/settings/log-streaming/event-types",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/settings/log-streaming/event-types\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/settings/otel",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/settings/otel\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/settings/otel",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/settings/otel\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/settings/otel/test-trace",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/settings/otel/test-trace\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/settings/security-policy",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/settings/security-policy\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/settings/security-policy",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/settings/security-policy\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/settings/sso/oidc",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/settings/sso/oidc\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/settings/sso/oidc",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/settings/sso/oidc\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/settings/sso/saml",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/settings/sso/saml\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/settings/sso/saml",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/settings/sso/saml\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/source-control/pull",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/source-control/pull\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tags",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/tags\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tags",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/tags\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tags/{id}",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/tags/{id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/tags/{id}",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/tags/{id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/tags/{id}",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/tags/{id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/users\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/users\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{id}",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/users/{id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/users/{id}",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/users/{id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/users/{id}/role",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/users/{id}/role\"].patch"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/variables",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/variables\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/variables",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/variables\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/variables/{id}",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/variables/{id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/variables/{id}",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/variables/{id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workflows",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/workflows\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/workflows",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/workflows\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workflows/{id}",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/workflows/{id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/workflows/{id}",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/workflows/{id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/workflows/{id}",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/workflows/{id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/workflows/{id}/activate",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/workflows/{id}/activate\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/workflows/{id}/archive",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/workflows/{id}/archive\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/workflows/{id}/deactivate",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/workflows/{id}/deactivate\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workflows/{id}/history",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/workflows/{id}/history\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/workflows/{id}/publish",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/workflows/{id}/publish\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workflows/{id}/tags",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/workflows/{id}/tags\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/workflows/{id}/tags",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/workflows/{id}/tags\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workflows/{id}/test-runs",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/workflows/{id}/test-runs\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/workflows/{id}/test-runs",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/workflows/{id}/test-runs\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workflows/{id}/test-runs/{runId}",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/workflows/{id}/test-runs/{runId}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/workflows/{id}/test-runs/{runId}/cancel",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/workflows/{id}/test-runs/{runId}/cancel\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workflows/{id}/test-runs/{runId}/test-cases",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/workflows/{id}/test-runs/{runId}/test-cases\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/workflows/{id}/transfer",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/workflows/{id}/transfer\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/workflows/{id}/unarchive",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/workflows/{id}/unarchive\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/workflows/{id}/unpublish",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/workflows/{id}/unpublish\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workflows/{id}/{versionId}",
+      "provenance": {
+        "artifact": "n8n-artifact-2026-08-09",
+        "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5",
+        "coordinate": "paths[\"/workflows/{id}/{versionId}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     }
   ]

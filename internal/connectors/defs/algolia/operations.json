@@ -1,0 +1,1083 @@
+{
+  "operations": [
+    {
+      "id": "algolia.get.1-clusters",
+      "kind": "rest_read",
+      "summary": "GET /1/clusters",
+      "description": "deprecated multi-cluster listClusters endpoint",
+      "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/multiclusters/listClusters.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/1/clusters",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "algolia.get.1-clusters-mapping",
+      "kind": "rest_read",
+      "summary": "GET /1/clusters/mapping",
+      "description": "deprecated multi-cluster listUserIds endpoint",
+      "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/multiclusters/userIds.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/1/clusters/mapping",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "algolia.post.1-clusters-mapping",
+      "kind": "rest_write",
+      "summary": "POST /1/clusters/mapping",
+      "description": "Algolia's OpenAPI spec marks every multi-cluster (userID mapping) endpoint deprecated: true",
+      "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/multiclusters/userIds.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/1/clusters/mapping",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "algolia.post.1-clusters-mapping-batch",
+      "kind": "rest_write",
+      "summary": "POST /1/clusters/mapping/batch",
+      "description": "deprecated multi-cluster batchAssignUserIds endpoint",
+      "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/multiclusters/batchAssignUserIds.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/1/clusters/mapping/batch",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "algolia.get.1-clusters-mapping-pending",
+      "kind": "rest_read",
+      "summary": "GET /1/clusters/mapping/pending",
+      "description": "deprecated multi-cluster hasPendingMappings endpoint",
+      "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/multiclusters/hasPendingMappings.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/1/clusters/mapping/pending",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "algolia.post.1-clusters-mapping-search",
+      "kind": "rest_write",
+      "summary": "POST /1/clusters/mapping/search",
+      "description": "deprecated multi-cluster searchUserIds endpoint",
+      "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/multiclusters/searchUserIds.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/1/clusters/mapping/search",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "algolia.get.1-clusters-mapping-top",
+      "kind": "rest_read",
+      "summary": "GET /1/clusters/mapping/top",
+      "description": "deprecated multi-cluster getTopUserIds endpoint",
+      "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/multiclusters/getTopUserIds.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/1/clusters/mapping/top",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "algolia.get.1-clusters-mapping-userid",
+      "kind": "rest_read",
+      "summary": "GET /1/clusters/mapping/{userID}",
+      "description": "deprecated multi-cluster getUserId endpoint",
+      "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/multiclusters/userId.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/1/clusters/mapping/{userID}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "algolia.delete.1-clusters-mapping-userid",
+      "kind": "rest_write",
+      "summary": "DELETE /1/clusters/mapping/{userID}",
+      "description": "deprecated multi-cluster removeUserId endpoint",
+      "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/multiclusters/userId.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/1/clusters/mapping/{userID}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "algolia.put.1-dictionaries-settings",
+      "kind": "rest_write",
+      "summary": "PUT /1/dictionaries/*/settings",
+      "description": "toggles standard stop-word dictionary entries on/off per language; a narrow settings-flag write not yet paired with a dedicated action in this pass",
+      "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/dictionaries/dictionarySettings.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/1/dictionaries/*/settings",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "algolia.post.1-dictionaries-dictionaryname-batch",
+      "kind": "rest_write",
+      "summary": "POST /1/dictionaries/{dictionaryName}/batch",
+      "description": "batched custom-dictionary-entry save/delete; record-level data-plane write with a batch body shape, not a single-resource mutation this connector's writes.json models",
+      "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/dictionaries/batchDictionaryEntries.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/1/dictionaries/{dictionaryName}/batch",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "algolia.post.1-dictionaries-dictionaryname-search",
+      "kind": "rest_write",
+      "summary": "POST /1/dictionaries/{dictionaryName}/search",
+      "description": "ENGINE_GAP: same POST-with-body 'list custom dictionary entries via empty query' gap as searchSynonyms/searchRules above",
+      "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/dictionaries/searchDictionaryEntries.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/1/dictionaries/{dictionaryName}/search",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "algolia.post.1-indexes-batch",
+      "kind": "rest_write",
+      "summary": "POST /1/indexes/*/batch",
+      "description": "multi-index batched record operations; same data-plane/batch-shape scope narrowing as the single-index batch endpoint",
+      "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/objects/multipleBatch.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/1/indexes/*/batch",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "algolia.post.1-indexes-objects",
+      "kind": "rest_write",
+      "summary": "POST /1/indexes/*/objects",
+      "description": "bulk multi-object retrieval by objectID; data-plane read, not a metadata list/detail resource",
+      "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/objects/getObjects.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/1/indexes/*/objects",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "algolia.post.1-indexes-queries",
+      "kind": "rest_write",
+      "summary": "POST /1/indexes/*/queries",
+      "description": "multi-index federated search query execution; same data-plane scope narrowing as searchSingleIndex",
+      "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/search/search.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/1/indexes/*/queries",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "algolia.post.1-indexes-indexname",
+      "kind": "rest_write",
+      "summary": "POST /1/indexes/{indexName}",
+      "description": "adds/replaces a single search record (addObject); record-level write on the data plane, not a config-plane mutation this connector's writes.json covers",
+      "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/objects/objects.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/1/indexes/{indexName}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "algolia.delete.1-indexes-indexname",
+      "kind": "rest_write",
+      "summary": "DELETE /1/indexes/{indexName}",
+      "description": "deletes an entire index and all its records/settings",
+      "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/objects/objects.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/1/indexes/{indexName}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "algolia.post.1-indexes-indexname-batch",
+      "kind": "rest_write",
+      "summary": "POST /1/indexes/{indexName}/batch",
+      "description": "batched record add/update/delete operations; record-level data-plane write, and a batch body shape the dialect's single-record write action model doesn't fit",
+      "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/objects/batch.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/1/indexes/{indexName}/batch",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "algolia.post.1-indexes-indexname-browse",
+      "kind": "rest_write",
+      "summary": "POST /1/indexes/{indexName}/browse",
+      "description": "bulk record browse/export of index contents; this connector's records are index/key/settings CONFIGURATION, not the underlying search records themselves (a genuinely different, much larger data surface deferred to a future dedicated records connector)",
+      "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/search/browse.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/1/indexes/{indexName}/browse",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "algolia.post.1-indexes-indexname-clear",
+      "kind": "rest_write",
+      "summary": "POST /1/indexes/{indexName}/clear",
+      "description": "deletes every record in the index while keeping settings; irreversible",
+      "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/objects/clearObjects.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/1/indexes/{indexName}/clear",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "algolia.post.1-indexes-indexname-deletebyquery",
+      "kind": "rest_write",
+      "summary": "POST /1/indexes/{indexName}/deleteByQuery",
+      "description": "bulk-deletes every record matching a query filter; irreversible mass deletion",
+      "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/objects/deleteBy.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/1/indexes/{indexName}/deleteByQuery",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "algolia.post.1-indexes-indexname-facets-facetname-query",
+      "kind": "rest_write",
+      "summary": "POST /1/indexes/{indexName}/facets/{facetName}/query",
+      "description": "facet-value search query execution; data-plane, not a metadata resource",
+      "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/search/searchForFacetValues.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/1/indexes/{indexName}/facets/{facetName}/query",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "algolia.post.1-indexes-indexname-operation",
+      "kind": "rest_write",
+      "summary": "POST /1/indexes/{indexName}/operation",
+      "description": "copies or moves (renames) an entire index, overwriting the destination index's existing data/settings",
+      "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/manage_indices/operationIndex.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/1/indexes/{indexName}/operation",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "algolia.post.1-indexes-indexname-query",
+      "kind": "rest_write",
+      "summary": "POST /1/indexes/{indexName}/query",
+      "description": "full-text search query execution is a data-plane read (arbitrary query params, not a stable list/detail resource); this connector reads index/key/settings metadata, not search results",
+      "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/search/searchSingleIndex.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/1/indexes/{indexName}/query",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "algolia.post.1-indexes-indexname-rules-batch",
+      "kind": "rest_write",
+      "summary": "POST /1/indexes/{indexName}/rules/batch",
+      "description": "batched rule save; batch-shape scope narrowing, same as object batch",
+      "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/rules/saveRules.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/1/indexes/{indexName}/rules/batch",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "algolia.post.1-indexes-indexname-rules-clear",
+      "kind": "rest_write",
+      "summary": "POST /1/indexes/{indexName}/rules/clear",
+      "description": "deletes every query rule for the index",
+      "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/rules/clearRules.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/1/indexes/{indexName}/rules/clear",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "algolia.post.1-indexes-indexname-rules-search",
+      "kind": "rest_write",
+      "summary": "POST /1/indexes/{indexName}/rules/search",
+      "description": "ENGINE_GAP: identical POST-with-body 'list all rules via empty query' gap as searchSynonyms above -- stream.Body is unwired in the declarative read path",
+      "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/rules/searchRules.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/1/indexes/{indexName}/rules/search",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "algolia.get.1-indexes-indexname-rules-objectid",
+      "kind": "rest_read",
+      "summary": "GET /1/indexes/{indexName}/rules/{objectID}",
+      "description": "single-rule detail lookup by objectID, not a list resource; same searchRules POST-body gap as synonyms below",
+      "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/rules/rule.yml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/1/indexes/{indexName}/rules/{objectID}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "algolia.put.1-indexes-indexname-rules-objectid",
+      "kind": "rest_write",
+      "summary": "PUT /1/indexes/{indexName}/rules/{objectID}",
+      "description": "creates/replaces a single query rule; per-record config-plane write",
+      "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/rules/rule.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/1/indexes/{indexName}/rules/{objectID}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "algolia.delete.1-indexes-indexname-rules-objectid",
+      "kind": "rest_write",
+      "summary": "DELETE /1/indexes/{indexName}/rules/{objectID}",
+      "description": "deletes a single query rule, changing live search behavior for the index",
+      "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/rules/rule.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/1/indexes/{indexName}/rules/{objectID}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "algolia.post.1-indexes-indexname-synonyms-batch",
+      "kind": "rest_write",
+      "summary": "POST /1/indexes/{indexName}/synonyms/batch",
+      "description": "batched synonym save; batch-shape scope narrowing, same as object batch",
+      "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/synonyms/saveSynonyms.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/1/indexes/{indexName}/synonyms/batch",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "algolia.post.1-indexes-indexname-synonyms-clear",
+      "kind": "rest_write",
+      "summary": "POST /1/indexes/{indexName}/synonyms/clear",
+      "description": "deletes every synonym rule for the index",
+      "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/synonyms/clearSynonyms.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/1/indexes/{indexName}/synonyms/clear",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "algolia.post.1-indexes-indexname-synonyms-search",
+      "kind": "rest_write",
+      "summary": "POST /1/indexes/{indexName}/synonyms/search",
+      "description": "ENGINE_GAP: the only way to list ALL synonyms is this POST-with-body 'search' endpoint (empty query returns everything, page/hitsPerPage paginated); the engine's declarative stream dialect has no wired mechanism to send a stream-level request body (streams.json's StreamSpec.Body field is accepted by the schema but never read by the read-path engine -- read.go's declarative loop always sends a nil body) -- implementing this as a real list stream would require either an engine change (wiring stream.Body through) or a Tier-2 StreamHook, both out of scope for this Pass B pass; documented here rather than silently worked around",
+      "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/synonyms/searchSynonyms.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/1/indexes/{indexName}/synonyms/search",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "algolia.get.1-indexes-indexname-synonyms-objectid",
+      "kind": "rest_read",
+      "summary": "GET /1/indexes/{indexName}/synonyms/{objectID}",
+      "description": "single-synonym detail lookup by objectID, not a list resource; listing synonyms requires searchSynonyms (see below)",
+      "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/synonyms/synonym.yml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/1/indexes/{indexName}/synonyms/{objectID}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "algolia.put.1-indexes-indexname-synonyms-objectid",
+      "kind": "rest_write",
+      "summary": "PUT /1/indexes/{indexName}/synonyms/{objectID}",
+      "description": "creates/replaces a single synonym rule; a narrow per-record config-plane write not yet worth a dedicated action alongside searchSynonyms' read gap below",
+      "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/synonyms/synonym.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/1/indexes/{indexName}/synonyms/{objectID}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "algolia.delete.1-indexes-indexname-synonyms-objectid",
+      "kind": "rest_write",
+      "summary": "DELETE /1/indexes/{indexName}/synonyms/{objectID}",
+      "description": "deletes a single synonym rule, changing live search relevance for the index",
+      "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/synonyms/synonym.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/1/indexes/{indexName}/synonyms/{objectID}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "algolia.get.1-indexes-indexname-task-taskid",
+      "kind": "rest_read",
+      "summary": "GET /1/indexes/{indexName}/task/{taskID}",
+      "description": "polls the status of a single async per-index indexing task by taskID; same no-stable-id-list scope narrowing as getAppTask",
+      "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/advanced/getTask.yml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/1/indexes/{indexName}/task/{taskID}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "algolia.get.1-indexes-indexname-objectid",
+      "kind": "rest_read",
+      "summary": "GET /1/indexes/{indexName}/{objectID}",
+      "description": "single search-record retrieval; data-plane, not a metadata resource this connector streams",
+      "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/objects/object.yml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/1/indexes/{indexName}/{objectID}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "algolia.put.1-indexes-indexname-objectid",
+      "kind": "rest_write",
+      "summary": "PUT /1/indexes/{indexName}/{objectID}",
+      "description": "creates/replaces a single search record by objectID; record-level data-plane write",
+      "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/objects/object.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/1/indexes/{indexName}/{objectID}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "algolia.delete.1-indexes-indexname-objectid",
+      "kind": "rest_write",
+      "summary": "DELETE /1/indexes/{indexName}/{objectID}",
+      "description": "deletes a single search record",
+      "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/objects/object.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/1/indexes/{indexName}/{objectID}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "algolia.post.1-indexes-indexname-objectid-partial",
+      "kind": "rest_write",
+      "summary": "POST /1/indexes/{indexName}/{objectID}/partial",
+      "description": "partial record update; record-level data-plane write",
+      "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/objects/partialUpdate.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/1/indexes/{indexName}/{objectID}/partial",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "algolia.get.1-keys-key",
+      "kind": "rest_read",
+      "summary": "GET /1/keys/{key}",
+      "description": "single-key detail lookup by key value; api_keys already streams every key's full object from the list endpoint, so this adds no new data, only a redundant per-key path",
+      "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/keys/key.yml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/1/keys/{key}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "algolia.put.1-keys-key",
+      "kind": "rest_write",
+      "summary": "PUT /1/keys/{key}",
+      "description": "rotates/reconfigures an existing live API key's ACL and scope; a credential-management action riskier than creating a brand-new key",
+      "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/keys/key.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/1/keys/{key}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "algolia.delete.1-keys-key",
+      "kind": "rest_write",
+      "summary": "DELETE /1/keys/{key}",
+      "description": "permanently revokes a live API key; any integration still using it starts failing immediately",
+      "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/keys/key.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/1/keys/{key}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "algolia.post.1-keys-key-restore",
+      "kind": "rest_write",
+      "summary": "POST /1/keys/{key}/restore",
+      "description": "restores a previously-deleted API key; admin-ACL credential-lifecycle action, not a routine reverse-ETL write",
+      "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/keys/restoreApiKey.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/1/keys/{key}/restore",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "algolia.put.1-security-sources",
+      "kind": "rest_write",
+      "summary": "PUT /1/security/sources",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/vault/vaultSources.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/1/security/sources",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "algolia.post.1-security-sources-append",
+      "kind": "rest_write",
+      "summary": "POST /1/security/sources/append",
+      "description": "appends a new allowed source IP range to the application's security allowlist; admin-ACL network-security config change",
+      "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/vault/appendSource.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/1/security/sources/append",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "algolia.delete.1-security-sources-source",
+      "kind": "rest_write",
+      "summary": "DELETE /1/security/sources/{source}",
+      "description": "removes an allowed source IP range; can immediately block legitimate traffic from that range if misapplied",
+      "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/vault/deleteSource.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/1/security/sources/{source}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "algolia.get.1-task-taskid",
+      "kind": "rest_read",
+      "summary": "GET /1/task/{taskID}",
+      "description": "polls the status of a single async application-level task by taskID; a taskID is only known transiently right after issuing a mutation, so there is no stable id list to stream against",
+      "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/advanced/getAppTask.yml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/1/task/{taskID}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "algolia.get.accountcopyindex",
+      "kind": "rest_read",
+      "summary": "GET /accountCopyIndex",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/helpers/accountCopyIndex.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/accountCopyIndex",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "algolia.get.browseobjects",
+      "kind": "rest_read",
+      "summary": "GET /browseObjects",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/helpers/browseObjects.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/browseObjects",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "algolia.get.chunkedbatch",
+      "kind": "rest_read",
+      "summary": "GET /chunkedBatch",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/helpers/chunkedBatch.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/chunkedBatch",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "algolia.post.deleteobjects",
+      "kind": "rest_write",
+      "summary": "POST /deleteObjects",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/helpers/deleteObjects.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/deleteObjects",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "algolia.get.generatesecuredapikey",
+      "kind": "rest_read",
+      "summary": "GET /generateSecuredApiKey",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/helpers/generateSecuredApiKey.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/generateSecuredApiKey",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "algolia.get.indexexists",
+      "kind": "rest_read",
+      "summary": "GET /indexExists",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/helpers/indexExists.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/indexExists",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "algolia.post.partialupdateobjects",
+      "kind": "rest_write",
+      "summary": "POST /partialUpdateObjects",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/helpers/partialUpdateObjects.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/partialUpdateObjects",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "algolia.post.partialupdateobjectswithtransformation",
+      "kind": "rest_write",
+      "summary": "POST /partialUpdateObjectsWithTransformation",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/helpers/partialUpdateObjectsWithTransformation.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/partialUpdateObjectsWithTransformation",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "algolia.get.replaceallobjects",
+      "kind": "rest_read",
+      "summary": "GET /replaceAllObjects",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/helpers/replaceAllObjects.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/replaceAllObjects",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "algolia.get.replaceallobjectswithtransformation",
+      "kind": "rest_read",
+      "summary": "GET /replaceAllObjectsWithTransformation",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/helpers/replaceAllObjectsWithTransformation.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/replaceAllObjectsWithTransformation",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "algolia.get.saveobjects",
+      "kind": "rest_read",
+      "summary": "GET /saveObjects",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/helpers/saveObjects.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/saveObjects",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "algolia.get.saveobjectswithtransformation",
+      "kind": "rest_read",
+      "summary": "GET /saveObjectsWithTransformation",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/helpers/saveObjectsWithTransformation.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/saveObjectsWithTransformation",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "algolia.get.setclientapikey",
+      "kind": "rest_read",
+      "summary": "GET /setClientApiKey",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/common/helpers/setClientApiKey.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/setClientApiKey",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "algolia.get.waitforapikey",
+      "kind": "rest_read",
+      "summary": "GET /waitForApiKey",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/helpers/waitForApiKey.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/waitForApiKey",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "algolia.get.waitforapptask",
+      "kind": "rest_read",
+      "summary": "GET /waitForAppTask",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/helpers/waitForAppTask.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/waitForAppTask",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "algolia.get.waitfortask",
+      "kind": "rest_read",
+      "summary": "GET /waitForTask",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/helpers/waitForTask.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/waitForTask",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "algolia.get.path",
+      "kind": "rest_read",
+      "summary": "GET /{path}",
+      "description": "generic custom-request passthrough helper (customRequest.yml), not a resource endpoint of its own",
+      "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/common/paths/customRequest.yml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/{path}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "algolia.post.path",
+      "kind": "rest_write",
+      "summary": "POST /{path}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/common/paths/customRequest.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/{path}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "algolia.put.path",
+      "kind": "rest_write",
+      "summary": "PUT /{path}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/common/paths/customRequest.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/{path}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "algolia.delete.path",
+      "kind": "rest_write",
+      "summary": "DELETE /{path}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/common/paths/customRequest.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/{path}",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

@@ -1,0 +1,67 @@
+{
+  "operations": [
+    {
+      "id": "printify.get.app-oauth-accept",
+      "kind": "rest_read",
+      "summary": "GET /app/oauth/accept",
+      "description": "OAuth app authorization callback endpoint; not an ETL data surface.",
+      "source_url": "https://developers.printify.com/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/app/oauth/accept",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "printify.post.app-oauth-tokens",
+      "kind": "rest_write",
+      "summary": "POST /app/oauth/tokens",
+      "description": "OAuth app token exchange endpoint; credential lifecycle, not connector records.",
+      "source_url": "https://developers.printify.com/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/app/oauth/tokens",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "printify.post.app-oauth-tokens-refresh",
+      "kind": "rest_write",
+      "summary": "POST /app/oauth/tokens/refresh",
+      "description": "OAuth app token refresh endpoint; credential lifecycle, not connector records.",
+      "source_url": "https://developers.printify.com/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/app/oauth/tokens/refresh",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "printify.post.v1-shops-shop-id-express-json",
+      "kind": "rest_write",
+      "summary": "POST /v1/shops/{shop_id}/express.json",
+      "description": "Navigation entry duplicates the documented /v1/shops/{shop_id}/orders/express.json endpoint table.",
+      "source_url": "https://developers.printify.com/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/shops/{shop_id}/express.json",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

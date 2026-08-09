@@ -1,0 +1,3931 @@
+{
+  "operations": [
+    {
+      "id": "tempo.get.4-account-categories",
+      "kind": "rest_read",
+      "summary": "GET /4/account-categories",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/account-categories",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.post.4-account-categories",
+      "kind": "rest_write",
+      "summary": "POST /4/account-categories",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/4/account-categories",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-account-categories-key",
+      "kind": "rest_read",
+      "summary": "GET /4/account-categories/{key}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/account-categories/{key}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.put.4-account-categories-key",
+      "kind": "rest_write",
+      "summary": "PUT /4/account-categories/{key}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/4/account-categories/{key}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.delete.4-account-categories-key",
+      "kind": "rest_write",
+      "summary": "DELETE /4/account-categories/{key}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/4/account-categories/{key}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-account-category-types",
+      "kind": "rest_read",
+      "summary": "GET /4/account-category-types",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/account-category-types",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.post.4-account-links",
+      "kind": "rest_write",
+      "summary": "POST /4/account-links",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/4/account-links",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-account-links-project-id",
+      "kind": "rest_read",
+      "summary": "GET /4/account-links/project/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/account-links/project/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-account-links-id",
+      "kind": "rest_read",
+      "summary": "GET /4/account-links/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/account-links/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.delete.4-account-links-id",
+      "kind": "rest_write",
+      "summary": "DELETE /4/account-links/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/4/account-links/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.patch.4-account-links-id-make-default",
+      "kind": "rest_write",
+      "summary": "PATCH /4/account-links/{id}/make-default",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/4/account-links/{id}/make-default",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.post.4-accounts",
+      "kind": "rest_write",
+      "summary": "POST /4/accounts",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/4/accounts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.post.4-accounts-search",
+      "kind": "rest_write",
+      "summary": "POST /4/accounts/search",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/4/accounts/search",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-accounts-id",
+      "kind": "rest_read",
+      "summary": "GET /4/accounts/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/accounts/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.put.4-accounts-key",
+      "kind": "rest_write",
+      "summary": "PUT /4/accounts/{key}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/4/accounts/{key}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.delete.4-accounts-key",
+      "kind": "rest_write",
+      "summary": "DELETE /4/accounts/{key}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/4/accounts/{key}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-accounts-key-links",
+      "kind": "rest_read",
+      "summary": "GET /4/accounts/{key}/links",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/accounts/{key}/links",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-approvals",
+      "kind": "rest_read",
+      "summary": "GET /4/approvals",
+      "description": "/4/approvals is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/approvals",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-billing-rates-tables",
+      "kind": "rest_read",
+      "summary": "GET /4/billing-rates-tables",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/billing-rates-tables",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.post.4-billing-rates-tables",
+      "kind": "rest_write",
+      "summary": "POST /4/billing-rates-tables",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/4/billing-rates-tables",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-billing-rates-tables-billingratestableid",
+      "kind": "rest_read",
+      "summary": "GET /4/billing-rates-tables/{billingRatesTableId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/billing-rates-tables/{billingRatesTableId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.delete.4-billing-rates-tables-billingratestableid",
+      "kind": "rest_write",
+      "summary": "DELETE /4/billing-rates-tables/{billingRatesTableId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/4/billing-rates-tables/{billingRatesTableId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.put.4-billing-rates-tables-billingratestableid-account",
+      "kind": "rest_write",
+      "summary": "PUT /4/billing-rates-tables/{billingRatesTableId}/account",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/4/billing-rates-tables/{billingRatesTableId}/account",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.put.4-billing-rates-tables-billingratestableid-rates",
+      "kind": "rest_write",
+      "summary": "PUT /4/billing-rates-tables/{billingRatesTableId}/rates",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/4/billing-rates-tables/{billingRatesTableId}/rates",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.post.4-customers",
+      "kind": "rest_write",
+      "summary": "POST /4/customers",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/4/customers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.post.4-customers-search",
+      "kind": "rest_write",
+      "summary": "POST /4/customers/search",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/4/customers/search",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-customers-id",
+      "kind": "rest_read",
+      "summary": "GET /4/customers/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/customers/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-customers-id-accounts",
+      "kind": "rest_read",
+      "summary": "GET /4/customers/{id}/accounts",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/customers/{id}/accounts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.put.4-customers-key",
+      "kind": "rest_write",
+      "summary": "PUT /4/customers/{key}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/4/customers/{key}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.delete.4-customers-key",
+      "kind": "rest_write",
+      "summary": "DELETE /4/customers/{key}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/4/customers/{key}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.post.4-flex-plans",
+      "kind": "rest_write",
+      "summary": "POST /4/flex-plans",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/4/flex-plans",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.post.4-flex-plans-search",
+      "kind": "rest_write",
+      "summary": "POST /4/flex-plans/search",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/4/flex-plans/search",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-flex-plans-id",
+      "kind": "rest_read",
+      "summary": "GET /4/flex-plans/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/flex-plans/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.put.4-flex-plans-id",
+      "kind": "rest_write",
+      "summary": "PUT /4/flex-plans/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/4/flex-plans/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.delete.4-flex-plans-id",
+      "kind": "rest_write",
+      "summary": "DELETE /4/flex-plans/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/4/flex-plans/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.post.4-generic-resources",
+      "kind": "rest_write",
+      "summary": "POST /4/generic-resources",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/4/generic-resources",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.post.4-generic-resources-search",
+      "kind": "rest_write",
+      "summary": "POST /4/generic-resources/search",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/4/generic-resources/search",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-generic-resources-id",
+      "kind": "rest_read",
+      "summary": "GET /4/generic-resources/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/generic-resources/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.put.4-generic-resources-id",
+      "kind": "rest_write",
+      "summary": "PUT /4/generic-resources/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/4/generic-resources/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.delete.4-generic-resources-id",
+      "kind": "rest_write",
+      "summary": "DELETE /4/generic-resources/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/4/generic-resources/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-global-rates-by-role",
+      "kind": "rest_read",
+      "summary": "GET /4/global-rates/by-role",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/global-rates/by-role",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-global-rates-by-role-roleid",
+      "kind": "rest_read",
+      "summary": "GET /4/global-rates/by-role/{roleId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/global-rates/by-role/{roleId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.put.4-global-rates-cost-by-role",
+      "kind": "rest_write",
+      "summary": "PUT /4/global-rates/cost/by-role",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/4/global-rates/cost/by-role",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-globalconfiguration",
+      "kind": "rest_read",
+      "summary": "GET /4/globalconfiguration",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/globalconfiguration",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-holiday-schemes",
+      "kind": "rest_read",
+      "summary": "GET /4/holiday-schemes",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/holiday-schemes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.post.4-holiday-schemes",
+      "kind": "rest_write",
+      "summary": "POST /4/holiday-schemes",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/4/holiday-schemes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.post.4-holiday-schemes-members-search",
+      "kind": "rest_write",
+      "summary": "POST /4/holiday-schemes/members/search",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/4/holiday-schemes/members/search",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-holiday-schemes-users-accountid",
+      "kind": "rest_read",
+      "summary": "GET /4/holiday-schemes/users/{accountId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/holiday-schemes/users/{accountId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-holiday-schemes-schemeid",
+      "kind": "rest_read",
+      "summary": "GET /4/holiday-schemes/{schemeId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/holiday-schemes/{schemeId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.put.4-holiday-schemes-schemeid",
+      "kind": "rest_write",
+      "summary": "PUT /4/holiday-schemes/{schemeId}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/4/holiday-schemes/{schemeId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.delete.4-holiday-schemes-schemeid",
+      "kind": "rest_write",
+      "summary": "DELETE /4/holiday-schemes/{schemeId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/4/holiday-schemes/{schemeId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.put.4-holiday-schemes-schemeid-default",
+      "kind": "rest_write",
+      "summary": "PUT /4/holiday-schemes/{schemeId}/default",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/4/holiday-schemes/{schemeId}/default",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-holiday-schemes-schemeid-holidays",
+      "kind": "rest_read",
+      "summary": "GET /4/holiday-schemes/{schemeId}/holidays",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/holiday-schemes/{schemeId}/holidays",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.post.4-holiday-schemes-schemeid-holidays",
+      "kind": "rest_write",
+      "summary": "POST /4/holiday-schemes/{schemeId}/holidays",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/4/holiday-schemes/{schemeId}/holidays",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-holiday-schemes-schemeid-holidays-floating",
+      "kind": "rest_read",
+      "summary": "GET /4/holiday-schemes/{schemeId}/holidays/floating",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/holiday-schemes/{schemeId}/holidays/floating",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-holiday-schemes-schemeid-holidays-holidayid",
+      "kind": "rest_read",
+      "summary": "GET /4/holiday-schemes/{schemeId}/holidays/{holidayId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/holiday-schemes/{schemeId}/holidays/{holidayId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.put.4-holiday-schemes-schemeid-holidays-holidayid",
+      "kind": "rest_write",
+      "summary": "PUT /4/holiday-schemes/{schemeId}/holidays/{holidayId}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/4/holiday-schemes/{schemeId}/holidays/{holidayId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.delete.4-holiday-schemes-schemeid-holidays-holidayid",
+      "kind": "rest_write",
+      "summary": "DELETE /4/holiday-schemes/{schemeId}/holidays/{holidayId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/4/holiday-schemes/{schemeId}/holidays/{holidayId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-holiday-schemes-schemeid-members",
+      "kind": "rest_read",
+      "summary": "GET /4/holiday-schemes/{schemeId}/members",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/holiday-schemes/{schemeId}/members",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.post.4-holiday-schemes-schemeid-members",
+      "kind": "rest_write",
+      "summary": "POST /4/holiday-schemes/{schemeId}/members",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/4/holiday-schemes/{schemeId}/members",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.post.4-papertrail-search",
+      "kind": "rest_write",
+      "summary": "POST /4/papertrail/search",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/4/papertrail/search",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-periods",
+      "kind": "rest_read",
+      "summary": "GET /4/periods",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/periods",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-permission-roles",
+      "kind": "rest_read",
+      "summary": "GET /4/permission-roles",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/permission-roles",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.post.4-permission-roles",
+      "kind": "rest_write",
+      "summary": "POST /4/permission-roles",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/4/permission-roles",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-permission-roles-global",
+      "kind": "rest_read",
+      "summary": "GET /4/permission-roles/global",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/permission-roles/global",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-permission-roles-id",
+      "kind": "rest_read",
+      "summary": "GET /4/permission-roles/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/permission-roles/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.put.4-permission-roles-id",
+      "kind": "rest_write",
+      "summary": "PUT /4/permission-roles/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/4/permission-roles/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.delete.4-permission-roles-id",
+      "kind": "rest_write",
+      "summary": "DELETE /4/permission-roles/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/4/permission-roles/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.post.4-plan-approvals-plans-for-review",
+      "kind": "rest_write",
+      "summary": "POST /4/plan-approvals/plans-for-review",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/4/plan-approvals/plans-for-review",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.put.4-plan-approvals-allocationid",
+      "kind": "rest_write",
+      "summary": "PUT /4/plan-approvals/{allocationId}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/4/plan-approvals/{allocationId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-plan-permissions-plan-reviewers",
+      "kind": "rest_read",
+      "summary": "GET /4/plan-permissions/plan-reviewers",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/plan-permissions/plan-reviewers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-plans",
+      "kind": "rest_read",
+      "summary": "GET /4/plans",
+      "description": "/4/plans is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/plans",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.post.4-plans",
+      "kind": "rest_write",
+      "summary": "POST /4/plans",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/4/plans",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-plans-generic-resource-genericresourceid",
+      "kind": "rest_read",
+      "summary": "GET /4/plans/generic-resource/{genericResourceId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/plans/generic-resource/{genericResourceId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.post.4-plans-search",
+      "kind": "rest_write",
+      "summary": "POST /4/plans/search",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/4/plans/search",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-plans-user-accountid",
+      "kind": "rest_read",
+      "summary": "GET /4/plans/user/{accountId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/plans/user/{accountId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-plans-id",
+      "kind": "rest_read",
+      "summary": "GET /4/plans/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/plans/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.put.4-plans-id",
+      "kind": "rest_write",
+      "summary": "PUT /4/plans/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/4/plans/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.delete.4-plans-id",
+      "kind": "rest_write",
+      "summary": "DELETE /4/plans/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/4/plans/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.put.4-plans-id-partial-day",
+      "kind": "rest_write",
+      "summary": "PUT /4/plans/{id}/partial/{day}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/4/plans/{id}/partial/{day}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.delete.4-plans-id-partial-day",
+      "kind": "rest_write",
+      "summary": "DELETE /4/plans/{id}/partial/{day}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/4/plans/{id}/partial/{day}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-portfolios",
+      "kind": "rest_read",
+      "summary": "GET /4/portfolios",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/portfolios",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.post.4-portfolios",
+      "kind": "rest_write",
+      "summary": "POST /4/portfolios",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/4/portfolios",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-portfolios-portfolioid",
+      "kind": "rest_read",
+      "summary": "GET /4/portfolios/{portfolioId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/portfolios/{portfolioId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.put.4-portfolios-portfolioid",
+      "kind": "rest_write",
+      "summary": "PUT /4/portfolios/{portfolioId}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/4/portfolios/{portfolioId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.delete.4-portfolios-portfolioid",
+      "kind": "rest_write",
+      "summary": "DELETE /4/portfolios/{portfolioId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/4/portfolios/{portfolioId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-portfolios-portfolioid-projects",
+      "kind": "rest_read",
+      "summary": "GET /4/portfolios/{portfolioId}/projects",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/portfolios/{portfolioId}/projects",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.post.4-portfolios-portfolioid-projects",
+      "kind": "rest_write",
+      "summary": "POST /4/portfolios/{portfolioId}/projects",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/4/portfolios/{portfolioId}/projects",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.delete.4-portfolios-portfolioid-projects",
+      "kind": "rest_write",
+      "summary": "DELETE /4/portfolios/{portfolioId}/projects",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/4/portfolios/{portfolioId}/projects",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.put.4-portfolios-portfolioid-shared",
+      "kind": "rest_write",
+      "summary": "PUT /4/portfolios/{portfolioId}/shared",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/4/portfolios/{portfolioId}/shared",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-programs",
+      "kind": "rest_read",
+      "summary": "GET /4/programs",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/programs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.post.4-programs",
+      "kind": "rest_write",
+      "summary": "POST /4/programs",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/4/programs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-programs-id",
+      "kind": "rest_read",
+      "summary": "GET /4/programs/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/programs/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.put.4-programs-id",
+      "kind": "rest_write",
+      "summary": "PUT /4/programs/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/4/programs/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.delete.4-programs-id",
+      "kind": "rest_write",
+      "summary": "DELETE /4/programs/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/4/programs/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-programs-id-teams",
+      "kind": "rest_read",
+      "summary": "GET /4/programs/{id}/teams",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/programs/{id}/teams",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-project-attributes",
+      "kind": "rest_read",
+      "summary": "GET /4/project-attributes",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/project-attributes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.post.4-project-attributes",
+      "kind": "rest_write",
+      "summary": "POST /4/project-attributes",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/4/project-attributes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.put.4-project-attributes-projectattributeid",
+      "kind": "rest_write",
+      "summary": "PUT /4/project-attributes/{projectAttributeId}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/4/project-attributes/{projectAttributeId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.delete.4-project-attributes-projectattributeid",
+      "kind": "rest_write",
+      "summary": "DELETE /4/project-attributes/{projectAttributeId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/4/project-attributes/{projectAttributeId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-projects",
+      "kind": "rest_read",
+      "summary": "GET /4/projects",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/projects",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.post.4-projects",
+      "kind": "rest_write",
+      "summary": "POST /4/projects",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/4/projects",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-projects-time-approvals-team-member-teammemberid",
+      "kind": "rest_read",
+      "summary": "GET /4/projects/time-approvals/team-member/{teamMemberId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/projects/time-approvals/team-member/{teamMemberId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-projects-id",
+      "kind": "rest_read",
+      "summary": "GET /4/projects/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/projects/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.put.4-projects-projectid",
+      "kind": "rest_write",
+      "summary": "PUT /4/projects/{projectId}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/4/projects/{projectId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.delete.4-projects-projectid",
+      "kind": "rest_write",
+      "summary": "DELETE /4/projects/{projectId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/4/projects/{projectId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-projects-projectid-actuals-expenses",
+      "kind": "rest_read",
+      "summary": "GET /4/projects/{projectId}/actuals/expenses",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/projects/{projectId}/actuals/expenses",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-projects-projectid-actuals-labor",
+      "kind": "rest_read",
+      "summary": "GET /4/projects/{projectId}/actuals/labor",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/projects/{projectId}/actuals/labor",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.put.4-projects-projectid-auto-sync",
+      "kind": "rest_write",
+      "summary": "PUT /4/projects/{projectId}/auto-sync",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/4/projects/{projectId}/auto-sync",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-projects-projectid-budget",
+      "kind": "rest_read",
+      "summary": "GET /4/projects/{projectId}/budget",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/projects/{projectId}/budget",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.delete.4-projects-projectid-budget",
+      "kind": "rest_write",
+      "summary": "DELETE /4/projects/{projectId}/budget",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/4/projects/{projectId}/budget",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-projects-projectid-budget-milestones",
+      "kind": "rest_read",
+      "summary": "GET /4/projects/{projectId}/budget-milestones",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/projects/{projectId}/budget-milestones",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.post.4-projects-projectid-budget-milestones",
+      "kind": "rest_write",
+      "summary": "POST /4/projects/{projectId}/budget-milestones",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/4/projects/{projectId}/budget-milestones",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.put.4-projects-projectid-budget-milestones-milestoneid",
+      "kind": "rest_write",
+      "summary": "PUT /4/projects/{projectId}/budget-milestones/{milestoneId}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/4/projects/{projectId}/budget-milestones/{milestoneId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.delete.4-projects-projectid-budget-milestones-milestoneid",
+      "kind": "rest_write",
+      "summary": "DELETE /4/projects/{projectId}/budget-milestones/{milestoneId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/4/projects/{projectId}/budget-milestones/{milestoneId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.put.4-projects-projectid-budget-newvalue",
+      "kind": "rest_write",
+      "summary": "PUT /4/projects/{projectId}/budget/{newValue}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/4/projects/{projectId}/budget/{newValue}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.put.4-projects-projectid-currency-currencycode",
+      "kind": "rest_write",
+      "summary": "PUT /4/projects/{projectId}/currency/{currencyCode}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/4/projects/{projectId}/currency/{currencyCode}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-projects-projectid-expenses",
+      "kind": "rest_read",
+      "summary": "GET /4/projects/{projectId}/expenses",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/projects/{projectId}/expenses",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.post.4-projects-projectid-expenses",
+      "kind": "rest_write",
+      "summary": "POST /4/projects/{projectId}/expenses",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/4/projects/{projectId}/expenses",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-projects-projectid-expenses-expenseid",
+      "kind": "rest_read",
+      "summary": "GET /4/projects/{projectId}/expenses/{expenseId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/projects/{projectId}/expenses/{expenseId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.put.4-projects-projectid-expenses-expenseid",
+      "kind": "rest_write",
+      "summary": "PUT /4/projects/{projectId}/expenses/{expenseId}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/4/projects/{projectId}/expenses/{expenseId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.delete.4-projects-projectid-expenses-expenseid",
+      "kind": "rest_write",
+      "summary": "DELETE /4/projects/{projectId}/expenses/{expenseId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/4/projects/{projectId}/expenses/{expenseId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-projects-projectid-financials-summary",
+      "kind": "rest_read",
+      "summary": "GET /4/projects/{projectId}/financials/summary",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/projects/{projectId}/financials/summary",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-projects-projectid-fixed-revenues",
+      "kind": "rest_read",
+      "summary": "GET /4/projects/{projectId}/fixed-revenues",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/projects/{projectId}/fixed-revenues",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.post.4-projects-projectid-fixed-revenues",
+      "kind": "rest_write",
+      "summary": "POST /4/projects/{projectId}/fixed-revenues",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/4/projects/{projectId}/fixed-revenues",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-projects-projectid-fixed-revenues-fixedrevenueid",
+      "kind": "rest_read",
+      "summary": "GET /4/projects/{projectId}/fixed-revenues/{fixedRevenueId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/projects/{projectId}/fixed-revenues/{fixedRevenueId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.put.4-projects-projectid-fixed-revenues-fixedrevenueid",
+      "kind": "rest_write",
+      "summary": "PUT /4/projects/{projectId}/fixed-revenues/{fixedRevenueId}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/4/projects/{projectId}/fixed-revenues/{fixedRevenueId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.delete.4-projects-projectid-fixed-revenues-fixedrevenueid",
+      "kind": "rest_write",
+      "summary": "DELETE /4/projects/{projectId}/fixed-revenues/{fixedRevenueId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/4/projects/{projectId}/fixed-revenues/{fixedRevenueId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.put.4-projects-projectid-generalaccess",
+      "kind": "rest_write",
+      "summary": "PUT /4/projects/{projectId}/generalAccess",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/4/projects/{projectId}/generalAccess",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.put.4-projects-projectid-owner-newownerid",
+      "kind": "rest_write",
+      "summary": "PUT /4/projects/{projectId}/owner/{newOwnerId}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/4/projects/{projectId}/owner/{newOwnerId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-projects-projectid-plans-labor",
+      "kind": "rest_read",
+      "summary": "GET /4/projects/{projectId}/plans/labor",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/projects/{projectId}/plans/labor",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.put.4-projects-projectid-project-attributes-projectattributeid",
+      "kind": "rest_write",
+      "summary": "PUT /4/projects/{projectId}/project-attributes/{projectAttributeId}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/4/projects/{projectId}/project-attributes/{projectAttributeId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-projects-projectid-project-time-approvers",
+      "kind": "rest_read",
+      "summary": "GET /4/projects/{projectId}/project-time-approvers",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/projects/{projectId}/project-time-approvers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.post.4-projects-projectid-project-time-approvers",
+      "kind": "rest_write",
+      "summary": "POST /4/projects/{projectId}/project-time-approvers",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/4/projects/{projectId}/project-time-approvers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.delete.4-projects-projectid-project-time-approvers",
+      "kind": "rest_write",
+      "summary": "DELETE /4/projects/{projectId}/project-time-approvers",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/4/projects/{projectId}/project-time-approvers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.put.4-projects-projectid-project-time-approvers-default-approverid",
+      "kind": "rest_write",
+      "summary": "PUT /4/projects/{projectId}/project-time-approvers/default/{approverId}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/4/projects/{projectId}/project-time-approvers/default/{approverId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.put.4-projects-projectid-rate",
+      "kind": "rest_write",
+      "summary": "PUT /4/projects/{projectId}/rate",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/4/projects/{projectId}/rate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-projects-projectid-scope",
+      "kind": "rest_read",
+      "summary": "GET /4/projects/{projectId}/scope",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/projects/{projectId}/scope",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-projects-projectid-scope-tasks",
+      "kind": "rest_read",
+      "summary": "GET /4/projects/{projectId}/scope/tasks",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/projects/{projectId}/scope/tasks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-projects-projectid-shares",
+      "kind": "rest_read",
+      "summary": "GET /4/projects/{projectId}/shares",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/projects/{projectId}/shares",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.post.4-projects-projectid-shares",
+      "kind": "rest_write",
+      "summary": "POST /4/projects/{projectId}/shares",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/4/projects/{projectId}/shares",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.delete.4-projects-projectid-shares",
+      "kind": "rest_write",
+      "summary": "DELETE /4/projects/{projectId}/shares",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/4/projects/{projectId}/shares",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-projects-projectid-team-members-rates",
+      "kind": "rest_read",
+      "summary": "GET /4/projects/{projectId}/team-members/rates",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/projects/{projectId}/team-members/rates",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.put.4-projects-projectid-team-members-rates-rateid",
+      "kind": "rest_write",
+      "summary": "PUT /4/projects/{projectId}/team-members/rates/{rateId}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/4/projects/{projectId}/team-members/rates/{rateId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.delete.4-projects-projectid-team-members-rates-rateid",
+      "kind": "rest_write",
+      "summary": "DELETE /4/projects/{projectId}/team-members/rates/{rateId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/4/projects/{projectId}/team-members/rates/{rateId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-projects-projectid-team-members-roles",
+      "kind": "rest_read",
+      "summary": "GET /4/projects/{projectId}/team-members/roles",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/projects/{projectId}/team-members/roles",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.put.4-projects-projectid-team-members-roles-teammemberid",
+      "kind": "rest_write",
+      "summary": "PUT /4/projects/{projectId}/team-members/roles/{teamMemberId}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/4/projects/{projectId}/team-members/roles/{teamMemberId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.post.4-projects-projectid-team-members-teammemberid-rates",
+      "kind": "rest_write",
+      "summary": "POST /4/projects/{projectId}/team-members/{teamMemberId}/rates",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/4/projects/{projectId}/team-members/{teamMemberId}/rates",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.delete.4-projects-projectid-team-members-teammemberid-rates",
+      "kind": "rest_write",
+      "summary": "DELETE /4/projects/{projectId}/team-members/{teamMemberId}/rates",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/4/projects/{projectId}/team-members/{teamMemberId}/rates",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-projects-projectid-time-approvals",
+      "kind": "rest_read",
+      "summary": "GET /4/projects/{projectId}/time-approvals",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/projects/{projectId}/time-approvals",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.post.4-projects-projectid-time-approvals-approve",
+      "kind": "rest_write",
+      "summary": "POST /4/projects/{projectId}/time-approvals/approve",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/4/projects/{projectId}/time-approvals/approve",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-projects-projectid-time-approvals-labor-costs",
+      "kind": "rest_read",
+      "summary": "GET /4/projects/{projectId}/time-approvals/labor-costs",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/projects/{projectId}/time-approvals/labor-costs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.post.4-projects-projectid-time-approvals-reject",
+      "kind": "rest_write",
+      "summary": "POST /4/projects/{projectId}/time-approvals/reject",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/4/projects/{projectId}/time-approvals/reject",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.post.4-projects-projectid-time-approvals-reopen",
+      "kind": "rest_write",
+      "summary": "POST /4/projects/{projectId}/time-approvals/reopen",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/4/projects/{projectId}/time-approvals/reopen",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-projects-projectid-timeframe",
+      "kind": "rest_read",
+      "summary": "GET /4/projects/{projectId}/timeframe",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/projects/{projectId}/timeframe",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.put.4-projects-projectid-timeframe",
+      "kind": "rest_write",
+      "summary": "PUT /4/projects/{projectId}/timeframe",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/4/projects/{projectId}/timeframe",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.delete.4-projects-projectid-timeframe",
+      "kind": "rest_write",
+      "summary": "DELETE /4/projects/{projectId}/timeframe",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/4/projects/{projectId}/timeframe",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.put.4-projects-projectid-usingaccountrates",
+      "kind": "rest_write",
+      "summary": "PUT /4/projects/{projectId}/usingAccountRates",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/4/projects/{projectId}/usingAccountRates",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.put.4-projects-projectid-usingglobalcostrates",
+      "kind": "rest_write",
+      "summary": "PUT /4/projects/{projectId}/usingGlobalCostRates",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/4/projects/{projectId}/usingGlobalCostRates",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-reports-costs-and-revenues",
+      "kind": "rest_read",
+      "summary": "GET /4/reports/costs-and-revenues",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/reports/costs-and-revenues",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.post.4-reports-costs-and-revenues",
+      "kind": "rest_write",
+      "summary": "POST /4/reports/costs-and-revenues",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/4/reports/costs-and-revenues",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-reports-costs-and-revenues-reportid",
+      "kind": "rest_read",
+      "summary": "GET /4/reports/costs-and-revenues/{reportId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/reports/costs-and-revenues/{reportId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.delete.4-reports-costs-and-revenues-reportid",
+      "kind": "rest_write",
+      "summary": "DELETE /4/reports/costs-and-revenues/{reportId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/4/reports/costs-and-revenues/{reportId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-reports-costs-and-revenues-reportid-data",
+      "kind": "rest_read",
+      "summary": "GET /4/reports/costs-and-revenues/{reportId}/data",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/reports/costs-and-revenues/{reportId}/data",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-roles",
+      "kind": "rest_read",
+      "summary": "GET /4/roles",
+      "description": "/4/roles is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/roles",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.post.4-roles",
+      "kind": "rest_write",
+      "summary": "POST /4/roles",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/4/roles",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-roles-default",
+      "kind": "rest_read",
+      "summary": "GET /4/roles/default",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/roles/default",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-roles-id",
+      "kind": "rest_read",
+      "summary": "GET /4/roles/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/roles/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.put.4-roles-id",
+      "kind": "rest_write",
+      "summary": "PUT /4/roles/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/4/roles/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.delete.4-roles-id",
+      "kind": "rest_write",
+      "summary": "DELETE /4/roles/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/4/roles/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-schedules",
+      "kind": "rest_read",
+      "summary": "GET /4/schedules",
+      "description": "/4/schedules is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/schedules",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.post.4-skill-assignments",
+      "kind": "rest_write",
+      "summary": "POST /4/skill-assignments",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/4/skill-assignments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.post.4-skill-assignments-replace",
+      "kind": "rest_write",
+      "summary": "POST /4/skill-assignments/replace",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/4/skill-assignments/replace",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.post.4-skill-assignments-search",
+      "kind": "rest_write",
+      "summary": "POST /4/skill-assignments/search",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/4/skill-assignments/search",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-skill-assignments-assigneeid-assigneetype",
+      "kind": "rest_read",
+      "summary": "GET /4/skill-assignments/{assigneeId}/{assigneeType}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/skill-assignments/{assigneeId}/{assigneeType}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.delete.4-skill-assignments-assigneeid-assigneetype-skillid",
+      "kind": "rest_write",
+      "summary": "DELETE /4/skill-assignments/{assigneeId}/{assigneeType}/{skillId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/4/skill-assignments/{assigneeId}/{assigneeType}/{skillId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-skills",
+      "kind": "rest_read",
+      "summary": "GET /4/skills",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/skills",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.post.4-skills",
+      "kind": "rest_write",
+      "summary": "POST /4/skills",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/4/skills",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-skills-id",
+      "kind": "rest_read",
+      "summary": "GET /4/skills/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/skills/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.put.4-skills-id",
+      "kind": "rest_write",
+      "summary": "PUT /4/skills/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/4/skills/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.delete.4-skills-id",
+      "kind": "rest_write",
+      "summary": "DELETE /4/skills/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/4/skills/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.post.4-team-links",
+      "kind": "rest_write",
+      "summary": "POST /4/team-links",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/4/team-links",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-team-links-project-id",
+      "kind": "rest_read",
+      "summary": "GET /4/team-links/project/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/team-links/project/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-team-links-linkid",
+      "kind": "rest_read",
+      "summary": "GET /4/team-links/{linkId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/team-links/{linkId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.delete.4-team-links-linkid",
+      "kind": "rest_write",
+      "summary": "DELETE /4/team-links/{linkId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/4/team-links/{linkId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.post.4-team-memberships",
+      "kind": "rest_write",
+      "summary": "POST /4/team-memberships",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/4/team-memberships",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.post.4-team-memberships-search",
+      "kind": "rest_write",
+      "summary": "POST /4/team-memberships/search",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/4/team-memberships/search",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-team-memberships-team-teamid",
+      "kind": "rest_read",
+      "summary": "GET /4/team-memberships/team/{teamId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/team-memberships/team/{teamId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-team-memberships-id",
+      "kind": "rest_read",
+      "summary": "GET /4/team-memberships/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/team-memberships/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.put.4-team-memberships-id",
+      "kind": "rest_write",
+      "summary": "PUT /4/team-memberships/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/4/team-memberships/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.delete.4-team-memberships-id",
+      "kind": "rest_write",
+      "summary": "DELETE /4/team-memberships/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/4/team-memberships/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-teams",
+      "kind": "rest_read",
+      "summary": "GET /4/teams",
+      "description": "/4/teams is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/teams",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.post.4-teams",
+      "kind": "rest_write",
+      "summary": "POST /4/teams",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/4/teams",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-teams-id",
+      "kind": "rest_read",
+      "summary": "GET /4/teams/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/teams/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.put.4-teams-id",
+      "kind": "rest_write",
+      "summary": "PUT /4/teams/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/4/teams/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.delete.4-teams-id",
+      "kind": "rest_write",
+      "summary": "DELETE /4/teams/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/4/teams/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-teams-id-links",
+      "kind": "rest_read",
+      "summary": "GET /4/teams/{id}/links",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/teams/{id}/links",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-teams-id-members",
+      "kind": "rest_read",
+      "summary": "GET /4/teams/{id}/members",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/teams/{id}/members",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-teams-teamid-generic-resources",
+      "kind": "rest_read",
+      "summary": "GET /4/teams/{teamId}/generic-resources",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/teams/{teamId}/generic-resources",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.post.4-teams-teamid-generic-resources",
+      "kind": "rest_write",
+      "summary": "POST /4/teams/{teamId}/generic-resources",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/4/teams/{teamId}/generic-resources",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-teams-teamid-generic-resources-resourceid",
+      "kind": "rest_read",
+      "summary": "GET /4/teams/{teamId}/generic-resources/{resourceId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/teams/{teamId}/generic-resources/{resourceId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.delete.4-teams-teamid-generic-resources-resourceid",
+      "kind": "rest_write",
+      "summary": "DELETE /4/teams/{teamId}/generic-resources/{resourceId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/4/teams/{teamId}/generic-resources/{resourceId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.post.4-timesheet-approvals-logs-search",
+      "kind": "rest_write",
+      "summary": "POST /4/timesheet-approvals/logs/search",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/4/timesheet-approvals/logs/search",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-timesheet-approvals-team-teamid",
+      "kind": "rest_read",
+      "summary": "GET /4/timesheet-approvals/team/{teamId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/timesheet-approvals/team/{teamId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-timesheet-approvals-user-accountid",
+      "kind": "rest_read",
+      "summary": "GET /4/timesheet-approvals/user/{accountId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/timesheet-approvals/user/{accountId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.post.4-timesheet-approvals-user-accountid-approve",
+      "kind": "rest_write",
+      "summary": "POST /4/timesheet-approvals/user/{accountId}/approve",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/4/timesheet-approvals/user/{accountId}/approve",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.post.4-timesheet-approvals-user-accountid-recall",
+      "kind": "rest_write",
+      "summary": "POST /4/timesheet-approvals/user/{accountId}/recall",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/4/timesheet-approvals/user/{accountId}/recall",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.post.4-timesheet-approvals-user-accountid-reject",
+      "kind": "rest_write",
+      "summary": "POST /4/timesheet-approvals/user/{accountId}/reject",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/4/timesheet-approvals/user/{accountId}/reject",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.post.4-timesheet-approvals-user-accountid-reopen",
+      "kind": "rest_write",
+      "summary": "POST /4/timesheet-approvals/user/{accountId}/reopen",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/4/timesheet-approvals/user/{accountId}/reopen",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-timesheet-approvals-user-accountid-reviewers",
+      "kind": "rest_read",
+      "summary": "GET /4/timesheet-approvals/user/{accountId}/reviewers",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/timesheet-approvals/user/{accountId}/reviewers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.post.4-timesheet-approvals-user-accountid-submit",
+      "kind": "rest_write",
+      "summary": "POST /4/timesheet-approvals/user/{accountId}/submit",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/4/timesheet-approvals/user/{accountId}/submit",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-timesheet-approvals-waiting",
+      "kind": "rest_read",
+      "summary": "GET /4/timesheet-approvals/waiting",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/timesheet-approvals/waiting",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-user-schedule",
+      "kind": "rest_read",
+      "summary": "GET /4/user-schedule",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/user-schedule",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-user-schedule-accountid",
+      "kind": "rest_read",
+      "summary": "GET /4/user-schedule/{accountId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/user-schedule/{accountId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-webhooks-subscriptions",
+      "kind": "rest_read",
+      "summary": "GET /4/webhooks/subscriptions",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/webhooks/subscriptions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.post.4-webhooks-subscriptions",
+      "kind": "rest_write",
+      "summary": "POST /4/webhooks/subscriptions",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/4/webhooks/subscriptions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-webhooks-subscriptions-id",
+      "kind": "rest_read",
+      "summary": "GET /4/webhooks/subscriptions/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/webhooks/subscriptions/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.delete.4-webhooks-subscriptions-id",
+      "kind": "rest_write",
+      "summary": "DELETE /4/webhooks/subscriptions/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/4/webhooks/subscriptions/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.patch.4-webhooks-subscriptions-id-refresh",
+      "kind": "rest_write",
+      "summary": "PATCH /4/webhooks/subscriptions/{id}/refresh",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/4/webhooks/subscriptions/{id}/refresh",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-work-attributes",
+      "kind": "rest_read",
+      "summary": "GET /4/work-attributes",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/work-attributes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.post.4-work-attributes",
+      "kind": "rest_write",
+      "summary": "POST /4/work-attributes",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/4/work-attributes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-work-attributes-key",
+      "kind": "rest_read",
+      "summary": "GET /4/work-attributes/{key}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/work-attributes/{key}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.put.4-work-attributes-key",
+      "kind": "rest_write",
+      "summary": "PUT /4/work-attributes/{key}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/4/work-attributes/{key}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.delete.4-work-attributes-key",
+      "kind": "rest_write",
+      "summary": "DELETE /4/work-attributes/{key}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/4/work-attributes/{key}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.post.4-workload-schemes",
+      "kind": "rest_write",
+      "summary": "POST /4/workload-schemes",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/4/workload-schemes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.post.4-workload-schemes-members-search",
+      "kind": "rest_write",
+      "summary": "POST /4/workload-schemes/members/search",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/4/workload-schemes/members/search",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-workload-schemes-users-accountid",
+      "kind": "rest_read",
+      "summary": "GET /4/workload-schemes/users/{accountId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/workload-schemes/users/{accountId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-workload-schemes-id",
+      "kind": "rest_read",
+      "summary": "GET /4/workload-schemes/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/workload-schemes/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.put.4-workload-schemes-id",
+      "kind": "rest_write",
+      "summary": "PUT /4/workload-schemes/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/4/workload-schemes/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.delete.4-workload-schemes-id",
+      "kind": "rest_write",
+      "summary": "DELETE /4/workload-schemes/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/4/workload-schemes/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.put.4-workload-schemes-id-default",
+      "kind": "rest_write",
+      "summary": "PUT /4/workload-schemes/{id}/default",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/4/workload-schemes/{id}/default",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-workload-schemes-id-members",
+      "kind": "rest_read",
+      "summary": "GET /4/workload-schemes/{id}/members",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/workload-schemes/{id}/members",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.post.4-workload-schemes-id-members",
+      "kind": "rest_write",
+      "summary": "POST /4/workload-schemes/{id}/members",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/4/workload-schemes/{id}/members",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.post.4-worklogs",
+      "kind": "rest_write",
+      "summary": "POST /4/worklogs",
+      "description": "Legacy connector is read-only",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/4/worklogs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-worklogs-account-accountkey",
+      "kind": "rest_read",
+      "summary": "GET /4/worklogs/account/{accountKey}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/worklogs/account/{accountKey}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-worklogs-issue-issueid",
+      "kind": "rest_read",
+      "summary": "GET /4/worklogs/issue/{issueId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/worklogs/issue/{issueId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.post.4-worklogs-issue-issueid-bulk",
+      "kind": "rest_write",
+      "summary": "POST /4/worklogs/issue/{issueId}/bulk",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/4/worklogs/issue/{issueId}/bulk",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.post.4-worklogs-jira-to-tempo",
+      "kind": "rest_write",
+      "summary": "POST /4/worklogs/jira-to-tempo",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/4/worklogs/jira-to-tempo",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-worklogs-project-projectid",
+      "kind": "rest_read",
+      "summary": "GET /4/worklogs/project/{projectId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/worklogs/project/{projectId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.post.4-worklogs-search",
+      "kind": "rest_write",
+      "summary": "POST /4/worklogs/search",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/4/worklogs/search",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-worklogs-team-teamid",
+      "kind": "rest_read",
+      "summary": "GET /4/worklogs/team/{teamId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/worklogs/team/{teamId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.post.4-worklogs-tempo-to-jira",
+      "kind": "rest_write",
+      "summary": "POST /4/worklogs/tempo-to-jira",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/4/worklogs/tempo-to-jira",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-worklogs-user-accountid",
+      "kind": "rest_read",
+      "summary": "GET /4/worklogs/user/{accountId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/worklogs/user/{accountId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.post.4-worklogs-work-attribute-values",
+      "kind": "rest_write",
+      "summary": "POST /4/worklogs/work-attribute-values",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/4/worklogs/work-attribute-values",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.post.4-worklogs-work-attribute-values-search",
+      "kind": "rest_write",
+      "summary": "POST /4/worklogs/work-attribute-values/search",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/4/worklogs/work-attribute-values/search",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-worklogs-id",
+      "kind": "rest_read",
+      "summary": "GET /4/worklogs/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/worklogs/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.put.4-worklogs-id",
+      "kind": "rest_write",
+      "summary": "PUT /4/worklogs/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/4/worklogs/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.delete.4-worklogs-id",
+      "kind": "rest_write",
+      "summary": "DELETE /4/worklogs/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/4/worklogs/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-worklogs-id-work-attribute-values",
+      "kind": "rest_read",
+      "summary": "GET /4/worklogs/{id}/work-attribute-values",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/worklogs/{id}/work-attribute-values",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.4-worklogs-id-work-attribute-values-key",
+      "kind": "rest_read",
+      "summary": "GET /4/worklogs/{id}/work-attribute-values/{key}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/4/worklogs/{id}/work-attribute-values/{key}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.papertrail-1-events-deleted-types-allocation",
+      "kind": "rest_read",
+      "summary": "GET /papertrail/1/events/deleted/types/allocation",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/papertrail/1/events/deleted/types/allocation",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tempo.get.papertrail-1-events-deleted-types-worklog",
+      "kind": "rest_read",
+      "summary": "GET /papertrail/1/events/deleted/types/worklog",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.tempo.io/tempo-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/papertrail/1/events/deleted/types/worklog",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

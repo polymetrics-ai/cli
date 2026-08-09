@@ -1,0 +1,461 @@
+{
+  "schema_version": 1,
+  "manifest": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-009-manifest.json",
+  "candidates": 40,
+  "included": [
+    {
+      "connector": "web-scrapper",
+      "artifact": {
+        "kind": "openapi",
+        "url": "https://webscraper.io/openapi.yaml",
+        "version": "OpenAPI 3.0.3; Web Scraper Cloud API info.version 1.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0c1d30f72dab7c61544387706f921cb19a4b02fa692a69768d433af9a11f8716"
+      },
+      "artifact_operations": 22,
+      "declared_operations": 37,
+      "operation_split": {
+        "executable": 11,
+        "provider_blocked": 10,
+        "excluded": 16
+      },
+      "cli_commands": 37,
+      "implemented_commands": 9,
+      "named_dependency_commands": 28,
+      "flagged_discrepancies": 15,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 26
+    },
+    {
+      "connector": "payfit",
+      "artifact": {
+        "kind": "openapi",
+        "url": "https://developers.payfit.io/openapi/partner-api.json",
+        "version": "PayFit Partner API v1.0; OpenAPI 3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5bdff912254416c2238dc825e0643451ca4e5a32d935eca4d3bd680c25ea7543"
+      },
+      "artifact_operations": 31,
+      "declared_operations": 36,
+      "operation_split": {
+        "executable": 28,
+        "provider_blocked": 0,
+        "excluded": 8
+      },
+      "cli_commands": 36,
+      "implemented_commands": 24,
+      "named_dependency_commands": 12,
+      "flagged_discrepancies": 5,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 8
+    },
+    {
+      "connector": "surveycto",
+      "artifact": {
+        "kind": "openapi",
+        "url": "https://developer.surveycto.com/specs/api-v2.json",
+        "version": "Server API v2 (OpenAPI 3.0.1)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ee81c17e626cc08410d048a347199c1da95511073dffea494f785f7ab9ece9cb"
+      },
+      "artifact_operations": 35,
+      "declared_operations": 35,
+      "operation_split": {
+        "executable": 13,
+        "provider_blocked": 0,
+        "excluded": 22
+      },
+      "cli_commands": 35,
+      "implemented_commands": 13,
+      "named_dependency_commands": 22,
+      "flagged_discrepancies": 0,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 22
+    },
+    {
+      "connector": "revolut-merchant",
+      "artifact": {
+        "kind": "openapi",
+        "url": "https://developer.revolut.com/docs/api/merchant.yaml",
+        "version": "Revolut Merchant API 2026-04-20; OpenAPI 3.1.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0f33bff0ac0eb03aa7ff06f4d4b01f6d420f23a84e9b6159a0cd4c29cbc62204"
+      },
+      "artifact_operations": 68,
+      "declared_operations": 79,
+      "operation_split": {
+        "executable": 4,
+        "provider_blocked": 35,
+        "excluded": 40
+      },
+      "cli_commands": 79,
+      "implemented_commands": 4,
+      "named_dependency_commands": 75,
+      "flagged_discrepancies": 11,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 75
+    },
+    {
+      "connector": "criteo-marketing",
+      "artifact": {
+        "kind": "openapi",
+        "url": "https://api.criteo.com/2026-07/marketingsolutions/open-api-specifications.json",
+        "version": "Criteo Marketing Solutions API 2026-07 stable; OpenAPI 3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "880a7402f4e47c6de352dddeeae87b5b7c9b81339a38e7f777d6a099e26ce114"
+      },
+      "artifact_operations": 96,
+      "declared_operations": 192,
+      "operation_split": {
+        "executable": 9,
+        "provider_blocked": 51,
+        "excluded": 132
+      },
+      "cli_commands": 192,
+      "implemented_commands": 9,
+      "named_dependency_commands": 183,
+      "flagged_discrepancies": 96,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 183
+    },
+    {
+      "connector": "pandadoc",
+      "artifact": {
+        "kind": "openapi",
+        "url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "version": "PandaDoc Public API v8.10.0; OpenAPI 3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665"
+      },
+      "artifact_operations": 129,
+      "declared_operations": 131,
+      "operation_split": {
+        "executable": 111,
+        "provider_blocked": 1,
+        "excluded": 19
+      },
+      "cli_commands": 131,
+      "implemented_commands": 111,
+      "named_dependency_commands": 20,
+      "flagged_discrepancies": 2,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 20
+    },
+    {
+      "connector": "solarwinds-service-desk",
+      "artifact": {
+        "kind": "openapi",
+        "url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+        "version": "OpenAPI 3.0.1; SolarWinds Service Desk API 0.2.20",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c21a782ad1b946b4f5496eb0efd16d86f6d6fab092dbdecc48dc1404295325e4"
+      },
+      "artifact_operations": 135,
+      "declared_operations": 135,
+      "operation_split": {
+        "executable": 44,
+        "provider_blocked": 0,
+        "excluded": 91
+      },
+      "cli_commands": 135,
+      "implemented_commands": 24,
+      "named_dependency_commands": 111,
+      "flagged_discrepancies": 0,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 91
+    },
+    {
+      "connector": "pennylane",
+      "artifact": {
+        "kind": "openapi",
+        "url": "https://pennylane.readme.io/openapi/accounting.json",
+        "version": "Pennylane Company V2 2.0; OpenAPI 3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ce48f9aa5e19a85647423be2ba94fbab19269efd052e0ddaf39c3aaf6411dd8a"
+      },
+      "artifact_operations": 167,
+      "declared_operations": 325,
+      "operation_split": {
+        "executable": 18,
+        "provider_blocked": 97,
+        "excluded": 210
+      },
+      "cli_commands": 325,
+      "implemented_commands": 16,
+      "named_dependency_commands": 309,
+      "flagged_discrepancies": 158,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 307
+    },
+    {
+      "connector": "repairshopr",
+      "artifact": {
+        "kind": "openapi",
+        "url": "https://api-docs.repairshopr.com/swagger.json",
+        "version": "RepairShopr API v1; OpenAPI 3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa"
+      },
+      "artifact_operations": 174,
+      "declared_operations": 184,
+      "operation_split": {
+        "executable": 5,
+        "provider_blocked": 92,
+        "excluded": 87
+      },
+      "cli_commands": 184,
+      "implemented_commands": 5,
+      "named_dependency_commands": 179,
+      "flagged_discrepancies": 10,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 179
+    },
+    {
+      "connector": "twitter",
+      "artifact": {
+        "kind": "openapi",
+        "url": "https://api.twitter.com/2/openapi.json",
+        "version": "OpenAPI 3.0.0; X API v2 info.version 2.167",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb"
+      },
+      "artifact_operations": 177,
+      "declared_operations": 178,
+      "operation_split": {
+        "executable": 2,
+        "provider_blocked": 118,
+        "excluded": 58
+      },
+      "cli_commands": 178,
+      "implemented_commands": 2,
+      "named_dependency_commands": 176,
+      "flagged_discrepancies": 1,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 176
+    },
+    {
+      "connector": "uservoice",
+      "artifact": {
+        "kind": "swagger",
+        "url": "https://uservoice.uservoice.com/api/v2/public/doc/api-v2-reference",
+        "version": "Swagger 2.0; Uservoice API info.version 0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a16bc62e1ef1352044d2b920c213d8d933aaad2824c30f09013ee7ac9cb49c68"
+      },
+      "artifact_operations": 185,
+      "declared_operations": 371,
+      "operation_split": {
+        "executable": 17,
+        "provider_blocked": 98,
+        "excluded": 256
+      },
+      "cli_commands": 371,
+      "implemented_commands": 14,
+      "named_dependency_commands": 357,
+      "flagged_discrepancies": 186,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 354
+    },
+    {
+      "connector": "persona",
+      "artifact": {
+        "kind": "openapi",
+        "url": "https://docs.withpersona.com/openapi/api-reference.yaml",
+        "version": "Persona API Reference default 2025-12-08; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5bfe78c64233b4a15774a7335e10693e9606a51c891bce76639fd5decb4a258b"
+      },
+      "artifact_operations": 337,
+      "declared_operations": 337,
+      "operation_split": {
+        "executable": 18,
+        "provider_blocked": 1,
+        "excluded": 318
+      },
+      "cli_commands": 337,
+      "implemented_commands": 18,
+      "named_dependency_commands": 319,
+      "flagged_discrepancies": 0,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 319
+    },
+    {
+      "connector": "clarif-ai",
+      "artifact": {
+        "kind": "swagger",
+        "url": "https://api.clarifai.com/v2/swagger.json",
+        "version": "Clarifai v2 REST API; Swagger 2.0; info.version is 'version not set'",
+        "retrieved_at": "2026-08-09",
+        "sha256": "605be3e9f9b9e0db1768241c515348e140685f2bbf673b409a7d7fa47d8a260c"
+      },
+      "artifact_operations": 466,
+      "declared_operations": 493,
+      "operation_split": {
+        "executable": 9,
+        "provider_blocked": 277,
+        "excluded": 207
+      },
+      "cli_commands": 493,
+      "implemented_commands": 6,
+      "named_dependency_commands": 487,
+      "flagged_discrepancies": 27,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 484
+    },
+    {
+      "connector": "rootly",
+      "artifact": {
+        "kind": "openapi",
+        "url": "https://rootly-heroku.s3.amazonaws.com/swagger/v1/swagger.json",
+        "version": "Rootly API v1; OpenAPI 3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "38cf83bc395b2c7529cd4bb762d7688bde2debcddb4db717728d134dd9eeda91"
+      },
+      "artifact_operations": 584,
+      "declared_operations": 587,
+      "operation_split": {
+        "executable": 3,
+        "provider_blocked": 335,
+        "excluded": 249
+      },
+      "cli_commands": 587,
+      "implemented_commands": 3,
+      "named_dependency_commands": 584,
+      "flagged_discrepancies": 3,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 584
+    }
+  ],
+  "dropped": [
+    {
+      "connector": "ding-connect",
+      "stage": "artifact_fetch",
+      "reason": "artifact cache has no ding-connect.{json,yaml,yml,txt,md,html,htm}"
+    },
+    {
+      "connector": "circa",
+      "stage": "artifact_parse",
+      "reason": "decode Postman collection: invalid character '\u003c' looking for beginning of value"
+    },
+    {
+      "connector": "google-calendar",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact is not an OpenAPI or Swagger document), and official reference fallback \"https://developers.google.com/workspace/calendar/api/v3/reference\" failed: artifact operation inventory is unknown: official reference contains a selected link that failed URL admission"
+    },
+    {
+      "connector": "partnerize",
+      "stage": "artifact_parse",
+      "reason": "decode OpenAPI or Swagger artifact: yaml: line 11: mapping values are not allowed in this context"
+    },
+    {
+      "connector": "when-i-work",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: operation GET /2/openshiftapprovalrequests has unsupported field \"post\"), and official reference fallback \"https://apidocs.wheniwork.com/external/index.html\" failed: artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    },
+    {
+      "connector": "unleash",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference traversal exceeds the 64-document limit), and official reference fallback \"https://docs.getunleash.io/api\" failed: artifact operation inventory is unknown: candidate reference traversal exceeds the 64-document limit"
+    },
+    {
+      "connector": "gitlab",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact yielded 1147 operation(s), below the ledger's 1745; official reference fallback \"https://docs.gitlab.com/api/rest/\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "harness",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact is not an OpenAPI or Swagger document), and official reference fallback \"https://apidocs.harness.io/\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "senseforce",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract), and official reference fallback \"https://manual.senseforce.io/manual/sf-platform/public-api/endpoints\" failed: artifact operation inventory is unknown: official reference link \"https://manual.senseforce.io/manual/sf-platform/public-api/endpoints/rss.xml\" could not be fetched: fetch artifact: provider returned HTTP 404"
+    },
+    {
+      "connector": "wasabi-stats-api",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract), and official reference fallback \"https://docs.wasabi.com/apidocs/wasabi-stats-api\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "just-sift",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract), and official reference fallback \"https://www.justsift.com/features/api\" failed: artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    },
+    {
+      "connector": "service-now",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference contains a selected link that failed URL admission"
+    },
+    {
+      "connector": "granola",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference \"https://docs.granola.ai/api-reference/changelog/rss.xml\" is neither a parseable OpenAPI/Swagger or Postman artifact nor a recognized reference document"
+    },
+    {
+      "connector": "klarna",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "survicate",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    },
+    {
+      "connector": "tyntec-sms",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host), and official reference fallback \"https://api.tyntec.com/reference/\" failed: artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    },
+    {
+      "connector": "workramp",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host), and official reference fallback \"https://developers.workramp.com/reference/getting-started\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "papersign",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference traversal exceeds the 64-document limit), and official reference fallback \"https://paperform.readme.io/reference/getting-started-1\" failed: artifact operation inventory is unknown: candidate reference traversal exceeds the 64-document limit"
+    },
+    {
+      "connector": "navan",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: artifact inventory yielded 16 operation(s), below the ledger's 19"
+    },
+    {
+      "connector": "waiteraid",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    },
+    {
+      "connector": "oveit",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    },
+    {
+      "connector": "easypromos",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference \"https://easypromos-apiref.redoc.ly/\" is neither a parseable OpenAPI/Swagger or Postman artifact nor a recognized reference document), and official reference fallback \"https://soporte.easypromosapp.com/hc/en-us/articles/115002592906-Getting-started-with-the-Easypromos-REST-API\" failed: artifact operation inventory is unknown: official reference link \"https://soporte.easypromosapp.com/hc/en-us/articles/115002592906-Getting-started-with-the-Easypromos-REST-API/subscription.html\" could not be fetched: fetch artifact: provider returned HTTP 404"
+    },
+    {
+      "connector": "retently",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: artifact inventory yielded 5 operation(s), below the ledger's 32"
+    },
+    {
+      "connector": "referralhero",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract), and official reference fallback \"https://support.referralhero.com/integrate/rest-api/endpoints-reference\" failed: artifact operation inventory is unknown: official reference link \"https://support.referralhero.com/integrate/rest-api/endpoints-reference/rss.xml\" could not be fetched: fetch artifact: provider returned HTTP 404"
+    },
+    {
+      "connector": "tally",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference traversal exceeds the 64-document limit), and official reference fallback \"https://developers.tally.so/api-reference/versioning\" failed: artifact operation inventory is unknown: candidate reference traversal exceeds the 64-document limit"
+    },
+    {
+      "connector": "perk",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host), and official reference fallback \"https://developers.perk.com/reference/authentication\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    }
+  ]
+}

@@ -1,0 +1,593 @@
+{
+  "operations": [
+    {
+      "id": "perigon.get.v1-api-contactpoints",
+      "kind": "rest_read",
+      "summary": "GET /v1/api/contactPoints",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/api/contactPoints",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "perigon.post.v1-api-contactpoints",
+      "kind": "rest_write",
+      "summary": "POST /v1/api/contactPoints",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/api/contactPoints",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "perigon.get.v1-api-contactpoints-uuid",
+      "kind": "rest_read",
+      "summary": "GET /v1/api/contactPoints/{uuid}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/api/contactPoints/{uuid}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "perigon.patch.v1-api-contactpoints-uuid",
+      "kind": "rest_write",
+      "summary": "PATCH /v1/api/contactPoints/{uuid}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/v1/api/contactPoints/{uuid}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "perigon.delete.v1-api-contactpoints-uuid",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/api/contactPoints/{uuid}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/api/contactPoints/{uuid}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "perigon.get.v1-api-monitors",
+      "kind": "rest_read",
+      "summary": "GET /v1/api/monitors",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/api/monitors",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "perigon.post.v1-api-monitors",
+      "kind": "rest_write",
+      "summary": "POST /v1/api/monitors",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/api/monitors",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "perigon.get.v1-api-monitors-uuid",
+      "kind": "rest_read",
+      "summary": "GET /v1/api/monitors/{uuid}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/api/monitors/{uuid}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "perigon.patch.v1-api-monitors-uuid",
+      "kind": "rest_write",
+      "summary": "PATCH /v1/api/monitors/{uuid}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/v1/api/monitors/{uuid}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "perigon.delete.v1-api-monitors-uuid",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/api/monitors/{uuid}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/api/monitors/{uuid}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "perigon.post.v1-api-monitors-uuid-activate",
+      "kind": "rest_write",
+      "summary": "POST /v1/api/monitors/{uuid}/activate",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/api/monitors/{uuid}/activate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "perigon.get.v1-api-monitors-uuid-events",
+      "kind": "rest_read",
+      "summary": "GET /v1/api/monitors/{uuid}/events",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/api/monitors/{uuid}/events",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "perigon.get.v1-api-monitors-uuid-newsletters",
+      "kind": "rest_read",
+      "summary": "GET /v1/api/monitors/{uuid}/newsletters",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/api/monitors/{uuid}/newsletters",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "perigon.post.v1-api-monitors-uuid-pause",
+      "kind": "rest_write",
+      "summary": "POST /v1/api/monitors/{uuid}/pause",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/api/monitors/{uuid}/pause",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "perigon.get.v1-api-monitors-uuid-summary",
+      "kind": "rest_read",
+      "summary": "GET /v1/api/monitors/{uuid}/summary",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/api/monitors/{uuid}/summary",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "perigon.get.v1-api-sourcegroups",
+      "kind": "rest_read",
+      "summary": "GET /v1/api/sourceGroups",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/api/sourceGroups",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "perigon.post.v1-api-sourcegroups",
+      "kind": "rest_write",
+      "summary": "POST /v1/api/sourceGroups",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/api/sourceGroups",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "perigon.get.v1-api-sourcegroups-resolve",
+      "kind": "rest_read",
+      "summary": "GET /v1/api/sourceGroups/resolve",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/api/sourceGroups/resolve",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "perigon.get.v1-api-sourcegroups-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/api/sourceGroups/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/api/sourceGroups/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "perigon.patch.v1-api-sourcegroups-id",
+      "kind": "rest_write",
+      "summary": "PATCH /v1/api/sourceGroups/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/v1/api/sourceGroups/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "perigon.delete.v1-api-sourcegroups-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/api/sourceGroups/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/api/sourceGroups/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "perigon.get.v1-api-watchlists",
+      "kind": "rest_read",
+      "summary": "GET /v1/api/watchlists",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/api/watchlists",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "perigon.post.v1-api-watchlists",
+      "kind": "rest_write",
+      "summary": "POST /v1/api/watchlists",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/api/watchlists",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "perigon.get.v1-api-watchlists-resolve",
+      "kind": "rest_read",
+      "summary": "GET /v1/api/watchlists/resolve",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/api/watchlists/resolve",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "perigon.get.v1-api-watchlists-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/api/watchlists/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/api/watchlists/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "perigon.patch.v1-api-watchlists-id",
+      "kind": "rest_write",
+      "summary": "PATCH /v1/api/watchlists/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/v1/api/watchlists/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "perigon.delete.v1-api-watchlists-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/api/watchlists/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/api/watchlists/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "perigon.post.v1-articles-refresh-jobs",
+      "kind": "rest_write",
+      "summary": "POST /v1/articles/refresh/jobs",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/articles/refresh/jobs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "perigon.get.v1-articles-refresh-jobs-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/articles/refresh/jobs/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/articles/refresh/jobs/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "perigon.post.v1-articles-refresh-peek",
+      "kind": "rest_write",
+      "summary": "POST /v1/articles/refresh/peek",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/articles/refresh/peek",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "perigon.get.v1-journalists-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/journalists/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/journalists/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "perigon.get.v1-limits",
+      "kind": "rest_read",
+      "summary": "GET /v1/limits",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/limits",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "perigon.get.v1-stories-history",
+      "kind": "rest_read",
+      "summary": "GET /v1/stories/history",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/stories/history",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "perigon.get.v1-stories-stats",
+      "kind": "rest_read",
+      "summary": "GET /v1/stories/stats",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/stories/stats",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "perigon.post.v1-summarize",
+      "kind": "rest_write",
+      "summary": "POST /v1/summarize",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/summarize",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "perigon.post.v1-vector-news-all",
+      "kind": "rest_write",
+      "summary": "POST /v1/vector/news/all",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/vector/news/all",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "perigon.post.v1-vector-wikipedia-all",
+      "kind": "rest_write",
+      "summary": "POST /v1/vector/wikipedia/all",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/vector/wikipedia/all",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "perigon.get.v1-wikipedia-all",
+      "kind": "rest_read",
+      "summary": "GET /v1/wikipedia/all",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/wikipedia/all",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

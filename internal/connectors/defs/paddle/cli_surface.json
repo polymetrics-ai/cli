@@ -1,0 +1,3263 @@
+{
+  "tagline": "Run Paddle's declared streams and reverse-ETL actions.",
+  "usage": "pm paddle \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "api get adjustments",
+        "api get adjustments adjustment-id credit-note",
+        "api get checkout-domains",
+        "api get checkout-domains domain-id",
+        "api get client-tokens",
+        "api get client-tokens client-token-id",
+        "api get customers customer-id",
+        "api get customers customer-id addresses",
+        "api get customers customer-id addresses address-id",
+        "api get customers customer-id businesses",
+        "api get customers customer-id businesses business-id",
+        "api get customers customer-id credit-balances",
+        "api get customers customer-id payment-methods",
+        "api get customers customer-id payment-methods payment-method-id",
+        "api get discount-groups",
+        "api get discount-groups discount-group-id",
+        "api get discounts",
+        "api get discounts discount-id",
+        "api get event-types",
+        "api get events",
+        "api get ips",
+        "api get metrics active-subscribers",
+        "api get metrics chargebacks",
+        "api get metrics checkout-conversion",
+        "api get metrics monthly-recurring-revenue",
+        "api get metrics monthly-recurring-revenue-change",
+        "api get metrics refunds",
+        "api get metrics revenue",
+        "api get notification-settings",
+        "api get notification-settings notification-setting-id",
+        "api get notifications",
+        "api get notifications notification-id",
+        "api get notifications notification-id logs",
+        "api get prices",
+        "api get prices price-id",
+        "api get products product-id",
+        "api get reports",
+        "api get reports report-id",
+        "api get reports report-id download-url",
+        "api get simulation-types",
+        "api get simulations",
+        "api get simulations simulation-id",
+        "api get simulations simulation-id runs",
+        "api get simulations simulation-id runs simulation-run-id",
+        "api get simulations simulation-id runs simulation-run-id events",
+        "api get simulations simulation-id runs simulation-run-id events simulation-event-id",
+        "api get subscriptions subscription-id",
+        "api get subscriptions subscription-id history",
+        "api get subscriptions subscription-id update-payment-method-transaction",
+        "api get transactions transaction-id",
+        "api get transactions transaction-id invoice",
+        "api webhook address-created-post",
+        "api webhook address-imported-post",
+        "api webhook address-updated-post",
+        "api webhook adjustment-created-post",
+        "api webhook adjustment-updated-post",
+        "api webhook api-key-created-post",
+        "api webhook api-key-expired-post",
+        "api webhook api-key-expiring-post",
+        "api webhook api-key-exposure-created-post",
+        "api webhook api-key-revoked-post",
+        "api webhook api-key-updated-post",
+        "api webhook business-created-post",
+        "api webhook business-imported-post",
+        "api webhook business-updated-post",
+        "api webhook client-token-created-post",
+        "api webhook client-token-revoked-post",
+        "api webhook client-token-updated-post",
+        "api webhook customer-created-post",
+        "api webhook customer-imported-post",
+        "api webhook customer-updated-post",
+        "api webhook discount-created-post",
+        "api webhook discount-group-created-post",
+        "api webhook discount-group-updated-post",
+        "api webhook discount-imported-post",
+        "api webhook discount-updated-post",
+        "api webhook payment-method-deleted-post",
+        "api webhook payment-method-saved-post",
+        "api webhook payout-created-post",
+        "api webhook payout-paid-post",
+        "api webhook price-created-post",
+        "api webhook price-imported-post",
+        "api webhook price-updated-post",
+        "api webhook product-created-post",
+        "api webhook product-imported-post",
+        "api webhook product-updated-post",
+        "api webhook report-created-post",
+        "api webhook report-updated-post",
+        "api webhook subscription-activated-post",
+        "api webhook subscription-canceled-post",
+        "api webhook subscription-created-post",
+        "api webhook subscription-imported-post",
+        "api webhook subscription-past-due-post",
+        "api webhook subscription-paused-post",
+        "api webhook subscription-resumed-post",
+        "api webhook subscription-trialing-post",
+        "api webhook subscription-updated-post",
+        "api webhook transaction-billed-post",
+        "api webhook transaction-canceled-post",
+        "api webhook transaction-completed-post",
+        "api webhook transaction-created-post",
+        "api webhook transaction-paid-post",
+        "api webhook transaction-past-due-post",
+        "api webhook transaction-payment-failed-post",
+        "api webhook transaction-ready-post",
+        "api webhook transaction-revised-post",
+        "api webhook transaction-updated-post",
+        "customers list",
+        "products list",
+        "subscriptions list",
+        "transactions list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "api delete checkout-domains domain-id",
+        "api delete customers customer-id payment-methods payment-method-id",
+        "api delete notification-settings notification-setting-id",
+        "api patch client-tokens client-token-id",
+        "api patch customers customer-id",
+        "api patch customers customer-id addresses address-id",
+        "api patch customers customer-id businesses business-id",
+        "api patch discount-groups discount-group-id",
+        "api patch discounts discount-id",
+        "api patch notification-settings notification-setting-id",
+        "api patch prices price-id",
+        "api patch products product-id",
+        "api patch simulations simulation-id",
+        "api patch subscriptions subscription-id",
+        "api patch subscriptions subscription-id preview",
+        "api patch transactions transaction-id",
+        "api post adjustments",
+        "api post checkout-domains domain-id verify-payment-method",
+        "api post client-tokens",
+        "api post customers",
+        "api post customers customer-id addresses",
+        "api post customers customer-id auth-token",
+        "api post customers customer-id businesses",
+        "api post customers customer-id portal-sessions",
+        "api post discount-groups",
+        "api post discounts",
+        "api post notification-settings",
+        "api post notifications notification-id replay",
+        "api post prices",
+        "api post pricing-preview",
+        "api post products",
+        "api post reports",
+        "api post simulations",
+        "api post simulations simulation-id runs",
+        "api post simulations simulation-id runs simulation-run-id events simulation-event-id replay",
+        "api post subscriptions subscription-id activate",
+        "api post subscriptions subscription-id cancel",
+        "api post subscriptions subscription-id charge",
+        "api post subscriptions subscription-id charge preview",
+        "api post subscriptions subscription-id pause",
+        "api post subscriptions subscription-id resume",
+        "api post transactions",
+        "api post transactions preview",
+        "api post transactions transaction-id revise"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "api delete checkout-domains domain-id",
+      "summary": "Documented DELETE /checkout-domains/{domain_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api delete checkout-domains domain-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/checkout-domains/{domain_id}"
+        }
+      ],
+      "operation": "paddle.delete.checkout-domains-domain-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete customers customer-id payment-methods payment-method-id",
+      "summary": "Documented DELETE /customers/{customer_id}/payment-methods/{payment_method_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api delete customers customer-id payment-methods payment-method-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/customers/{customer_id}/payment-methods/{payment_method_id}"
+        }
+      ],
+      "operation": "paddle.delete.customers-customer-id-payment-methods-payment-method-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete notification-settings notification-setting-id",
+      "summary": "Documented DELETE /notification-settings/{notification_setting_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api delete notification-settings notification-setting-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/notification-settings/{notification_setting_id}"
+        }
+      ],
+      "operation": "paddle.delete.notification-settings-notification-setting-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api get adjustments",
+      "summary": "Documented GET /adjustments (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api get adjustments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/adjustments"
+        }
+      ],
+      "operation": "paddle.get.adjustments",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get adjustments adjustment-id credit-note",
+      "summary": "Documented GET /adjustments/{adjustment_id}/credit-note (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api get adjustments adjustment-id credit-note --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/adjustments/{adjustment_id}/credit-note"
+        }
+      ],
+      "operation": "paddle.get.adjustments-adjustment-id-credit-note",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get checkout-domains",
+      "summary": "Documented GET /checkout-domains (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api get checkout-domains --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/checkout-domains"
+        }
+      ],
+      "operation": "paddle.get.checkout-domains",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get checkout-domains domain-id",
+      "summary": "Documented GET /checkout-domains/{domain_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api get checkout-domains domain-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/checkout-domains/{domain_id}"
+        }
+      ],
+      "operation": "paddle.get.checkout-domains-domain-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get client-tokens",
+      "summary": "Documented GET /client-tokens (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api get client-tokens --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/client-tokens"
+        }
+      ],
+      "operation": "paddle.get.client-tokens",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get client-tokens client-token-id",
+      "summary": "Documented GET /client-tokens/{client_token_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api get client-tokens client-token-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/client-tokens/{client_token_id}"
+        }
+      ],
+      "operation": "paddle.get.client-tokens-client-token-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get customers customer-id",
+      "summary": "Documented GET /customers/{customer_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api get customers customer-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customers/{customer_id}"
+        }
+      ],
+      "operation": "paddle.get.customers-customer-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get customers customer-id addresses",
+      "summary": "Documented GET /customers/{customer_id}/addresses (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api get customers customer-id addresses --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customers/{customer_id}/addresses"
+        }
+      ],
+      "operation": "paddle.get.customers-customer-id-addresses",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get customers customer-id addresses address-id",
+      "summary": "Documented GET /customers/{customer_id}/addresses/{address_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api get customers customer-id addresses address-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customers/{customer_id}/addresses/{address_id}"
+        }
+      ],
+      "operation": "paddle.get.customers-customer-id-addresses-address-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get customers customer-id businesses",
+      "summary": "Documented GET /customers/{customer_id}/businesses (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api get customers customer-id businesses --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customers/{customer_id}/businesses"
+        }
+      ],
+      "operation": "paddle.get.customers-customer-id-businesses",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get customers customer-id businesses business-id",
+      "summary": "Documented GET /customers/{customer_id}/businesses/{business_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api get customers customer-id businesses business-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customers/{customer_id}/businesses/{business_id}"
+        }
+      ],
+      "operation": "paddle.get.customers-customer-id-businesses-business-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get customers customer-id credit-balances",
+      "summary": "Documented GET /customers/{customer_id}/credit-balances (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api get customers customer-id credit-balances --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customers/{customer_id}/credit-balances"
+        }
+      ],
+      "operation": "paddle.get.customers-customer-id-credit-balances",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get customers customer-id payment-methods",
+      "summary": "Documented GET /customers/{customer_id}/payment-methods (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api get customers customer-id payment-methods --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customers/{customer_id}/payment-methods"
+        }
+      ],
+      "operation": "paddle.get.customers-customer-id-payment-methods",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get customers customer-id payment-methods payment-method-id",
+      "summary": "Documented GET /customers/{customer_id}/payment-methods/{payment_method_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api get customers customer-id payment-methods payment-method-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customers/{customer_id}/payment-methods/{payment_method_id}"
+        }
+      ],
+      "operation": "paddle.get.customers-customer-id-payment-methods-payment-method-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get discount-groups",
+      "summary": "Documented GET /discount-groups (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api get discount-groups --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/discount-groups"
+        }
+      ],
+      "operation": "paddle.get.discount-groups",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get discount-groups discount-group-id",
+      "summary": "Documented GET /discount-groups/{discount_group_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api get discount-groups discount-group-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/discount-groups/{discount_group_id}"
+        }
+      ],
+      "operation": "paddle.get.discount-groups-discount-group-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get discounts",
+      "summary": "Documented GET /discounts (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api get discounts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/discounts"
+        }
+      ],
+      "operation": "paddle.get.discounts",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get discounts discount-id",
+      "summary": "Documented GET /discounts/{discount_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api get discounts discount-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/discounts/{discount_id}"
+        }
+      ],
+      "operation": "paddle.get.discounts-discount-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get event-types",
+      "summary": "Documented GET /event-types (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api get event-types --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/event-types"
+        }
+      ],
+      "operation": "paddle.get.event-types",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get events",
+      "summary": "Documented GET /events (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api get events --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/events"
+        }
+      ],
+      "operation": "paddle.get.events",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get ips",
+      "summary": "Documented GET /ips (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api get ips --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/ips"
+        }
+      ],
+      "operation": "paddle.get.ips",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get metrics active-subscribers",
+      "summary": "Documented GET /metrics/active-subscribers (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api get metrics active-subscribers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/metrics/active-subscribers"
+        }
+      ],
+      "operation": "paddle.get.metrics-active-subscribers",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get metrics chargebacks",
+      "summary": "Documented GET /metrics/chargebacks (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api get metrics chargebacks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/metrics/chargebacks"
+        }
+      ],
+      "operation": "paddle.get.metrics-chargebacks",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get metrics checkout-conversion",
+      "summary": "Documented GET /metrics/checkout-conversion (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api get metrics checkout-conversion --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/metrics/checkout-conversion"
+        }
+      ],
+      "operation": "paddle.get.metrics-checkout-conversion",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get metrics monthly-recurring-revenue",
+      "summary": "Documented GET /metrics/monthly-recurring-revenue (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api get metrics monthly-recurring-revenue --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/metrics/monthly-recurring-revenue"
+        }
+      ],
+      "operation": "paddle.get.metrics-monthly-recurring-revenue",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get metrics monthly-recurring-revenue-change",
+      "summary": "Documented GET /metrics/monthly-recurring-revenue-change (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api get metrics monthly-recurring-revenue-change --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/metrics/monthly-recurring-revenue-change"
+        }
+      ],
+      "operation": "paddle.get.metrics-monthly-recurring-revenue-change",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get metrics refunds",
+      "summary": "Documented GET /metrics/refunds (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api get metrics refunds --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/metrics/refunds"
+        }
+      ],
+      "operation": "paddle.get.metrics-refunds",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get metrics revenue",
+      "summary": "Documented GET /metrics/revenue (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api get metrics revenue --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/metrics/revenue"
+        }
+      ],
+      "operation": "paddle.get.metrics-revenue",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get notification-settings",
+      "summary": "Documented GET /notification-settings (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api get notification-settings --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/notification-settings"
+        }
+      ],
+      "operation": "paddle.get.notification-settings",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get notification-settings notification-setting-id",
+      "summary": "Documented GET /notification-settings/{notification_setting_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api get notification-settings notification-setting-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/notification-settings/{notification_setting_id}"
+        }
+      ],
+      "operation": "paddle.get.notification-settings-notification-setting-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get notifications",
+      "summary": "Documented GET /notifications (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api get notifications --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/notifications"
+        }
+      ],
+      "operation": "paddle.get.notifications",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get notifications notification-id",
+      "summary": "Documented GET /notifications/{notification_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api get notifications notification-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/notifications/{notification_id}"
+        }
+      ],
+      "operation": "paddle.get.notifications-notification-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get notifications notification-id logs",
+      "summary": "Documented GET /notifications/{notification_id}/logs (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api get notifications notification-id logs --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/notifications/{notification_id}/logs"
+        }
+      ],
+      "operation": "paddle.get.notifications-notification-id-logs",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get prices",
+      "summary": "Documented GET /prices (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api get prices --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/prices"
+        }
+      ],
+      "operation": "paddle.get.prices",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get prices price-id",
+      "summary": "Documented GET /prices/{price_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api get prices price-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/prices/{price_id}"
+        }
+      ],
+      "operation": "paddle.get.prices-price-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get products product-id",
+      "summary": "Documented GET /products/{product_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api get products product-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/products/{product_id}"
+        }
+      ],
+      "operation": "paddle.get.products-product-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get reports",
+      "summary": "Documented GET /reports (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api get reports --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/reports"
+        }
+      ],
+      "operation": "paddle.get.reports",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get reports report-id",
+      "summary": "Documented GET /reports/{report_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api get reports report-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/reports/{report_id}"
+        }
+      ],
+      "operation": "paddle.get.reports-report-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get reports report-id download-url",
+      "summary": "Documented GET /reports/{report_id}/download-url (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api get reports report-id download-url --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/reports/{report_id}/download-url"
+        }
+      ],
+      "operation": "paddle.get.reports-report-id-download-url",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get simulation-types",
+      "summary": "Documented GET /simulation-types (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api get simulation-types --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/simulation-types"
+        }
+      ],
+      "operation": "paddle.get.simulation-types",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get simulations",
+      "summary": "Documented GET /simulations (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api get simulations --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/simulations"
+        }
+      ],
+      "operation": "paddle.get.simulations",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get simulations simulation-id",
+      "summary": "Documented GET /simulations/{simulation_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api get simulations simulation-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/simulations/{simulation_id}"
+        }
+      ],
+      "operation": "paddle.get.simulations-simulation-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get simulations simulation-id runs",
+      "summary": "Documented GET /simulations/{simulation_id}/runs (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api get simulations simulation-id runs --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/simulations/{simulation_id}/runs"
+        }
+      ],
+      "operation": "paddle.get.simulations-simulation-id-runs",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get simulations simulation-id runs simulation-run-id",
+      "summary": "Documented GET /simulations/{simulation_id}/runs/{simulation_run_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api get simulations simulation-id runs simulation-run-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/simulations/{simulation_id}/runs/{simulation_run_id}"
+        }
+      ],
+      "operation": "paddle.get.simulations-simulation-id-runs-simulation-run-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get simulations simulation-id runs simulation-run-id events",
+      "summary": "Documented GET /simulations/{simulation_id}/runs/{simulation_run_id}/events (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api get simulations simulation-id runs simulation-run-id events --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/simulations/{simulation_id}/runs/{simulation_run_id}/events"
+        }
+      ],
+      "operation": "paddle.get.simulations-simulation-id-runs-simulation-run-id-events",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get simulations simulation-id runs simulation-run-id events simulation-event-id",
+      "summary": "Documented GET /simulations/{simulation_id}/runs/{simulation_run_id}/events/{simulation_event_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api get simulations simulation-id runs simulation-run-id events simulation-event-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/simulations/{simulation_id}/runs/{simulation_run_id}/events/{simulation_event_id}"
+        }
+      ],
+      "operation": "paddle.get.simulations-simulation-id-runs-simulation-run-id-events-simulation-event-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get subscriptions subscription-id",
+      "summary": "Documented GET /subscriptions/{subscription_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api get subscriptions subscription-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/subscriptions/{subscription_id}"
+        }
+      ],
+      "operation": "paddle.get.subscriptions-subscription-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get subscriptions subscription-id history",
+      "summary": "Documented GET /subscriptions/{subscription_id}/history (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api get subscriptions subscription-id history --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/subscriptions/{subscription_id}/history"
+        }
+      ],
+      "operation": "paddle.get.subscriptions-subscription-id-history",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get subscriptions subscription-id update-payment-method-transaction",
+      "summary": "Documented GET /subscriptions/{subscription_id}/update-payment-method-transaction (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api get subscriptions subscription-id update-payment-method-transaction --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/subscriptions/{subscription_id}/update-payment-method-transaction"
+        }
+      ],
+      "operation": "paddle.get.subscriptions-subscription-id-update-payment-method-transaction",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get transactions transaction-id",
+      "summary": "Documented GET /transactions/{transaction_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api get transactions transaction-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/transactions/{transaction_id}"
+        }
+      ],
+      "operation": "paddle.get.transactions-transaction-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get transactions transaction-id invoice",
+      "summary": "Documented GET /transactions/{transaction_id}/invoice (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api get transactions transaction-id invoice --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/transactions/{transaction_id}/invoice"
+        }
+      ],
+      "operation": "paddle.get.transactions-transaction-id-invoice",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api patch client-tokens client-token-id",
+      "summary": "Documented PATCH /client-tokens/{client_token_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api patch client-tokens client-token-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/client-tokens/{client_token_id}"
+        }
+      ],
+      "operation": "paddle.patch.client-tokens-client-token-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch customers customer-id",
+      "summary": "Documented PATCH /customers/{customer_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api patch customers customer-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/customers/{customer_id}"
+        }
+      ],
+      "operation": "paddle.patch.customers-customer-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch customers customer-id addresses address-id",
+      "summary": "Documented PATCH /customers/{customer_id}/addresses/{address_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api patch customers customer-id addresses address-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/customers/{customer_id}/addresses/{address_id}"
+        }
+      ],
+      "operation": "paddle.patch.customers-customer-id-addresses-address-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch customers customer-id businesses business-id",
+      "summary": "Documented PATCH /customers/{customer_id}/businesses/{business_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api patch customers customer-id businesses business-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/customers/{customer_id}/businesses/{business_id}"
+        }
+      ],
+      "operation": "paddle.patch.customers-customer-id-businesses-business-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch discount-groups discount-group-id",
+      "summary": "Documented PATCH /discount-groups/{discount_group_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api patch discount-groups discount-group-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/discount-groups/{discount_group_id}"
+        }
+      ],
+      "operation": "paddle.patch.discount-groups-discount-group-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch discounts discount-id",
+      "summary": "Documented PATCH /discounts/{discount_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api patch discounts discount-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/discounts/{discount_id}"
+        }
+      ],
+      "operation": "paddle.patch.discounts-discount-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch notification-settings notification-setting-id",
+      "summary": "Documented PATCH /notification-settings/{notification_setting_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api patch notification-settings notification-setting-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/notification-settings/{notification_setting_id}"
+        }
+      ],
+      "operation": "paddle.patch.notification-settings-notification-setting-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch prices price-id",
+      "summary": "Documented PATCH /prices/{price_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api patch prices price-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/prices/{price_id}"
+        }
+      ],
+      "operation": "paddle.patch.prices-price-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch products product-id",
+      "summary": "Documented PATCH /products/{product_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api patch products product-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/products/{product_id}"
+        }
+      ],
+      "operation": "paddle.patch.products-product-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch simulations simulation-id",
+      "summary": "Documented PATCH /simulations/{simulation_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api patch simulations simulation-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/simulations/{simulation_id}"
+        }
+      ],
+      "operation": "paddle.patch.simulations-simulation-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch subscriptions subscription-id",
+      "summary": "Documented PATCH /subscriptions/{subscription_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api patch subscriptions subscription-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/subscriptions/{subscription_id}"
+        }
+      ],
+      "operation": "paddle.patch.subscriptions-subscription-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch subscriptions subscription-id preview",
+      "summary": "Documented PATCH /subscriptions/{subscription_id}/preview (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api patch subscriptions subscription-id preview --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/subscriptions/{subscription_id}/preview"
+        }
+      ],
+      "operation": "paddle.patch.subscriptions-subscription-id-preview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch transactions transaction-id",
+      "summary": "Documented PATCH /transactions/{transaction_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api patch transactions transaction-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/transactions/{transaction_id}"
+        }
+      ],
+      "operation": "paddle.patch.transactions-transaction-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post adjustments",
+      "summary": "Documented POST /adjustments (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api post adjustments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/adjustments"
+        }
+      ],
+      "operation": "paddle.post.adjustments",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post checkout-domains domain-id verify-payment-method",
+      "summary": "Documented POST /checkout-domains/{domain_id}/verify-payment-method (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api post checkout-domains domain-id verify-payment-method --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/checkout-domains/{domain_id}/verify-payment-method"
+        }
+      ],
+      "operation": "paddle.post.checkout-domains-domain-id-verify-payment-method",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post client-tokens",
+      "summary": "Documented POST /client-tokens (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api post client-tokens --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/client-tokens"
+        }
+      ],
+      "operation": "paddle.post.client-tokens",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post customers",
+      "summary": "Documented POST /customers (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api post customers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/customers"
+        }
+      ],
+      "operation": "paddle.post.customers",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post customers customer-id addresses",
+      "summary": "Documented POST /customers/{customer_id}/addresses (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api post customers customer-id addresses --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/customers/{customer_id}/addresses"
+        }
+      ],
+      "operation": "paddle.post.customers-customer-id-addresses",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post customers customer-id auth-token",
+      "summary": "Documented POST /customers/{customer_id}/auth-token (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api post customers customer-id auth-token --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/customers/{customer_id}/auth-token"
+        }
+      ],
+      "operation": "paddle.post.customers-customer-id-auth-token",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post customers customer-id businesses",
+      "summary": "Documented POST /customers/{customer_id}/businesses (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api post customers customer-id businesses --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/customers/{customer_id}/businesses"
+        }
+      ],
+      "operation": "paddle.post.customers-customer-id-businesses",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post customers customer-id portal-sessions",
+      "summary": "Documented POST /customers/{customer_id}/portal-sessions (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api post customers customer-id portal-sessions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/customers/{customer_id}/portal-sessions"
+        }
+      ],
+      "operation": "paddle.post.customers-customer-id-portal-sessions",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post discount-groups",
+      "summary": "Documented POST /discount-groups (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api post discount-groups --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/discount-groups"
+        }
+      ],
+      "operation": "paddle.post.discount-groups",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post discounts",
+      "summary": "Documented POST /discounts (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api post discounts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/discounts"
+        }
+      ],
+      "operation": "paddle.post.discounts",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post notification-settings",
+      "summary": "Documented POST /notification-settings (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api post notification-settings --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/notification-settings"
+        }
+      ],
+      "operation": "paddle.post.notification-settings",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post notifications notification-id replay",
+      "summary": "Documented POST /notifications/{notification_id}/replay (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api post notifications notification-id replay --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/notifications/{notification_id}/replay"
+        }
+      ],
+      "operation": "paddle.post.notifications-notification-id-replay",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post prices",
+      "summary": "Documented POST /prices (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api post prices --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/prices"
+        }
+      ],
+      "operation": "paddle.post.prices",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post pricing-preview",
+      "summary": "Documented POST /pricing-preview (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api post pricing-preview --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/pricing-preview"
+        }
+      ],
+      "operation": "paddle.post.pricing-preview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post products",
+      "summary": "Documented POST /products (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api post products --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/products"
+        }
+      ],
+      "operation": "paddle.post.products",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post reports",
+      "summary": "Documented POST /reports (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api post reports --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/reports"
+        }
+      ],
+      "operation": "paddle.post.reports",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post simulations",
+      "summary": "Documented POST /simulations (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api post simulations --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/simulations"
+        }
+      ],
+      "operation": "paddle.post.simulations",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post simulations simulation-id runs",
+      "summary": "Documented POST /simulations/{simulation_id}/runs (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api post simulations simulation-id runs --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/simulations/{simulation_id}/runs"
+        }
+      ],
+      "operation": "paddle.post.simulations-simulation-id-runs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post simulations simulation-id runs simulation-run-id events simulation-event-id replay",
+      "summary": "Documented POST /simulations/{simulation_id}/runs/{simulation_run_id}/events/{simulation_event_id}/replay (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api post simulations simulation-id runs simulation-run-id events simulation-event-id replay --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/simulations/{simulation_id}/runs/{simulation_run_id}/events/{simulation_event_id}/replay"
+        }
+      ],
+      "operation": "paddle.post.simulations-simulation-id-runs-simulation-run-id-events-simulation-event-id-replay",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post subscriptions subscription-id activate",
+      "summary": "Documented POST /subscriptions/{subscription_id}/activate (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api post subscriptions subscription-id activate --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/subscriptions/{subscription_id}/activate"
+        }
+      ],
+      "operation": "paddle.post.subscriptions-subscription-id-activate",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post subscriptions subscription-id cancel",
+      "summary": "Documented POST /subscriptions/{subscription_id}/cancel (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api post subscriptions subscription-id cancel --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/subscriptions/{subscription_id}/cancel"
+        }
+      ],
+      "operation": "paddle.post.subscriptions-subscription-id-cancel",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post subscriptions subscription-id charge",
+      "summary": "Documented POST /subscriptions/{subscription_id}/charge (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api post subscriptions subscription-id charge --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/subscriptions/{subscription_id}/charge"
+        }
+      ],
+      "operation": "paddle.post.subscriptions-subscription-id-charge",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post subscriptions subscription-id charge preview",
+      "summary": "Documented POST /subscriptions/{subscription_id}/charge/preview (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api post subscriptions subscription-id charge preview --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/subscriptions/{subscription_id}/charge/preview"
+        }
+      ],
+      "operation": "paddle.post.subscriptions-subscription-id-charge-preview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post subscriptions subscription-id pause",
+      "summary": "Documented POST /subscriptions/{subscription_id}/pause (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api post subscriptions subscription-id pause --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/subscriptions/{subscription_id}/pause"
+        }
+      ],
+      "operation": "paddle.post.subscriptions-subscription-id-pause",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post subscriptions subscription-id resume",
+      "summary": "Documented POST /subscriptions/{subscription_id}/resume (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api post subscriptions subscription-id resume --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/subscriptions/{subscription_id}/resume"
+        }
+      ],
+      "operation": "paddle.post.subscriptions-subscription-id-resume",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post transactions",
+      "summary": "Documented POST /transactions (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api post transactions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/transactions"
+        }
+      ],
+      "operation": "paddle.post.transactions",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post transactions preview",
+      "summary": "Documented POST /transactions/preview (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api post transactions preview --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/transactions/preview"
+        }
+      ],
+      "operation": "paddle.post.transactions-preview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post transactions transaction-id revise",
+      "summary": "Documented POST /transactions/{transaction_id}/revise (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api post transactions transaction-id revise --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/transactions/{transaction_id}/revise"
+        }
+      ],
+      "operation": "paddle.post.transactions-transaction-id-revise",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api webhook address-created-post",
+      "summary": "Documented WEBHOOK address.created#POST (not implemented)",
+      "intent": "docs_only",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api webhook address-created-post --help"
+      ],
+      "api_surface": [
+        {
+          "method": "WEBHOOK",
+          "path": "address.created#POST"
+        }
+      ],
+      "operation": "paddle.webhook.address-created-post",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "notes": "named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations"
+    },
+    {
+      "path": "api webhook address-imported-post",
+      "summary": "Documented WEBHOOK address.imported#POST (not implemented)",
+      "intent": "docs_only",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api webhook address-imported-post --help"
+      ],
+      "api_surface": [
+        {
+          "method": "WEBHOOK",
+          "path": "address.imported#POST"
+        }
+      ],
+      "operation": "paddle.webhook.address-imported-post",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "notes": "named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations"
+    },
+    {
+      "path": "api webhook address-updated-post",
+      "summary": "Documented WEBHOOK address.updated#POST (not implemented)",
+      "intent": "docs_only",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api webhook address-updated-post --help"
+      ],
+      "api_surface": [
+        {
+          "method": "WEBHOOK",
+          "path": "address.updated#POST"
+        }
+      ],
+      "operation": "paddle.webhook.address-updated-post",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "notes": "named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations"
+    },
+    {
+      "path": "api webhook adjustment-created-post",
+      "summary": "Documented WEBHOOK adjustment.created#POST (not implemented)",
+      "intent": "docs_only",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api webhook adjustment-created-post --help"
+      ],
+      "api_surface": [
+        {
+          "method": "WEBHOOK",
+          "path": "adjustment.created#POST"
+        }
+      ],
+      "operation": "paddle.webhook.adjustment-created-post",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "notes": "named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations"
+    },
+    {
+      "path": "api webhook adjustment-updated-post",
+      "summary": "Documented WEBHOOK adjustment.updated#POST (not implemented)",
+      "intent": "docs_only",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api webhook adjustment-updated-post --help"
+      ],
+      "api_surface": [
+        {
+          "method": "WEBHOOK",
+          "path": "adjustment.updated#POST"
+        }
+      ],
+      "operation": "paddle.webhook.adjustment-updated-post",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "notes": "named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations"
+    },
+    {
+      "path": "api webhook api-key-created-post",
+      "summary": "Documented WEBHOOK api_key.created#POST (not implemented)",
+      "intent": "docs_only",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api webhook api-key-created-post --help"
+      ],
+      "api_surface": [
+        {
+          "method": "WEBHOOK",
+          "path": "api_key.created#POST"
+        }
+      ],
+      "operation": "paddle.webhook.api-key-created-post",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "notes": "named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations"
+    },
+    {
+      "path": "api webhook api-key-expired-post",
+      "summary": "Documented WEBHOOK api_key.expired#POST (not implemented)",
+      "intent": "docs_only",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api webhook api-key-expired-post --help"
+      ],
+      "api_surface": [
+        {
+          "method": "WEBHOOK",
+          "path": "api_key.expired#POST"
+        }
+      ],
+      "operation": "paddle.webhook.api-key-expired-post",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "notes": "named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations"
+    },
+    {
+      "path": "api webhook api-key-expiring-post",
+      "summary": "Documented WEBHOOK api_key.expiring#POST (not implemented)",
+      "intent": "docs_only",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api webhook api-key-expiring-post --help"
+      ],
+      "api_surface": [
+        {
+          "method": "WEBHOOK",
+          "path": "api_key.expiring#POST"
+        }
+      ],
+      "operation": "paddle.webhook.api-key-expiring-post",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "notes": "named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations"
+    },
+    {
+      "path": "api webhook api-key-exposure-created-post",
+      "summary": "Documented WEBHOOK api_key_exposure.created#POST (not implemented)",
+      "intent": "docs_only",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api webhook api-key-exposure-created-post --help"
+      ],
+      "api_surface": [
+        {
+          "method": "WEBHOOK",
+          "path": "api_key_exposure.created#POST"
+        }
+      ],
+      "operation": "paddle.webhook.api-key-exposure-created-post",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "notes": "named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations"
+    },
+    {
+      "path": "api webhook api-key-revoked-post",
+      "summary": "Documented WEBHOOK api_key.revoked#POST (not implemented)",
+      "intent": "docs_only",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api webhook api-key-revoked-post --help"
+      ],
+      "api_surface": [
+        {
+          "method": "WEBHOOK",
+          "path": "api_key.revoked#POST"
+        }
+      ],
+      "operation": "paddle.webhook.api-key-revoked-post",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "notes": "named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations"
+    },
+    {
+      "path": "api webhook api-key-updated-post",
+      "summary": "Documented WEBHOOK api_key.updated#POST (not implemented)",
+      "intent": "docs_only",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api webhook api-key-updated-post --help"
+      ],
+      "api_surface": [
+        {
+          "method": "WEBHOOK",
+          "path": "api_key.updated#POST"
+        }
+      ],
+      "operation": "paddle.webhook.api-key-updated-post",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "notes": "named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations"
+    },
+    {
+      "path": "api webhook business-created-post",
+      "summary": "Documented WEBHOOK business.created#POST (not implemented)",
+      "intent": "docs_only",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api webhook business-created-post --help"
+      ],
+      "api_surface": [
+        {
+          "method": "WEBHOOK",
+          "path": "business.created#POST"
+        }
+      ],
+      "operation": "paddle.webhook.business-created-post",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "notes": "named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations"
+    },
+    {
+      "path": "api webhook business-imported-post",
+      "summary": "Documented WEBHOOK business.imported#POST (not implemented)",
+      "intent": "docs_only",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api webhook business-imported-post --help"
+      ],
+      "api_surface": [
+        {
+          "method": "WEBHOOK",
+          "path": "business.imported#POST"
+        }
+      ],
+      "operation": "paddle.webhook.business-imported-post",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "notes": "named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations"
+    },
+    {
+      "path": "api webhook business-updated-post",
+      "summary": "Documented WEBHOOK business.updated#POST (not implemented)",
+      "intent": "docs_only",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api webhook business-updated-post --help"
+      ],
+      "api_surface": [
+        {
+          "method": "WEBHOOK",
+          "path": "business.updated#POST"
+        }
+      ],
+      "operation": "paddle.webhook.business-updated-post",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "notes": "named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations"
+    },
+    {
+      "path": "api webhook client-token-created-post",
+      "summary": "Documented WEBHOOK client_token.created#POST (not implemented)",
+      "intent": "docs_only",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api webhook client-token-created-post --help"
+      ],
+      "api_surface": [
+        {
+          "method": "WEBHOOK",
+          "path": "client_token.created#POST"
+        }
+      ],
+      "operation": "paddle.webhook.client-token-created-post",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "notes": "named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations"
+    },
+    {
+      "path": "api webhook client-token-revoked-post",
+      "summary": "Documented WEBHOOK client_token.revoked#POST (not implemented)",
+      "intent": "docs_only",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api webhook client-token-revoked-post --help"
+      ],
+      "api_surface": [
+        {
+          "method": "WEBHOOK",
+          "path": "client_token.revoked#POST"
+        }
+      ],
+      "operation": "paddle.webhook.client-token-revoked-post",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "notes": "named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations"
+    },
+    {
+      "path": "api webhook client-token-updated-post",
+      "summary": "Documented WEBHOOK client_token.updated#POST (not implemented)",
+      "intent": "docs_only",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api webhook client-token-updated-post --help"
+      ],
+      "api_surface": [
+        {
+          "method": "WEBHOOK",
+          "path": "client_token.updated#POST"
+        }
+      ],
+      "operation": "paddle.webhook.client-token-updated-post",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "notes": "named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations"
+    },
+    {
+      "path": "api webhook customer-created-post",
+      "summary": "Documented WEBHOOK customer.created#POST (not implemented)",
+      "intent": "docs_only",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api webhook customer-created-post --help"
+      ],
+      "api_surface": [
+        {
+          "method": "WEBHOOK",
+          "path": "customer.created#POST"
+        }
+      ],
+      "operation": "paddle.webhook.customer-created-post",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "notes": "named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations"
+    },
+    {
+      "path": "api webhook customer-imported-post",
+      "summary": "Documented WEBHOOK customer.imported#POST (not implemented)",
+      "intent": "docs_only",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api webhook customer-imported-post --help"
+      ],
+      "api_surface": [
+        {
+          "method": "WEBHOOK",
+          "path": "customer.imported#POST"
+        }
+      ],
+      "operation": "paddle.webhook.customer-imported-post",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "notes": "named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations"
+    },
+    {
+      "path": "api webhook customer-updated-post",
+      "summary": "Documented WEBHOOK customer.updated#POST (not implemented)",
+      "intent": "docs_only",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api webhook customer-updated-post --help"
+      ],
+      "api_surface": [
+        {
+          "method": "WEBHOOK",
+          "path": "customer.updated#POST"
+        }
+      ],
+      "operation": "paddle.webhook.customer-updated-post",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "notes": "named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations"
+    },
+    {
+      "path": "api webhook discount-created-post",
+      "summary": "Documented WEBHOOK discount.created#POST (not implemented)",
+      "intent": "docs_only",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api webhook discount-created-post --help"
+      ],
+      "api_surface": [
+        {
+          "method": "WEBHOOK",
+          "path": "discount.created#POST"
+        }
+      ],
+      "operation": "paddle.webhook.discount-created-post",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "notes": "named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations"
+    },
+    {
+      "path": "api webhook discount-group-created-post",
+      "summary": "Documented WEBHOOK discount_group.created#POST (not implemented)",
+      "intent": "docs_only",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api webhook discount-group-created-post --help"
+      ],
+      "api_surface": [
+        {
+          "method": "WEBHOOK",
+          "path": "discount_group.created#POST"
+        }
+      ],
+      "operation": "paddle.webhook.discount-group-created-post",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "notes": "named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations"
+    },
+    {
+      "path": "api webhook discount-group-updated-post",
+      "summary": "Documented WEBHOOK discount_group.updated#POST (not implemented)",
+      "intent": "docs_only",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api webhook discount-group-updated-post --help"
+      ],
+      "api_surface": [
+        {
+          "method": "WEBHOOK",
+          "path": "discount_group.updated#POST"
+        }
+      ],
+      "operation": "paddle.webhook.discount-group-updated-post",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "notes": "named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations"
+    },
+    {
+      "path": "api webhook discount-imported-post",
+      "summary": "Documented WEBHOOK discount.imported#POST (not implemented)",
+      "intent": "docs_only",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api webhook discount-imported-post --help"
+      ],
+      "api_surface": [
+        {
+          "method": "WEBHOOK",
+          "path": "discount.imported#POST"
+        }
+      ],
+      "operation": "paddle.webhook.discount-imported-post",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "notes": "named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations"
+    },
+    {
+      "path": "api webhook discount-updated-post",
+      "summary": "Documented WEBHOOK discount.updated#POST (not implemented)",
+      "intent": "docs_only",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api webhook discount-updated-post --help"
+      ],
+      "api_surface": [
+        {
+          "method": "WEBHOOK",
+          "path": "discount.updated#POST"
+        }
+      ],
+      "operation": "paddle.webhook.discount-updated-post",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "notes": "named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations"
+    },
+    {
+      "path": "api webhook payment-method-deleted-post",
+      "summary": "Documented WEBHOOK payment_method.deleted#POST (not implemented)",
+      "intent": "docs_only",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api webhook payment-method-deleted-post --help"
+      ],
+      "api_surface": [
+        {
+          "method": "WEBHOOK",
+          "path": "payment_method.deleted#POST"
+        }
+      ],
+      "operation": "paddle.webhook.payment-method-deleted-post",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "notes": "named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations"
+    },
+    {
+      "path": "api webhook payment-method-saved-post",
+      "summary": "Documented WEBHOOK payment_method.saved#POST (not implemented)",
+      "intent": "docs_only",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api webhook payment-method-saved-post --help"
+      ],
+      "api_surface": [
+        {
+          "method": "WEBHOOK",
+          "path": "payment_method.saved#POST"
+        }
+      ],
+      "operation": "paddle.webhook.payment-method-saved-post",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "notes": "named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations"
+    },
+    {
+      "path": "api webhook payout-created-post",
+      "summary": "Documented WEBHOOK payout.created#POST (not implemented)",
+      "intent": "docs_only",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api webhook payout-created-post --help"
+      ],
+      "api_surface": [
+        {
+          "method": "WEBHOOK",
+          "path": "payout.created#POST"
+        }
+      ],
+      "operation": "paddle.webhook.payout-created-post",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "notes": "named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations"
+    },
+    {
+      "path": "api webhook payout-paid-post",
+      "summary": "Documented WEBHOOK payout.paid#POST (not implemented)",
+      "intent": "docs_only",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api webhook payout-paid-post --help"
+      ],
+      "api_surface": [
+        {
+          "method": "WEBHOOK",
+          "path": "payout.paid#POST"
+        }
+      ],
+      "operation": "paddle.webhook.payout-paid-post",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "notes": "named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations"
+    },
+    {
+      "path": "api webhook price-created-post",
+      "summary": "Documented WEBHOOK price.created#POST (not implemented)",
+      "intent": "docs_only",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api webhook price-created-post --help"
+      ],
+      "api_surface": [
+        {
+          "method": "WEBHOOK",
+          "path": "price.created#POST"
+        }
+      ],
+      "operation": "paddle.webhook.price-created-post",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "notes": "named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations"
+    },
+    {
+      "path": "api webhook price-imported-post",
+      "summary": "Documented WEBHOOK price.imported#POST (not implemented)",
+      "intent": "docs_only",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api webhook price-imported-post --help"
+      ],
+      "api_surface": [
+        {
+          "method": "WEBHOOK",
+          "path": "price.imported#POST"
+        }
+      ],
+      "operation": "paddle.webhook.price-imported-post",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "notes": "named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations"
+    },
+    {
+      "path": "api webhook price-updated-post",
+      "summary": "Documented WEBHOOK price.updated#POST (not implemented)",
+      "intent": "docs_only",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api webhook price-updated-post --help"
+      ],
+      "api_surface": [
+        {
+          "method": "WEBHOOK",
+          "path": "price.updated#POST"
+        }
+      ],
+      "operation": "paddle.webhook.price-updated-post",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "notes": "named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations"
+    },
+    {
+      "path": "api webhook product-created-post",
+      "summary": "Documented WEBHOOK product.created#POST (not implemented)",
+      "intent": "docs_only",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api webhook product-created-post --help"
+      ],
+      "api_surface": [
+        {
+          "method": "WEBHOOK",
+          "path": "product.created#POST"
+        }
+      ],
+      "operation": "paddle.webhook.product-created-post",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "notes": "named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations"
+    },
+    {
+      "path": "api webhook product-imported-post",
+      "summary": "Documented WEBHOOK product.imported#POST (not implemented)",
+      "intent": "docs_only",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api webhook product-imported-post --help"
+      ],
+      "api_surface": [
+        {
+          "method": "WEBHOOK",
+          "path": "product.imported#POST"
+        }
+      ],
+      "operation": "paddle.webhook.product-imported-post",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "notes": "named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations"
+    },
+    {
+      "path": "api webhook product-updated-post",
+      "summary": "Documented WEBHOOK product.updated#POST (not implemented)",
+      "intent": "docs_only",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api webhook product-updated-post --help"
+      ],
+      "api_surface": [
+        {
+          "method": "WEBHOOK",
+          "path": "product.updated#POST"
+        }
+      ],
+      "operation": "paddle.webhook.product-updated-post",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "notes": "named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations"
+    },
+    {
+      "path": "api webhook report-created-post",
+      "summary": "Documented WEBHOOK report.created#POST (not implemented)",
+      "intent": "docs_only",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api webhook report-created-post --help"
+      ],
+      "api_surface": [
+        {
+          "method": "WEBHOOK",
+          "path": "report.created#POST"
+        }
+      ],
+      "operation": "paddle.webhook.report-created-post",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "notes": "named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations"
+    },
+    {
+      "path": "api webhook report-updated-post",
+      "summary": "Documented WEBHOOK report.updated#POST (not implemented)",
+      "intent": "docs_only",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api webhook report-updated-post --help"
+      ],
+      "api_surface": [
+        {
+          "method": "WEBHOOK",
+          "path": "report.updated#POST"
+        }
+      ],
+      "operation": "paddle.webhook.report-updated-post",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "notes": "named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations"
+    },
+    {
+      "path": "api webhook subscription-activated-post",
+      "summary": "Documented WEBHOOK subscription.activated#POST (not implemented)",
+      "intent": "docs_only",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api webhook subscription-activated-post --help"
+      ],
+      "api_surface": [
+        {
+          "method": "WEBHOOK",
+          "path": "subscription.activated#POST"
+        }
+      ],
+      "operation": "paddle.webhook.subscription-activated-post",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "notes": "named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations"
+    },
+    {
+      "path": "api webhook subscription-canceled-post",
+      "summary": "Documented WEBHOOK subscription.canceled#POST (not implemented)",
+      "intent": "docs_only",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api webhook subscription-canceled-post --help"
+      ],
+      "api_surface": [
+        {
+          "method": "WEBHOOK",
+          "path": "subscription.canceled#POST"
+        }
+      ],
+      "operation": "paddle.webhook.subscription-canceled-post",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "notes": "named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations"
+    },
+    {
+      "path": "api webhook subscription-created-post",
+      "summary": "Documented WEBHOOK subscription.created#POST (not implemented)",
+      "intent": "docs_only",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api webhook subscription-created-post --help"
+      ],
+      "api_surface": [
+        {
+          "method": "WEBHOOK",
+          "path": "subscription.created#POST"
+        }
+      ],
+      "operation": "paddle.webhook.subscription-created-post",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "notes": "named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations"
+    },
+    {
+      "path": "api webhook subscription-imported-post",
+      "summary": "Documented WEBHOOK subscription.imported#POST (not implemented)",
+      "intent": "docs_only",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api webhook subscription-imported-post --help"
+      ],
+      "api_surface": [
+        {
+          "method": "WEBHOOK",
+          "path": "subscription.imported#POST"
+        }
+      ],
+      "operation": "paddle.webhook.subscription-imported-post",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "notes": "named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations"
+    },
+    {
+      "path": "api webhook subscription-past-due-post",
+      "summary": "Documented WEBHOOK subscription.past_due#POST (not implemented)",
+      "intent": "docs_only",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api webhook subscription-past-due-post --help"
+      ],
+      "api_surface": [
+        {
+          "method": "WEBHOOK",
+          "path": "subscription.past_due#POST"
+        }
+      ],
+      "operation": "paddle.webhook.subscription-past-due-post",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "notes": "named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations"
+    },
+    {
+      "path": "api webhook subscription-paused-post",
+      "summary": "Documented WEBHOOK subscription.paused#POST (not implemented)",
+      "intent": "docs_only",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api webhook subscription-paused-post --help"
+      ],
+      "api_surface": [
+        {
+          "method": "WEBHOOK",
+          "path": "subscription.paused#POST"
+        }
+      ],
+      "operation": "paddle.webhook.subscription-paused-post",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "notes": "named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations"
+    },
+    {
+      "path": "api webhook subscription-resumed-post",
+      "summary": "Documented WEBHOOK subscription.resumed#POST (not implemented)",
+      "intent": "docs_only",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api webhook subscription-resumed-post --help"
+      ],
+      "api_surface": [
+        {
+          "method": "WEBHOOK",
+          "path": "subscription.resumed#POST"
+        }
+      ],
+      "operation": "paddle.webhook.subscription-resumed-post",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "notes": "named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations"
+    },
+    {
+      "path": "api webhook subscription-trialing-post",
+      "summary": "Documented WEBHOOK subscription.trialing#POST (not implemented)",
+      "intent": "docs_only",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api webhook subscription-trialing-post --help"
+      ],
+      "api_surface": [
+        {
+          "method": "WEBHOOK",
+          "path": "subscription.trialing#POST"
+        }
+      ],
+      "operation": "paddle.webhook.subscription-trialing-post",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "notes": "named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations"
+    },
+    {
+      "path": "api webhook subscription-updated-post",
+      "summary": "Documented WEBHOOK subscription.updated#POST (not implemented)",
+      "intent": "docs_only",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api webhook subscription-updated-post --help"
+      ],
+      "api_surface": [
+        {
+          "method": "WEBHOOK",
+          "path": "subscription.updated#POST"
+        }
+      ],
+      "operation": "paddle.webhook.subscription-updated-post",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "notes": "named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations"
+    },
+    {
+      "path": "api webhook transaction-billed-post",
+      "summary": "Documented WEBHOOK transaction.billed#POST (not implemented)",
+      "intent": "docs_only",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api webhook transaction-billed-post --help"
+      ],
+      "api_surface": [
+        {
+          "method": "WEBHOOK",
+          "path": "transaction.billed#POST"
+        }
+      ],
+      "operation": "paddle.webhook.transaction-billed-post",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "notes": "named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations"
+    },
+    {
+      "path": "api webhook transaction-canceled-post",
+      "summary": "Documented WEBHOOK transaction.canceled#POST (not implemented)",
+      "intent": "docs_only",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api webhook transaction-canceled-post --help"
+      ],
+      "api_surface": [
+        {
+          "method": "WEBHOOK",
+          "path": "transaction.canceled#POST"
+        }
+      ],
+      "operation": "paddle.webhook.transaction-canceled-post",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "notes": "named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations"
+    },
+    {
+      "path": "api webhook transaction-completed-post",
+      "summary": "Documented WEBHOOK transaction.completed#POST (not implemented)",
+      "intent": "docs_only",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api webhook transaction-completed-post --help"
+      ],
+      "api_surface": [
+        {
+          "method": "WEBHOOK",
+          "path": "transaction.completed#POST"
+        }
+      ],
+      "operation": "paddle.webhook.transaction-completed-post",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "notes": "named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations"
+    },
+    {
+      "path": "api webhook transaction-created-post",
+      "summary": "Documented WEBHOOK transaction.created#POST (not implemented)",
+      "intent": "docs_only",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api webhook transaction-created-post --help"
+      ],
+      "api_surface": [
+        {
+          "method": "WEBHOOK",
+          "path": "transaction.created#POST"
+        }
+      ],
+      "operation": "paddle.webhook.transaction-created-post",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "notes": "named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations"
+    },
+    {
+      "path": "api webhook transaction-paid-post",
+      "summary": "Documented WEBHOOK transaction.paid#POST (not implemented)",
+      "intent": "docs_only",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api webhook transaction-paid-post --help"
+      ],
+      "api_surface": [
+        {
+          "method": "WEBHOOK",
+          "path": "transaction.paid#POST"
+        }
+      ],
+      "operation": "paddle.webhook.transaction-paid-post",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "notes": "named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations"
+    },
+    {
+      "path": "api webhook transaction-past-due-post",
+      "summary": "Documented WEBHOOK transaction.past_due#POST (not implemented)",
+      "intent": "docs_only",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api webhook transaction-past-due-post --help"
+      ],
+      "api_surface": [
+        {
+          "method": "WEBHOOK",
+          "path": "transaction.past_due#POST"
+        }
+      ],
+      "operation": "paddle.webhook.transaction-past-due-post",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "notes": "named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations"
+    },
+    {
+      "path": "api webhook transaction-payment-failed-post",
+      "summary": "Documented WEBHOOK transaction.payment_failed#POST (not implemented)",
+      "intent": "docs_only",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api webhook transaction-payment-failed-post --help"
+      ],
+      "api_surface": [
+        {
+          "method": "WEBHOOK",
+          "path": "transaction.payment_failed#POST"
+        }
+      ],
+      "operation": "paddle.webhook.transaction-payment-failed-post",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "notes": "named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations"
+    },
+    {
+      "path": "api webhook transaction-ready-post",
+      "summary": "Documented WEBHOOK transaction.ready#POST (not implemented)",
+      "intent": "docs_only",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api webhook transaction-ready-post --help"
+      ],
+      "api_surface": [
+        {
+          "method": "WEBHOOK",
+          "path": "transaction.ready#POST"
+        }
+      ],
+      "operation": "paddle.webhook.transaction-ready-post",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "notes": "named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations"
+    },
+    {
+      "path": "api webhook transaction-revised-post",
+      "summary": "Documented WEBHOOK transaction.revised#POST (not implemented)",
+      "intent": "docs_only",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api webhook transaction-revised-post --help"
+      ],
+      "api_surface": [
+        {
+          "method": "WEBHOOK",
+          "path": "transaction.revised#POST"
+        }
+      ],
+      "operation": "paddle.webhook.transaction-revised-post",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "notes": "named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations"
+    },
+    {
+      "path": "api webhook transaction-updated-post",
+      "summary": "Documented WEBHOOK transaction.updated#POST (not implemented)",
+      "intent": "docs_only",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle api webhook transaction-updated-post --help"
+      ],
+      "api_surface": [
+        {
+          "method": "WEBHOOK",
+          "path": "transaction.updated#POST"
+        }
+      ],
+      "operation": "paddle.webhook.transaction-updated-post",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "notes": "named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations"
+    },
+    {
+      "path": "customers list",
+      "summary": "Run the customers ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "customers",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle customers list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customers"
+        }
+      ]
+    },
+    {
+      "path": "products list",
+      "summary": "Run the products ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "products",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle products list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/products"
+        }
+      ]
+    },
+    {
+      "path": "subscriptions list",
+      "summary": "Run the subscriptions ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "subscriptions",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle subscriptions list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/subscriptions"
+        }
+      ]
+    },
+    {
+      "path": "transactions list",
+      "summary": "Run the transactions ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "transactions",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "examples": [
+        "pm paddle transactions list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/transactions"
+        }
+      ]
+    }
+  ]
+}

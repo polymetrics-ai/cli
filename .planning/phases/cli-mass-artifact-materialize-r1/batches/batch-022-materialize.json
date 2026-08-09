@@ -1,0 +1,233 @@
+{
+  "schema_version": 1,
+  "manifest": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-022-machine-plus-root-manifest.json",
+  "candidates": 40,
+  "included": [
+    {
+      "connector": "formbricks",
+      "commands_checked": 26,
+      "declared_operations": 66,
+      "operation_split": {
+        "executable": 26,
+        "provider_blocked": 21,
+        "excluded": 19
+      },
+      "warnings": []
+    },
+    {
+      "connector": "sharetribe",
+      "commands_checked": 20,
+      "declared_operations": 45,
+      "operation_split": {
+        "executable": 23,
+        "provider_blocked": 6,
+        "excluded": 16
+      },
+      "warnings": []
+    }
+  ],
+  "dropped": [
+    {
+      "connector": "smartwaiver",
+      "stage": "bundle_path",
+      "reason": "bundle directory: stat /Users/karthiksivadas/.treehouse/cli-83d592/41/cli/.planning/phases/cli-mass-artifact-materialize-r1/batches/batch-022-validated-defs/smartwaiver: no such file or directory"
+    },
+    {
+      "connector": "tvmaze-schedule",
+      "stage": "bundle_path",
+      "reason": "bundle directory: stat /Users/karthiksivadas/.treehouse/cli-83d592/41/cli/.planning/phases/cli-mass-artifact-materialize-r1/batches/batch-022-validated-defs/tvmaze-schedule: no such file or directory"
+    },
+    {
+      "connector": "intruder",
+      "stage": "bundle_path",
+      "reason": "bundle directory: stat /Users/karthiksivadas/.treehouse/cli-83d592/41/cli/.planning/phases/cli-mass-artifact-materialize-r1/batches/batch-022-validated-defs/intruder: no such file or directory"
+    },
+    {
+      "connector": "convertkit",
+      "stage": "bundle_path",
+      "reason": "bundle directory: stat /Users/karthiksivadas/.treehouse/cli-83d592/41/cli/.planning/phases/cli-mass-artifact-materialize-r1/batches/batch-022-validated-defs/convertkit: no such file or directory"
+    },
+    {
+      "connector": "emailoctopus",
+      "stage": "bundle_path",
+      "reason": "bundle directory: stat /Users/karthiksivadas/.treehouse/cli-83d592/41/cli/.planning/phases/cli-mass-artifact-materialize-r1/batches/batch-022-validated-defs/emailoctopus: no such file or directory"
+    },
+    {
+      "connector": "strava",
+      "stage": "bundle_path",
+      "reason": "bundle directory: stat /Users/karthiksivadas/.treehouse/cli-83d592/41/cli/.planning/phases/cli-mass-artifact-materialize-r1/batches/batch-022-validated-defs/strava: no such file or directory"
+    },
+    {
+      "connector": "imagga",
+      "stage": "bundle_path",
+      "reason": "bundle directory: stat /Users/karthiksivadas/.treehouse/cli-83d592/41/cli/.planning/phases/cli-mass-artifact-materialize-r1/batches/batch-022-validated-defs/imagga: no such file or directory"
+    },
+    {
+      "connector": "mention",
+      "stage": "bundle_path",
+      "reason": "bundle directory: stat /Users/karthiksivadas/.treehouse/cli-83d592/41/cli/.planning/phases/cli-mass-artifact-materialize-r1/batches/batch-022-validated-defs/mention: no such file or directory"
+    },
+    {
+      "connector": "chargedesk",
+      "stage": "bundle_path",
+      "reason": "bundle directory: stat /Users/karthiksivadas/.treehouse/cli-83d592/41/cli/.planning/phases/cli-mass-artifact-materialize-r1/batches/batch-022-validated-defs/chargedesk: no such file or directory"
+    },
+    {
+      "connector": "openaq",
+      "stage": "bundle_path",
+      "reason": "bundle directory: stat /Users/karthiksivadas/.treehouse/cli-83d592/41/cli/.planning/phases/cli-mass-artifact-materialize-r1/batches/batch-022-validated-defs/openaq: no such file or directory"
+    },
+    {
+      "connector": "drift",
+      "stage": "bundle_path",
+      "reason": "bundle directory: stat /Users/karthiksivadas/.treehouse/cli-83d592/41/cli/.planning/phases/cli-mass-artifact-materialize-r1/batches/batch-022-validated-defs/drift: no such file or directory"
+    },
+    {
+      "connector": "appfollow",
+      "stage": "bundle_path",
+      "reason": "bundle directory: stat /Users/karthiksivadas/.treehouse/cli-83d592/41/cli/.planning/phases/cli-mass-artifact-materialize-r1/batches/batch-022-validated-defs/appfollow: no such file or directory"
+    },
+    {
+      "connector": "missive",
+      "stage": "bundle_path",
+      "reason": "bundle directory: stat /Users/karthiksivadas/.treehouse/cli-83d592/41/cli/.planning/phases/cli-mass-artifact-materialize-r1/batches/batch-022-validated-defs/missive: no such file or directory"
+    },
+    {
+      "connector": "feishu",
+      "stage": "bundle_path",
+      "reason": "bundle directory: stat /Users/karthiksivadas/.treehouse/cli-83d592/41/cli/.planning/phases/cli-mass-artifact-materialize-r1/batches/batch-022-validated-defs/feishu: no such file or directory"
+    },
+    {
+      "connector": "polygon-stock-api",
+      "stage": "bundle_path",
+      "reason": "bundle directory: stat /Users/karthiksivadas/.treehouse/cli-83d592/41/cli/.planning/phases/cli-mass-artifact-materialize-r1/batches/batch-022-validated-defs/polygon-stock-api: no such file or directory"
+    },
+    {
+      "connector": "shipstation",
+      "stage": "bundle_path",
+      "reason": "bundle directory: stat /Users/karthiksivadas/.treehouse/cli-83d592/41/cli/.planning/phases/cli-mass-artifact-materialize-r1/batches/batch-022-validated-defs/shipstation: no such file or directory"
+    },
+    {
+      "connector": "appfigures",
+      "stage": "bundle_path",
+      "reason": "bundle directory: stat /Users/karthiksivadas/.treehouse/cli-83d592/41/cli/.planning/phases/cli-mass-artifact-materialize-r1/batches/batch-022-validated-defs/appfigures: no such file or directory"
+    },
+    {
+      "connector": "beamer",
+      "stage": "bundle_path",
+      "reason": "bundle directory: stat /Users/karthiksivadas/.treehouse/cli-83d592/41/cli/.planning/phases/cli-mass-artifact-materialize-r1/batches/batch-022-validated-defs/beamer: no such file or directory"
+    },
+    {
+      "connector": "onesignal",
+      "stage": "bundle_path",
+      "reason": "bundle directory: stat /Users/karthiksivadas/.treehouse/cli-83d592/41/cli/.planning/phases/cli-mass-artifact-materialize-r1/batches/batch-022-validated-defs/onesignal: no such file or directory"
+    },
+    {
+      "connector": "scryfall",
+      "stage": "bundle_path",
+      "reason": "bundle directory: stat /Users/karthiksivadas/.treehouse/cli-83d592/41/cli/.planning/phases/cli-mass-artifact-materialize-r1/batches/batch-022-validated-defs/scryfall: no such file or directory"
+    },
+    {
+      "connector": "stigg",
+      "stage": "bundle_path",
+      "reason": "bundle directory: stat /Users/karthiksivadas/.treehouse/cli-83d592/41/cli/.planning/phases/cli-mass-artifact-materialize-r1/batches/batch-022-validated-defs/stigg: no such file or directory"
+    },
+    {
+      "connector": "typeform",
+      "stage": "bundle_path",
+      "reason": "bundle directory: stat /Users/karthiksivadas/.treehouse/cli-83d592/41/cli/.planning/phases/cli-mass-artifact-materialize-r1/batches/batch-022-validated-defs/typeform: no such file or directory"
+    },
+    {
+      "connector": "canny",
+      "stage": "bundle_path",
+      "reason": "bundle directory: stat /Users/karthiksivadas/.treehouse/cli-83d592/41/cli/.planning/phases/cli-mass-artifact-materialize-r1/batches/batch-022-validated-defs/canny: no such file or directory"
+    },
+    {
+      "connector": "jotform",
+      "stage": "bundle_path",
+      "reason": "bundle directory: stat /Users/karthiksivadas/.treehouse/cli-83d592/41/cli/.planning/phases/cli-mass-artifact-materialize-r1/batches/batch-022-validated-defs/jotform: no such file or directory"
+    },
+    {
+      "connector": "insightful",
+      "stage": "bundle_path",
+      "reason": "bundle directory: stat /Users/karthiksivadas/.treehouse/cli-83d592/41/cli/.planning/phases/cli-mass-artifact-materialize-r1/batches/batch-022-validated-defs/insightful: no such file or directory"
+    },
+    {
+      "connector": "statuspage",
+      "stage": "bundle_path",
+      "reason": "bundle directory: stat /Users/karthiksivadas/.treehouse/cli-83d592/41/cli/.planning/phases/cli-mass-artifact-materialize-r1/batches/batch-022-validated-defs/statuspage: no such file or directory"
+    },
+    {
+      "connector": "finnhub",
+      "stage": "bundle_path",
+      "reason": "bundle directory: stat /Users/karthiksivadas/.treehouse/cli-83d592/41/cli/.planning/phases/cli-mass-artifact-materialize-r1/batches/batch-022-validated-defs/finnhub: no such file or directory"
+    },
+    {
+      "connector": "dixa",
+      "stage": "bundle_path",
+      "reason": "bundle directory: stat /Users/karthiksivadas/.treehouse/cli-83d592/41/cli/.planning/phases/cli-mass-artifact-materialize-r1/batches/batch-022-validated-defs/dixa: no such file or directory"
+    },
+    {
+      "connector": "teamtailor",
+      "stage": "bundle_path",
+      "reason": "bundle directory: stat /Users/karthiksivadas/.treehouse/cli-83d592/41/cli/.planning/phases/cli-mass-artifact-materialize-r1/batches/batch-022-validated-defs/teamtailor: no such file or directory"
+    },
+    {
+      "connector": "secoda",
+      "stage": "bundle_path",
+      "reason": "bundle directory: stat /Users/karthiksivadas/.treehouse/cli-83d592/41/cli/.planning/phases/cli-mass-artifact-materialize-r1/batches/batch-022-validated-defs/secoda: no such file or directory"
+    },
+    {
+      "connector": "7shifts",
+      "stage": "bundle_path",
+      "reason": "bundle directory: stat /Users/karthiksivadas/.treehouse/cli-83d592/41/cli/.planning/phases/cli-mass-artifact-materialize-r1/batches/batch-022-validated-defs/7shifts: no such file or directory"
+    },
+    {
+      "connector": "freshbooks",
+      "stage": "bundle_path",
+      "reason": "bundle directory: stat /Users/karthiksivadas/.treehouse/cli-83d592/41/cli/.planning/phases/cli-mass-artifact-materialize-r1/batches/batch-022-validated-defs/freshbooks: no such file or directory"
+    },
+    {
+      "connector": "lokalise",
+      "stage": "bundle_path",
+      "reason": "bundle directory: stat /Users/karthiksivadas/.treehouse/cli-83d592/41/cli/.planning/phases/cli-mass-artifact-materialize-r1/batches/batch-022-validated-defs/lokalise: no such file or directory"
+    },
+    {
+      "connector": "castor-edc",
+      "stage": "bundle_path",
+      "reason": "bundle directory: stat /Users/karthiksivadas/.treehouse/cli-83d592/41/cli/.planning/phases/cli-mass-artifact-materialize-r1/batches/batch-022-validated-defs/castor-edc: no such file or directory"
+    },
+    {
+      "connector": "clockify",
+      "stage": "bundle_path",
+      "reason": "bundle directory: stat /Users/karthiksivadas/.treehouse/cli-83d592/41/cli/.planning/phases/cli-mass-artifact-materialize-r1/batches/batch-022-validated-defs/clockify: no such file or directory"
+    },
+    {
+      "connector": "recurly",
+      "stage": "bundle_path",
+      "reason": "bundle directory: stat /Users/karthiksivadas/.treehouse/cli-83d592/41/cli/.planning/phases/cli-mass-artifact-materialize-r1/batches/batch-022-validated-defs/recurly: no such file or directory"
+    },
+    {
+      "connector": "kisi",
+      "stage": "bundle_path",
+      "reason": "bundle directory: stat /Users/karthiksivadas/.treehouse/cli-83d592/41/cli/.planning/phases/cli-mass-artifact-materialize-r1/batches/batch-022-validated-defs/kisi: no such file or directory"
+    },
+    {
+      "connector": "confluence",
+      "stage": "bundle_path",
+      "reason": "bundle directory: stat /Users/karthiksivadas/.treehouse/cli-83d592/41/cli/.planning/phases/cli-mass-artifact-materialize-r1/batches/batch-022-validated-defs/confluence: no such file or directory"
+    }
+  ],
+  "provenance_refusals": 0,
+  "surveyed_operations": {
+    "total": 3234,
+    "read": 1793,
+    "write": 1441
+  },
+  "declared_operations": 111,
+  "operation_split": {
+    "executable": 49,
+    "provider_blocked": 27,
+    "excluded": 35
+  }
+}

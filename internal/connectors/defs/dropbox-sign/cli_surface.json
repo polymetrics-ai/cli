@@ -1,0 +1,1665 @@
+{
+  "tagline": "Run Dropbox Sign's declared streams and reverse-ETL actions.",
+  "usage": "pm dropbox-sign \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "account list",
+        "api get api-app client-id",
+        "api get api-app list",
+        "api get bulk-send-job bulk-send-job-id",
+        "api get bulk-send-job list",
+        "api get embedded sign-url signature-id",
+        "api get fax fax-id",
+        "api get fax files fax-id",
+        "api get fax list",
+        "api get fax-line",
+        "api get fax-line area-codes",
+        "api get fax-line list",
+        "api get signature-request files signature-request-id",
+        "api get signature-request files-as-data-uri signature-request-id",
+        "api get signature-request files-as-file-url signature-request-id",
+        "api get signature-request signature-request-id",
+        "api get team",
+        "api get team info",
+        "api get team invites",
+        "api get team sub-teams team-id",
+        "api get template files template-id",
+        "api get template files-as-data-uri template-id",
+        "api get template files-as-file-url template-id",
+        "api get template template-id",
+        "signature requests list",
+        "team members list",
+        "templates list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "add team member apply",
+        "add template user apply",
+        "api delete api-app client-id",
+        "api delete fax fax-id",
+        "api delete fax-line",
+        "api delete team destroy",
+        "api post account create",
+        "api post account verify",
+        "api post api-app",
+        "api post embedded edit-url template-id",
+        "api post fax send",
+        "api post fax-line create",
+        "api post notification retry",
+        "api post oauth token",
+        "api post oauth token-refresh",
+        "api post report create",
+        "api post signature-request bulk-create-embedded-with-template",
+        "api post signature-request bulk-send-with-template",
+        "api post signature-request create-embedded",
+        "api post signature-request create-embedded-with-template",
+        "api post signature-request send",
+        "api post signature-request send-with-template",
+        "api post template create",
+        "api post template create-embedded-draft",
+        "api post template update template-id",
+        "api post template update-files template-id",
+        "api post unclaimed-draft create",
+        "api post unclaimed-draft create-embedded",
+        "api post unclaimed-draft create-embedded-with-template",
+        "api post unclaimed-draft edit-and-resend signature-request-id",
+        "api put api-app client-id",
+        "api put fax-line add-user",
+        "api put fax-line remove-user",
+        "api put signature-request edit signature-request-id",
+        "api put signature-request edit-embedded signature-request-id",
+        "api put signature-request edit-embedded-with-template signature-request-id",
+        "api put signature-request edit-with-template signature-request-id",
+        "cancel signature request apply",
+        "create team apply",
+        "delete template apply",
+        "release hold signature request apply",
+        "remind signature request apply",
+        "remove signature request apply",
+        "remove team member apply",
+        "remove template user apply",
+        "update account apply",
+        "update signature request apply",
+        "update team apply"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "account list",
+      "summary": "Run the account ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "account",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "examples": [
+        "pm dropbox-sign account list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/account"
+        }
+      ]
+    },
+    {
+      "path": "add team member apply",
+      "summary": "Plan and execute the add team member reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "add_team_member",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "examples": [
+        "pm dropbox-sign add team member apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/team/add_member"
+        }
+      ],
+      "risk": "external mutation; invites or moves a user onto the caller's Team, creating a new Dropbox Sign account for the invited email if one does not already exist",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "add template user apply",
+      "summary": "Plan and execute the add template user reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "add_template_user",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "flags": [
+        {
+          "name": "template_id",
+          "type": "string",
+          "summary": "Required template id record field.",
+          "maps_to": "record.template_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm dropbox-sign add template user apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/template/add_user/{template_id}"
+        }
+      ],
+      "risk": "external mutation; grants the specified account (which must already be a Team member) access to a template",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "api delete api-app client-id",
+      "summary": "Documented DELETE /api_app/{client_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "examples": [
+        "pm dropbox-sign api delete api-app client-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api_app/{client_id}"
+        }
+      ],
+      "operation": "dropbox-sign.delete.api-app-client-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete fax fax-id",
+      "summary": "Documented DELETE /fax/{fax_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "examples": [
+        "pm dropbox-sign api delete fax fax-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/fax/{fax_id}"
+        }
+      ],
+      "operation": "dropbox-sign.delete.fax-fax-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete fax-line",
+      "summary": "Documented DELETE /fax_line (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "examples": [
+        "pm dropbox-sign api delete fax-line --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/fax_line"
+        }
+      ],
+      "operation": "dropbox-sign.delete.fax-line",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete team destroy",
+      "summary": "Documented DELETE /team/destroy (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "examples": [
+        "pm dropbox-sign api delete team destroy --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/team/destroy"
+        }
+      ],
+      "operation": "dropbox-sign.delete.team-destroy",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api get api-app client-id",
+      "summary": "Documented GET /api_app/{client_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "examples": [
+        "pm dropbox-sign api get api-app client-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api_app/{client_id}"
+        }
+      ],
+      "operation": "dropbox-sign.get.api-app-client-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api-app list",
+      "summary": "Documented GET /api_app/list (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "examples": [
+        "pm dropbox-sign api get api-app list --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api_app/list"
+        }
+      ],
+      "operation": "dropbox-sign.get.api-app-list",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get bulk-send-job bulk-send-job-id",
+      "summary": "Documented GET /bulk_send_job/{bulk_send_job_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "examples": [
+        "pm dropbox-sign api get bulk-send-job bulk-send-job-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/bulk_send_job/{bulk_send_job_id}"
+        }
+      ],
+      "operation": "dropbox-sign.get.bulk-send-job-bulk-send-job-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get bulk-send-job list",
+      "summary": "Documented GET /bulk_send_job/list (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "examples": [
+        "pm dropbox-sign api get bulk-send-job list --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/bulk_send_job/list"
+        }
+      ],
+      "operation": "dropbox-sign.get.bulk-send-job-list",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get embedded sign-url signature-id",
+      "summary": "Documented GET /embedded/sign_url/{signature_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "examples": [
+        "pm dropbox-sign api get embedded sign-url signature-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/embedded/sign_url/{signature_id}"
+        }
+      ],
+      "operation": "dropbox-sign.get.embedded-sign-url-signature-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get fax fax-id",
+      "summary": "Documented GET /fax/{fax_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "examples": [
+        "pm dropbox-sign api get fax fax-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/fax/{fax_id}"
+        }
+      ],
+      "operation": "dropbox-sign.get.fax-fax-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get fax files fax-id",
+      "summary": "Documented GET /fax/files/{fax_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "examples": [
+        "pm dropbox-sign api get fax files fax-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/fax/files/{fax_id}"
+        }
+      ],
+      "operation": "dropbox-sign.get.fax-files-fax-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get fax list",
+      "summary": "Documented GET /fax/list (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "examples": [
+        "pm dropbox-sign api get fax list --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/fax/list"
+        }
+      ],
+      "operation": "dropbox-sign.get.fax-list",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get fax-line",
+      "summary": "Documented GET /fax_line (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "examples": [
+        "pm dropbox-sign api get fax-line --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/fax_line"
+        }
+      ],
+      "operation": "dropbox-sign.get.fax-line",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get fax-line area-codes",
+      "summary": "Documented GET /fax_line/area_codes (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "examples": [
+        "pm dropbox-sign api get fax-line area-codes --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/fax_line/area_codes"
+        }
+      ],
+      "operation": "dropbox-sign.get.fax-line-area-codes",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get fax-line list",
+      "summary": "Documented GET /fax_line/list (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "examples": [
+        "pm dropbox-sign api get fax-line list --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/fax_line/list"
+        }
+      ],
+      "operation": "dropbox-sign.get.fax-line-list",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get signature-request files signature-request-id",
+      "summary": "Documented GET /signature_request/files/{signature_request_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "examples": [
+        "pm dropbox-sign api get signature-request files signature-request-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/signature_request/files/{signature_request_id}"
+        }
+      ],
+      "operation": "dropbox-sign.get.signature-request-files-signature-request-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get signature-request files-as-data-uri signature-request-id",
+      "summary": "Documented GET /signature_request/files_as_data_uri/{signature_request_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "examples": [
+        "pm dropbox-sign api get signature-request files-as-data-uri signature-request-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/signature_request/files_as_data_uri/{signature_request_id}"
+        }
+      ],
+      "operation": "dropbox-sign.get.signature-request-files-as-data-uri-signature-request-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get signature-request files-as-file-url signature-request-id",
+      "summary": "Documented GET /signature_request/files_as_file_url/{signature_request_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "examples": [
+        "pm dropbox-sign api get signature-request files-as-file-url signature-request-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/signature_request/files_as_file_url/{signature_request_id}"
+        }
+      ],
+      "operation": "dropbox-sign.get.signature-request-files-as-file-url-signature-request-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get signature-request signature-request-id",
+      "summary": "Documented GET /signature_request/{signature_request_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "examples": [
+        "pm dropbox-sign api get signature-request signature-request-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/signature_request/{signature_request_id}"
+        }
+      ],
+      "operation": "dropbox-sign.get.signature-request-signature-request-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get team",
+      "summary": "Documented GET /team (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "examples": [
+        "pm dropbox-sign api get team --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/team"
+        }
+      ],
+      "operation": "dropbox-sign.get.team",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get team info",
+      "summary": "Documented GET /team/info (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "examples": [
+        "pm dropbox-sign api get team info --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/team/info"
+        }
+      ],
+      "operation": "dropbox-sign.get.team-info",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get team invites",
+      "summary": "Documented GET /team/invites (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "examples": [
+        "pm dropbox-sign api get team invites --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/team/invites"
+        }
+      ],
+      "operation": "dropbox-sign.get.team-invites",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get team sub-teams team-id",
+      "summary": "Documented GET /team/sub_teams/{team_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "examples": [
+        "pm dropbox-sign api get team sub-teams team-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/team/sub_teams/{team_id}"
+        }
+      ],
+      "operation": "dropbox-sign.get.team-sub-teams-team-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get template files template-id",
+      "summary": "Documented GET /template/files/{template_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "examples": [
+        "pm dropbox-sign api get template files template-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/template/files/{template_id}"
+        }
+      ],
+      "operation": "dropbox-sign.get.template-files-template-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get template files-as-data-uri template-id",
+      "summary": "Documented GET /template/files_as_data_uri/{template_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "examples": [
+        "pm dropbox-sign api get template files-as-data-uri template-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/template/files_as_data_uri/{template_id}"
+        }
+      ],
+      "operation": "dropbox-sign.get.template-files-as-data-uri-template-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get template files-as-file-url template-id",
+      "summary": "Documented GET /template/files_as_file_url/{template_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "examples": [
+        "pm dropbox-sign api get template files-as-file-url template-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/template/files_as_file_url/{template_id}"
+        }
+      ],
+      "operation": "dropbox-sign.get.template-files-as-file-url-template-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get template template-id",
+      "summary": "Documented GET /template/{template_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "examples": [
+        "pm dropbox-sign api get template template-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/template/{template_id}"
+        }
+      ],
+      "operation": "dropbox-sign.get.template-template-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api post account create",
+      "summary": "Documented POST /account/create (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "examples": [
+        "pm dropbox-sign api post account create --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/account/create"
+        }
+      ],
+      "operation": "dropbox-sign.post.account-create",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post account verify",
+      "summary": "Documented POST /account/verify (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "examples": [
+        "pm dropbox-sign api post account verify --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/account/verify"
+        }
+      ],
+      "operation": "dropbox-sign.post.account-verify",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api-app",
+      "summary": "Documented POST /api_app (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "examples": [
+        "pm dropbox-sign api post api-app --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api_app"
+        }
+      ],
+      "operation": "dropbox-sign.post.api-app",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post embedded edit-url template-id",
+      "summary": "Documented POST /embedded/edit_url/{template_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "examples": [
+        "pm dropbox-sign api post embedded edit-url template-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/embedded/edit_url/{template_id}"
+        }
+      ],
+      "operation": "dropbox-sign.post.embedded-edit-url-template-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post fax send",
+      "summary": "Documented POST /fax/send (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "examples": [
+        "pm dropbox-sign api post fax send --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/fax/send"
+        }
+      ],
+      "operation": "dropbox-sign.post.fax-send",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post fax-line create",
+      "summary": "Documented POST /fax_line/create (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "examples": [
+        "pm dropbox-sign api post fax-line create --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/fax_line/create"
+        }
+      ],
+      "operation": "dropbox-sign.post.fax-line-create",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post notification retry",
+      "summary": "Documented POST /notification/retry (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "examples": [
+        "pm dropbox-sign api post notification retry --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/notification/retry"
+        }
+      ],
+      "operation": "dropbox-sign.post.notification-retry",
+      "risk": "high",
+      "approval": "not implemented: the provider webhook-URL mutation has no dedicated security-reviewed execution contract",
+      "notes": "named_dependency=review.webhook_url_mutation: the provider webhook-URL mutation has no dedicated security-reviewed execution contract"
+    },
+    {
+      "path": "api post oauth token",
+      "summary": "Documented POST /oauth/token (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "examples": [
+        "pm dropbox-sign api post oauth token --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/oauth/token"
+        }
+      ],
+      "operation": "dropbox-sign.post.oauth-token",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post oauth token-refresh",
+      "summary": "Documented POST /oauth/token?refresh (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "examples": [
+        "pm dropbox-sign api post oauth token-refresh --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/oauth/token?refresh"
+        }
+      ],
+      "operation": "dropbox-sign.post.oauth-token-refresh",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post report create",
+      "summary": "Documented POST /report/create (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "examples": [
+        "pm dropbox-sign api post report create --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/report/create"
+        }
+      ],
+      "operation": "dropbox-sign.post.report-create",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post signature-request bulk-create-embedded-with-template",
+      "summary": "Documented POST /signature_request/bulk_create_embedded_with_template (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "examples": [
+        "pm dropbox-sign api post signature-request bulk-create-embedded-with-template --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/signature_request/bulk_create_embedded_with_template"
+        }
+      ],
+      "operation": "dropbox-sign.post.signature-request-bulk-create-embedded-with-template",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post signature-request bulk-send-with-template",
+      "summary": "Documented POST /signature_request/bulk_send_with_template (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "examples": [
+        "pm dropbox-sign api post signature-request bulk-send-with-template --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/signature_request/bulk_send_with_template"
+        }
+      ],
+      "operation": "dropbox-sign.post.signature-request-bulk-send-with-template",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post signature-request create-embedded",
+      "summary": "Documented POST /signature_request/create_embedded (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "examples": [
+        "pm dropbox-sign api post signature-request create-embedded --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/signature_request/create_embedded"
+        }
+      ],
+      "operation": "dropbox-sign.post.signature-request-create-embedded",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post signature-request create-embedded-with-template",
+      "summary": "Documented POST /signature_request/create_embedded_with_template (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "examples": [
+        "pm dropbox-sign api post signature-request create-embedded-with-template --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/signature_request/create_embedded_with_template"
+        }
+      ],
+      "operation": "dropbox-sign.post.signature-request-create-embedded-with-template",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post signature-request send",
+      "summary": "Documented POST /signature_request/send (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "examples": [
+        "pm dropbox-sign api post signature-request send --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/signature_request/send"
+        }
+      ],
+      "operation": "dropbox-sign.post.signature-request-send",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post signature-request send-with-template",
+      "summary": "Documented POST /signature_request/send_with_template (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "examples": [
+        "pm dropbox-sign api post signature-request send-with-template --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/signature_request/send_with_template"
+        }
+      ],
+      "operation": "dropbox-sign.post.signature-request-send-with-template",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post template create",
+      "summary": "Documented POST /template/create (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "examples": [
+        "pm dropbox-sign api post template create --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/template/create"
+        }
+      ],
+      "operation": "dropbox-sign.post.template-create",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post template create-embedded-draft",
+      "summary": "Documented POST /template/create_embedded_draft (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "examples": [
+        "pm dropbox-sign api post template create-embedded-draft --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/template/create_embedded_draft"
+        }
+      ],
+      "operation": "dropbox-sign.post.template-create-embedded-draft",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post template update template-id",
+      "summary": "Documented POST /template/update/{template_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "examples": [
+        "pm dropbox-sign api post template update template-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/template/update/{template_id}"
+        }
+      ],
+      "operation": "dropbox-sign.post.template-update-template-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post template update-files template-id",
+      "summary": "Documented POST /template/update_files/{template_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "examples": [
+        "pm dropbox-sign api post template update-files template-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/template/update_files/{template_id}"
+        }
+      ],
+      "operation": "dropbox-sign.post.template-update-files-template-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post unclaimed-draft create",
+      "summary": "Documented POST /unclaimed_draft/create (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "examples": [
+        "pm dropbox-sign api post unclaimed-draft create --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/unclaimed_draft/create"
+        }
+      ],
+      "operation": "dropbox-sign.post.unclaimed-draft-create",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post unclaimed-draft create-embedded",
+      "summary": "Documented POST /unclaimed_draft/create_embedded (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "examples": [
+        "pm dropbox-sign api post unclaimed-draft create-embedded --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/unclaimed_draft/create_embedded"
+        }
+      ],
+      "operation": "dropbox-sign.post.unclaimed-draft-create-embedded",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post unclaimed-draft create-embedded-with-template",
+      "summary": "Documented POST /unclaimed_draft/create_embedded_with_template (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "examples": [
+        "pm dropbox-sign api post unclaimed-draft create-embedded-with-template --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/unclaimed_draft/create_embedded_with_template"
+        }
+      ],
+      "operation": "dropbox-sign.post.unclaimed-draft-create-embedded-with-template",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post unclaimed-draft edit-and-resend signature-request-id",
+      "summary": "Documented POST /unclaimed_draft/edit_and_resend/{signature_request_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "examples": [
+        "pm dropbox-sign api post unclaimed-draft edit-and-resend signature-request-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/unclaimed_draft/edit_and_resend/{signature_request_id}"
+        }
+      ],
+      "operation": "dropbox-sign.post.unclaimed-draft-edit-and-resend-signature-request-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put api-app client-id",
+      "summary": "Documented PUT /api_app/{client_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "examples": [
+        "pm dropbox-sign api put api-app client-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api_app/{client_id}"
+        }
+      ],
+      "operation": "dropbox-sign.put.api-app-client-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put fax-line add-user",
+      "summary": "Documented PUT /fax_line/add_user (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "examples": [
+        "pm dropbox-sign api put fax-line add-user --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/fax_line/add_user"
+        }
+      ],
+      "operation": "dropbox-sign.put.fax-line-add-user",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put fax-line remove-user",
+      "summary": "Documented PUT /fax_line/remove_user (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "examples": [
+        "pm dropbox-sign api put fax-line remove-user --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/fax_line/remove_user"
+        }
+      ],
+      "operation": "dropbox-sign.put.fax-line-remove-user",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put signature-request edit signature-request-id",
+      "summary": "Documented PUT /signature_request/edit/{signature_request_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "examples": [
+        "pm dropbox-sign api put signature-request edit signature-request-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/signature_request/edit/{signature_request_id}"
+        }
+      ],
+      "operation": "dropbox-sign.put.signature-request-edit-signature-request-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put signature-request edit-embedded signature-request-id",
+      "summary": "Documented PUT /signature_request/edit_embedded/{signature_request_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "examples": [
+        "pm dropbox-sign api put signature-request edit-embedded signature-request-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/signature_request/edit_embedded/{signature_request_id}"
+        }
+      ],
+      "operation": "dropbox-sign.put.signature-request-edit-embedded-signature-request-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put signature-request edit-embedded-with-template signature-request-id",
+      "summary": "Documented PUT /signature_request/edit_embedded_with_template/{signature_request_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "examples": [
+        "pm dropbox-sign api put signature-request edit-embedded-with-template signature-request-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/signature_request/edit_embedded_with_template/{signature_request_id}"
+        }
+      ],
+      "operation": "dropbox-sign.put.signature-request-edit-embedded-with-template-signature-request-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put signature-request edit-with-template signature-request-id",
+      "summary": "Documented PUT /signature_request/edit_with_template/{signature_request_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "examples": [
+        "pm dropbox-sign api put signature-request edit-with-template signature-request-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/signature_request/edit_with_template/{signature_request_id}"
+        }
+      ],
+      "operation": "dropbox-sign.put.signature-request-edit-with-template-signature-request-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "cancel signature request apply",
+      "summary": "Plan and execute the cancel signature request reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "cancel_signature_request",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "flags": [
+        {
+          "name": "signature_request_id",
+          "type": "string",
+          "summary": "Required signature request id record field.",
+          "maps_to": "record.signature_request_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm dropbox-sign cancel signature request apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/signature_request/cancel/{signature_request_id}"
+        }
+      ],
+      "risk": "destructive external mutation; cancels an incomplete signature request, this action is not reversible; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create team apply",
+      "summary": "Plan and execute the create team reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_team",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "examples": [
+        "pm dropbox-sign create team apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/team/create"
+        }
+      ],
+      "risk": "external mutation; creates a new Team and makes the calling account its member; fails if the caller already belongs to a Team",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete template apply",
+      "summary": "Plan and execute the delete template reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_template",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "flags": [
+        {
+          "name": "template_id",
+          "type": "string",
+          "summary": "Required template id record field.",
+          "maps_to": "record.template_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm dropbox-sign delete template apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/template/delete/{template_id}"
+        }
+      ],
+      "risk": "destructive external mutation; completely deletes a template from the account, this action is not reversible; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "release hold signature request apply",
+      "summary": "Plan and execute the release hold signature request reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "release_hold_signature_request",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "flags": [
+        {
+          "name": "signature_request_id",
+          "type": "string",
+          "summary": "Required signature request id record field.",
+          "maps_to": "record.signature_request_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm dropbox-sign release hold signature request apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/signature_request/release_hold/{signature_request_id}"
+        }
+      ],
+      "risk": "external mutation; releases a held signature request created from an UnclaimedDraft, immediately sending requests to all signers; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "remind signature request apply",
+      "summary": "Plan and execute the remind signature request reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "remind_signature_request",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "flags": [
+        {
+          "name": "email_address",
+          "type": "string",
+          "summary": "Required email address record field.",
+          "maps_to": "record.email_address",
+          "required": true
+        },
+        {
+          "name": "signature_request_id",
+          "type": "string",
+          "summary": "Required signature request id record field.",
+          "maps_to": "record.signature_request_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm dropbox-sign remind signature request apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/signature_request/remind/{signature_request_id}"
+        }
+      ],
+      "risk": "external mutation; sends an email reminder to a signer; cannot be sent again within 1 hour of the last reminder (manual or automatic)",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "remove signature request apply",
+      "summary": "Plan and execute the remove signature request reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "remove_signature_request",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "flags": [
+        {
+          "name": "signature_request_id",
+          "type": "string",
+          "summary": "Required signature request id record field.",
+          "maps_to": "record.signature_request_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm dropbox-sign remove signature request apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/signature_request/remove/{signature_request_id}"
+        }
+      ],
+      "risk": "destructive external mutation; removes the caller's access to a completed signature request from the account's list view, this action is not reversible; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "remove team member apply",
+      "summary": "Plan and execute the remove team member reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "remove_team_member",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "examples": [
+        "pm dropbox-sign remove team member apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/team/remove_member"
+        }
+      ],
+      "risk": "destructive external mutation; removes a user from the caller's Team; optionally transfers the removed account's documents to another account (Enterprise plans only), which is not reversible; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "remove template user apply",
+      "summary": "Plan and execute the remove template user reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "remove_template_user",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "flags": [
+        {
+          "name": "template_id",
+          "type": "string",
+          "summary": "Required template id record field.",
+          "maps_to": "record.template_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm dropbox-sign remove template user apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/template/remove_user/{template_id}"
+        }
+      ],
+      "risk": "external mutation; revokes the specified account's access to a template",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "signature requests list",
+      "summary": "Run the signature requests ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "signature_requests",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "examples": [
+        "pm dropbox-sign signature requests list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/signature_request/list"
+        }
+      ]
+    },
+    {
+      "path": "team members list",
+      "summary": "Run the team members ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "team_members",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "examples": [
+        "pm dropbox-sign team members list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/team/members/{team_id}"
+        }
+      ]
+    },
+    {
+      "path": "templates list",
+      "summary": "Run the templates ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "templates",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "examples": [
+        "pm dropbox-sign templates list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/template/list"
+        }
+      ]
+    },
+    {
+      "path": "update account apply",
+      "summary": "Plan and execute the update account reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_account",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "examples": [
+        "pm dropbox-sign update account apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/account"
+        }
+      ],
+      "risk": "external mutation; updates the caller's account settings (currently limited to the event callback URL and locale)",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update signature request apply",
+      "summary": "Plan and execute the update signature request reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_signature_request",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "flags": [
+        {
+          "name": "signature_id",
+          "type": "string",
+          "summary": "Required signature id record field.",
+          "maps_to": "record.signature_id",
+          "required": true
+        },
+        {
+          "name": "signature_request_id",
+          "type": "string",
+          "summary": "Required signature request id record field.",
+          "maps_to": "record.signature_request_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm dropbox-sign update signature request apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/signature_request/update/{signature_request_id}"
+        }
+      ],
+      "risk": "external mutation; changes a signer's email address or name on an in-progress signature request, redirecting where the next request/reminder is delivered; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update team apply",
+      "summary": "Plan and execute the update team reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_team",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm dropbox-sign update team apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/team"
+        }
+      ],
+      "risk": "external mutation; renames the caller's own Team",
+      "approval": "requires plan, preview, approval, and execute"
+    }
+  ]
+}

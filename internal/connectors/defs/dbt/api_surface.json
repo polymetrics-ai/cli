@@ -1,60 +1,996 @@
 {
-  "api": "dbt Cloud Administrative API v2 (https://cloud.getdbt.com/api/v2)",
+  "api": "dbt Cloud Administrative API v2 (https://cloud.getdbt.com/api/v2); provider artifact version: dbt Cloud API v2 2.0.0; OpenAPI 3.0.3; current provider-published master artifact",
   "docs": "https://docs.getdbt.com/dbt-cloud/api-v2",
-  "reviewed_at": "2026-07-04",
-  "scope": "Pass B full-surface expansion, cross-checked against the real published OpenAPI spec (https://github.com/dbt-labs/dbt-cloud-openapi-spec/blob/master/openapi-v2.yaml, fetched 2026-07-04): every one of the 52 documented Administrative API v2 operations is enumerated below, each covered_by a stream/write or excluded with a specific reason. 10 streams (projects/runs/repositories/users/environments/jobs/invites/licenses/notifications/ssh_tunnels) and 13 writes (job CRUD + trigger/retry, run cancel/retry, notification CRUD, SSH tunnel CRUD) now cover every practical GET-list/detail resource and every dialect-expressible mutation. Excluded: Projects/Environments/Repositories v2 CRUD mutations (the v2 endpoints themselves are dbt-labs-deprecated in favor of v3, which this bundle's base_url/spec targets v2 only), Accounts/Permissions/Users mutation (account-admin scope, not syncable connector data), run/job artifact downloads (raw manifest.json/run_results.json/catalog.json file bodies, not a JSON list endpoint), and the notification-unsubscribe utility endpoint (a caller-identity action, not a data mutation on a record).",
+  "reviewed_at": "2026-08-09",
+  "operation_ledger_version": 2,
+  "scope": "Provider-artifact inventory generated from the cited openapi artifact (52 documented operations across 1 provider-owned source document(s)). Every documented operation is represented; existing source-surface bindings absent from the artifact are retained and flagged with present-in-surface-absent-from-artifact.",
+  "artifacts": [
+    {
+      "id": "dbt-artifact-2026-08-09",
+      "url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "kind": "openapi",
+      "version": "3.0.3",
+      "retrieved_at": "2026-08-09",
+      "sha256": "75bce6e7de231bf397897502ab6c4280a1ca9fe5f5657d9e9291425e1a13f1ec"
+    }
+  ],
   "endpoints": [
-    { "method": "GET", "path": "/api/v2/accounts/", "excluded": { "category": "deprecated", "reason": "dbt-labs-marked 'Deprecated. Consider using the v3 API instead' in the published OpenAPI spec; this bundle's account scoping uses the required account_id config value directly, never an account-listing call" } },
-    { "method": "GET", "path": "/api/v2/accounts/{account_id}/", "excluded": { "category": "requires_elevated_scope", "reason": "account-level billing/plan metadata retrieval, not a syncable data stream; account_id is supplied directly via config, not discovered" } },
-    { "method": "POST", "path": "/api/v2/accounts/{account_id}/", "excluded": { "category": "requires_elevated_scope", "reason": "mutates account-level billing/plan settings; account-admin scope, not connector-appropriate data mutation" } },
-    { "method": "PATCH", "path": "/api/v2/accounts/{account_id}/", "excluded": { "category": "requires_elevated_scope", "reason": "partial account-level settings update; same account-admin scope as the full account update" } },
-    { "method": "GET", "path": "/api/v2/accounts/{account_id}/encryptions/", "covered_by": { "stream": "ssh_tunnels" } },
-    { "method": "POST", "path": "/api/v2/accounts/{account_id}/encryptions/", "covered_by": { "write": "create_ssh_tunnel" } },
-    { "method": "GET", "path": "/api/v2/accounts/{account_id}/encryptions/{id}/", "excluded": { "category": "duplicate_of", "reason": "single-SSH-tunnel detail is a strict subset of the ssh_tunnels stream's list response fields; the list stream already reads every tunnel" } },
-    { "method": "POST", "path": "/api/v2/accounts/{account_id}/encryptions/{id}/", "covered_by": { "write": "update_ssh_tunnel" } },
-    { "method": "DELETE", "path": "/api/v2/accounts/{account_id}/encryptions/{id}/", "covered_by": { "write": "delete_ssh_tunnel" } },
-    { "method": "GET", "path": "/api/v2/accounts/{account_id}/environments/", "covered_by": { "stream": "environments" } },
-    { "method": "POST", "path": "/api/v2/accounts/{account_id}/environments/", "excluded": { "category": "deprecated", "reason": "dbt-labs-marked 'Deprecated. Consider using the v3 API instead'; environment mutation belongs to the v3 Administrative API this connector does not target" } },
-    { "method": "GET", "path": "/api/v2/accounts/{account_id}/environments/{id}/", "excluded": { "category": "duplicate_of", "reason": "single-environment detail is a strict subset of the environments stream's list response fields" } },
-    { "method": "POST", "path": "/api/v2/accounts/{account_id}/environments/{id}/", "excluded": { "category": "deprecated", "reason": "dbt-labs-marked 'Deprecated. Consider using the v3 API instead'" } },
-    { "method": "DELETE", "path": "/api/v2/accounts/{account_id}/environments/{id}/", "excluded": { "category": "deprecated", "reason": "dbt-labs-marked 'Deprecated. Consider using the v3 API instead'" } },
-    { "method": "GET", "path": "/api/v2/accounts/{account_id}/invites/", "covered_by": { "stream": "invites" } },
-    { "method": "GET", "path": "/api/v2/accounts/{account_id}/invites/{id}/", "excluded": { "category": "duplicate_of", "reason": "single-invite detail is a strict subset of the invites stream's list response fields" } },
-    { "method": "GET", "path": "/api/v2/accounts/{account_id}/jobs/", "covered_by": { "stream": "jobs" } },
-    { "method": "POST", "path": "/api/v2/accounts/{account_id}/jobs/", "covered_by": { "write": "create_job" } },
-    { "method": "GET", "path": "/api/v2/accounts/{account_id}/jobs/{id}/", "excluded": { "category": "duplicate_of", "reason": "single-job detail is a strict subset of the jobs stream's list response fields" } },
-    { "method": "POST", "path": "/api/v2/accounts/{account_id}/jobs/{id}/", "covered_by": { "write": "update_job" } },
-    { "method": "DELETE", "path": "/api/v2/accounts/{account_id}/jobs/{id}/", "covered_by": { "write": "delete_job" } },
-    { "method": "GET", "path": "/api/v2/accounts/{account_id}/jobs/{job_id}/artifacts/{remainder}", "excluded": { "category": "binary_payload", "reason": "downloads a specific completed run's manifest.json/run_results.json/catalog.json artifact file verbatim, not a structured JSON list/detail record" } },
-    { "method": "POST", "path": "/api/v2/accounts/{account_id}/jobs/{job_id}/rerun/", "covered_by": { "write": "retry_failed_job" } },
-    { "method": "POST", "path": "/api/v2/accounts/{account_id}/jobs/{job_id}/run/", "covered_by": { "write": "trigger_job_run" } },
-    { "method": "GET", "path": "/api/v2/accounts/{account_id}/licenses/", "covered_by": { "stream": "licenses" } },
-    { "method": "GET", "path": "/api/v2/accounts/{account_id}/notifications/", "covered_by": { "stream": "notifications" } },
-    { "method": "POST", "path": "/api/v2/accounts/{account_id}/notifications/", "covered_by": { "write": "create_notification" } },
-    { "method": "GET", "path": "/api/v2/accounts/{account_id}/notifications/{id}/", "excluded": { "category": "duplicate_of", "reason": "single-notification detail is a strict subset of the notifications stream's list response fields" } },
-    { "method": "POST", "path": "/api/v2/accounts/{account_id}/notifications/{id}/", "covered_by": { "write": "update_notification" } },
-    { "method": "DELETE", "path": "/api/v2/accounts/{account_id}/notifications/{id}/", "covered_by": { "write": "delete_notification" } },
-    { "method": "POST", "path": "/api/v2/accounts/{account_id}/permissions/{id}/", "excluded": { "category": "requires_elevated_scope", "reason": "mutates a user's license/role permission grant; account-admin identity-management action, not connector data" } },
-    { "method": "GET", "path": "/api/v2/accounts/{account_id}/projects/", "covered_by": { "stream": "projects" } },
-    { "method": "POST", "path": "/api/v2/accounts/{account_id}/projects/", "excluded": { "category": "deprecated", "reason": "dbt-labs-marked 'Deprecated. Consider using the v3 API instead'" } },
-    { "method": "GET", "path": "/api/v2/accounts/{account_id}/projects/{id}/", "excluded": { "category": "duplicate_of", "reason": "single-project detail is a strict subset of the projects stream's list response fields" } },
-    { "method": "POST", "path": "/api/v2/accounts/{account_id}/projects/{id}/", "excluded": { "category": "deprecated", "reason": "dbt-labs-marked 'Deprecated. Consider using the v3 API instead'" } },
-    { "method": "DELETE", "path": "/api/v2/accounts/{account_id}/projects/{id}/", "excluded": { "category": "deprecated", "reason": "dbt-labs-marked 'Deprecated. Consider using the v3 API instead'" } },
-    { "method": "GET", "path": "/api/v2/accounts/{account_id}/repositories/", "covered_by": { "stream": "repositories" } },
-    { "method": "POST", "path": "/api/v2/accounts/{account_id}/repositories/", "excluded": { "category": "deprecated", "reason": "dbt-labs-marked 'Deprecated. Consider using the v3 API instead'" } },
-    { "method": "GET", "path": "/api/v2/accounts/{account_id}/repositories/{id}/", "excluded": { "category": "duplicate_of", "reason": "single-repository detail is a strict subset of the repositories stream's list response fields" } },
-    { "method": "DELETE", "path": "/api/v2/accounts/{account_id}/repositories/{id}/", "excluded": { "category": "deprecated", "reason": "dbt-labs-marked 'Deprecated. Consider using the v3 API instead'" } },
-    { "method": "GET", "path": "/api/v2/accounts/{account_id}/runs/", "covered_by": { "stream": "runs" } },
-    { "method": "GET", "path": "/api/v2/accounts/{account_id}/runs/{id}/", "excluded": { "category": "duplicate_of", "reason": "single-run detail is a strict subset of the runs stream's list response fields" } },
-    { "method": "GET", "path": "/api/v2/accounts/{account_id}/runs/{run_id}/artifacts/", "excluded": { "category": "binary_payload", "reason": "lists artifact FILENAMES only as a precursor to downloading each raw artifact body; the artifacts themselves are binary_payload (see the per-file GET below), and the filename list carries no independently syncable record data" } },
-    { "method": "GET", "path": "/api/v2/accounts/{account_id}/runs/{run_id}/artifacts/{remainder}", "excluded": { "category": "binary_payload", "reason": "downloads a specific run's manifest.json/run_results.json/catalog.json artifact file verbatim, not a structured JSON list/detail record" } },
-    { "method": "POST", "path": "/api/v2/accounts/{account_id}/runs/{run_id}/cancel/", "covered_by": { "write": "cancel_run" } },
-    { "method": "GET", "path": "/api/v2/accounts/{account_id}/runs/{run_id}/retry/", "excluded": { "category": "duplicate_of", "reason": "retrieves retry-eligibility/failure-point details already present on the runs stream's own record (status/status_message); no independent record shape" } },
-    { "method": "POST", "path": "/api/v2/accounts/{account_id}/runs/{run_id}/retry/", "covered_by": { "write": "retry_run" } },
-    { "method": "GET", "path": "/api/v2/accounts/{account_id}/steps/{id}/", "excluded": { "category": "out_of_scope", "reason": "a single run step's full stdout/debug log text is a large unbounded blob keyed by an id only discoverable by first reading a run's own step list (not itself a list endpoint dbt Cloud publishes); no practical stream shape without a parent-id fan_out this connector does not declare" } },
-    { "method": "GET", "path": "/api/v2/accounts/{account_id}/users/", "covered_by": { "stream": "users" } },
-    { "method": "GET", "path": "/api/v2/users/{id}/", "excluded": { "category": "duplicate_of", "reason": "single-user detail is a strict subset of the users stream's list response fields" } },
-    { "method": "POST", "path": "/api/v2/users/{id}/", "excluded": { "category": "requires_elevated_scope", "reason": "mutates a user's own account profile fields; user-identity self-service action, not connector-appropriate data mutation" } },
-    { "method": "POST", "path": "/api/v2/notifications/unsubscribe/", "excluded": { "category": "non_data_endpoint", "reason": "clears every email notification configuration for the CALLING user's own identity; a caller-identity action, not a mutation targeting a specific record the connector reads" } }
+    {
+      "method": "GET",
+      "path": "/api/v2/accounts/",
+      "provenance": {
+        "artifact": "dbt-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "75bce6e7de231bf397897502ab6c4280a1ca9fe5f5657d9e9291425e1a13f1ec",
+        "coordinate": "paths[\"/api/v2/accounts/\"].get"
+      },
+      "operation": {
+        "model": "deprecated",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "dbt-labs-marked 'Deprecated. Consider using the v3 API instead' in the published OpenAPI spec; this bundle's account scoping uses the required account_id config value directly, never an account-listing call",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/",
+      "provenance": {
+        "artifact": "dbt-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "75bce6e7de231bf397897502ab6c4280a1ca9fe5f5657d9e9291425e1a13f1ec",
+        "coordinate": "paths[\"/api/v2/accounts/{account_id}/\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "account-level billing/plan metadata retrieval, not a syncable data stream; account_id is supplied directly via config, not discovered",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/accounts/{account_id}/",
+      "provenance": {
+        "artifact": "dbt-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "75bce6e7de231bf397897502ab6c4280a1ca9fe5f5657d9e9291425e1a13f1ec",
+        "coordinate": "paths[\"/api/v2/accounts/{account_id}/\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "mutates account-level billing/plan settings; account-admin scope, not connector-appropriate data mutation",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/accounts/{account_id}/",
+      "provenance": {
+        "artifact": "dbt-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "75bce6e7de231bf397897502ab6c4280a1ca9fe5f5657d9e9291425e1a13f1ec",
+        "coordinate": "paths[\"/api/v2/accounts/{account_id}/\"].patch"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "partial account-level settings update; same account-admin scope as the full account update",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/encryptions/",
+      "provenance": {
+        "artifact": "dbt-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "75bce6e7de231bf397897502ab6c4280a1ca9fe5f5657d9e9291425e1a13f1ec",
+        "coordinate": "paths[\"/api/v2/accounts/{account_id}/encryptions/\"].get"
+      },
+      "covered_by": {
+        "stream": "ssh_tunnels"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/accounts/{account_id}/encryptions/",
+      "provenance": {
+        "artifact": "dbt-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "75bce6e7de231bf397897502ab6c4280a1ca9fe5f5657d9e9291425e1a13f1ec",
+        "coordinate": "paths[\"/api/v2/accounts/{account_id}/encryptions/\"].post"
+      },
+      "covered_by": {
+        "write": "create_ssh_tunnel"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/encryptions/{id}/",
+      "provenance": {
+        "artifact": "dbt-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "75bce6e7de231bf397897502ab6c4280a1ca9fe5f5657d9e9291425e1a13f1ec",
+        "coordinate": "paths[\"/api/v2/accounts/{account_id}/encryptions/{id}/\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-SSH-tunnel detail is a strict subset of the ssh_tunnels stream's list response fields; the list stream already reads every tunnel",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/accounts/{account_id}/encryptions/{id}/",
+      "provenance": {
+        "artifact": "dbt-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "75bce6e7de231bf397897502ab6c4280a1ca9fe5f5657d9e9291425e1a13f1ec",
+        "coordinate": "paths[\"/api/v2/accounts/{account_id}/encryptions/{id}/\"].post"
+      },
+      "covered_by": {
+        "write": "update_ssh_tunnel"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/accounts/{account_id}/encryptions/{id}/",
+      "provenance": {
+        "artifact": "dbt-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "75bce6e7de231bf397897502ab6c4280a1ca9fe5f5657d9e9291425e1a13f1ec",
+        "coordinate": "paths[\"/api/v2/accounts/{account_id}/encryptions/{id}/\"].delete"
+      },
+      "covered_by": {
+        "write": "delete_ssh_tunnel"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/environments/",
+      "provenance": {
+        "artifact": "dbt-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "75bce6e7de231bf397897502ab6c4280a1ca9fe5f5657d9e9291425e1a13f1ec",
+        "coordinate": "paths[\"/api/v2/accounts/{account_id}/environments/\"].get"
+      },
+      "covered_by": {
+        "stream": "environments"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/accounts/{account_id}/environments/",
+      "provenance": {
+        "artifact": "dbt-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "75bce6e7de231bf397897502ab6c4280a1ca9fe5f5657d9e9291425e1a13f1ec",
+        "coordinate": "paths[\"/api/v2/accounts/{account_id}/environments/\"].post"
+      },
+      "operation": {
+        "model": "deprecated",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "dbt-labs-marked 'Deprecated. Consider using the v3 API instead'; environment mutation belongs to the v3 Administrative API this connector does not target",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/environments/{id}/",
+      "provenance": {
+        "artifact": "dbt-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "75bce6e7de231bf397897502ab6c4280a1ca9fe5f5657d9e9291425e1a13f1ec",
+        "coordinate": "paths[\"/api/v2/accounts/{account_id}/environments/{id}/\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-environment detail is a strict subset of the environments stream's list response fields",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/accounts/{account_id}/environments/{id}/",
+      "provenance": {
+        "artifact": "dbt-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "75bce6e7de231bf397897502ab6c4280a1ca9fe5f5657d9e9291425e1a13f1ec",
+        "coordinate": "paths[\"/api/v2/accounts/{account_id}/environments/{id}/\"].post"
+      },
+      "operation": {
+        "model": "deprecated",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "dbt-labs-marked 'Deprecated. Consider using the v3 API instead'",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/accounts/{account_id}/environments/{id}/",
+      "provenance": {
+        "artifact": "dbt-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "75bce6e7de231bf397897502ab6c4280a1ca9fe5f5657d9e9291425e1a13f1ec",
+        "coordinate": "paths[\"/api/v2/accounts/{account_id}/environments/{id}/\"].delete"
+      },
+      "operation": {
+        "model": "deprecated",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "dbt-labs-marked 'Deprecated. Consider using the v3 API instead'",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/invites/",
+      "provenance": {
+        "artifact": "dbt-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "75bce6e7de231bf397897502ab6c4280a1ca9fe5f5657d9e9291425e1a13f1ec",
+        "coordinate": "paths[\"/api/v2/accounts/{account_id}/invites/\"].get"
+      },
+      "covered_by": {
+        "stream": "invites"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/invites/{id}/",
+      "provenance": {
+        "artifact": "dbt-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "75bce6e7de231bf397897502ab6c4280a1ca9fe5f5657d9e9291425e1a13f1ec",
+        "coordinate": "paths[\"/api/v2/accounts/{account_id}/invites/{id}/\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-invite detail is a strict subset of the invites stream's list response fields",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/jobs/",
+      "provenance": {
+        "artifact": "dbt-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "75bce6e7de231bf397897502ab6c4280a1ca9fe5f5657d9e9291425e1a13f1ec",
+        "coordinate": "paths[\"/api/v2/accounts/{account_id}/jobs/\"].get"
+      },
+      "covered_by": {
+        "stream": "jobs"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/accounts/{account_id}/jobs/",
+      "provenance": {
+        "artifact": "dbt-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "75bce6e7de231bf397897502ab6c4280a1ca9fe5f5657d9e9291425e1a13f1ec",
+        "coordinate": "paths[\"/api/v2/accounts/{account_id}/jobs/\"].post"
+      },
+      "covered_by": {
+        "write": "create_job"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/jobs/{id}/",
+      "provenance": {
+        "artifact": "dbt-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "75bce6e7de231bf397897502ab6c4280a1ca9fe5f5657d9e9291425e1a13f1ec",
+        "coordinate": "paths[\"/api/v2/accounts/{account_id}/jobs/{id}/\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-job detail is a strict subset of the jobs stream's list response fields",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/accounts/{account_id}/jobs/{id}/",
+      "provenance": {
+        "artifact": "dbt-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "75bce6e7de231bf397897502ab6c4280a1ca9fe5f5657d9e9291425e1a13f1ec",
+        "coordinate": "paths[\"/api/v2/accounts/{account_id}/jobs/{id}/\"].post"
+      },
+      "covered_by": {
+        "write": "update_job"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/accounts/{account_id}/jobs/{id}/",
+      "provenance": {
+        "artifact": "dbt-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "75bce6e7de231bf397897502ab6c4280a1ca9fe5f5657d9e9291425e1a13f1ec",
+        "coordinate": "paths[\"/api/v2/accounts/{account_id}/jobs/{id}/\"].delete"
+      },
+      "covered_by": {
+        "write": "delete_job"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/jobs/{job_id}/artifacts/{remainder}",
+      "provenance": {
+        "artifact": "dbt-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "75bce6e7de231bf397897502ab6c4280a1ca9fe5f5657d9e9291425e1a13f1ec",
+        "coordinate": "paths[\"/api/v2/accounts/{account_id}/jobs/{job_id}/artifacts/{remainder}\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "downloads a specific completed run's manifest.json/run_results.json/catalog.json artifact file verbatim, not a structured JSON list/detail record",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/accounts/{account_id}/jobs/{job_id}/rerun/",
+      "provenance": {
+        "artifact": "dbt-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "75bce6e7de231bf397897502ab6c4280a1ca9fe5f5657d9e9291425e1a13f1ec",
+        "coordinate": "paths[\"/api/v2/accounts/{account_id}/jobs/{job_id}/rerun/\"].post"
+      },
+      "covered_by": {
+        "write": "retry_failed_job"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/accounts/{account_id}/jobs/{job_id}/run/",
+      "provenance": {
+        "artifact": "dbt-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "75bce6e7de231bf397897502ab6c4280a1ca9fe5f5657d9e9291425e1a13f1ec",
+        "coordinate": "paths[\"/api/v2/accounts/{account_id}/jobs/{job_id}/run/\"].post"
+      },
+      "covered_by": {
+        "write": "trigger_job_run"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/licenses/",
+      "provenance": {
+        "artifact": "dbt-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "75bce6e7de231bf397897502ab6c4280a1ca9fe5f5657d9e9291425e1a13f1ec",
+        "coordinate": "paths[\"/api/v2/accounts/{account_id}/licenses/\"].get"
+      },
+      "covered_by": {
+        "stream": "licenses"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/notifications/",
+      "provenance": {
+        "artifact": "dbt-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "75bce6e7de231bf397897502ab6c4280a1ca9fe5f5657d9e9291425e1a13f1ec",
+        "coordinate": "paths[\"/api/v2/accounts/{account_id}/notifications/\"].get"
+      },
+      "covered_by": {
+        "stream": "notifications"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/accounts/{account_id}/notifications/",
+      "provenance": {
+        "artifact": "dbt-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "75bce6e7de231bf397897502ab6c4280a1ca9fe5f5657d9e9291425e1a13f1ec",
+        "coordinate": "paths[\"/api/v2/accounts/{account_id}/notifications/\"].post"
+      },
+      "covered_by": {
+        "write": "create_notification"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/notifications/{id}/",
+      "provenance": {
+        "artifact": "dbt-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "75bce6e7de231bf397897502ab6c4280a1ca9fe5f5657d9e9291425e1a13f1ec",
+        "coordinate": "paths[\"/api/v2/accounts/{account_id}/notifications/{id}/\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-notification detail is a strict subset of the notifications stream's list response fields",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/accounts/{account_id}/notifications/{id}/",
+      "provenance": {
+        "artifact": "dbt-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "75bce6e7de231bf397897502ab6c4280a1ca9fe5f5657d9e9291425e1a13f1ec",
+        "coordinate": "paths[\"/api/v2/accounts/{account_id}/notifications/{id}/\"].post"
+      },
+      "covered_by": {
+        "write": "update_notification"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/accounts/{account_id}/notifications/{id}/",
+      "provenance": {
+        "artifact": "dbt-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "75bce6e7de231bf397897502ab6c4280a1ca9fe5f5657d9e9291425e1a13f1ec",
+        "coordinate": "paths[\"/api/v2/accounts/{account_id}/notifications/{id}/\"].delete"
+      },
+      "covered_by": {
+        "write": "delete_notification"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/accounts/{account_id}/permissions/{id}/",
+      "provenance": {
+        "artifact": "dbt-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "75bce6e7de231bf397897502ab6c4280a1ca9fe5f5657d9e9291425e1a13f1ec",
+        "coordinate": "paths[\"/api/v2/accounts/{account_id}/permissions/{id}/\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "mutates a user's license/role permission grant; account-admin identity-management action, not connector data",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/projects/",
+      "provenance": {
+        "artifact": "dbt-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "75bce6e7de231bf397897502ab6c4280a1ca9fe5f5657d9e9291425e1a13f1ec",
+        "coordinate": "paths[\"/api/v2/accounts/{account_id}/projects/\"].get"
+      },
+      "covered_by": {
+        "stream": "projects"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/accounts/{account_id}/projects/",
+      "provenance": {
+        "artifact": "dbt-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "75bce6e7de231bf397897502ab6c4280a1ca9fe5f5657d9e9291425e1a13f1ec",
+        "coordinate": "paths[\"/api/v2/accounts/{account_id}/projects/\"].post"
+      },
+      "operation": {
+        "model": "deprecated",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "dbt-labs-marked 'Deprecated. Consider using the v3 API instead'",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/projects/{id}/",
+      "provenance": {
+        "artifact": "dbt-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "75bce6e7de231bf397897502ab6c4280a1ca9fe5f5657d9e9291425e1a13f1ec",
+        "coordinate": "paths[\"/api/v2/accounts/{account_id}/projects/{id}/\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-project detail is a strict subset of the projects stream's list response fields",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/accounts/{account_id}/projects/{id}/",
+      "provenance": {
+        "artifact": "dbt-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "75bce6e7de231bf397897502ab6c4280a1ca9fe5f5657d9e9291425e1a13f1ec",
+        "coordinate": "paths[\"/api/v2/accounts/{account_id}/projects/{id}/\"].post"
+      },
+      "operation": {
+        "model": "deprecated",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "dbt-labs-marked 'Deprecated. Consider using the v3 API instead'",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/accounts/{account_id}/projects/{id}/",
+      "provenance": {
+        "artifact": "dbt-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "75bce6e7de231bf397897502ab6c4280a1ca9fe5f5657d9e9291425e1a13f1ec",
+        "coordinate": "paths[\"/api/v2/accounts/{account_id}/projects/{id}/\"].delete"
+      },
+      "operation": {
+        "model": "deprecated",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "dbt-labs-marked 'Deprecated. Consider using the v3 API instead'",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/repositories/",
+      "provenance": {
+        "artifact": "dbt-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "75bce6e7de231bf397897502ab6c4280a1ca9fe5f5657d9e9291425e1a13f1ec",
+        "coordinate": "paths[\"/api/v2/accounts/{account_id}/repositories/\"].get"
+      },
+      "covered_by": {
+        "stream": "repositories"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/accounts/{account_id}/repositories/",
+      "provenance": {
+        "artifact": "dbt-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "75bce6e7de231bf397897502ab6c4280a1ca9fe5f5657d9e9291425e1a13f1ec",
+        "coordinate": "paths[\"/api/v2/accounts/{account_id}/repositories/\"].post"
+      },
+      "operation": {
+        "model": "deprecated",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "dbt-labs-marked 'Deprecated. Consider using the v3 API instead'",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/repositories/{id}/",
+      "provenance": {
+        "artifact": "dbt-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "75bce6e7de231bf397897502ab6c4280a1ca9fe5f5657d9e9291425e1a13f1ec",
+        "coordinate": "paths[\"/api/v2/accounts/{account_id}/repositories/{id}/\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-repository detail is a strict subset of the repositories stream's list response fields",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/accounts/{account_id}/repositories/{id}/",
+      "provenance": {
+        "artifact": "dbt-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "75bce6e7de231bf397897502ab6c4280a1ca9fe5f5657d9e9291425e1a13f1ec",
+        "coordinate": "paths[\"/api/v2/accounts/{account_id}/repositories/{id}/\"].delete"
+      },
+      "operation": {
+        "model": "deprecated",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "dbt-labs-marked 'Deprecated. Consider using the v3 API instead'",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/runs/",
+      "provenance": {
+        "artifact": "dbt-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "75bce6e7de231bf397897502ab6c4280a1ca9fe5f5657d9e9291425e1a13f1ec",
+        "coordinate": "paths[\"/api/v2/accounts/{account_id}/runs/\"].get"
+      },
+      "covered_by": {
+        "stream": "runs"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/runs/{id}/",
+      "provenance": {
+        "artifact": "dbt-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "75bce6e7de231bf397897502ab6c4280a1ca9fe5f5657d9e9291425e1a13f1ec",
+        "coordinate": "paths[\"/api/v2/accounts/{account_id}/runs/{id}/\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-run detail is a strict subset of the runs stream's list response fields",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/runs/{run_id}/artifacts/",
+      "provenance": {
+        "artifact": "dbt-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "75bce6e7de231bf397897502ab6c4280a1ca9fe5f5657d9e9291425e1a13f1ec",
+        "coordinate": "paths[\"/api/v2/accounts/{account_id}/runs/{run_id}/artifacts/\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "lists artifact FILENAMES only as a precursor to downloading each raw artifact body; the artifacts themselves are binary_payload (see the per-file GET below), and the filename list carries no independently syncable record data",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/runs/{run_id}/artifacts/{remainder}",
+      "provenance": {
+        "artifact": "dbt-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "75bce6e7de231bf397897502ab6c4280a1ca9fe5f5657d9e9291425e1a13f1ec",
+        "coordinate": "paths[\"/api/v2/accounts/{account_id}/runs/{run_id}/artifacts/{remainder}\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "downloads a specific run's manifest.json/run_results.json/catalog.json artifact file verbatim, not a structured JSON list/detail record",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/accounts/{account_id}/runs/{run_id}/cancel/",
+      "provenance": {
+        "artifact": "dbt-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "75bce6e7de231bf397897502ab6c4280a1ca9fe5f5657d9e9291425e1a13f1ec",
+        "coordinate": "paths[\"/api/v2/accounts/{account_id}/runs/{run_id}/cancel/\"].post"
+      },
+      "covered_by": {
+        "write": "cancel_run"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/runs/{run_id}/retry/",
+      "provenance": {
+        "artifact": "dbt-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "75bce6e7de231bf397897502ab6c4280a1ca9fe5f5657d9e9291425e1a13f1ec",
+        "coordinate": "paths[\"/api/v2/accounts/{account_id}/runs/{run_id}/retry/\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "retrieves retry-eligibility/failure-point details already present on the runs stream's own record (status/status_message); no independent record shape",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/accounts/{account_id}/runs/{run_id}/retry/",
+      "provenance": {
+        "artifact": "dbt-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "75bce6e7de231bf397897502ab6c4280a1ca9fe5f5657d9e9291425e1a13f1ec",
+        "coordinate": "paths[\"/api/v2/accounts/{account_id}/runs/{run_id}/retry/\"].post"
+      },
+      "covered_by": {
+        "write": "retry_run"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/steps/{id}/",
+      "provenance": {
+        "artifact": "dbt-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "75bce6e7de231bf397897502ab6c4280a1ca9fe5f5657d9e9291425e1a13f1ec",
+        "coordinate": "paths[\"/api/v2/accounts/{account_id}/steps/{id}/\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "a single run step's full stdout/debug log text is a large unbounded blob keyed by an id only discoverable by first reading a run's own step list (not itself a list endpoint dbt Cloud publishes); no practical stream shape without a parent-id fan_out this connector does not declare",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/users/",
+      "provenance": {
+        "artifact": "dbt-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "75bce6e7de231bf397897502ab6c4280a1ca9fe5f5657d9e9291425e1a13f1ec",
+        "coordinate": "paths[\"/api/v2/accounts/{account_id}/users/\"].get"
+      },
+      "covered_by": {
+        "stream": "users"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/notifications/unsubscribe/",
+      "provenance": {
+        "artifact": "dbt-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "75bce6e7de231bf397897502ab6c4280a1ca9fe5f5657d9e9291425e1a13f1ec",
+        "coordinate": "paths[\"/api/v2/notifications/unsubscribe/\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "clears every email notification configuration for the CALLING user's own identity; a caller-identity action, not a mutation targeting a specific record the connector reads",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/users/{id}/",
+      "provenance": {
+        "artifact": "dbt-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "75bce6e7de231bf397897502ab6c4280a1ca9fe5f5657d9e9291425e1a13f1ec",
+        "coordinate": "paths[\"/api/v2/users/{id}/\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-user detail is a strict subset of the users stream's list response fields",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/users/{id}/",
+      "provenance": {
+        "artifact": "dbt-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "75bce6e7de231bf397897502ab6c4280a1ca9fe5f5657d9e9291425e1a13f1ec",
+        "coordinate": "paths[\"/api/v2/users/{id}/\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "mutates a user's own account profile fields; user-identity self-service action, not connector-appropriate data mutation",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    }
   ]
 }

@@ -1,0 +1,126 @@
+{
+  "tagline": "Run Buzzsprout's declared streams and reverse-ETL actions.",
+  "usage": "pm buzzsprout \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "api get api podcast-id episodes episode-id json",
+        "episodes list",
+        "podcasts list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "create episode apply",
+        "update episode apply"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "api get api podcast-id episodes episode-id json",
+      "summary": "Documented GET /api/{podcast_id}/episodes/{episode_id}.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://github.com/buzzsprout/buzzsprout-api",
+      "examples": [
+        "pm buzzsprout api get api podcast-id episodes episode-id json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/{podcast_id}/episodes/{episode_id}.json"
+        }
+      ],
+      "operation": "buzzsprout.get.api-podcast-id-episodes-episode-id-json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "create episode apply",
+      "summary": "Plan and execute the create episode reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_episode",
+      "source_url": "https://github.com/buzzsprout/buzzsprout-api",
+      "examples": [
+        "pm buzzsprout create episode apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/{podcast_id}/episodes.json"
+        }
+      ],
+      "risk": "external mutation; creates a new episode (and can trigger audio processing/publication) on the configured podcast; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "episodes list",
+      "summary": "Run the episodes ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "episodes",
+      "source_url": "https://github.com/buzzsprout/buzzsprout-api",
+      "examples": [
+        "pm buzzsprout episodes list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/{podcast_id}/episodes.json"
+        }
+      ]
+    },
+    {
+      "path": "podcasts list",
+      "summary": "Run the podcasts ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "podcasts",
+      "source_url": "https://github.com/buzzsprout/buzzsprout-api",
+      "examples": [
+        "pm buzzsprout podcasts list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/podcasts.json"
+        }
+      ]
+    },
+    {
+      "path": "update episode apply",
+      "summary": "Plan and execute the update episode reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_episode",
+      "source_url": "https://github.com/buzzsprout/buzzsprout-api",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm buzzsprout update episode apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/{podcast_id}/episodes/{episode_id}.json"
+        }
+      ],
+      "risk": "external mutation; overwrites episode metadata on the configured podcast; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    }
+  ]
+}

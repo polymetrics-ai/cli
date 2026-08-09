@@ -1,0 +1,3987 @@
+{
+  "tagline": "Run Bitly's declared streams and reverse-ETL actions.",
+  "usage": "pm bitly \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "api get apps client-id",
+        "api get bitlinks bitlink",
+        "api get bitlinks bitlink cities",
+        "api get bitlinks bitlink clicks",
+        "api get bitlinks bitlink clicks summary",
+        "api get bitlinks bitlink countries",
+        "api get bitlinks bitlink devices",
+        "api get bitlinks bitlink engagements",
+        "api get bitlinks bitlink engagements summary",
+        "api get bitlinks bitlink referrer-name",
+        "api get bitlinks bitlink referrers",
+        "api get bitlinks bitlink referrers-by-domains",
+        "api get bitlinks bitlink referring-domains",
+        "api get bsds",
+        "api get campaigns",
+        "api get campaigns campaign-guid",
+        "api get channels",
+        "api get channels channel-guid",
+        "api get custom-bitlinks custom-bitlink",
+        "api get custom-bitlinks custom-bitlink clicks",
+        "api get custom-bitlinks custom-bitlink clicks-by-destination",
+        "api get groups",
+        "api get groups group-guid",
+        "api get groups group-guid bitlinks",
+        "api get groups group-guid bitlinks sort",
+        "api get groups group-guid cities",
+        "api get groups group-guid clicks",
+        "api get groups group-guid codes scans cities",
+        "api get groups group-guid codes scans countries",
+        "api get groups group-guid codes scans over-time",
+        "api get groups group-guid codes scans top",
+        "api get groups group-guid countries",
+        "api get groups group-guid devices",
+        "api get groups group-guid engagements over-time",
+        "api get groups group-guid engagements sorted top",
+        "api get groups group-guid engagements top",
+        "api get groups group-guid feature-usage",
+        "api get groups group-guid historical-usage",
+        "api get groups group-guid links clicks cities",
+        "api get groups group-guid links clicks countries",
+        "api get groups group-guid links clicks devices",
+        "api get groups group-guid links clicks over-time",
+        "api get groups group-guid links clicks referrers",
+        "api get groups group-guid links clicks top",
+        "api get groups group-guid preferences",
+        "api get groups group-guid qr-codes",
+        "api get groups group-guid referrers",
+        "api get groups group-guid referring-networks",
+        "api get groups group-guid shorten-counts",
+        "api get groups group-guid tags",
+        "api get organizations",
+        "api get organizations organization-guid",
+        "api get organizations organization-guid plan-limits",
+        "api get organizations organization-guid shorten-counts",
+        "api get organizations organization-guid shorten-counts-by-group",
+        "api get organizations organization-guid webhooks",
+        "api get qr-codes qrcode-id",
+        "api get qr-codes qrcode-id image",
+        "api get qr-codes qrcode-id scans",
+        "api get qr-codes qrcode-id scans browsers",
+        "api get qr-codes qrcode-id scans cities",
+        "api get qr-codes qrcode-id scans countries",
+        "api get qr-codes qrcode-id scans device-os",
+        "api get qr-codes qrcode-id scans summary",
+        "api get user",
+        "api get user platform-limits",
+        "api get v4 bitlinks bitlink",
+        "api get v4 bitlinks bitlink cities",
+        "api get v4 bitlinks bitlink clicks",
+        "api get v4 bitlinks bitlink clicks summary",
+        "api get v4 bitlinks bitlink countries",
+        "api get v4 bitlinks bitlink devices",
+        "api get v4 bitlinks bitlink engagements",
+        "api get v4 bitlinks bitlink engagements summary",
+        "api get v4 bitlinks bitlink qr-code",
+        "api get v4 bitlinks bitlink referrer-name",
+        "api get v4 bitlinks bitlink referrers",
+        "api get v4 bitlinks bitlink referrers-by-domains",
+        "api get v4 bitlinks bitlink referring-domains",
+        "api get v4 campaigns campaign-guid",
+        "api get v4 channels channel-guid",
+        "api get v4 custom-bitlinks custom-bitlink",
+        "api get v4 custom-bitlinks custom-bitlink clicks",
+        "api get v4 custom-bitlinks custom-bitlink clicks-by-destination",
+        "api get v4 groups group-guid",
+        "api get v4 groups group-guid bitlinks sort",
+        "api get v4 groups group-guid cities",
+        "api get v4 groups group-guid clicks",
+        "api get v4 groups group-guid codes scans cities",
+        "api get v4 groups group-guid codes scans countries",
+        "api get v4 groups group-guid codes scans over-time",
+        "api get v4 groups group-guid codes scans top",
+        "api get v4 groups group-guid countries",
+        "api get v4 groups group-guid devices",
+        "api get v4 groups group-guid engagements over-time",
+        "api get v4 groups group-guid engagements sorted top",
+        "api get v4 groups group-guid engagements top",
+        "api get v4 groups group-guid feature-usage",
+        "api get v4 groups group-guid historical-usage",
+        "api get v4 groups group-guid links clicks cities",
+        "api get v4 groups group-guid links clicks countries",
+        "api get v4 groups group-guid links clicks devices",
+        "api get v4 groups group-guid links clicks over-time",
+        "api get v4 groups group-guid links clicks referrers",
+        "api get v4 groups group-guid links clicks top",
+        "api get v4 groups group-guid preferences",
+        "api get v4 groups group-guid referrers",
+        "api get v4 groups group-guid referring-networks",
+        "api get v4 groups group-guid shorten-counts",
+        "api get v4 oauth deauthorize",
+        "api get v4 organizations organization-guid",
+        "api get v4 organizations organization-guid plan-limits",
+        "api get v4 organizations organization-guid shorten-counts",
+        "api get v4 organizations organization-guid shorten-counts-by-group",
+        "api get v4 qr-codes qr-code-id",
+        "api get v4 user",
+        "api get v4 user link-history",
+        "api get v4 webhooks webhook-guid",
+        "api get webhooks webhook-guid",
+        "bitlinks list",
+        "bsds list",
+        "campaigns list",
+        "channels list",
+        "group tags list",
+        "groups list",
+        "organizations list",
+        "qr codes list",
+        "webhooks list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "api delete bitlinks bitlink",
+        "api delete qr-codes qrcode-id",
+        "api delete webhooks webhook-guid",
+        "api patch bitlinks bitlink",
+        "api patch campaigns campaign-guid",
+        "api patch channels channel-guid",
+        "api patch custom-bitlinks custom-bitlink",
+        "api patch groups group-guid",
+        "api patch groups group-guid bitlinks",
+        "api patch groups group-guid preferences",
+        "api patch groups group-guid qr-codes",
+        "api patch qr-codes qrcode-id",
+        "api patch qr-codes qrcode-id redirect",
+        "api patch user",
+        "api patch v4 groups group-guid bitlinks",
+        "api patch v4 user",
+        "api patch webhooks webhook-guid",
+        "api post bitlinks",
+        "api post campaigns",
+        "api post channels",
+        "api post custom-bitlinks",
+        "api post expand",
+        "api post groups group-guid exports",
+        "api post qr-codes",
+        "api post qr-codes static",
+        "api post shorten",
+        "api post v4 expand",
+        "api post v4 groups group-guid exports",
+        "api post v4 oauth deauthorize",
+        "api post v4 qr-codes qr-code-id customize",
+        "api post v4 shorten",
+        "api post webhooks",
+        "api post webhooks webhook-guid verify",
+        "api put qr-codes qrcode-id to-bitlink",
+        "create bitlink apply",
+        "create campaign apply",
+        "create channel apply",
+        "create custom bitlink apply",
+        "create qr code apply",
+        "create webhook apply",
+        "delete bitlink apply",
+        "delete bitlink tags apply",
+        "delete qr code apply",
+        "delete webhook apply",
+        "update bitlink apply",
+        "update bitlink tags apply",
+        "update campaign apply",
+        "update channel apply",
+        "update custom bitlink apply",
+        "update group apply",
+        "update group preferences apply",
+        "update qr code apply",
+        "update webhook apply"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "api delete bitlinks bitlink",
+      "summary": "Documented DELETE /bitlinks/{bitlink} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api delete bitlinks bitlink --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/bitlinks/{bitlink}"
+        }
+      ],
+      "operation": "bitly.delete.bitlinks-bitlink",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete qr-codes qrcode-id",
+      "summary": "Documented DELETE /qr-codes/{qrcode_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api delete qr-codes qrcode-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/qr-codes/{qrcode_id}"
+        }
+      ],
+      "operation": "bitly.delete.qr-codes-qrcode-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete webhooks webhook-guid",
+      "summary": "Documented DELETE /webhooks/{webhook_guid} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api delete webhooks webhook-guid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/webhooks/{webhook_guid}"
+        }
+      ],
+      "operation": "bitly.delete.webhooks-webhook-guid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api get apps client-id",
+      "summary": "Documented GET /apps/{client_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get apps client-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/apps/{client_id}"
+        }
+      ],
+      "operation": "bitly.get.apps-client-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get bitlinks bitlink",
+      "summary": "Documented GET /bitlinks/{bitlink} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get bitlinks bitlink --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/bitlinks/{bitlink}"
+        }
+      ],
+      "operation": "bitly.get.bitlinks-bitlink",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get bitlinks bitlink cities",
+      "summary": "Documented GET /bitlinks/{bitlink}/cities (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get bitlinks bitlink cities --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/bitlinks/{bitlink}/cities"
+        }
+      ],
+      "operation": "bitly.get.bitlinks-bitlink-cities",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get bitlinks bitlink clicks",
+      "summary": "Documented GET /bitlinks/{bitlink}/clicks (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get bitlinks bitlink clicks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/bitlinks/{bitlink}/clicks"
+        }
+      ],
+      "operation": "bitly.get.bitlinks-bitlink-clicks",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get bitlinks bitlink clicks summary",
+      "summary": "Documented GET /bitlinks/{bitlink}/clicks/summary (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get bitlinks bitlink clicks summary --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/bitlinks/{bitlink}/clicks/summary"
+        }
+      ],
+      "operation": "bitly.get.bitlinks-bitlink-clicks-summary",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get bitlinks bitlink countries",
+      "summary": "Documented GET /bitlinks/{bitlink}/countries (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get bitlinks bitlink countries --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/bitlinks/{bitlink}/countries"
+        }
+      ],
+      "operation": "bitly.get.bitlinks-bitlink-countries",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get bitlinks bitlink devices",
+      "summary": "Documented GET /bitlinks/{bitlink}/devices (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get bitlinks bitlink devices --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/bitlinks/{bitlink}/devices"
+        }
+      ],
+      "operation": "bitly.get.bitlinks-bitlink-devices",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get bitlinks bitlink engagements",
+      "summary": "Documented GET /bitlinks/{bitlink}/engagements (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get bitlinks bitlink engagements --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/bitlinks/{bitlink}/engagements"
+        }
+      ],
+      "operation": "bitly.get.bitlinks-bitlink-engagements",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get bitlinks bitlink engagements summary",
+      "summary": "Documented GET /bitlinks/{bitlink}/engagements/summary (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get bitlinks bitlink engagements summary --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/bitlinks/{bitlink}/engagements/summary"
+        }
+      ],
+      "operation": "bitly.get.bitlinks-bitlink-engagements-summary",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get bitlinks bitlink referrer-name",
+      "summary": "Documented GET /bitlinks/{bitlink}/referrer_name (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get bitlinks bitlink referrer-name --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/bitlinks/{bitlink}/referrer_name"
+        }
+      ],
+      "operation": "bitly.get.bitlinks-bitlink-referrer-name",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get bitlinks bitlink referrers",
+      "summary": "Documented GET /bitlinks/{bitlink}/referrers (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get bitlinks bitlink referrers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/bitlinks/{bitlink}/referrers"
+        }
+      ],
+      "operation": "bitly.get.bitlinks-bitlink-referrers",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get bitlinks bitlink referrers-by-domains",
+      "summary": "Documented GET /bitlinks/{bitlink}/referrers_by_domains (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get bitlinks bitlink referrers-by-domains --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/bitlinks/{bitlink}/referrers_by_domains"
+        }
+      ],
+      "operation": "bitly.get.bitlinks-bitlink-referrers-by-domains",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get bitlinks bitlink referring-domains",
+      "summary": "Documented GET /bitlinks/{bitlink}/referring_domains (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get bitlinks bitlink referring-domains --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/bitlinks/{bitlink}/referring_domains"
+        }
+      ],
+      "operation": "bitly.get.bitlinks-bitlink-referring-domains",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get bsds",
+      "summary": "Documented GET /bsds (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get bsds --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/bsds"
+        }
+      ],
+      "operation": "bitly.get.bsds",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get campaigns",
+      "summary": "Documented GET /campaigns (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get campaigns --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/campaigns"
+        }
+      ],
+      "operation": "bitly.get.campaigns",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get campaigns campaign-guid",
+      "summary": "Documented GET /campaigns/{campaign_guid} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get campaigns campaign-guid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/campaigns/{campaign_guid}"
+        }
+      ],
+      "operation": "bitly.get.campaigns-campaign-guid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get channels",
+      "summary": "Documented GET /channels (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get channels --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/channels"
+        }
+      ],
+      "operation": "bitly.get.channels",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get channels channel-guid",
+      "summary": "Documented GET /channels/{channel_guid} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get channels channel-guid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/channels/{channel_guid}"
+        }
+      ],
+      "operation": "bitly.get.channels-channel-guid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get custom-bitlinks custom-bitlink",
+      "summary": "Documented GET /custom_bitlinks/{custom_bitlink} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get custom-bitlinks custom-bitlink --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/custom_bitlinks/{custom_bitlink}"
+        }
+      ],
+      "operation": "bitly.get.custom-bitlinks-custom-bitlink",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get custom-bitlinks custom-bitlink clicks",
+      "summary": "Documented GET /custom_bitlinks/{custom_bitlink}/clicks (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get custom-bitlinks custom-bitlink clicks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/custom_bitlinks/{custom_bitlink}/clicks"
+        }
+      ],
+      "operation": "bitly.get.custom-bitlinks-custom-bitlink-clicks",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get custom-bitlinks custom-bitlink clicks-by-destination",
+      "summary": "Documented GET /custom_bitlinks/{custom_bitlink}/clicks_by_destination (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get custom-bitlinks custom-bitlink clicks-by-destination --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/custom_bitlinks/{custom_bitlink}/clicks_by_destination"
+        }
+      ],
+      "operation": "bitly.get.custom-bitlinks-custom-bitlink-clicks-by-destination",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get groups",
+      "summary": "Documented GET /groups (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get groups --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/groups"
+        }
+      ],
+      "operation": "bitly.get.groups",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get groups group-guid",
+      "summary": "Documented GET /groups/{group_guid} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get groups group-guid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/groups/{group_guid}"
+        }
+      ],
+      "operation": "bitly.get.groups-group-guid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get groups group-guid bitlinks",
+      "summary": "Documented GET /groups/{group_guid}/bitlinks (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get groups group-guid bitlinks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/groups/{group_guid}/bitlinks"
+        }
+      ],
+      "operation": "bitly.get.groups-group-guid-bitlinks",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get groups group-guid bitlinks sort",
+      "summary": "Documented GET /groups/{group_guid}/bitlinks/{sort} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get groups group-guid bitlinks sort --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/groups/{group_guid}/bitlinks/{sort}"
+        }
+      ],
+      "operation": "bitly.get.groups-group-guid-bitlinks-sort",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get groups group-guid cities",
+      "summary": "Documented GET /groups/{group_guid}/cities (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get groups group-guid cities --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/groups/{group_guid}/cities"
+        }
+      ],
+      "operation": "bitly.get.groups-group-guid-cities",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get groups group-guid clicks",
+      "summary": "Documented GET /groups/{group_guid}/clicks (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get groups group-guid clicks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/groups/{group_guid}/clicks"
+        }
+      ],
+      "operation": "bitly.get.groups-group-guid-clicks",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get groups group-guid codes scans cities",
+      "summary": "Documented GET /groups/{group_guid}/codes/scans/cities (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get groups group-guid codes scans cities --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/groups/{group_guid}/codes/scans/cities"
+        }
+      ],
+      "operation": "bitly.get.groups-group-guid-codes-scans-cities",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get groups group-guid codes scans countries",
+      "summary": "Documented GET /groups/{group_guid}/codes/scans/countries (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get groups group-guid codes scans countries --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/groups/{group_guid}/codes/scans/countries"
+        }
+      ],
+      "operation": "bitly.get.groups-group-guid-codes-scans-countries",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get groups group-guid codes scans over-time",
+      "summary": "Documented GET /groups/{group_guid}/codes/scans/over_time (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get groups group-guid codes scans over-time --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/groups/{group_guid}/codes/scans/over_time"
+        }
+      ],
+      "operation": "bitly.get.groups-group-guid-codes-scans-over-time",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get groups group-guid codes scans top",
+      "summary": "Documented GET /groups/{group_guid}/codes/scans/top (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get groups group-guid codes scans top --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/groups/{group_guid}/codes/scans/top"
+        }
+      ],
+      "operation": "bitly.get.groups-group-guid-codes-scans-top",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get groups group-guid countries",
+      "summary": "Documented GET /groups/{group_guid}/countries (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get groups group-guid countries --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/groups/{group_guid}/countries"
+        }
+      ],
+      "operation": "bitly.get.groups-group-guid-countries",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get groups group-guid devices",
+      "summary": "Documented GET /groups/{group_guid}/devices (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get groups group-guid devices --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/groups/{group_guid}/devices"
+        }
+      ],
+      "operation": "bitly.get.groups-group-guid-devices",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get groups group-guid engagements over-time",
+      "summary": "Documented GET /groups/{group_guid}/engagements/over_time (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get groups group-guid engagements over-time --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/groups/{group_guid}/engagements/over_time"
+        }
+      ],
+      "operation": "bitly.get.groups-group-guid-engagements-over-time",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get groups group-guid engagements sorted top",
+      "summary": "Documented GET /groups/{group_guid}/engagements/sorted/top (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get groups group-guid engagements sorted top --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/groups/{group_guid}/engagements/sorted/top"
+        }
+      ],
+      "operation": "bitly.get.groups-group-guid-engagements-sorted-top",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get groups group-guid engagements top",
+      "summary": "Documented GET /groups/{group_guid}/engagements/top (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get groups group-guid engagements top --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/groups/{group_guid}/engagements/top"
+        }
+      ],
+      "operation": "bitly.get.groups-group-guid-engagements-top",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get groups group-guid feature-usage",
+      "summary": "Documented GET /groups/{group_guid}/feature_usage (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get groups group-guid feature-usage --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/groups/{group_guid}/feature_usage"
+        }
+      ],
+      "operation": "bitly.get.groups-group-guid-feature-usage",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get groups group-guid historical-usage",
+      "summary": "Documented GET /groups/{group_guid}/historical_usage (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get groups group-guid historical-usage --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/groups/{group_guid}/historical_usage"
+        }
+      ],
+      "operation": "bitly.get.groups-group-guid-historical-usage",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get groups group-guid links clicks cities",
+      "summary": "Documented GET /groups/{group_guid}/links/clicks/cities (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get groups group-guid links clicks cities --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/groups/{group_guid}/links/clicks/cities"
+        }
+      ],
+      "operation": "bitly.get.groups-group-guid-links-clicks-cities",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get groups group-guid links clicks countries",
+      "summary": "Documented GET /groups/{group_guid}/links/clicks/countries (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get groups group-guid links clicks countries --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/groups/{group_guid}/links/clicks/countries"
+        }
+      ],
+      "operation": "bitly.get.groups-group-guid-links-clicks-countries",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get groups group-guid links clicks devices",
+      "summary": "Documented GET /groups/{group_guid}/links/clicks/devices (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get groups group-guid links clicks devices --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/groups/{group_guid}/links/clicks/devices"
+        }
+      ],
+      "operation": "bitly.get.groups-group-guid-links-clicks-devices",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get groups group-guid links clicks over-time",
+      "summary": "Documented GET /groups/{group_guid}/links/clicks/over_time (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get groups group-guid links clicks over-time --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/groups/{group_guid}/links/clicks/over_time"
+        }
+      ],
+      "operation": "bitly.get.groups-group-guid-links-clicks-over-time",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get groups group-guid links clicks referrers",
+      "summary": "Documented GET /groups/{group_guid}/links/clicks/referrers (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get groups group-guid links clicks referrers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/groups/{group_guid}/links/clicks/referrers"
+        }
+      ],
+      "operation": "bitly.get.groups-group-guid-links-clicks-referrers",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get groups group-guid links clicks top",
+      "summary": "Documented GET /groups/{group_guid}/links/clicks/top (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get groups group-guid links clicks top --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/groups/{group_guid}/links/clicks/top"
+        }
+      ],
+      "operation": "bitly.get.groups-group-guid-links-clicks-top",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get groups group-guid preferences",
+      "summary": "Documented GET /groups/{group_guid}/preferences (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get groups group-guid preferences --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/groups/{group_guid}/preferences"
+        }
+      ],
+      "operation": "bitly.get.groups-group-guid-preferences",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get groups group-guid qr-codes",
+      "summary": "Documented GET /groups/{group_guid}/qr-codes (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get groups group-guid qr-codes --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/groups/{group_guid}/qr-codes"
+        }
+      ],
+      "operation": "bitly.get.groups-group-guid-qr-codes",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get groups group-guid referrers",
+      "summary": "Documented GET /groups/{group_guid}/referrers (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get groups group-guid referrers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/groups/{group_guid}/referrers"
+        }
+      ],
+      "operation": "bitly.get.groups-group-guid-referrers",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get groups group-guid referring-networks",
+      "summary": "Documented GET /groups/{group_guid}/referring_networks (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get groups group-guid referring-networks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/groups/{group_guid}/referring_networks"
+        }
+      ],
+      "operation": "bitly.get.groups-group-guid-referring-networks",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get groups group-guid shorten-counts",
+      "summary": "Documented GET /groups/{group_guid}/shorten_counts (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get groups group-guid shorten-counts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/groups/{group_guid}/shorten_counts"
+        }
+      ],
+      "operation": "bitly.get.groups-group-guid-shorten-counts",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get groups group-guid tags",
+      "summary": "Documented GET /groups/{group_guid}/tags (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get groups group-guid tags --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/groups/{group_guid}/tags"
+        }
+      ],
+      "operation": "bitly.get.groups-group-guid-tags",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get organizations",
+      "summary": "Documented GET /organizations (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get organizations --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/organizations"
+        }
+      ],
+      "operation": "bitly.get.organizations",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get organizations organization-guid",
+      "summary": "Documented GET /organizations/{organization_guid} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get organizations organization-guid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/organizations/{organization_guid}"
+        }
+      ],
+      "operation": "bitly.get.organizations-organization-guid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get organizations organization-guid plan-limits",
+      "summary": "Documented GET /organizations/{organization_guid}/plan_limits (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get organizations organization-guid plan-limits --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/organizations/{organization_guid}/plan_limits"
+        }
+      ],
+      "operation": "bitly.get.organizations-organization-guid-plan-limits",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get organizations organization-guid shorten-counts",
+      "summary": "Documented GET /organizations/{organization_guid}/shorten_counts (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get organizations organization-guid shorten-counts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/organizations/{organization_guid}/shorten_counts"
+        }
+      ],
+      "operation": "bitly.get.organizations-organization-guid-shorten-counts",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get organizations organization-guid shorten-counts-by-group",
+      "summary": "Documented GET /organizations/{organization_guid}/shorten_counts_by_group (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get organizations organization-guid shorten-counts-by-group --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/organizations/{organization_guid}/shorten_counts_by_group"
+        }
+      ],
+      "operation": "bitly.get.organizations-organization-guid-shorten-counts-by-group",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get organizations organization-guid webhooks",
+      "summary": "Documented GET /organizations/{organization_guid}/webhooks (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get organizations organization-guid webhooks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/organizations/{organization_guid}/webhooks"
+        }
+      ],
+      "operation": "bitly.get.organizations-organization-guid-webhooks",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get qr-codes qrcode-id",
+      "summary": "Documented GET /qr-codes/{qrcode_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get qr-codes qrcode-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/qr-codes/{qrcode_id}"
+        }
+      ],
+      "operation": "bitly.get.qr-codes-qrcode-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get qr-codes qrcode-id image",
+      "summary": "Documented GET /qr-codes/{qrcode_id}/image (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get qr-codes qrcode-id image --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/qr-codes/{qrcode_id}/image"
+        }
+      ],
+      "operation": "bitly.get.qr-codes-qrcode-id-image",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get qr-codes qrcode-id scans",
+      "summary": "Documented GET /qr-codes/{qrcode_id}/scans (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get qr-codes qrcode-id scans --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/qr-codes/{qrcode_id}/scans"
+        }
+      ],
+      "operation": "bitly.get.qr-codes-qrcode-id-scans",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get qr-codes qrcode-id scans browsers",
+      "summary": "Documented GET /qr-codes/{qrcode_id}/scans/browsers (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get qr-codes qrcode-id scans browsers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/qr-codes/{qrcode_id}/scans/browsers"
+        }
+      ],
+      "operation": "bitly.get.qr-codes-qrcode-id-scans-browsers",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get qr-codes qrcode-id scans cities",
+      "summary": "Documented GET /qr-codes/{qrcode_id}/scans/cities (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get qr-codes qrcode-id scans cities --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/qr-codes/{qrcode_id}/scans/cities"
+        }
+      ],
+      "operation": "bitly.get.qr-codes-qrcode-id-scans-cities",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get qr-codes qrcode-id scans countries",
+      "summary": "Documented GET /qr-codes/{qrcode_id}/scans/countries (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get qr-codes qrcode-id scans countries --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/qr-codes/{qrcode_id}/scans/countries"
+        }
+      ],
+      "operation": "bitly.get.qr-codes-qrcode-id-scans-countries",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get qr-codes qrcode-id scans device-os",
+      "summary": "Documented GET /qr-codes/{qrcode_id}/scans/device_os (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get qr-codes qrcode-id scans device-os --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/qr-codes/{qrcode_id}/scans/device_os"
+        }
+      ],
+      "operation": "bitly.get.qr-codes-qrcode-id-scans-device-os",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get qr-codes qrcode-id scans summary",
+      "summary": "Documented GET /qr-codes/{qrcode_id}/scans/summary (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get qr-codes qrcode-id scans summary --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/qr-codes/{qrcode_id}/scans/summary"
+        }
+      ],
+      "operation": "bitly.get.qr-codes-qrcode-id-scans-summary",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get user",
+      "summary": "Documented GET /user (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get user --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/user"
+        }
+      ],
+      "operation": "bitly.get.user",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get user platform-limits",
+      "summary": "Documented GET /user/platform_limits (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get user platform-limits --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/user/platform_limits"
+        }
+      ],
+      "operation": "bitly.get.user-platform-limits",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v4 bitlinks bitlink",
+      "summary": "Documented GET /v4/bitlinks/{bitlink} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get v4 bitlinks bitlink --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v4/bitlinks/{bitlink}"
+        }
+      ],
+      "operation": "bitly.get.v4-bitlinks-bitlink",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v4 bitlinks bitlink cities",
+      "summary": "Documented GET /v4/bitlinks/{bitlink}/cities (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get v4 bitlinks bitlink cities --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v4/bitlinks/{bitlink}/cities"
+        }
+      ],
+      "operation": "bitly.get.v4-bitlinks-bitlink-cities",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v4 bitlinks bitlink clicks",
+      "summary": "Documented GET /v4/bitlinks/{bitlink}/clicks (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get v4 bitlinks bitlink clicks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v4/bitlinks/{bitlink}/clicks"
+        }
+      ],
+      "operation": "bitly.get.v4-bitlinks-bitlink-clicks",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v4 bitlinks bitlink clicks summary",
+      "summary": "Documented GET /v4/bitlinks/{bitlink}/clicks/summary (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get v4 bitlinks bitlink clicks summary --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v4/bitlinks/{bitlink}/clicks/summary"
+        }
+      ],
+      "operation": "bitly.get.v4-bitlinks-bitlink-clicks-summary",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v4 bitlinks bitlink countries",
+      "summary": "Documented GET /v4/bitlinks/{bitlink}/countries (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get v4 bitlinks bitlink countries --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v4/bitlinks/{bitlink}/countries"
+        }
+      ],
+      "operation": "bitly.get.v4-bitlinks-bitlink-countries",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v4 bitlinks bitlink devices",
+      "summary": "Documented GET /v4/bitlinks/{bitlink}/devices (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get v4 bitlinks bitlink devices --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v4/bitlinks/{bitlink}/devices"
+        }
+      ],
+      "operation": "bitly.get.v4-bitlinks-bitlink-devices",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v4 bitlinks bitlink engagements",
+      "summary": "Documented GET /v4/bitlinks/{bitlink}/engagements (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get v4 bitlinks bitlink engagements --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v4/bitlinks/{bitlink}/engagements"
+        }
+      ],
+      "operation": "bitly.get.v4-bitlinks-bitlink-engagements",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v4 bitlinks bitlink engagements summary",
+      "summary": "Documented GET /v4/bitlinks/{bitlink}/engagements/summary (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get v4 bitlinks bitlink engagements summary --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v4/bitlinks/{bitlink}/engagements/summary"
+        }
+      ],
+      "operation": "bitly.get.v4-bitlinks-bitlink-engagements-summary",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v4 bitlinks bitlink qr-code",
+      "summary": "Documented GET /v4/bitlinks/{bitlink}/qr_code (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get v4 bitlinks bitlink qr-code --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v4/bitlinks/{bitlink}/qr_code"
+        }
+      ],
+      "operation": "bitly.get.v4-bitlinks-bitlink-qr-code",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v4 bitlinks bitlink referrer-name",
+      "summary": "Documented GET /v4/bitlinks/{bitlink}/referrer_name (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get v4 bitlinks bitlink referrer-name --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v4/bitlinks/{bitlink}/referrer_name"
+        }
+      ],
+      "operation": "bitly.get.v4-bitlinks-bitlink-referrer-name",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v4 bitlinks bitlink referrers",
+      "summary": "Documented GET /v4/bitlinks/{bitlink}/referrers (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get v4 bitlinks bitlink referrers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v4/bitlinks/{bitlink}/referrers"
+        }
+      ],
+      "operation": "bitly.get.v4-bitlinks-bitlink-referrers",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v4 bitlinks bitlink referrers-by-domains",
+      "summary": "Documented GET /v4/bitlinks/{bitlink}/referrers_by_domains (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get v4 bitlinks bitlink referrers-by-domains --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v4/bitlinks/{bitlink}/referrers_by_domains"
+        }
+      ],
+      "operation": "bitly.get.v4-bitlinks-bitlink-referrers-by-domains",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v4 bitlinks bitlink referring-domains",
+      "summary": "Documented GET /v4/bitlinks/{bitlink}/referring_domains (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get v4 bitlinks bitlink referring-domains --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v4/bitlinks/{bitlink}/referring_domains"
+        }
+      ],
+      "operation": "bitly.get.v4-bitlinks-bitlink-referring-domains",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v4 campaigns campaign-guid",
+      "summary": "Documented GET /v4/campaigns/{campaign_guid} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get v4 campaigns campaign-guid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v4/campaigns/{campaign_guid}"
+        }
+      ],
+      "operation": "bitly.get.v4-campaigns-campaign-guid",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v4 channels channel-guid",
+      "summary": "Documented GET /v4/channels/{channel_guid} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get v4 channels channel-guid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v4/channels/{channel_guid}"
+        }
+      ],
+      "operation": "bitly.get.v4-channels-channel-guid",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v4 custom-bitlinks custom-bitlink",
+      "summary": "Documented GET /v4/custom_bitlinks/{custom_bitlink} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get v4 custom-bitlinks custom-bitlink --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v4/custom_bitlinks/{custom_bitlink}"
+        }
+      ],
+      "operation": "bitly.get.v4-custom-bitlinks-custom-bitlink",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v4 custom-bitlinks custom-bitlink clicks",
+      "summary": "Documented GET /v4/custom_bitlinks/{custom_bitlink}/clicks (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get v4 custom-bitlinks custom-bitlink clicks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v4/custom_bitlinks/{custom_bitlink}/clicks"
+        }
+      ],
+      "operation": "bitly.get.v4-custom-bitlinks-custom-bitlink-clicks",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v4 custom-bitlinks custom-bitlink clicks-by-destination",
+      "summary": "Documented GET /v4/custom_bitlinks/{custom_bitlink}/clicks_by_destination (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get v4 custom-bitlinks custom-bitlink clicks-by-destination --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v4/custom_bitlinks/{custom_bitlink}/clicks_by_destination"
+        }
+      ],
+      "operation": "bitly.get.v4-custom-bitlinks-custom-bitlink-clicks-by-destination",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v4 groups group-guid",
+      "summary": "Documented GET /v4/groups/{group_guid} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get v4 groups group-guid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v4/groups/{group_guid}"
+        }
+      ],
+      "operation": "bitly.get.v4-groups-group-guid",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v4 groups group-guid bitlinks sort",
+      "summary": "Documented GET /v4/groups/{group_guid}/bitlinks/{sort} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get v4 groups group-guid bitlinks sort --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v4/groups/{group_guid}/bitlinks/{sort}"
+        }
+      ],
+      "operation": "bitly.get.v4-groups-group-guid-bitlinks-sort",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v4 groups group-guid cities",
+      "summary": "Documented GET /v4/groups/{group_guid}/cities (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get v4 groups group-guid cities --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v4/groups/{group_guid}/cities"
+        }
+      ],
+      "operation": "bitly.get.v4-groups-group-guid-cities",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v4 groups group-guid clicks",
+      "summary": "Documented GET /v4/groups/{group_guid}/clicks (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get v4 groups group-guid clicks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v4/groups/{group_guid}/clicks"
+        }
+      ],
+      "operation": "bitly.get.v4-groups-group-guid-clicks",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v4 groups group-guid codes scans cities",
+      "summary": "Documented GET /v4/groups/{group_guid}/codes/scans/cities (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get v4 groups group-guid codes scans cities --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v4/groups/{group_guid}/codes/scans/cities"
+        }
+      ],
+      "operation": "bitly.get.v4-groups-group-guid-codes-scans-cities",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v4 groups group-guid codes scans countries",
+      "summary": "Documented GET /v4/groups/{group_guid}/codes/scans/countries (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get v4 groups group-guid codes scans countries --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v4/groups/{group_guid}/codes/scans/countries"
+        }
+      ],
+      "operation": "bitly.get.v4-groups-group-guid-codes-scans-countries",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v4 groups group-guid codes scans over-time",
+      "summary": "Documented GET /v4/groups/{group_guid}/codes/scans/over_time (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get v4 groups group-guid codes scans over-time --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v4/groups/{group_guid}/codes/scans/over_time"
+        }
+      ],
+      "operation": "bitly.get.v4-groups-group-guid-codes-scans-over-time",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v4 groups group-guid codes scans top",
+      "summary": "Documented GET /v4/groups/{group_guid}/codes/scans/top (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get v4 groups group-guid codes scans top --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v4/groups/{group_guid}/codes/scans/top"
+        }
+      ],
+      "operation": "bitly.get.v4-groups-group-guid-codes-scans-top",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v4 groups group-guid countries",
+      "summary": "Documented GET /v4/groups/{group_guid}/countries (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get v4 groups group-guid countries --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v4/groups/{group_guid}/countries"
+        }
+      ],
+      "operation": "bitly.get.v4-groups-group-guid-countries",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v4 groups group-guid devices",
+      "summary": "Documented GET /v4/groups/{group_guid}/devices (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get v4 groups group-guid devices --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v4/groups/{group_guid}/devices"
+        }
+      ],
+      "operation": "bitly.get.v4-groups-group-guid-devices",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v4 groups group-guid engagements over-time",
+      "summary": "Documented GET /v4/groups/{group_guid}/engagements/over_time (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get v4 groups group-guid engagements over-time --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v4/groups/{group_guid}/engagements/over_time"
+        }
+      ],
+      "operation": "bitly.get.v4-groups-group-guid-engagements-over-time",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v4 groups group-guid engagements sorted top",
+      "summary": "Documented GET /v4/groups/{group_guid}/engagements/sorted/top (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get v4 groups group-guid engagements sorted top --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v4/groups/{group_guid}/engagements/sorted/top"
+        }
+      ],
+      "operation": "bitly.get.v4-groups-group-guid-engagements-sorted-top",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v4 groups group-guid engagements top",
+      "summary": "Documented GET /v4/groups/{group_guid}/engagements/top (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get v4 groups group-guid engagements top --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v4/groups/{group_guid}/engagements/top"
+        }
+      ],
+      "operation": "bitly.get.v4-groups-group-guid-engagements-top",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v4 groups group-guid feature-usage",
+      "summary": "Documented GET /v4/groups/{group_guid}/feature_usage (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get v4 groups group-guid feature-usage --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v4/groups/{group_guid}/feature_usage"
+        }
+      ],
+      "operation": "bitly.get.v4-groups-group-guid-feature-usage",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v4 groups group-guid historical-usage",
+      "summary": "Documented GET /v4/groups/{group_guid}/historical_usage (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get v4 groups group-guid historical-usage --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v4/groups/{group_guid}/historical_usage"
+        }
+      ],
+      "operation": "bitly.get.v4-groups-group-guid-historical-usage",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v4 groups group-guid links clicks cities",
+      "summary": "Documented GET /v4/groups/{group_guid}/links/clicks/cities (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get v4 groups group-guid links clicks cities --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v4/groups/{group_guid}/links/clicks/cities"
+        }
+      ],
+      "operation": "bitly.get.v4-groups-group-guid-links-clicks-cities",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v4 groups group-guid links clicks countries",
+      "summary": "Documented GET /v4/groups/{group_guid}/links/clicks/countries (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get v4 groups group-guid links clicks countries --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v4/groups/{group_guid}/links/clicks/countries"
+        }
+      ],
+      "operation": "bitly.get.v4-groups-group-guid-links-clicks-countries",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v4 groups group-guid links clicks devices",
+      "summary": "Documented GET /v4/groups/{group_guid}/links/clicks/devices (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get v4 groups group-guid links clicks devices --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v4/groups/{group_guid}/links/clicks/devices"
+        }
+      ],
+      "operation": "bitly.get.v4-groups-group-guid-links-clicks-devices",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v4 groups group-guid links clicks over-time",
+      "summary": "Documented GET /v4/groups/{group_guid}/links/clicks/over_time (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get v4 groups group-guid links clicks over-time --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v4/groups/{group_guid}/links/clicks/over_time"
+        }
+      ],
+      "operation": "bitly.get.v4-groups-group-guid-links-clicks-over-time",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v4 groups group-guid links clicks referrers",
+      "summary": "Documented GET /v4/groups/{group_guid}/links/clicks/referrers (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get v4 groups group-guid links clicks referrers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v4/groups/{group_guid}/links/clicks/referrers"
+        }
+      ],
+      "operation": "bitly.get.v4-groups-group-guid-links-clicks-referrers",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v4 groups group-guid links clicks top",
+      "summary": "Documented GET /v4/groups/{group_guid}/links/clicks/top (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get v4 groups group-guid links clicks top --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v4/groups/{group_guid}/links/clicks/top"
+        }
+      ],
+      "operation": "bitly.get.v4-groups-group-guid-links-clicks-top",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v4 groups group-guid preferences",
+      "summary": "Documented GET /v4/groups/{group_guid}/preferences (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get v4 groups group-guid preferences --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v4/groups/{group_guid}/preferences"
+        }
+      ],
+      "operation": "bitly.get.v4-groups-group-guid-preferences",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v4 groups group-guid referrers",
+      "summary": "Documented GET /v4/groups/{group_guid}/referrers (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get v4 groups group-guid referrers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v4/groups/{group_guid}/referrers"
+        }
+      ],
+      "operation": "bitly.get.v4-groups-group-guid-referrers",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v4 groups group-guid referring-networks",
+      "summary": "Documented GET /v4/groups/{group_guid}/referring_networks (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get v4 groups group-guid referring-networks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v4/groups/{group_guid}/referring_networks"
+        }
+      ],
+      "operation": "bitly.get.v4-groups-group-guid-referring-networks",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v4 groups group-guid shorten-counts",
+      "summary": "Documented GET /v4/groups/{group_guid}/shorten_counts (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get v4 groups group-guid shorten-counts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v4/groups/{group_guid}/shorten_counts"
+        }
+      ],
+      "operation": "bitly.get.v4-groups-group-guid-shorten-counts",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v4 oauth deauthorize",
+      "summary": "Documented GET /v4/oauth/deauthorize (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get v4 oauth deauthorize --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v4/oauth/deauthorize"
+        }
+      ],
+      "operation": "bitly.get.v4-oauth-deauthorize",
+      "risk": "high",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v4 organizations organization-guid",
+      "summary": "Documented GET /v4/organizations/{organization_guid} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get v4 organizations organization-guid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v4/organizations/{organization_guid}"
+        }
+      ],
+      "operation": "bitly.get.v4-organizations-organization-guid",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v4 organizations organization-guid plan-limits",
+      "summary": "Documented GET /v4/organizations/{organization_guid}/plan_limits (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get v4 organizations organization-guid plan-limits --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v4/organizations/{organization_guid}/plan_limits"
+        }
+      ],
+      "operation": "bitly.get.v4-organizations-organization-guid-plan-limits",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v4 organizations organization-guid shorten-counts",
+      "summary": "Documented GET /v4/organizations/{organization_guid}/shorten_counts (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get v4 organizations organization-guid shorten-counts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v4/organizations/{organization_guid}/shorten_counts"
+        }
+      ],
+      "operation": "bitly.get.v4-organizations-organization-guid-shorten-counts",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v4 organizations organization-guid shorten-counts-by-group",
+      "summary": "Documented GET /v4/organizations/{organization_guid}/shorten_counts_by_group (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get v4 organizations organization-guid shorten-counts-by-group --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v4/organizations/{organization_guid}/shorten_counts_by_group"
+        }
+      ],
+      "operation": "bitly.get.v4-organizations-organization-guid-shorten-counts-by-group",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v4 qr-codes qr-code-id",
+      "summary": "Documented GET /v4/qr-codes/{qr_code_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get v4 qr-codes qr-code-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v4/qr-codes/{qr_code_id}"
+        }
+      ],
+      "operation": "bitly.get.v4-qr-codes-qr-code-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v4 user",
+      "summary": "Documented GET /v4/user (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get v4 user --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v4/user"
+        }
+      ],
+      "operation": "bitly.get.v4-user",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v4 user link-history",
+      "summary": "Documented GET /v4/user/link_history (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get v4 user link-history --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v4/user/link_history"
+        }
+      ],
+      "operation": "bitly.get.v4-user-link-history",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v4 webhooks webhook-guid",
+      "summary": "Documented GET /v4/webhooks/{webhook_guid} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get v4 webhooks webhook-guid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v4/webhooks/{webhook_guid}"
+        }
+      ],
+      "operation": "bitly.get.v4-webhooks-webhook-guid",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get webhooks webhook-guid",
+      "summary": "Documented GET /webhooks/{webhook_guid} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api get webhooks webhook-guid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/webhooks/{webhook_guid}"
+        }
+      ],
+      "operation": "bitly.get.webhooks-webhook-guid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api patch bitlinks bitlink",
+      "summary": "Documented PATCH /bitlinks/{bitlink} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api patch bitlinks bitlink --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/bitlinks/{bitlink}"
+        }
+      ],
+      "operation": "bitly.patch.bitlinks-bitlink",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch campaigns campaign-guid",
+      "summary": "Documented PATCH /campaigns/{campaign_guid} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api patch campaigns campaign-guid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/campaigns/{campaign_guid}"
+        }
+      ],
+      "operation": "bitly.patch.campaigns-campaign-guid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch channels channel-guid",
+      "summary": "Documented PATCH /channels/{channel_guid} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api patch channels channel-guid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/channels/{channel_guid}"
+        }
+      ],
+      "operation": "bitly.patch.channels-channel-guid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch custom-bitlinks custom-bitlink",
+      "summary": "Documented PATCH /custom_bitlinks/{custom_bitlink} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api patch custom-bitlinks custom-bitlink --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/custom_bitlinks/{custom_bitlink}"
+        }
+      ],
+      "operation": "bitly.patch.custom-bitlinks-custom-bitlink",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch groups group-guid",
+      "summary": "Documented PATCH /groups/{group_guid} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api patch groups group-guid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/groups/{group_guid}"
+        }
+      ],
+      "operation": "bitly.patch.groups-group-guid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch groups group-guid bitlinks",
+      "summary": "Documented PATCH /groups/{group_guid}/bitlinks (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api patch groups group-guid bitlinks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/groups/{group_guid}/bitlinks"
+        }
+      ],
+      "operation": "bitly.patch.groups-group-guid-bitlinks",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch groups group-guid preferences",
+      "summary": "Documented PATCH /groups/{group_guid}/preferences (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api patch groups group-guid preferences --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/groups/{group_guid}/preferences"
+        }
+      ],
+      "operation": "bitly.patch.groups-group-guid-preferences",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch groups group-guid qr-codes",
+      "summary": "Documented PATCH /groups/{group_guid}/qr-codes (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api patch groups group-guid qr-codes --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/groups/{group_guid}/qr-codes"
+        }
+      ],
+      "operation": "bitly.patch.groups-group-guid-qr-codes",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch qr-codes qrcode-id",
+      "summary": "Documented PATCH /qr-codes/{qrcode_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api patch qr-codes qrcode-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/qr-codes/{qrcode_id}"
+        }
+      ],
+      "operation": "bitly.patch.qr-codes-qrcode-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch qr-codes qrcode-id redirect",
+      "summary": "Documented PATCH /qr-codes/{qrcode_id}/redirect (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api patch qr-codes qrcode-id redirect --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/qr-codes/{qrcode_id}/redirect"
+        }
+      ],
+      "operation": "bitly.patch.qr-codes-qrcode-id-redirect",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch user",
+      "summary": "Documented PATCH /user (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api patch user --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/user"
+        }
+      ],
+      "operation": "bitly.patch.user",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch v4 groups group-guid bitlinks",
+      "summary": "Documented PATCH /v4/groups/{group_guid}/bitlinks (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api patch v4 groups group-guid bitlinks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v4/groups/{group_guid}/bitlinks"
+        }
+      ],
+      "operation": "bitly.patch.v4-groups-group-guid-bitlinks",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch v4 user",
+      "summary": "Documented PATCH /v4/user (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api patch v4 user --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v4/user"
+        }
+      ],
+      "operation": "bitly.patch.v4-user",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch webhooks webhook-guid",
+      "summary": "Documented PATCH /webhooks/{webhook_guid} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api patch webhooks webhook-guid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/webhooks/{webhook_guid}"
+        }
+      ],
+      "operation": "bitly.patch.webhooks-webhook-guid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post bitlinks",
+      "summary": "Documented POST /bitlinks (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api post bitlinks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/bitlinks"
+        }
+      ],
+      "operation": "bitly.post.bitlinks",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post campaigns",
+      "summary": "Documented POST /campaigns (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api post campaigns --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/campaigns"
+        }
+      ],
+      "operation": "bitly.post.campaigns",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post channels",
+      "summary": "Documented POST /channels (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api post channels --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/channels"
+        }
+      ],
+      "operation": "bitly.post.channels",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post custom-bitlinks",
+      "summary": "Documented POST /custom_bitlinks (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api post custom-bitlinks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/custom_bitlinks"
+        }
+      ],
+      "operation": "bitly.post.custom-bitlinks",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post expand",
+      "summary": "Documented POST /expand (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api post expand --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/expand"
+        }
+      ],
+      "operation": "bitly.post.expand",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post groups group-guid exports",
+      "summary": "Documented POST /groups/{group_guid}/exports (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api post groups group-guid exports --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/groups/{group_guid}/exports"
+        }
+      ],
+      "operation": "bitly.post.groups-group-guid-exports",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post qr-codes",
+      "summary": "Documented POST /qr-codes (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api post qr-codes --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/qr-codes"
+        }
+      ],
+      "operation": "bitly.post.qr-codes",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post qr-codes static",
+      "summary": "Documented POST /qr-codes/static (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api post qr-codes static --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/qr-codes/static"
+        }
+      ],
+      "operation": "bitly.post.qr-codes-static",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post shorten",
+      "summary": "Documented POST /shorten (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api post shorten --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/shorten"
+        }
+      ],
+      "operation": "bitly.post.shorten",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v4 expand",
+      "summary": "Documented POST /v4/expand (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api post v4 expand --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v4/expand"
+        }
+      ],
+      "operation": "bitly.post.v4-expand",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v4 groups group-guid exports",
+      "summary": "Documented POST /v4/groups/{group_guid}/exports (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api post v4 groups group-guid exports --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v4/groups/{group_guid}/exports"
+        }
+      ],
+      "operation": "bitly.post.v4-groups-group-guid-exports",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v4 oauth deauthorize",
+      "summary": "Documented POST /v4/oauth/deauthorize (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api post v4 oauth deauthorize --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v4/oauth/deauthorize"
+        }
+      ],
+      "operation": "bitly.post.v4-oauth-deauthorize",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v4 qr-codes qr-code-id customize",
+      "summary": "Documented POST /v4/qr-codes/{qr_code_id}/customize (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api post v4 qr-codes qr-code-id customize --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v4/qr-codes/{qr_code_id}/customize"
+        }
+      ],
+      "operation": "bitly.post.v4-qr-codes-qr-code-id-customize",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v4 shorten",
+      "summary": "Documented POST /v4/shorten (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api post v4 shorten --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v4/shorten"
+        }
+      ],
+      "operation": "bitly.post.v4-shorten",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post webhooks",
+      "summary": "Documented POST /webhooks (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api post webhooks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/webhooks"
+        }
+      ],
+      "operation": "bitly.post.webhooks",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post webhooks webhook-guid verify",
+      "summary": "Documented POST /webhooks/{webhook_guid}/verify (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api post webhooks webhook-guid verify --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/webhooks/{webhook_guid}/verify"
+        }
+      ],
+      "operation": "bitly.post.webhooks-webhook-guid-verify",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put qr-codes qrcode-id to-bitlink",
+      "summary": "Documented PUT /qr-codes/{qrcode_id}/to-bitlink (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly api put qr-codes qrcode-id to-bitlink --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/qr-codes/{qrcode_id}/to-bitlink"
+        }
+      ],
+      "operation": "bitly.put.qr-codes-qrcode-id-to-bitlink",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "bitlinks list",
+      "summary": "Run the bitlinks ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "bitlinks",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly bitlinks list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v4/groups/{group_guid}/bitlinks"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "bsds list",
+      "summary": "Run the bsds ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "bsds",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly bsds list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v4/bsds"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "campaigns list",
+      "summary": "Run the campaigns ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "campaigns",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly campaigns list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v4/campaigns"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "channels list",
+      "summary": "Run the channels ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "channels",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly channels list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v4/channels"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "create bitlink apply",
+      "summary": "Plan and execute the create bitlink reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_bitlink",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "flags": [
+        {
+          "name": "long_url",
+          "type": "string",
+          "summary": "Required long url record field.",
+          "maps_to": "record.long_url",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm bitly create bitlink apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v4/bitlinks"
+        }
+      ],
+      "risk": "creates a new publicly-resolvable short link; low-risk external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create campaign apply",
+      "summary": "Plan and execute the create campaign reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_campaign",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "flags": [
+        {
+          "name": "group_guid",
+          "type": "string",
+          "summary": "Required group guid record field.",
+          "maps_to": "record.group_guid",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm bitly create campaign apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v4/campaigns"
+        }
+      ],
+      "risk": "creates a new campaign container in the target group; low-risk external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create channel apply",
+      "summary": "Plan and execute the create channel reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_channel",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly create channel apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v4/channels"
+        }
+      ],
+      "risk": "creates a new channel container; low-risk external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create custom bitlink apply",
+      "summary": "Plan and execute the create custom bitlink reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_custom_bitlink",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "flags": [
+        {
+          "name": "bitlink_id",
+          "type": "string",
+          "summary": "Required bitlink id record field.",
+          "maps_to": "record.bitlink_id",
+          "required": true
+        },
+        {
+          "name": "custom_bitlink",
+          "type": "string",
+          "summary": "Required custom bitlink record field.",
+          "maps_to": "record.custom_bitlink",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm bitly create custom bitlink apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v4/custom_bitlinks"
+        }
+      ],
+      "risk": "claims a custom keyword/back-half on a branded short domain and points it at a bitlink; consumes a finite custom-bitlink allocation on the domain",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create qr code apply",
+      "summary": "Plan and execute the create qr code reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_qr_code",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly create qr code apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v4/qr-codes"
+        }
+      ],
+      "risk": "creates a new QR code resource pointed at a bitlink or long_url; low-risk external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create webhook apply",
+      "summary": "Plan and execute the create webhook reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_webhook",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "flags": [
+        {
+          "name": "event",
+          "type": "string",
+          "summary": "Required event record field.",
+          "maps_to": "record.event",
+          "required": true
+        },
+        {
+          "name": "group_guid",
+          "type": "string",
+          "summary": "Required group guid record field.",
+          "maps_to": "record.group_guid",
+          "required": true
+        },
+        {
+          "name": "url",
+          "type": "string",
+          "summary": "Required url record field.",
+          "maps_to": "record.url",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm bitly create webhook apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v4/webhooks"
+        }
+      ],
+      "risk": "registers a new outbound webhook that will POST live event data (clicks/scans) to an external URL of the caller's choosing; verify the target endpoint before enabling",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete bitlink apply",
+      "summary": "Plan and execute the delete bitlink reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_bitlink",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm bitly delete bitlink apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v4/bitlinks/{bitlink}"
+        }
+      ],
+      "risk": "permanently removes a bitlink; any traffic still hitting the short URL starts failing to resolve",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete bitlink tags apply",
+      "summary": "Plan and execute the delete bitlink tags reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_bitlink_tags",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        },
+        {
+          "name": "tags",
+          "type": "string_array",
+          "summary": "Required tags record field.",
+          "maps_to": "record.tags",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm bitly delete bitlink tags apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v4/bitlinks/{bitlink}/tags"
+        }
+      ],
+      "risk": "removes the named tags from a bitlink; irreversible without re-adding them via update_bitlink_tags",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete qr code apply",
+      "summary": "Plan and execute the delete qr code reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_qr_code",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "flags": [
+        {
+          "name": "qrcode_id",
+          "type": "string",
+          "summary": "Required qrcode id record field.",
+          "maps_to": "record.qrcode_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm bitly delete qr code apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v4/qr-codes/{qr_code_id}"
+        }
+      ],
+      "risk": "permanently removes a QR code resource; any already-printed/distributed copy of the code stops resolving",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete webhook apply",
+      "summary": "Plan and execute the delete webhook reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_webhook",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "flags": [
+        {
+          "name": "guid",
+          "type": "string",
+          "summary": "Required guid record field.",
+          "maps_to": "record.guid",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm bitly delete webhook apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v4/webhooks/{webhook_guid}"
+        }
+      ],
+      "risk": "permanently removes a webhook subscription; event delivery to its target URL stops immediately",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "group tags list",
+      "summary": "Run the group tags ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "group_tags",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly group tags list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v4/groups/{group_guid}/tags"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "groups list",
+      "summary": "Run the groups ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "groups",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly groups list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v4/groups"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "organizations list",
+      "summary": "Run the organizations ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "organizations",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly organizations list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v4/organizations"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "qr codes list",
+      "summary": "Run the qr codes ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "qr_codes",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly qr codes list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v4/qr-codes"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "update bitlink apply",
+      "summary": "Plan and execute the update bitlink reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_bitlink",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm bitly update bitlink apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v4/bitlinks/{bitlink}"
+        }
+      ],
+      "risk": "mutates an existing bitlink's metadata or redirect destination; changing long_url redirects all future traffic on that short link and consumes an encode-limit unit",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update bitlink tags apply",
+      "summary": "Plan and execute the update bitlink tags reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_bitlink_tags",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        },
+        {
+          "name": "tags",
+          "type": "string_array",
+          "summary": "Required tags record field.",
+          "maps_to": "record.tags",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm bitly update bitlink tags apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v4/bitlinks/{bitlink}/tags"
+        }
+      ],
+      "risk": "replaces the full tag set on a bitlink; overwrites any tags not included in the submitted list",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update campaign apply",
+      "summary": "Plan and execute the update campaign reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_campaign",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "flags": [
+        {
+          "name": "guid",
+          "type": "string",
+          "summary": "Required guid record field.",
+          "maps_to": "record.guid",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm bitly update campaign apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v4/campaigns/{campaign_guid}"
+        }
+      ],
+      "risk": "mutates an existing campaign's name, description, or associated channels",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update channel apply",
+      "summary": "Plan and execute the update channel reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_channel",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "flags": [
+        {
+          "name": "guid",
+          "type": "string",
+          "summary": "Required guid record field.",
+          "maps_to": "record.guid",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm bitly update channel apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v4/channels/{channel_guid}"
+        }
+      ],
+      "risk": "mutates an existing channel's name or campaign association",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update custom bitlink apply",
+      "summary": "Plan and execute the update custom bitlink reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_custom_bitlink",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "flags": [
+        {
+          "name": "bitlink_id",
+          "type": "string",
+          "summary": "Required bitlink id record field.",
+          "maps_to": "record.bitlink_id",
+          "required": true
+        },
+        {
+          "name": "custom_bitlink",
+          "type": "string",
+          "summary": "Required custom bitlink record field.",
+          "maps_to": "record.custom_bitlink",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm bitly update custom bitlink apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v4/custom_bitlinks/{custom_bitlink}"
+        }
+      ],
+      "risk": "re-points an existing custom keyword at a different bitlink; redirects all future traffic hitting that custom URL to the new destination",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update group apply",
+      "summary": "Plan and execute the update group reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_group",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "flags": [
+        {
+          "name": "guid",
+          "type": "string",
+          "summary": "Required guid record field.",
+          "maps_to": "record.guid",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm bitly update group apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v4/groups/{group_guid}"
+        }
+      ],
+      "risk": "renames or re-parents an existing group; a visible change for every member of that group",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update group preferences apply",
+      "summary": "Plan and execute the update group preferences reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_group_preferences",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "flags": [
+        {
+          "name": "domain_preference",
+          "type": "string",
+          "summary": "Required domain preference record field.",
+          "maps_to": "record.domain_preference",
+          "required": true
+        },
+        {
+          "name": "group_guid",
+          "type": "string",
+          "summary": "Required group guid record field.",
+          "maps_to": "record.group_guid",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm bitly update group preferences apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v4/groups/{group_guid}/preferences"
+        }
+      ],
+      "risk": "changes the default branded short domain new bitlinks in this group are created with",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update qr code apply",
+      "summary": "Plan and execute the update qr code reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_qr_code",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "flags": [
+        {
+          "name": "qrcode_id",
+          "type": "string",
+          "summary": "Required qrcode id record field.",
+          "maps_to": "record.qrcode_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm bitly update qr code apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v4/qr-codes/{qr_code_id}"
+        }
+      ],
+      "risk": "mutates an existing QR code's title or destination; changing destination redirects anyone scanning an already-printed/distributed code",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update webhook apply",
+      "summary": "Plan and execute the update webhook reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_webhook",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "flags": [
+        {
+          "name": "guid",
+          "type": "string",
+          "summary": "Required guid record field.",
+          "maps_to": "record.guid",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm bitly update webhook apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v4/webhooks/{webhook_guid}"
+        }
+      ],
+      "risk": "mutates an existing webhook's target URL, event type, or active state; a changed url redirects future event deliveries to a different endpoint",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "webhooks list",
+      "summary": "Run the webhooks ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "webhooks",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "examples": [
+        "pm bitly webhooks list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v4/webhooks"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    }
+  ]
+}

@@ -1,0 +1,1472 @@
+{
+  "operations": [
+    {
+      "id": "circleci.post.context",
+      "kind": "rest_write",
+      "summary": "POST /context",
+      "description": "creates a new context; the context is org-scoped but this bundle only derives an owner-slug for reading, not creating, contexts; Pass B breadth-vs-cost triage",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/context",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.get.context-context-id",
+      "kind": "rest_read",
+      "summary": "GET /context/{context_id}",
+      "description": "single-context detail; identical record shape to the contexts list stream's per-item object, already covered by that stream",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/context/{context_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.delete.context-context-id",
+      "kind": "rest_write",
+      "summary": "DELETE /context/{context_id}",
+      "description": "permanently deletes a context and all secrets stored under it, breaking every pipeline that references it; not a safe reverse-ETL target",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/context/{context_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.get.context-context-id-environment-variable",
+      "kind": "rest_read",
+      "summary": "GET /context/{context_id}/environment-variable",
+      "description": "lists only environment-variable NAMES (values are never returned) scoped under a single already-enumerated context; a thin child listing of the contexts stream's own record, Pass B breadth-vs-cost triage",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/context/{context_id}/environment-variable",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.put.context-context-id-environment-variable-env-var-name",
+      "kind": "rest_write",
+      "summary": "PUT /context/{context_id}/environment-variable/{env_var_name}",
+      "description": "writes a secret VALUE into a shared context consumed by every pipeline using it; a secret-bearing mutation this connector's writes.json deliberately does not carry (secrets never flow through record-shaped write bodies in this dialect)",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/context/{context_id}/environment-variable/{env_var_name}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.delete.context-context-id-environment-variable-env-var-name",
+      "kind": "rest_write",
+      "summary": "DELETE /context/{context_id}/environment-variable/{env_var_name}",
+      "description": "removes a secret from a shared context; paired with the excluded PUT above for the same reason",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/context/{context_id}/environment-variable/{env_var_name}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.get.context-context-id-restrictions",
+      "kind": "rest_read",
+      "summary": "GET /context/{context_id}/restrictions",
+      "description": "lists project-restriction rules scoped under a single context; a thin child listing, Pass B breadth-vs-cost triage",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/context/{context_id}/restrictions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.post.context-context-id-restrictions",
+      "kind": "rest_write",
+      "summary": "POST /context/{context_id}/restrictions",
+      "description": "creates a context project-restriction rule; paired with the excluded GET above",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/context/{context_id}/restrictions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.delete.context-context-id-restrictions-restriction-id",
+      "kind": "rest_write",
+      "summary": "DELETE /context/{context_id}/restrictions/{restriction_id}",
+      "description": "deletes a context project-restriction rule; paired with the excluded GET/POST above",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/context/{context_id}/restrictions/{restriction_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.get.deploy-components",
+      "kind": "rest_read",
+      "summary": "GET /deploy/components",
+      "description": "CircleCI Deploy (Runner) component-catalog metadata, a separate product surface from CI pipelines/jobs; Pass B breadth-vs-cost triage",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/deploy/components",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.get.deploy-components-component-id",
+      "kind": "rest_read",
+      "summary": "GET /deploy/components/{component_id}",
+      "description": "single-component detail; same out-of-scope Deploy product surface as the components list endpoint above",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/deploy/components/{component_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.get.deploy-components-component-id-versions",
+      "kind": "rest_read",
+      "summary": "GET /deploy/components/{component_id}/versions",
+      "description": "component-version history nested under one component; same out-of-scope Deploy product surface",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/deploy/components/{component_id}/versions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.get.deploy-environments",
+      "kind": "rest_read",
+      "summary": "GET /deploy/environments",
+      "description": "CircleCI Deploy (Runner) environment-catalog metadata; same out-of-scope Deploy product surface",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/deploy/environments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.get.deploy-environments-environment-id",
+      "kind": "rest_read",
+      "summary": "GET /deploy/environments/{environment_id}",
+      "description": "single-environment detail; same out-of-scope Deploy product surface",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/deploy/environments/{environment_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.get.insights-pages-project-slug-summary",
+      "kind": "rest_read",
+      "summary": "GET /insights/pages/{project-slug}/summary",
+      "description": "paginated cross-workflow/branch summary aggregating the same metrics already covered by insights_workflow_summary",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/insights/pages/{project-slug}/summary",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.get.insights-time-series-project-slug-workflows-workflow-name-jobs",
+      "kind": "rest_read",
+      "summary": "GET /insights/time-series/{project-slug}/workflows/{workflow-name}/jobs",
+      "description": "time-bucketed job-duration series nested under one workflow name; Pass B breadth-vs-cost triage",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/insights/time-series/{project-slug}/workflows/{workflow-name}/jobs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.get.insights-org-slug-summary",
+      "kind": "rest_read",
+      "summary": "GET /insights/{org-slug}/summary",
+      "description": "org-wide cross-project summary; this connector is project-scoped, not org-scoped, for its other streams",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/insights/{org-slug}/summary",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.get.insights-project-slug-branches",
+      "kind": "rest_read",
+      "summary": "GET /insights/{project-slug}/branches",
+      "description": "lists branch names with recent activity for a project, not an independently useful syncable object; Pass B breadth-vs-cost triage",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/insights/{project-slug}/branches",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.get.insights-project-slug-flaky-tests",
+      "kind": "rest_read",
+      "summary": "GET /insights/{project-slug}/flaky-tests",
+      "description": "flaky-test detection report; Pass B breadth-vs-cost triage",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/insights/{project-slug}/flaky-tests",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.get.insights-project-slug-workflows-workflow-name",
+      "kind": "rest_read",
+      "summary": "GET /insights/{project-slug}/workflows/{workflow-name}",
+      "description": "recent individual pipeline/workflow runs for one workflow name; a differently-shaped, higher-cardinality time-series resource than the already-covered per-workflow summary stream; Pass B breadth-vs-cost triage",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/insights/{project-slug}/workflows/{workflow-name}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.get.insights-project-slug-workflows-workflow-name-jobs",
+      "kind": "rest_read",
+      "summary": "GET /insights/{project-slug}/workflows/{workflow-name}/jobs",
+      "description": "per-job metrics summary nested under one workflow name; Pass B breadth-vs-cost triage",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/insights/{project-slug}/workflows/{workflow-name}/jobs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.get.insights-project-slug-workflows-workflow-name-summary",
+      "kind": "rest_read",
+      "summary": "GET /insights/{project-slug}/workflows/{workflow-name}/summary",
+      "description": "trend-annotated variant of the same per-workflow metrics already covered by insights_workflow_summary",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/insights/{project-slug}/workflows/{workflow-name}/summary",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.get.insights-project-slug-workflows-workflow-name-test-metrics",
+      "kind": "rest_read",
+      "summary": "GET /insights/{project-slug}/workflows/{workflow-name}/test-metrics",
+      "description": "per-test-case timing/flake metrics nested under one workflow name; Pass B breadth-vs-cost triage",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/insights/{project-slug}/workflows/{workflow-name}/test-metrics",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.post.jobs-job-id-cancel",
+      "kind": "rest_write",
+      "summary": "POST /jobs/{job-id}/cancel",
+      "description": "cancels a running job by job ID; mutates live CI state, not a safe reverse-ETL target",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/jobs/{job-id}/cancel",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.get.jobs-job-id",
+      "kind": "rest_read",
+      "summary": "GET /jobs/{job_id}",
+      "description": "single-job detail by job ID; identical record shape to the jobs stream's per-item object, already covered by that stream",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/jobs/{job_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.get.me",
+      "kind": "rest_read",
+      "summary": "GET /me",
+      "description": "current-user identity check used only by the check request, not a syncable object stream",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/me",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.get.me-collaborations",
+      "kind": "rest_read",
+      "summary": "GET /me/collaborations",
+      "description": "lists the organizations/VCS accounts the current API-token user collaborates on; account-discovery metadata, not project data",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/me/collaborations",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.get.org-orgid-oidc-custom-claims",
+      "kind": "rest_read",
+      "summary": "GET /org/{orgID}/oidc-custom-claims",
+      "description": "org-tier OIDC token-claims configuration; Pass B breadth-vs-cost triage",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/org/{orgID}/oidc-custom-claims",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.patch.org-orgid-oidc-custom-claims",
+      "kind": "rest_write",
+      "summary": "PATCH /org/{orgID}/oidc-custom-claims",
+      "description": "modifies org-tier OIDC identity-federation configuration; a security-sensitive scope outside this connector's authority",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/org/{orgID}/oidc-custom-claims",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.delete.org-orgid-oidc-custom-claims",
+      "kind": "rest_write",
+      "summary": "DELETE /org/{orgID}/oidc-custom-claims",
+      "description": "same org-tier OIDC configuration scope as the patch endpoint above",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/org/{orgID}/oidc-custom-claims",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.get.org-orgid-project-projectid-oidc-custom-claims",
+      "kind": "rest_read",
+      "summary": "GET /org/{orgID}/project/{projectID}/oidc-custom-claims",
+      "description": "project-tier OIDC claims configuration, requires a project UUID this bundle's config cannot resolve; same gap class as the webhook endpoints",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/org/{orgID}/project/{projectID}/oidc-custom-claims",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.patch.org-orgid-project-projectid-oidc-custom-claims",
+      "kind": "rest_write",
+      "summary": "PATCH /org/{orgID}/project/{projectID}/oidc-custom-claims",
+      "description": "modifies project-tier OIDC identity-federation configuration; same project-UUID gap plus security-sensitive scope",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/org/{orgID}/project/{projectID}/oidc-custom-claims",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.delete.org-orgid-project-projectid-oidc-custom-claims",
+      "kind": "rest_write",
+      "summary": "DELETE /org/{orgID}/project/{projectID}/oidc-custom-claims",
+      "description": "same project-tier OIDC configuration scope as the patch endpoint above",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/org/{orgID}/project/{projectID}/oidc-custom-claims",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.post.organization",
+      "kind": "rest_write",
+      "summary": "POST /organization",
+      "description": "creates a brand-new CircleCI organization/account; an account-provisioning action far outside this project-scoped connector's authority",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/organization",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.get.organization-org-slug-or-id",
+      "kind": "rest_read",
+      "summary": "GET /organization/{org-slug-or-id}",
+      "description": "account/org-tier administration; this connector is project-scoped, Pass B breadth-vs-cost triage",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/organization/{org-slug-or-id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.delete.organization-org-slug-or-id",
+      "kind": "rest_write",
+      "summary": "DELETE /organization/{org-slug-or-id}",
+      "description": "permanently deletes an entire CircleCI organization and all its projects/history; not a safe reverse-ETL target",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/organization/{org-slug-or-id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.post.organization-org-slug-or-id-project",
+      "kind": "rest_write",
+      "summary": "POST /organization/{org-slug-or-id}/project",
+      "description": "provisions a brand-new CircleCI project under an organization; an account-provisioning action outside this connector's per-project write scope",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/organization/{org-slug-or-id}/project",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.get.organization-org-slug-or-id-url-orb-allow-list",
+      "kind": "rest_read",
+      "summary": "GET /organization/{org-slug-or-id}/url-orb-allow-list",
+      "description": "org-tier security-policy allow-list administration; Pass B breadth-vs-cost triage",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/organization/{org-slug-or-id}/url-orb-allow-list",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.post.organization-org-slug-or-id-url-orb-allow-list",
+      "kind": "rest_write",
+      "summary": "POST /organization/{org-slug-or-id}/url-orb-allow-list",
+      "description": "modifies org-tier security policy (which URLs orbs may fetch); outside this project-scoped connector's authority",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/organization/{org-slug-or-id}/url-orb-allow-list",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.delete.organization-org-slug-or-id-url-orb-allow-list-allow-list-entry-id",
+      "kind": "rest_write",
+      "summary": "DELETE /organization/{org-slug-or-id}/url-orb-allow-list/{allow-list-entry-id}",
+      "description": "same org-tier security-policy scope as the allow-list create endpoint above",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/organization/{org-slug-or-id}/url-orb-allow-list/{allow-list-entry-id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.get.organizations-org-id-groups",
+      "kind": "rest_read",
+      "summary": "GET /organizations/{org_id}/groups",
+      "description": "org-tier user-group administration; Pass B breadth-vs-cost triage",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/organizations/{org_id}/groups",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.post.organizations-org-id-groups",
+      "kind": "rest_write",
+      "summary": "POST /organizations/{org_id}/groups",
+      "description": "creates org-tier user-management groups; outside this project-scoped connector's authority",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/organizations/{org_id}/groups",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.get.organizations-org-id-groups-group-id",
+      "kind": "rest_read",
+      "summary": "GET /organizations/{org_id}/groups/{group_id}",
+      "description": "single-group detail; same org-tier scope as the groups list endpoint above",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/organizations/{org_id}/groups/{group_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.delete.organizations-org-id-groups-group-id",
+      "kind": "rest_write",
+      "summary": "DELETE /organizations/{org_id}/groups/{group_id}",
+      "description": "permanently deletes an org-tier user-management group; not a safe reverse-ETL target",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/organizations/{org_id}/groups/{group_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.post.organizations-org-id-usage-export-job",
+      "kind": "rest_write",
+      "summary": "POST /organizations/{org_id}/usage_export_job",
+      "description": "initiates an async usage-export job (create-then-poll-then-download); no declarative equivalent in this dialect",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/organizations/{org_id}/usage_export_job",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.get.organizations-org-id-usage-export-job-usage-export-job-id",
+      "kind": "rest_read",
+      "summary": "GET /organizations/{org_id}/usage_export_job/{usage_export_job_id}",
+      "description": "polls the async usage-export job initiated above; paired exclusion",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/organizations/{org_id}/usage_export_job/{usage_export_job_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.get.otel-exporters",
+      "kind": "rest_read",
+      "summary": "GET /otel/exporters",
+      "description": "experimental org-tier OpenTelemetry exporter configuration; Pass B breadth-vs-cost triage",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/otel/exporters",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.post.otel-exporters",
+      "kind": "rest_write",
+      "summary": "POST /otel/exporters",
+      "description": "creates an org-tier telemetry-export destination, which itself carries export credentials; outside this connector's per-project write scope",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/otel/exporters",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.delete.otel-exporters-otel-exporter-id",
+      "kind": "rest_write",
+      "summary": "DELETE /otel/exporters/{otel_exporter_id}",
+      "description": "same org-tier telemetry-export scope as the create endpoint above",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/otel/exporters/{otel_exporter_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.get.owner-ownerid-context-context-decision",
+      "kind": "rest_read",
+      "summary": "GET /owner/{ownerID}/context/{context}/decision",
+      "description": "org-tier open-policy-agent decision audit log; Pass B breadth-vs-cost triage",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/owner/{ownerID}/context/{context}/decision",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.post.owner-ownerid-context-context-decision",
+      "kind": "rest_write",
+      "summary": "POST /owner/{ownerID}/context/{context}/decision",
+      "description": "evaluates an org-tier OPA policy decision; not a syncable-object mutation",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/owner/{ownerID}/context/{context}/decision",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.get.owner-ownerid-context-context-decision-settings",
+      "kind": "rest_read",
+      "summary": "GET /owner/{ownerID}/context/{context}/decision/settings",
+      "description": "org-tier policy-decision settings; Pass B breadth-vs-cost triage",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/owner/{ownerID}/context/{context}/decision/settings",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.patch.owner-ownerid-context-context-decision-settings",
+      "kind": "rest_write",
+      "summary": "PATCH /owner/{ownerID}/context/{context}/decision/settings",
+      "description": "modifies org-tier security-policy enforcement settings; outside this connector's authority",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/owner/{ownerID}/context/{context}/decision/settings",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.get.owner-ownerid-context-context-decision-decisionid",
+      "kind": "rest_read",
+      "summary": "GET /owner/{ownerID}/context/{context}/decision/{decisionID}",
+      "description": "single-decision-log detail; same org-tier policy scope as the decision-log list endpoint above",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/owner/{ownerID}/context/{context}/decision/{decisionID}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.get.owner-ownerid-context-context-decision-decisionid-policy-bundle",
+      "kind": "rest_read",
+      "summary": "GET /owner/{ownerID}/context/{context}/decision/{decisionID}/policy-bundle",
+      "description": "returns the raw OPA policy-bundle text for a decision log; not a structured syncable object",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/owner/{ownerID}/context/{context}/decision/{decisionID}/policy-bundle",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.get.owner-ownerid-context-context-policy-bundle",
+      "kind": "rest_read",
+      "summary": "GET /owner/{ownerID}/context/{context}/policy-bundle",
+      "description": "returns the raw OPA policy-bundle text for a context; not a structured syncable object",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/owner/{ownerID}/context/{context}/policy-bundle",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.post.owner-ownerid-context-context-policy-bundle",
+      "kind": "rest_write",
+      "summary": "POST /owner/{ownerID}/context/{context}/policy-bundle",
+      "description": "uploads/modifies org-tier security-policy enforcement code; outside this connector's authority",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/owner/{ownerID}/context/{context}/policy-bundle",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.get.owner-ownerid-context-context-policy-bundle-policyname",
+      "kind": "rest_read",
+      "summary": "GET /owner/{ownerID}/context/{context}/policy-bundle/{policyName}",
+      "description": "single named policy document; same raw-text, non-structured shape as the policy-bundle endpoint above",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/owner/{ownerID}/context/{context}/policy-bundle/{policyName}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.get.pipeline",
+      "kind": "rest_read",
+      "summary": "GET /pipeline",
+      "description": "cross-project pipeline listing filtered by org-slug/mine; the project-scoped /project/{project-slug}/pipeline endpoint (the pipelines stream) already covers this project's pipelines",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/pipeline",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.post.pipeline-continue",
+      "kind": "rest_write",
+      "summary": "POST /pipeline/continue",
+      "description": "resumes a setup-workflow pipeline paused for dynamic config continuation; a live-CI-orchestration action, not a reverse-ETL write",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/pipeline/continue",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.get.pipeline-pipeline-id",
+      "kind": "rest_read",
+      "summary": "GET /pipeline/{pipeline-id}",
+      "description": "single-pipeline detail by ID; identical record shape to the pipelines list stream's per-item object, already covered by that stream",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/pipeline/{pipeline-id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.get.pipeline-pipeline-id-config",
+      "kind": "rest_read",
+      "summary": "GET /pipeline/{pipeline-id}/config",
+      "description": "returns the raw/compiled YAML config text for a pipeline, not a structured syncable object; Pass B breadth-vs-cost triage",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/pipeline/{pipeline-id}/config",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.get.pipeline-pipeline-id-values",
+      "kind": "rest_read",
+      "summary": "GET /pipeline/{pipeline_id}/values",
+      "description": "returns the resolved pipeline-parameter key-value map for a single pipeline run, not an independently syncable object; Pass B breadth-vs-cost triage",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/pipeline/{pipeline_id}/values",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.delete.project-project-slug",
+      "kind": "rest_write",
+      "summary": "DELETE /project/{project-slug}",
+      "description": "permanently deletes a CircleCI project's configuration and history; not a safe reverse-ETL target",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/project/{project-slug}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.get.project-project-slug-checkout-key-fingerprint",
+      "kind": "rest_read",
+      "summary": "GET /project/{project-slug}/checkout-key/{fingerprint}",
+      "description": "single-checkout-key detail by fingerprint; identical record shape to the checkout_keys list stream's per-item object, already covered by that stream",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/project/{project-slug}/checkout-key/{fingerprint}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.get.project-project-slug-envvar-name",
+      "kind": "rest_read",
+      "summary": "GET /project/{project-slug}/envvar/{name}",
+      "description": "single masked-environment-variable detail by name; identical record shape to the environment_variables list stream's per-item object, already covered by that stream",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/project/{project-slug}/envvar/{name}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.post.project-project-slug-job-job-number-cancel",
+      "kind": "rest_write",
+      "summary": "POST /project/{project-slug}/job/{job-number}/cancel",
+      "description": "cancels a running job by job number; same live-CI-state-mutation exclusion as the job-ID cancel endpoint above",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/project/{project-slug}/job/{job-number}/cancel",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.post.project-project-slug-pipeline",
+      "kind": "rest_write",
+      "summary": "POST /project/{project-slug}/pipeline",
+      "description": "triggers a new CI pipeline run; mutates live CI state, not a safe reverse-ETL target (matches legacy's own read-only scope)",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/project/{project-slug}/pipeline",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.get.project-project-slug-pipeline-mine",
+      "kind": "rest_read",
+      "summary": "GET /project/{project-slug}/pipeline/mine",
+      "description": "returns the current user's subset of pipelines already covered by the project's own /pipeline listing (the pipelines stream)",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/project/{project-slug}/pipeline/mine",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.get.project-project-slug-pipeline-pipeline-number",
+      "kind": "rest_read",
+      "summary": "GET /project/{project-slug}/pipeline/{pipeline-number}",
+      "description": "single-pipeline detail by pipeline number; identical record shape to the pipelines list stream's per-item object, already covered by that stream",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/project/{project-slug}/pipeline/{pipeline-number}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.post.project-provider-organization-project-pipeline-run",
+      "kind": "rest_write",
+      "summary": "POST /project/{provider}/{organization}/{project}/pipeline/run",
+      "description": "the recommended successor to the legacy pipeline-trigger endpoint above; same live-CI-state-mutation exclusion applies",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/project/{provider}/{organization}/{project}/pipeline/run",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.get.project-provider-organization-project-settings",
+      "kind": "rest_read",
+      "summary": "GET /project/{provider}/{organization}/{project}/settings",
+      "description": "project-level CI configuration settings (build behavior, advanced settings); not an object list/detail resource this migration's stream model targets; Pass B breadth-vs-cost triage",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/project/{provider}/{organization}/{project}/settings",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.patch.project-provider-organization-project-settings",
+      "kind": "rest_write",
+      "summary": "PATCH /project/{provider}/{organization}/{project}/settings",
+      "description": "mutates project-level CI configuration/build behavior; paired with the excluded GET settings endpoint above",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/project/{provider}/{organization}/{project}/settings",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.get.projects-project-id-pipeline-definitions",
+      "kind": "rest_read",
+      "summary": "GET /projects/{project_id}/pipeline-definitions",
+      "description": "requires a project UUID (project_id) this bundle's project-slug config has no declarative way to resolve; same gap class as the webhook/OIDC endpoints",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/projects/{project_id}/pipeline-definitions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.post.projects-project-id-pipeline-definitions",
+      "kind": "rest_write",
+      "summary": "POST /projects/{project_id}/pipeline-definitions",
+      "description": "same project-UUID-resolution gap as the corresponding read endpoint",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/projects/{project_id}/pipeline-definitions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.get.projects-project-id-pipeline-definitions-pipeline-definition-id",
+      "kind": "rest_read",
+      "summary": "GET /projects/{project_id}/pipeline-definitions/{pipeline_definition_id}",
+      "description": "single-pipeline-definition detail; same project-UUID-resolution gap as the list endpoint above",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/projects/{project_id}/pipeline-definitions/{pipeline_definition_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.patch.projects-project-id-pipeline-definitions-pipeline-definition-id",
+      "kind": "rest_write",
+      "summary": "PATCH /projects/{project_id}/pipeline-definitions/{pipeline_definition_id}",
+      "description": "same project-UUID-resolution gap as the corresponding read endpoint",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/projects/{project_id}/pipeline-definitions/{pipeline_definition_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.delete.projects-project-id-pipeline-definitions-pipeline-definition-id",
+      "kind": "rest_write",
+      "summary": "DELETE /projects/{project_id}/pipeline-definitions/{pipeline_definition_id}",
+      "description": "same project-UUID-resolution gap as the corresponding read endpoint",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/projects/{project_id}/pipeline-definitions/{pipeline_definition_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.get.projects-project-id-pipeline-definitions-pipeline-definition-id-triggers",
+      "kind": "rest_read",
+      "summary": "GET /projects/{project_id}/pipeline-definitions/{pipeline_definition_id}/triggers",
+      "description": "same project-UUID-resolution gap as the pipeline-definitions endpoints above",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/projects/{project_id}/pipeline-definitions/{pipeline_definition_id}/triggers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.post.projects-project-id-pipeline-definitions-pipeline-definition-id-triggers",
+      "kind": "rest_write",
+      "summary": "POST /projects/{project_id}/pipeline-definitions/{pipeline_definition_id}/triggers",
+      "description": "same project-UUID-resolution gap as the pipeline-definitions endpoints above",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/projects/{project_id}/pipeline-definitions/{pipeline_definition_id}/triggers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.post.projects-project-id-rollback",
+      "kind": "rest_write",
+      "summary": "POST /projects/{project_id}/rollback",
+      "description": "rolls a project's pipeline definitions back to a prior version; a live-CI-configuration mutation, plus the same project-UUID-resolution gap as the endpoints above",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/projects/{project_id}/rollback",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.get.projects-project-id-triggers-trigger-id",
+      "kind": "rest_read",
+      "summary": "GET /projects/{project_id}/triggers/{trigger_id}",
+      "description": "same project-UUID-resolution gap as the pipeline-definitions endpoints above",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/projects/{project_id}/triggers/{trigger_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.patch.projects-project-id-triggers-trigger-id",
+      "kind": "rest_write",
+      "summary": "PATCH /projects/{project_id}/triggers/{trigger_id}",
+      "description": "same project-UUID-resolution gap as the pipeline-definitions endpoints above",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/projects/{project_id}/triggers/{trigger_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.delete.projects-project-id-triggers-trigger-id",
+      "kind": "rest_write",
+      "summary": "DELETE /projects/{project_id}/triggers/{trigger_id}",
+      "description": "same project-UUID-resolution gap as the pipeline-definitions endpoints above",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/projects/{project_id}/triggers/{trigger_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.get.schedule-schedule-id",
+      "kind": "rest_read",
+      "summary": "GET /schedule/{schedule-id}",
+      "description": "single-schedule detail by ID; identical record shape to the schedules list stream's per-item object, already covered by that stream",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/schedule/{schedule-id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.get.user-id",
+      "kind": "rest_read",
+      "summary": "GET /user/{id}",
+      "description": "single-user detail by id; same shape as the /me identity check, not a syncable object list",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/user/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.get.webhook",
+      "kind": "rest_read",
+      "summary": "GET /webhook",
+      "description": "requires scope-id, a project UUID this bundle's project-slug/vcs_type+org+repo config has no declarative way to resolve (CircleCI's API exposes no slug-to-UUID lookup endpoint this dialect could chain to)",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/webhook",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.post.webhook",
+      "kind": "rest_write",
+      "summary": "POST /webhook",
+      "description": "same project-UUID-resolution gap as the webhook list endpoint; also carries a signing_secret in its response, a secret-bearing shape this dialect's writes.json avoids",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the provider webhook-URL mutation has no dedicated security-reviewed execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/webhook",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.get.webhook-webhook-id",
+      "kind": "rest_read",
+      "summary": "GET /webhook/{webhook_id}",
+      "description": "single-webhook detail; same project-UUID-resolution gap as the webhook list endpoint above",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/webhook/{webhook_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.put.webhook-webhook-id",
+      "kind": "rest_write",
+      "summary": "PUT /webhook/{webhook_id}",
+      "description": "same project-UUID-resolution and secret-bearing-response gap as webhook creation",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the provider webhook-URL mutation has no dedicated security-reviewed execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/webhook/{webhook_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.delete.webhook-webhook-id",
+      "kind": "rest_write",
+      "summary": "DELETE /webhook/{webhook_id}",
+      "description": "same project-UUID-resolution gap as the other webhook endpoints",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the provider webhook-URL mutation has no dedicated security-reviewed execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/webhook/{webhook_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.get.workflow-id",
+      "kind": "rest_read",
+      "summary": "GET /workflow/{id}",
+      "description": "single-workflow detail; identical record shape to the jobs stream's parent workflow context and already reachable via the workflows stream's own list",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/workflow/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.post.workflow-id-approve-approval-request-id",
+      "kind": "rest_write",
+      "summary": "POST /workflow/{id}/approve/{approval_request_id}",
+      "description": "approves a held CI workflow step; mutates live CI state, not a safe reverse-ETL target",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/workflow/{id}/approve/{approval_request_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.post.workflow-id-cancel",
+      "kind": "rest_write",
+      "summary": "POST /workflow/{id}/cancel",
+      "description": "cancels a running workflow; mutates live CI state, not a safe reverse-ETL target",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/workflow/{id}/cancel",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circleci.post.workflow-id-rerun",
+      "kind": "rest_write",
+      "summary": "POST /workflow/{id}/rerun",
+      "description": "reruns a workflow's jobs; mutates live CI state, not a safe reverse-ETL target",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/workflow/{id}/rerun",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

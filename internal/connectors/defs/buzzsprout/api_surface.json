@@ -1,13 +1,104 @@
 {
-  "api": "Buzzsprout API (https://www.buzzsprout.com/api)",
+  "api": "Buzzsprout API (https://www.buzzsprout.com/api); provider artifact version: v1; master f94910e0de19044a0f098def576672349548f3d1",
   "docs": "https://github.com/Buzzsprout/buzzsprout-api",
-  "reviewed_at": "2026-07-04",
-  "scope": "Pass B full-surface expansion: verified against the Buzzsprout API's real published documentation (github.com/Buzzsprout/buzzsprout-api, sections/episodes.md + sections/podcasts.md). Buzzsprout publishes exactly 5 endpoints total across 2 resources (episodes, podcasts) with no delete endpoint documented anywhere for either resource. All 5 are now covered: 2 read streams (episodes, podcasts) and 2 writes (create_episode, update_episode); the single-episode detail GET is excluded as a non-list convenience endpoint with no incremental/catalog value beyond the list stream.",
+  "reviewed_at": "2026-08-09",
+  "operation_ledger_version": 2,
+  "scope": "Exact existing-surface evidence fallback: the preserved source inventory contains 5 official-survey operation entries, exactly matching the immutable count. Shared executable bindings for the same provider method/path are merged into one normalized endpoint. The cited official html_reference artifact is retained as the v2 provenance root; no operation was inferred from a documentation crawl. Prior source-surface scope: Pass B full-surface expansion: verified against the Buzzsprout API's real published documentation (github.com/Buzzsprout/buzzsprout-api, sections/episodes.md + sections/podcasts.md). Buzzsprout publishes exactly 5 endpoints total across 2 resources (episodes, podcasts) with no delete endpoint documented anywhere for either resource. All 5 are now covered: 2 read streams (episodes, podcasts) and 2 writes (create_episode, update_episode); the single-episode detail GET is excluded as a non-list convenience endpoint with no incremental/catalog value beyond the list stream.",
+  "artifacts": [
+    {
+      "id": "buzzsprout-artifact-2026-08-09",
+      "url": "https://github.com/buzzsprout/buzzsprout-api",
+      "kind": "html_reference",
+      "version": "v1; master f94910e0de19044a0f098def576672349548f3d1",
+      "retrieved_at": "2026-08-09",
+      "sha256": "8efda2c83aaf8e5ddfa7e37e6cb4a154221e2f203cfbbeb1fec1f22a3f8e7b8f"
+    }
+  ],
   "endpoints": [
-    { "method": "GET", "path": "/api/{podcast_id}/episodes.json", "covered_by": { "stream": "episodes" } },
-    { "method": "GET", "path": "/api/podcasts.json", "covered_by": { "stream": "podcasts" } },
-    { "method": "POST", "path": "/api/{podcast_id}/episodes.json", "covered_by": { "write": "create_episode" } },
-    { "method": "PUT", "path": "/api/{podcast_id}/episodes/{episode_id}.json", "covered_by": { "write": "update_episode" } },
-    { "method": "GET", "path": "/api/{podcast_id}/episodes/{episode_id}.json", "excluded": { "category": "duplicate_of", "reason": "single-episode detail fetch; every field it returns is already emitted by the episodes list stream (GET /api/{podcast_id}/episodes.json returns the full episode set with the identical shape), and Buzzsprout has no per-episode incremental/webhook signal that would make a targeted single-record read useful beyond the list sync" } }
+    {
+      "method": "GET",
+      "path": "/api/podcasts.json",
+      "provenance": {
+        "artifact": "buzzsprout-artifact-2026-08-09",
+        "source_url": "https://github.com/buzzsprout/buzzsprout-api",
+        "source_kind": "html_reference",
+        "version": "v1; master f94910e0de19044a0f098def576672349548f3d1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8efda2c83aaf8e5ddfa7e37e6cb4a154221e2f203cfbbeb1fec1f22a3f8e7b8f",
+        "coordinate": "existing-complete-surface[GET /api/podcasts.json]"
+      },
+      "covered_by": {
+        "stream": "podcasts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/{podcast_id}/episodes.json",
+      "provenance": {
+        "artifact": "buzzsprout-artifact-2026-08-09",
+        "source_url": "https://github.com/buzzsprout/buzzsprout-api",
+        "source_kind": "html_reference",
+        "version": "v1; master f94910e0de19044a0f098def576672349548f3d1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8efda2c83aaf8e5ddfa7e37e6cb4a154221e2f203cfbbeb1fec1f22a3f8e7b8f",
+        "coordinate": "existing-complete-surface[GET /api/{podcast_id}/episodes.json]"
+      },
+      "covered_by": {
+        "stream": "episodes"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/{podcast_id}/episodes.json",
+      "provenance": {
+        "artifact": "buzzsprout-artifact-2026-08-09",
+        "source_url": "https://github.com/buzzsprout/buzzsprout-api",
+        "source_kind": "html_reference",
+        "version": "v1; master f94910e0de19044a0f098def576672349548f3d1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8efda2c83aaf8e5ddfa7e37e6cb4a154221e2f203cfbbeb1fec1f22a3f8e7b8f",
+        "coordinate": "existing-complete-surface[POST /api/{podcast_id}/episodes.json]"
+      },
+      "covered_by": {
+        "write": "create_episode"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/{podcast_id}/episodes/{episode_id}.json",
+      "provenance": {
+        "artifact": "buzzsprout-artifact-2026-08-09",
+        "source_url": "https://github.com/buzzsprout/buzzsprout-api",
+        "source_kind": "html_reference",
+        "version": "v1; master f94910e0de19044a0f098def576672349548f3d1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8efda2c83aaf8e5ddfa7e37e6cb4a154221e2f203cfbbeb1fec1f22a3f8e7b8f",
+        "coordinate": "existing-complete-surface[GET /api/{podcast_id}/episodes/{episode_id}.json]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-episode detail fetch; every field it returns is already emitted by the episodes list stream (GET /api/{podcast_id}/episodes.json returns the full episode set with the identical shape), and Buzzsprout has no per-episode incremental/webhook signal that would make a targeted single-record read useful beyond the list sync",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/{podcast_id}/episodes/{episode_id}.json",
+      "provenance": {
+        "artifact": "buzzsprout-artifact-2026-08-09",
+        "source_url": "https://github.com/buzzsprout/buzzsprout-api",
+        "source_kind": "html_reference",
+        "version": "v1; master f94910e0de19044a0f098def576672349548f3d1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8efda2c83aaf8e5ddfa7e37e6cb4a154221e2f203cfbbeb1fec1f22a3f8e7b8f",
+        "coordinate": "existing-complete-surface[PUT /api/{podcast_id}/episodes/{episode_id}.json]"
+      },
+      "covered_by": {
+        "write": "update_episode"
+      }
+    }
   ]
 }

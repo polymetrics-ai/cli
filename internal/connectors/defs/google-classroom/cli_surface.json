@@ -1,0 +1,2299 @@
+{
+  "tagline": "Run Google Classroom's declared streams and reverse-ETL actions.",
+  "usage": "pm google-classroom \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "announcements list",
+        "api get v1 courses",
+        "api get v1 courses courseid aliases",
+        "api get v1 courses courseid announcements",
+        "api get v1 courses courseid announcements id",
+        "api get v1 courses courseid announcements itemid addonattachments",
+        "api get v1 courses courseid announcements itemid addonattachments attachmentid",
+        "api get v1 courses courseid announcements itemid addoncontext",
+        "api get v1 courses courseid coursework",
+        "api get v1 courses courseid coursework courseworkid rubrics",
+        "api get v1 courses courseid coursework courseworkid rubrics id",
+        "api get v1 courses courseid coursework courseworkid studentsubmissions",
+        "api get v1 courses courseid coursework courseworkid studentsubmissions id",
+        "api get v1 courses courseid coursework id",
+        "api get v1 courses courseid coursework itemid addonattachments",
+        "api get v1 courses courseid coursework itemid addonattachments attachmentid",
+        "api get v1 courses courseid coursework itemid addonattachments attachmentid studentsubmissions submissionid",
+        "api get v1 courses courseid coursework itemid addoncontext",
+        "api get v1 courses courseid courseworkmaterials",
+        "api get v1 courses courseid courseworkmaterials id",
+        "api get v1 courses courseid courseworkmaterials itemid addonattachments",
+        "api get v1 courses courseid courseworkmaterials itemid addonattachments attachmentid",
+        "api get v1 courses courseid courseworkmaterials itemid addoncontext",
+        "api get v1 courses courseid gradingperiodsettings",
+        "api get v1 courses courseid posts postid addonattachments",
+        "api get v1 courses courseid posts postid addonattachments attachmentid",
+        "api get v1 courses courseid posts postid addonattachments attachmentid studentsubmissions submissionid",
+        "api get v1 courses courseid posts postid addoncontext",
+        "api get v1 courses courseid studentgroups",
+        "api get v1 courses courseid studentgroups studentgroupid studentgroupmembers",
+        "api get v1 courses courseid students",
+        "api get v1 courses courseid students userid",
+        "api get v1 courses courseid teachers",
+        "api get v1 courses courseid teachers userid",
+        "api get v1 courses courseid topics",
+        "api get v1 courses courseid topics id",
+        "api get v1 courses id",
+        "api get v1 invitations",
+        "api get v1 invitations id",
+        "api get v1 userprofiles studentid guardianinvitations",
+        "api get v1 userprofiles studentid guardianinvitations invitationid",
+        "api get v1 userprofiles studentid guardians",
+        "api get v1 userprofiles studentid guardians guardianid",
+        "api get v1 userprofiles userid",
+        "course work list",
+        "courses list",
+        "students list",
+        "teachers list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "api delete v1 courses courseid aliases alias",
+        "api delete v1 courses courseid announcements id",
+        "api delete v1 courses courseid announcements itemid addonattachments attachmentid",
+        "api delete v1 courses courseid coursework courseworkid rubrics id",
+        "api delete v1 courses courseid coursework id",
+        "api delete v1 courses courseid coursework itemid addonattachments attachmentid",
+        "api delete v1 courses courseid courseworkmaterials id",
+        "api delete v1 courses courseid courseworkmaterials itemid addonattachments attachmentid",
+        "api delete v1 courses courseid posts postid addonattachments attachmentid",
+        "api delete v1 courses courseid studentgroups id",
+        "api delete v1 courses courseid studentgroups studentgroupid studentgroupmembers userid",
+        "api delete v1 courses courseid students userid",
+        "api delete v1 courses courseid teachers userid",
+        "api delete v1 courses courseid topics id",
+        "api delete v1 courses id",
+        "api delete v1 invitations id",
+        "api delete v1 registrations registrationid",
+        "api delete v1 userprofiles studentid guardians guardianid",
+        "api patch v1 courses courseid announcements id",
+        "api patch v1 courses courseid announcements itemid addonattachments attachmentid",
+        "api patch v1 courses courseid coursework courseworkid rubric",
+        "api patch v1 courses courseid coursework courseworkid rubrics id",
+        "api patch v1 courses courseid coursework courseworkid studentsubmissions id",
+        "api patch v1 courses courseid coursework id",
+        "api patch v1 courses courseid coursework itemid addonattachments attachmentid",
+        "api patch v1 courses courseid coursework itemid addonattachments attachmentid studentsubmissions submissionid",
+        "api patch v1 courses courseid courseworkmaterials id",
+        "api patch v1 courses courseid courseworkmaterials itemid addonattachments attachmentid",
+        "api patch v1 courses courseid gradingperiodsettings",
+        "api patch v1 courses courseid posts postid addonattachments attachmentid",
+        "api patch v1 courses courseid posts postid addonattachments attachmentid studentsubmissions submissionid",
+        "api patch v1 courses courseid studentgroups id",
+        "api patch v1 courses courseid topics id",
+        "api patch v1 courses id",
+        "api patch v1 userprofiles studentid guardianinvitations invitationid",
+        "api post v1 courses",
+        "api post v1 courses courseid aliases",
+        "api post v1 courses courseid announcements",
+        "api post v1 courses courseid announcements id modifyassignees",
+        "api post v1 courses courseid announcements itemid addonattachments",
+        "api post v1 courses courseid coursework",
+        "api post v1 courses courseid coursework courseworkid rubrics",
+        "api post v1 courses courseid coursework courseworkid studentsubmissions id modifyattachments",
+        "api post v1 courses courseid coursework courseworkid studentsubmissions id reclaim",
+        "api post v1 courses courseid coursework courseworkid studentsubmissions id return",
+        "api post v1 courses courseid coursework courseworkid studentsubmissions id turnin",
+        "api post v1 courses courseid coursework id modifyassignees",
+        "api post v1 courses courseid coursework itemid addonattachments",
+        "api post v1 courses courseid courseworkmaterials",
+        "api post v1 courses courseid courseworkmaterials itemid addonattachments",
+        "api post v1 courses courseid posts postid addonattachments",
+        "api post v1 courses courseid studentgroups",
+        "api post v1 courses courseid studentgroups studentgroupid studentgroupmembers",
+        "api post v1 courses courseid students",
+        "api post v1 courses courseid teachers",
+        "api post v1 courses courseid topics",
+        "api post v1 invitations",
+        "api post v1 invitations id accept",
+        "api post v1 registrations",
+        "api post v1 userprofiles studentid guardianinvitations",
+        "api put v1 courses id"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "announcements list",
+      "summary": "Run the announcements ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "announcements",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom announcements list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "HOOK",
+          "path": "internal/connectors/google-classroom announcements read path"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "api delete v1 courses courseid aliases alias",
+      "summary": "Documented DELETE /v1/courses/{courseId}/aliases/{alias} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api delete v1 courses courseid aliases alias --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/courses/{courseId}/aliases/{alias}"
+        }
+      ],
+      "operation": "google-classroom.delete.v1-courses-courseid-aliases-alias",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v1 courses courseid announcements id",
+      "summary": "Documented DELETE /v1/courses/{courseId}/announcements/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api delete v1 courses courseid announcements id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/courses/{courseId}/announcements/{id}"
+        }
+      ],
+      "operation": "google-classroom.delete.v1-courses-courseid-announcements-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v1 courses courseid announcements itemid addonattachments attachmentid",
+      "summary": "Documented DELETE /v1/courses/{courseId}/announcements/{itemId}/addOnAttachments/{attachmentId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api delete v1 courses courseid announcements itemid addonattachments attachmentid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/courses/{courseId}/announcements/{itemId}/addOnAttachments/{attachmentId}"
+        }
+      ],
+      "operation": "google-classroom.delete.v1-courses-courseid-announcements-itemid-addonattachments-attachmentid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v1 courses courseid coursework courseworkid rubrics id",
+      "summary": "Documented DELETE /v1/courses/{courseId}/courseWork/{courseWorkId}/rubrics/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api delete v1 courses courseid coursework courseworkid rubrics id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/courses/{courseId}/courseWork/{courseWorkId}/rubrics/{id}"
+        }
+      ],
+      "operation": "google-classroom.delete.v1-courses-courseid-coursework-courseworkid-rubrics-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v1 courses courseid coursework id",
+      "summary": "Documented DELETE /v1/courses/{courseId}/courseWork/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api delete v1 courses courseid coursework id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/courses/{courseId}/courseWork/{id}"
+        }
+      ],
+      "operation": "google-classroom.delete.v1-courses-courseid-coursework-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v1 courses courseid coursework itemid addonattachments attachmentid",
+      "summary": "Documented DELETE /v1/courses/{courseId}/courseWork/{itemId}/addOnAttachments/{attachmentId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api delete v1 courses courseid coursework itemid addonattachments attachmentid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/courses/{courseId}/courseWork/{itemId}/addOnAttachments/{attachmentId}"
+        }
+      ],
+      "operation": "google-classroom.delete.v1-courses-courseid-coursework-itemid-addonattachments-attachmentid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v1 courses courseid courseworkmaterials id",
+      "summary": "Documented DELETE /v1/courses/{courseId}/courseWorkMaterials/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api delete v1 courses courseid courseworkmaterials id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/courses/{courseId}/courseWorkMaterials/{id}"
+        }
+      ],
+      "operation": "google-classroom.delete.v1-courses-courseid-courseworkmaterials-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v1 courses courseid courseworkmaterials itemid addonattachments attachmentid",
+      "summary": "Documented DELETE /v1/courses/{courseId}/courseWorkMaterials/{itemId}/addOnAttachments/{attachmentId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api delete v1 courses courseid courseworkmaterials itemid addonattachments attachmentid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/courses/{courseId}/courseWorkMaterials/{itemId}/addOnAttachments/{attachmentId}"
+        }
+      ],
+      "operation": "google-classroom.delete.v1-courses-courseid-courseworkmaterials-itemid-addonattachments-attachmentid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v1 courses courseid posts postid addonattachments attachmentid",
+      "summary": "Documented DELETE /v1/courses/{courseId}/posts/{postId}/addOnAttachments/{attachmentId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api delete v1 courses courseid posts postid addonattachments attachmentid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/courses/{courseId}/posts/{postId}/addOnAttachments/{attachmentId}"
+        }
+      ],
+      "operation": "google-classroom.delete.v1-courses-courseid-posts-postid-addonattachments-attachmentid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v1 courses courseid studentgroups id",
+      "summary": "Documented DELETE /v1/courses/{courseId}/studentGroups/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api delete v1 courses courseid studentgroups id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/courses/{courseId}/studentGroups/{id}"
+        }
+      ],
+      "operation": "google-classroom.delete.v1-courses-courseid-studentgroups-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v1 courses courseid studentgroups studentgroupid studentgroupmembers userid",
+      "summary": "Documented DELETE /v1/courses/{courseId}/studentGroups/{studentGroupId}/studentGroupMembers/{userId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api delete v1 courses courseid studentgroups studentgroupid studentgroupmembers userid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/courses/{courseId}/studentGroups/{studentGroupId}/studentGroupMembers/{userId}"
+        }
+      ],
+      "operation": "google-classroom.delete.v1-courses-courseid-studentgroups-studentgroupid-studentgroupmembers-userid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v1 courses courseid students userid",
+      "summary": "Documented DELETE /v1/courses/{courseId}/students/{userId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api delete v1 courses courseid students userid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/courses/{courseId}/students/{userId}"
+        }
+      ],
+      "operation": "google-classroom.delete.v1-courses-courseid-students-userid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v1 courses courseid teachers userid",
+      "summary": "Documented DELETE /v1/courses/{courseId}/teachers/{userId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api delete v1 courses courseid teachers userid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/courses/{courseId}/teachers/{userId}"
+        }
+      ],
+      "operation": "google-classroom.delete.v1-courses-courseid-teachers-userid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v1 courses courseid topics id",
+      "summary": "Documented DELETE /v1/courses/{courseId}/topics/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api delete v1 courses courseid topics id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/courses/{courseId}/topics/{id}"
+        }
+      ],
+      "operation": "google-classroom.delete.v1-courses-courseid-topics-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v1 courses id",
+      "summary": "Documented DELETE /v1/courses/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api delete v1 courses id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/courses/{id}"
+        }
+      ],
+      "operation": "google-classroom.delete.v1-courses-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v1 invitations id",
+      "summary": "Documented DELETE /v1/invitations/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api delete v1 invitations id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/invitations/{id}"
+        }
+      ],
+      "operation": "google-classroom.delete.v1-invitations-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v1 registrations registrationid",
+      "summary": "Documented DELETE /v1/registrations/{registrationId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api delete v1 registrations registrationid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/registrations/{registrationId}"
+        }
+      ],
+      "operation": "google-classroom.delete.v1-registrations-registrationid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v1 userprofiles studentid guardians guardianid",
+      "summary": "Documented DELETE /v1/userProfiles/{studentId}/guardians/{guardianId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api delete v1 userprofiles studentid guardians guardianid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/userProfiles/{studentId}/guardians/{guardianId}"
+        }
+      ],
+      "operation": "google-classroom.delete.v1-userprofiles-studentid-guardians-guardianid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api get v1 courses",
+      "summary": "Documented GET /v1/courses (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api get v1 courses --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/courses"
+        }
+      ],
+      "operation": "google-classroom.get.v1-courses",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 courses courseid aliases",
+      "summary": "Documented GET /v1/courses/{courseId}/aliases (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api get v1 courses courseid aliases --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/courses/{courseId}/aliases"
+        }
+      ],
+      "operation": "google-classroom.get.v1-courses-courseid-aliases",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 courses courseid announcements",
+      "summary": "Documented GET /v1/courses/{courseId}/announcements (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api get v1 courses courseid announcements --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/courses/{courseId}/announcements"
+        }
+      ],
+      "operation": "google-classroom.get.v1-courses-courseid-announcements",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 courses courseid announcements id",
+      "summary": "Documented GET /v1/courses/{courseId}/announcements/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api get v1 courses courseid announcements id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/courses/{courseId}/announcements/{id}"
+        }
+      ],
+      "operation": "google-classroom.get.v1-courses-courseid-announcements-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 courses courseid announcements itemid addonattachments",
+      "summary": "Documented GET /v1/courses/{courseId}/announcements/{itemId}/addOnAttachments (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api get v1 courses courseid announcements itemid addonattachments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/courses/{courseId}/announcements/{itemId}/addOnAttachments"
+        }
+      ],
+      "operation": "google-classroom.get.v1-courses-courseid-announcements-itemid-addonattachments",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 courses courseid announcements itemid addonattachments attachmentid",
+      "summary": "Documented GET /v1/courses/{courseId}/announcements/{itemId}/addOnAttachments/{attachmentId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api get v1 courses courseid announcements itemid addonattachments attachmentid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/courses/{courseId}/announcements/{itemId}/addOnAttachments/{attachmentId}"
+        }
+      ],
+      "operation": "google-classroom.get.v1-courses-courseid-announcements-itemid-addonattachments-attachmentid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 courses courseid announcements itemid addoncontext",
+      "summary": "Documented GET /v1/courses/{courseId}/announcements/{itemId}/addOnContext (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api get v1 courses courseid announcements itemid addoncontext --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/courses/{courseId}/announcements/{itemId}/addOnContext"
+        }
+      ],
+      "operation": "google-classroom.get.v1-courses-courseid-announcements-itemid-addoncontext",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 courses courseid coursework",
+      "summary": "Documented GET /v1/courses/{courseId}/courseWork (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api get v1 courses courseid coursework --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/courses/{courseId}/courseWork"
+        }
+      ],
+      "operation": "google-classroom.get.v1-courses-courseid-coursework",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 courses courseid coursework courseworkid rubrics",
+      "summary": "Documented GET /v1/courses/{courseId}/courseWork/{courseWorkId}/rubrics (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api get v1 courses courseid coursework courseworkid rubrics --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/courses/{courseId}/courseWork/{courseWorkId}/rubrics"
+        }
+      ],
+      "operation": "google-classroom.get.v1-courses-courseid-coursework-courseworkid-rubrics",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 courses courseid coursework courseworkid rubrics id",
+      "summary": "Documented GET /v1/courses/{courseId}/courseWork/{courseWorkId}/rubrics/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api get v1 courses courseid coursework courseworkid rubrics id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/courses/{courseId}/courseWork/{courseWorkId}/rubrics/{id}"
+        }
+      ],
+      "operation": "google-classroom.get.v1-courses-courseid-coursework-courseworkid-rubrics-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 courses courseid coursework courseworkid studentsubmissions",
+      "summary": "Documented GET /v1/courses/{courseId}/courseWork/{courseWorkId}/studentSubmissions (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api get v1 courses courseid coursework courseworkid studentsubmissions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/courses/{courseId}/courseWork/{courseWorkId}/studentSubmissions"
+        }
+      ],
+      "operation": "google-classroom.get.v1-courses-courseid-coursework-courseworkid-studentsubmissions",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 courses courseid coursework courseworkid studentsubmissions id",
+      "summary": "Documented GET /v1/courses/{courseId}/courseWork/{courseWorkId}/studentSubmissions/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api get v1 courses courseid coursework courseworkid studentsubmissions id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/courses/{courseId}/courseWork/{courseWorkId}/studentSubmissions/{id}"
+        }
+      ],
+      "operation": "google-classroom.get.v1-courses-courseid-coursework-courseworkid-studentsubmissions-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 courses courseid coursework id",
+      "summary": "Documented GET /v1/courses/{courseId}/courseWork/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api get v1 courses courseid coursework id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/courses/{courseId}/courseWork/{id}"
+        }
+      ],
+      "operation": "google-classroom.get.v1-courses-courseid-coursework-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 courses courseid coursework itemid addonattachments",
+      "summary": "Documented GET /v1/courses/{courseId}/courseWork/{itemId}/addOnAttachments (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api get v1 courses courseid coursework itemid addonattachments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/courses/{courseId}/courseWork/{itemId}/addOnAttachments"
+        }
+      ],
+      "operation": "google-classroom.get.v1-courses-courseid-coursework-itemid-addonattachments",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 courses courseid coursework itemid addonattachments attachmentid",
+      "summary": "Documented GET /v1/courses/{courseId}/courseWork/{itemId}/addOnAttachments/{attachmentId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api get v1 courses courseid coursework itemid addonattachments attachmentid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/courses/{courseId}/courseWork/{itemId}/addOnAttachments/{attachmentId}"
+        }
+      ],
+      "operation": "google-classroom.get.v1-courses-courseid-coursework-itemid-addonattachments-attachmentid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 courses courseid coursework itemid addonattachments attachmentid studentsubmissions submissionid",
+      "summary": "Documented GET /v1/courses/{courseId}/courseWork/{itemId}/addOnAttachments/{attachmentId}/studentSubmissions/{submissionId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api get v1 courses courseid coursework itemid addonattachments attachmentid studentsubmissions submissionid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/courses/{courseId}/courseWork/{itemId}/addOnAttachments/{attachmentId}/studentSubmissions/{submissionId}"
+        }
+      ],
+      "operation": "google-classroom.get.v1-courses-courseid-coursework-itemid-addonattachments-attachmentid-studentsubmissions-submissionid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 courses courseid coursework itemid addoncontext",
+      "summary": "Documented GET /v1/courses/{courseId}/courseWork/{itemId}/addOnContext (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api get v1 courses courseid coursework itemid addoncontext --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/courses/{courseId}/courseWork/{itemId}/addOnContext"
+        }
+      ],
+      "operation": "google-classroom.get.v1-courses-courseid-coursework-itemid-addoncontext",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 courses courseid courseworkmaterials",
+      "summary": "Documented GET /v1/courses/{courseId}/courseWorkMaterials (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api get v1 courses courseid courseworkmaterials --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/courses/{courseId}/courseWorkMaterials"
+        }
+      ],
+      "operation": "google-classroom.get.v1-courses-courseid-courseworkmaterials",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 courses courseid courseworkmaterials id",
+      "summary": "Documented GET /v1/courses/{courseId}/courseWorkMaterials/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api get v1 courses courseid courseworkmaterials id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/courses/{courseId}/courseWorkMaterials/{id}"
+        }
+      ],
+      "operation": "google-classroom.get.v1-courses-courseid-courseworkmaterials-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 courses courseid courseworkmaterials itemid addonattachments",
+      "summary": "Documented GET /v1/courses/{courseId}/courseWorkMaterials/{itemId}/addOnAttachments (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api get v1 courses courseid courseworkmaterials itemid addonattachments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/courses/{courseId}/courseWorkMaterials/{itemId}/addOnAttachments"
+        }
+      ],
+      "operation": "google-classroom.get.v1-courses-courseid-courseworkmaterials-itemid-addonattachments",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 courses courseid courseworkmaterials itemid addonattachments attachmentid",
+      "summary": "Documented GET /v1/courses/{courseId}/courseWorkMaterials/{itemId}/addOnAttachments/{attachmentId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api get v1 courses courseid courseworkmaterials itemid addonattachments attachmentid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/courses/{courseId}/courseWorkMaterials/{itemId}/addOnAttachments/{attachmentId}"
+        }
+      ],
+      "operation": "google-classroom.get.v1-courses-courseid-courseworkmaterials-itemid-addonattachments-attachmentid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 courses courseid courseworkmaterials itemid addoncontext",
+      "summary": "Documented GET /v1/courses/{courseId}/courseWorkMaterials/{itemId}/addOnContext (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api get v1 courses courseid courseworkmaterials itemid addoncontext --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/courses/{courseId}/courseWorkMaterials/{itemId}/addOnContext"
+        }
+      ],
+      "operation": "google-classroom.get.v1-courses-courseid-courseworkmaterials-itemid-addoncontext",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 courses courseid gradingperiodsettings",
+      "summary": "Documented GET /v1/courses/{courseId}/gradingPeriodSettings (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api get v1 courses courseid gradingperiodsettings --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/courses/{courseId}/gradingPeriodSettings"
+        }
+      ],
+      "operation": "google-classroom.get.v1-courses-courseid-gradingperiodsettings",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 courses courseid posts postid addonattachments",
+      "summary": "Documented GET /v1/courses/{courseId}/posts/{postId}/addOnAttachments (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api get v1 courses courseid posts postid addonattachments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/courses/{courseId}/posts/{postId}/addOnAttachments"
+        }
+      ],
+      "operation": "google-classroom.get.v1-courses-courseid-posts-postid-addonattachments",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 courses courseid posts postid addonattachments attachmentid",
+      "summary": "Documented GET /v1/courses/{courseId}/posts/{postId}/addOnAttachments/{attachmentId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api get v1 courses courseid posts postid addonattachments attachmentid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/courses/{courseId}/posts/{postId}/addOnAttachments/{attachmentId}"
+        }
+      ],
+      "operation": "google-classroom.get.v1-courses-courseid-posts-postid-addonattachments-attachmentid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 courses courseid posts postid addonattachments attachmentid studentsubmissions submissionid",
+      "summary": "Documented GET /v1/courses/{courseId}/posts/{postId}/addOnAttachments/{attachmentId}/studentSubmissions/{submissionId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api get v1 courses courseid posts postid addonattachments attachmentid studentsubmissions submissionid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/courses/{courseId}/posts/{postId}/addOnAttachments/{attachmentId}/studentSubmissions/{submissionId}"
+        }
+      ],
+      "operation": "google-classroom.get.v1-courses-courseid-posts-postid-addonattachments-attachmentid-studentsubmissions-submissionid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 courses courseid posts postid addoncontext",
+      "summary": "Documented GET /v1/courses/{courseId}/posts/{postId}/addOnContext (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api get v1 courses courseid posts postid addoncontext --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/courses/{courseId}/posts/{postId}/addOnContext"
+        }
+      ],
+      "operation": "google-classroom.get.v1-courses-courseid-posts-postid-addoncontext",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 courses courseid studentgroups",
+      "summary": "Documented GET /v1/courses/{courseId}/studentGroups (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api get v1 courses courseid studentgroups --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/courses/{courseId}/studentGroups"
+        }
+      ],
+      "operation": "google-classroom.get.v1-courses-courseid-studentgroups",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 courses courseid studentgroups studentgroupid studentgroupmembers",
+      "summary": "Documented GET /v1/courses/{courseId}/studentGroups/{studentGroupId}/studentGroupMembers (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api get v1 courses courseid studentgroups studentgroupid studentgroupmembers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/courses/{courseId}/studentGroups/{studentGroupId}/studentGroupMembers"
+        }
+      ],
+      "operation": "google-classroom.get.v1-courses-courseid-studentgroups-studentgroupid-studentgroupmembers",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 courses courseid students",
+      "summary": "Documented GET /v1/courses/{courseId}/students (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api get v1 courses courseid students --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/courses/{courseId}/students"
+        }
+      ],
+      "operation": "google-classroom.get.v1-courses-courseid-students",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 courses courseid students userid",
+      "summary": "Documented GET /v1/courses/{courseId}/students/{userId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api get v1 courses courseid students userid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/courses/{courseId}/students/{userId}"
+        }
+      ],
+      "operation": "google-classroom.get.v1-courses-courseid-students-userid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 courses courseid teachers",
+      "summary": "Documented GET /v1/courses/{courseId}/teachers (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api get v1 courses courseid teachers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/courses/{courseId}/teachers"
+        }
+      ],
+      "operation": "google-classroom.get.v1-courses-courseid-teachers",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 courses courseid teachers userid",
+      "summary": "Documented GET /v1/courses/{courseId}/teachers/{userId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api get v1 courses courseid teachers userid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/courses/{courseId}/teachers/{userId}"
+        }
+      ],
+      "operation": "google-classroom.get.v1-courses-courseid-teachers-userid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 courses courseid topics",
+      "summary": "Documented GET /v1/courses/{courseId}/topics (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api get v1 courses courseid topics --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/courses/{courseId}/topics"
+        }
+      ],
+      "operation": "google-classroom.get.v1-courses-courseid-topics",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 courses courseid topics id",
+      "summary": "Documented GET /v1/courses/{courseId}/topics/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api get v1 courses courseid topics id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/courses/{courseId}/topics/{id}"
+        }
+      ],
+      "operation": "google-classroom.get.v1-courses-courseid-topics-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 courses id",
+      "summary": "Documented GET /v1/courses/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api get v1 courses id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/courses/{id}"
+        }
+      ],
+      "operation": "google-classroom.get.v1-courses-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 invitations",
+      "summary": "Documented GET /v1/invitations (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api get v1 invitations --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/invitations"
+        }
+      ],
+      "operation": "google-classroom.get.v1-invitations",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 invitations id",
+      "summary": "Documented GET /v1/invitations/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api get v1 invitations id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/invitations/{id}"
+        }
+      ],
+      "operation": "google-classroom.get.v1-invitations-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 userprofiles studentid guardianinvitations",
+      "summary": "Documented GET /v1/userProfiles/{studentId}/guardianInvitations (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api get v1 userprofiles studentid guardianinvitations --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/userProfiles/{studentId}/guardianInvitations"
+        }
+      ],
+      "operation": "google-classroom.get.v1-userprofiles-studentid-guardianinvitations",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 userprofiles studentid guardianinvitations invitationid",
+      "summary": "Documented GET /v1/userProfiles/{studentId}/guardianInvitations/{invitationId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api get v1 userprofiles studentid guardianinvitations invitationid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/userProfiles/{studentId}/guardianInvitations/{invitationId}"
+        }
+      ],
+      "operation": "google-classroom.get.v1-userprofiles-studentid-guardianinvitations-invitationid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 userprofiles studentid guardians",
+      "summary": "Documented GET /v1/userProfiles/{studentId}/guardians (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api get v1 userprofiles studentid guardians --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/userProfiles/{studentId}/guardians"
+        }
+      ],
+      "operation": "google-classroom.get.v1-userprofiles-studentid-guardians",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 userprofiles studentid guardians guardianid",
+      "summary": "Documented GET /v1/userProfiles/{studentId}/guardians/{guardianId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api get v1 userprofiles studentid guardians guardianid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/userProfiles/{studentId}/guardians/{guardianId}"
+        }
+      ],
+      "operation": "google-classroom.get.v1-userprofiles-studentid-guardians-guardianid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 userprofiles userid",
+      "summary": "Documented GET /v1/userProfiles/{userId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api get v1 userprofiles userid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/userProfiles/{userId}"
+        }
+      ],
+      "operation": "google-classroom.get.v1-userprofiles-userid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api patch v1 courses courseid announcements id",
+      "summary": "Documented PATCH /v1/courses/{courseId}/announcements/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api patch v1 courses courseid announcements id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v1/courses/{courseId}/announcements/{id}"
+        }
+      ],
+      "operation": "google-classroom.patch.v1-courses-courseid-announcements-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch v1 courses courseid announcements itemid addonattachments attachmentid",
+      "summary": "Documented PATCH /v1/courses/{courseId}/announcements/{itemId}/addOnAttachments/{attachmentId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api patch v1 courses courseid announcements itemid addonattachments attachmentid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v1/courses/{courseId}/announcements/{itemId}/addOnAttachments/{attachmentId}"
+        }
+      ],
+      "operation": "google-classroom.patch.v1-courses-courseid-announcements-itemid-addonattachments-attachmentid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch v1 courses courseid coursework courseworkid rubric",
+      "summary": "Documented PATCH /v1/courses/{courseId}/courseWork/{courseWorkId}/rubric (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api patch v1 courses courseid coursework courseworkid rubric --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v1/courses/{courseId}/courseWork/{courseWorkId}/rubric"
+        }
+      ],
+      "operation": "google-classroom.patch.v1-courses-courseid-coursework-courseworkid-rubric",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch v1 courses courseid coursework courseworkid rubrics id",
+      "summary": "Documented PATCH /v1/courses/{courseId}/courseWork/{courseWorkId}/rubrics/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api patch v1 courses courseid coursework courseworkid rubrics id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v1/courses/{courseId}/courseWork/{courseWorkId}/rubrics/{id}"
+        }
+      ],
+      "operation": "google-classroom.patch.v1-courses-courseid-coursework-courseworkid-rubrics-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch v1 courses courseid coursework courseworkid studentsubmissions id",
+      "summary": "Documented PATCH /v1/courses/{courseId}/courseWork/{courseWorkId}/studentSubmissions/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api patch v1 courses courseid coursework courseworkid studentsubmissions id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v1/courses/{courseId}/courseWork/{courseWorkId}/studentSubmissions/{id}"
+        }
+      ],
+      "operation": "google-classroom.patch.v1-courses-courseid-coursework-courseworkid-studentsubmissions-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch v1 courses courseid coursework id",
+      "summary": "Documented PATCH /v1/courses/{courseId}/courseWork/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api patch v1 courses courseid coursework id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v1/courses/{courseId}/courseWork/{id}"
+        }
+      ],
+      "operation": "google-classroom.patch.v1-courses-courseid-coursework-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch v1 courses courseid coursework itemid addonattachments attachmentid",
+      "summary": "Documented PATCH /v1/courses/{courseId}/courseWork/{itemId}/addOnAttachments/{attachmentId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api patch v1 courses courseid coursework itemid addonattachments attachmentid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v1/courses/{courseId}/courseWork/{itemId}/addOnAttachments/{attachmentId}"
+        }
+      ],
+      "operation": "google-classroom.patch.v1-courses-courseid-coursework-itemid-addonattachments-attachmentid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch v1 courses courseid coursework itemid addonattachments attachmentid studentsubmissions submissionid",
+      "summary": "Documented PATCH /v1/courses/{courseId}/courseWork/{itemId}/addOnAttachments/{attachmentId}/studentSubmissions/{submissionId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api patch v1 courses courseid coursework itemid addonattachments attachmentid studentsubmissions submissionid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v1/courses/{courseId}/courseWork/{itemId}/addOnAttachments/{attachmentId}/studentSubmissions/{submissionId}"
+        }
+      ],
+      "operation": "google-classroom.patch.v1-courses-courseid-coursework-itemid-addonattachments-attachmentid-studentsubmissions-submissionid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch v1 courses courseid courseworkmaterials id",
+      "summary": "Documented PATCH /v1/courses/{courseId}/courseWorkMaterials/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api patch v1 courses courseid courseworkmaterials id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v1/courses/{courseId}/courseWorkMaterials/{id}"
+        }
+      ],
+      "operation": "google-classroom.patch.v1-courses-courseid-courseworkmaterials-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch v1 courses courseid courseworkmaterials itemid addonattachments attachmentid",
+      "summary": "Documented PATCH /v1/courses/{courseId}/courseWorkMaterials/{itemId}/addOnAttachments/{attachmentId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api patch v1 courses courseid courseworkmaterials itemid addonattachments attachmentid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v1/courses/{courseId}/courseWorkMaterials/{itemId}/addOnAttachments/{attachmentId}"
+        }
+      ],
+      "operation": "google-classroom.patch.v1-courses-courseid-courseworkmaterials-itemid-addonattachments-attachmentid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch v1 courses courseid gradingperiodsettings",
+      "summary": "Documented PATCH /v1/courses/{courseId}/gradingPeriodSettings (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api patch v1 courses courseid gradingperiodsettings --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v1/courses/{courseId}/gradingPeriodSettings"
+        }
+      ],
+      "operation": "google-classroom.patch.v1-courses-courseid-gradingperiodsettings",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch v1 courses courseid posts postid addonattachments attachmentid",
+      "summary": "Documented PATCH /v1/courses/{courseId}/posts/{postId}/addOnAttachments/{attachmentId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api patch v1 courses courseid posts postid addonattachments attachmentid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v1/courses/{courseId}/posts/{postId}/addOnAttachments/{attachmentId}"
+        }
+      ],
+      "operation": "google-classroom.patch.v1-courses-courseid-posts-postid-addonattachments-attachmentid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch v1 courses courseid posts postid addonattachments attachmentid studentsubmissions submissionid",
+      "summary": "Documented PATCH /v1/courses/{courseId}/posts/{postId}/addOnAttachments/{attachmentId}/studentSubmissions/{submissionId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api patch v1 courses courseid posts postid addonattachments attachmentid studentsubmissions submissionid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v1/courses/{courseId}/posts/{postId}/addOnAttachments/{attachmentId}/studentSubmissions/{submissionId}"
+        }
+      ],
+      "operation": "google-classroom.patch.v1-courses-courseid-posts-postid-addonattachments-attachmentid-studentsubmissions-submissionid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch v1 courses courseid studentgroups id",
+      "summary": "Documented PATCH /v1/courses/{courseId}/studentGroups/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api patch v1 courses courseid studentgroups id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v1/courses/{courseId}/studentGroups/{id}"
+        }
+      ],
+      "operation": "google-classroom.patch.v1-courses-courseid-studentgroups-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch v1 courses courseid topics id",
+      "summary": "Documented PATCH /v1/courses/{courseId}/topics/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api patch v1 courses courseid topics id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v1/courses/{courseId}/topics/{id}"
+        }
+      ],
+      "operation": "google-classroom.patch.v1-courses-courseid-topics-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch v1 courses id",
+      "summary": "Documented PATCH /v1/courses/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api patch v1 courses id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v1/courses/{id}"
+        }
+      ],
+      "operation": "google-classroom.patch.v1-courses-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch v1 userprofiles studentid guardianinvitations invitationid",
+      "summary": "Documented PATCH /v1/userProfiles/{studentId}/guardianInvitations/{invitationId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api patch v1 userprofiles studentid guardianinvitations invitationid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v1/userProfiles/{studentId}/guardianInvitations/{invitationId}"
+        }
+      ],
+      "operation": "google-classroom.patch.v1-userprofiles-studentid-guardianinvitations-invitationid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 courses",
+      "summary": "Documented POST /v1/courses (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api post v1 courses --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/courses"
+        }
+      ],
+      "operation": "google-classroom.post.v1-courses",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 courses courseid aliases",
+      "summary": "Documented POST /v1/courses/{courseId}/aliases (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api post v1 courses courseid aliases --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/courses/{courseId}/aliases"
+        }
+      ],
+      "operation": "google-classroom.post.v1-courses-courseid-aliases",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 courses courseid announcements",
+      "summary": "Documented POST /v1/courses/{courseId}/announcements (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api post v1 courses courseid announcements --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/courses/{courseId}/announcements"
+        }
+      ],
+      "operation": "google-classroom.post.v1-courses-courseid-announcements",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 courses courseid announcements id modifyassignees",
+      "summary": "Documented POST /v1/courses/{courseId}/announcements/{id}:modifyAssignees (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api post v1 courses courseid announcements id modifyassignees --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/courses/{courseId}/announcements/{id}:modifyAssignees"
+        }
+      ],
+      "operation": "google-classroom.post.v1-courses-courseid-announcements-id-modifyassignees",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 courses courseid announcements itemid addonattachments",
+      "summary": "Documented POST /v1/courses/{courseId}/announcements/{itemId}/addOnAttachments (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api post v1 courses courseid announcements itemid addonattachments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/courses/{courseId}/announcements/{itemId}/addOnAttachments"
+        }
+      ],
+      "operation": "google-classroom.post.v1-courses-courseid-announcements-itemid-addonattachments",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 courses courseid coursework",
+      "summary": "Documented POST /v1/courses/{courseId}/courseWork (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api post v1 courses courseid coursework --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/courses/{courseId}/courseWork"
+        }
+      ],
+      "operation": "google-classroom.post.v1-courses-courseid-coursework",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 courses courseid coursework courseworkid rubrics",
+      "summary": "Documented POST /v1/courses/{courseId}/courseWork/{courseWorkId}/rubrics (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api post v1 courses courseid coursework courseworkid rubrics --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/courses/{courseId}/courseWork/{courseWorkId}/rubrics"
+        }
+      ],
+      "operation": "google-classroom.post.v1-courses-courseid-coursework-courseworkid-rubrics",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 courses courseid coursework courseworkid studentsubmissions id modifyattachments",
+      "summary": "Documented POST /v1/courses/{courseId}/courseWork/{courseWorkId}/studentSubmissions/{id}:modifyAttachments (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api post v1 courses courseid coursework courseworkid studentsubmissions id modifyattachments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/courses/{courseId}/courseWork/{courseWorkId}/studentSubmissions/{id}:modifyAttachments"
+        }
+      ],
+      "operation": "google-classroom.post.v1-courses-courseid-coursework-courseworkid-studentsubmissions-id-modifyattachments",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 courses courseid coursework courseworkid studentsubmissions id reclaim",
+      "summary": "Documented POST /v1/courses/{courseId}/courseWork/{courseWorkId}/studentSubmissions/{id}:reclaim (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api post v1 courses courseid coursework courseworkid studentsubmissions id reclaim --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/courses/{courseId}/courseWork/{courseWorkId}/studentSubmissions/{id}:reclaim"
+        }
+      ],
+      "operation": "google-classroom.post.v1-courses-courseid-coursework-courseworkid-studentsubmissions-id-reclaim",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 courses courseid coursework courseworkid studentsubmissions id return",
+      "summary": "Documented POST /v1/courses/{courseId}/courseWork/{courseWorkId}/studentSubmissions/{id}:return (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api post v1 courses courseid coursework courseworkid studentsubmissions id return --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/courses/{courseId}/courseWork/{courseWorkId}/studentSubmissions/{id}:return"
+        }
+      ],
+      "operation": "google-classroom.post.v1-courses-courseid-coursework-courseworkid-studentsubmissions-id-return",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 courses courseid coursework courseworkid studentsubmissions id turnin",
+      "summary": "Documented POST /v1/courses/{courseId}/courseWork/{courseWorkId}/studentSubmissions/{id}:turnIn (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api post v1 courses courseid coursework courseworkid studentsubmissions id turnin --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/courses/{courseId}/courseWork/{courseWorkId}/studentSubmissions/{id}:turnIn"
+        }
+      ],
+      "operation": "google-classroom.post.v1-courses-courseid-coursework-courseworkid-studentsubmissions-id-turnin",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 courses courseid coursework id modifyassignees",
+      "summary": "Documented POST /v1/courses/{courseId}/courseWork/{id}:modifyAssignees (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api post v1 courses courseid coursework id modifyassignees --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/courses/{courseId}/courseWork/{id}:modifyAssignees"
+        }
+      ],
+      "operation": "google-classroom.post.v1-courses-courseid-coursework-id-modifyassignees",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 courses courseid coursework itemid addonattachments",
+      "summary": "Documented POST /v1/courses/{courseId}/courseWork/{itemId}/addOnAttachments (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api post v1 courses courseid coursework itemid addonattachments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/courses/{courseId}/courseWork/{itemId}/addOnAttachments"
+        }
+      ],
+      "operation": "google-classroom.post.v1-courses-courseid-coursework-itemid-addonattachments",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 courses courseid courseworkmaterials",
+      "summary": "Documented POST /v1/courses/{courseId}/courseWorkMaterials (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api post v1 courses courseid courseworkmaterials --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/courses/{courseId}/courseWorkMaterials"
+        }
+      ],
+      "operation": "google-classroom.post.v1-courses-courseid-courseworkmaterials",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 courses courseid courseworkmaterials itemid addonattachments",
+      "summary": "Documented POST /v1/courses/{courseId}/courseWorkMaterials/{itemId}/addOnAttachments (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api post v1 courses courseid courseworkmaterials itemid addonattachments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/courses/{courseId}/courseWorkMaterials/{itemId}/addOnAttachments"
+        }
+      ],
+      "operation": "google-classroom.post.v1-courses-courseid-courseworkmaterials-itemid-addonattachments",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 courses courseid posts postid addonattachments",
+      "summary": "Documented POST /v1/courses/{courseId}/posts/{postId}/addOnAttachments (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api post v1 courses courseid posts postid addonattachments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/courses/{courseId}/posts/{postId}/addOnAttachments"
+        }
+      ],
+      "operation": "google-classroom.post.v1-courses-courseid-posts-postid-addonattachments",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 courses courseid studentgroups",
+      "summary": "Documented POST /v1/courses/{courseId}/studentGroups (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api post v1 courses courseid studentgroups --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/courses/{courseId}/studentGroups"
+        }
+      ],
+      "operation": "google-classroom.post.v1-courses-courseid-studentgroups",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 courses courseid studentgroups studentgroupid studentgroupmembers",
+      "summary": "Documented POST /v1/courses/{courseId}/studentGroups/{studentGroupId}/studentGroupMembers (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api post v1 courses courseid studentgroups studentgroupid studentgroupmembers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/courses/{courseId}/studentGroups/{studentGroupId}/studentGroupMembers"
+        }
+      ],
+      "operation": "google-classroom.post.v1-courses-courseid-studentgroups-studentgroupid-studentgroupmembers",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 courses courseid students",
+      "summary": "Documented POST /v1/courses/{courseId}/students (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api post v1 courses courseid students --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/courses/{courseId}/students"
+        }
+      ],
+      "operation": "google-classroom.post.v1-courses-courseid-students",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 courses courseid teachers",
+      "summary": "Documented POST /v1/courses/{courseId}/teachers (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api post v1 courses courseid teachers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/courses/{courseId}/teachers"
+        }
+      ],
+      "operation": "google-classroom.post.v1-courses-courseid-teachers",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 courses courseid topics",
+      "summary": "Documented POST /v1/courses/{courseId}/topics (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api post v1 courses courseid topics --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/courses/{courseId}/topics"
+        }
+      ],
+      "operation": "google-classroom.post.v1-courses-courseid-topics",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 invitations",
+      "summary": "Documented POST /v1/invitations (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api post v1 invitations --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/invitations"
+        }
+      ],
+      "operation": "google-classroom.post.v1-invitations",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 invitations id accept",
+      "summary": "Documented POST /v1/invitations/{id}:accept (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api post v1 invitations id accept --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/invitations/{id}:accept"
+        }
+      ],
+      "operation": "google-classroom.post.v1-invitations-id-accept",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 registrations",
+      "summary": "Documented POST /v1/registrations (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api post v1 registrations --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/registrations"
+        }
+      ],
+      "operation": "google-classroom.post.v1-registrations",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 userprofiles studentid guardianinvitations",
+      "summary": "Documented POST /v1/userProfiles/{studentId}/guardianInvitations (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api post v1 userprofiles studentid guardianinvitations --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/userProfiles/{studentId}/guardianInvitations"
+        }
+      ],
+      "operation": "google-classroom.post.v1-userprofiles-studentid-guardianinvitations",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v1 courses id",
+      "summary": "Documented PUT /v1/courses/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom api put v1 courses id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v1/courses/{id}"
+        }
+      ],
+      "operation": "google-classroom.put.v1-courses-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "course work list",
+      "summary": "Run the course work ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "course_work",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom course work list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "HOOK",
+          "path": "internal/connectors/google-classroom courseWork read path"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "courses list",
+      "summary": "Run the courses ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "courses",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom courses list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "HOOK",
+          "path": "internal/connectors/google-classroom courses read path"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "students list",
+      "summary": "Run the students ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "students",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom students list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "HOOK",
+          "path": "internal/connectors/google-classroom students read path"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "teachers list",
+      "summary": "Run the teachers ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "teachers",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-classroom teachers list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "HOOK",
+          "path": "internal/connectors/google-classroom teachers read path"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    }
+  ]
+}

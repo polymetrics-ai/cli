@@ -1,77 +1,2092 @@
 {
-  "api": "Algolia Search REST API (https://<application_id>.algolia.net)",
+  "api": "Algolia Search REST API (https://\u003capplication_id\u003e.algolia.net); provider artifact version: main",
   "docs": "https://www.algolia.com/doc/rest-api/search/",
-  "reviewed_at": "2026-07-04",
-  "scope": "Pass B full-surface expansion: every endpoint in Algolia's published Search API OpenAPI spec (algolia/api-clients-automation, specs/search/spec.yml) is enumerated below. 7 read streams (indices, api_keys, index_settings, vault_sources, dictionary_settings, dictionary_languages, logs) and 2 writes (update_index_settings, create_api_key) are now covered. Every remaining endpoint is excluded with a specific reason: record/object CRUD and search-query endpoints are a data-plane (not config-plane) surface out of scope for this metadata connector; synonyms/rules/dictionary-entry 'search'-style list endpoints require a POST body the engine's declarative stream dialect cannot send (streams.json's StreamSpec.Body field is accepted by the loader's schema but never read by the read-path engine, read.go's declarative loop always sends a nil body regardless — a real ENGINE_GAP, documented per endpoint below rather than silently worked around); multi-cluster endpoints are deprecated by Algolia's own OpenAPI spec; key/source/dictionary mutation and index copy/move/task-status endpoints are destructive or credential-management admin actions kept out of the reverse-ETL write surface.",
+  "reviewed_at": "2026-08-09",
+  "operation_ledger_version": 2,
+  "scope": "Provider-artifact inventory generated from the cited openapi artifact (78 documented operations across 61 provider-owned source document(s)). Every documented operation is represented; existing source-surface bindings absent from the artifact are retained and flagged with present-in-surface-absent-from-artifact.",
+  "artifacts": [
+    {
+      "id": "algolia-artifact-2026-08-09",
+      "url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/spec.yml",
+      "kind": "openapi",
+      "version": "3.0.2",
+      "retrieved_at": "2026-08-09",
+      "sha256": "8af208683544f6263820287bcca6ac5c4ccd6e585d3e5906a72c4d7197f20f68"
+    },
+    {
+      "id": "algolia-artifact-ref-1090185c8c703e57-a8ed058917f64766",
+      "url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/multiclusters/listClusters.yml",
+      "kind": "referenced-document",
+      "version": "main",
+      "retrieved_at": "2026-08-09",
+      "sha256": "1090185c8c703e57a0974ce07988dd18a534d17a10b422fe899b7f1ad5514351"
+    },
+    {
+      "id": "algolia-artifact-ref-3bc6b13d4a4787ea-50675c17d4ce3ade",
+      "url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/multiclusters/userIds.yml",
+      "kind": "referenced-document",
+      "version": "main",
+      "retrieved_at": "2026-08-09",
+      "sha256": "3bc6b13d4a4787eafe7ad1453c257098cabc5735c5ac35918af9b033ed7612f6"
+    },
+    {
+      "id": "algolia-artifact-ref-d8cd2fd86345329c-a87a43bd0d170507",
+      "url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/multiclusters/batchAssignUserIds.yml",
+      "kind": "referenced-document",
+      "version": "main",
+      "retrieved_at": "2026-08-09",
+      "sha256": "d8cd2fd86345329cae65eb9aecc768b2e724d0bccad342fd9a8e961abb91e7b9"
+    },
+    {
+      "id": "algolia-artifact-ref-1fd2928522278004-8773fc0cae986f3a",
+      "url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/multiclusters/hasPendingMappings.yml",
+      "kind": "referenced-document",
+      "version": "main",
+      "retrieved_at": "2026-08-09",
+      "sha256": "1fd2928522278004538f8a7219d5789300bb231f953ce9928b444a5c684b0d7d"
+    },
+    {
+      "id": "algolia-artifact-ref-8f488650446c59aa-2b96c90cb17f94d6",
+      "url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/multiclusters/searchUserIds.yml",
+      "kind": "referenced-document",
+      "version": "main",
+      "retrieved_at": "2026-08-09",
+      "sha256": "8f488650446c59aa38023bce1b4ff1a93dc5e91e255ac9ff1f8af56b4cdccf0d"
+    },
+    {
+      "id": "algolia-artifact-ref-60607527f6288601-8d8803661a6f88c2",
+      "url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/multiclusters/getTopUserIds.yml",
+      "kind": "referenced-document",
+      "version": "main",
+      "retrieved_at": "2026-08-09",
+      "sha256": "60607527f6288601d34f128b6508449c06549eea50be2bf799ffd9db981d3eed"
+    },
+    {
+      "id": "algolia-artifact-ref-f5588ce62b114895-63abb995fc8b529d",
+      "url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/multiclusters/userId.yml",
+      "kind": "referenced-document",
+      "version": "main",
+      "retrieved_at": "2026-08-09",
+      "sha256": "f5588ce62b114895306934925fa4ea884d570b97fc309f1260fe4f3a9e3baea6"
+    },
+    {
+      "id": "algolia-artifact-ref-57e235c80c8e6c4f-8d69eb6a510d3684",
+      "url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/dictionaries/getDictionaryLanguages.yml",
+      "kind": "referenced-document",
+      "version": "main",
+      "retrieved_at": "2026-08-09",
+      "sha256": "57e235c80c8e6c4f4558c2f0cf2ca840a66c1f74b5b1215f36214773b7e7e3dc"
+    },
+    {
+      "id": "algolia-artifact-ref-2b4599997a79761c-15a0eef825dabfc2",
+      "url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/dictionaries/dictionarySettings.yml",
+      "kind": "referenced-document",
+      "version": "main",
+      "retrieved_at": "2026-08-09",
+      "sha256": "2b4599997a79761cd119e2f55ecb911165c7a03c8c4bf623b0bce74efbb16ac3"
+    },
+    {
+      "id": "algolia-artifact-ref-828fe267f0c4923f-133a9452676ebbcd",
+      "url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/dictionaries/batchDictionaryEntries.yml",
+      "kind": "referenced-document",
+      "version": "main",
+      "retrieved_at": "2026-08-09",
+      "sha256": "828fe267f0c4923f21815331adef15057f623355496c4fef811a9a710d7839df"
+    },
+    {
+      "id": "algolia-artifact-ref-68fe344d74442bf9-72d83272bdef0a71",
+      "url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/dictionaries/searchDictionaryEntries.yml",
+      "kind": "referenced-document",
+      "version": "main",
+      "retrieved_at": "2026-08-09",
+      "sha256": "68fe344d74442bf9643b30ec07a76ed0a52ed5d2c796502486656887a6312a46"
+    },
+    {
+      "id": "algolia-artifact-ref-e40da6c1f01d3272-4bf8e84525a4a6de",
+      "url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/manage_indices/listIndices.yml",
+      "kind": "referenced-document",
+      "version": "main",
+      "retrieved_at": "2026-08-09",
+      "sha256": "e40da6c1f01d32721d1793e341a2e60431516aa0286e0902c70db5b8a73e199f"
+    },
+    {
+      "id": "algolia-artifact-ref-1a51e890ee6ffe3a-5ada104b2fcb37cf",
+      "url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/objects/multipleBatch.yml",
+      "kind": "referenced-document",
+      "version": "main",
+      "retrieved_at": "2026-08-09",
+      "sha256": "1a51e890ee6ffe3aad2c749908844fd68de8e76bdb929153220dbf6ab207e199"
+    },
+    {
+      "id": "algolia-artifact-ref-9e85a5a8c1797e14-e83da6deda99902c",
+      "url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/objects/getObjects.yml",
+      "kind": "referenced-document",
+      "version": "main",
+      "retrieved_at": "2026-08-09",
+      "sha256": "9e85a5a8c1797e1437f8df4c7e83d9b1cfee66f7ad725432a322e0ee401e5c82"
+    },
+    {
+      "id": "algolia-artifact-ref-66251cfd44621d29-cf263f6a32aa8c48",
+      "url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/search/search.yml",
+      "kind": "referenced-document",
+      "version": "main",
+      "retrieved_at": "2026-08-09",
+      "sha256": "66251cfd44621d294c085872f10314a23b2d2a0d8d9247a387e0ca4601c8b5fb"
+    },
+    {
+      "id": "algolia-artifact-ref-3ccabbc79ec3c0b0-686842411f5ac440",
+      "url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/objects/objects.yml",
+      "kind": "referenced-document",
+      "version": "main",
+      "retrieved_at": "2026-08-09",
+      "sha256": "3ccabbc79ec3c0b0f178425633fe0a5951a34e6a45a62d9734771b1f1462fab6"
+    },
+    {
+      "id": "algolia-artifact-ref-7997ecee0360cf61-c21de34855301b79",
+      "url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/objects/batch.yml",
+      "kind": "referenced-document",
+      "version": "main",
+      "retrieved_at": "2026-08-09",
+      "sha256": "7997ecee0360cf617b8a60b6b8af7ff28ec7724a5013e67cfb81ea827817ac20"
+    },
+    {
+      "id": "algolia-artifact-ref-da60527058b74c4b-ee6faf9596b4cdd4",
+      "url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/search/browse.yml",
+      "kind": "referenced-document",
+      "version": "main",
+      "retrieved_at": "2026-08-09",
+      "sha256": "da60527058b74c4b80d89c97ad4a8ce330ce40a2610eb62f369fc3ee62db8145"
+    },
+    {
+      "id": "algolia-artifact-ref-0283f261f0217211-c5ea01dedf7aaa5b",
+      "url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/objects/clearObjects.yml",
+      "kind": "referenced-document",
+      "version": "main",
+      "retrieved_at": "2026-08-09",
+      "sha256": "0283f261f0217211fc7d90c45c32bda83b10d65b8af57ba47ef14e8e356fa16a"
+    },
+    {
+      "id": "algolia-artifact-ref-875d0aff780f834d-a0890d35118e56a5",
+      "url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/objects/deleteBy.yml",
+      "kind": "referenced-document",
+      "version": "main",
+      "retrieved_at": "2026-08-09",
+      "sha256": "875d0aff780f834d0814f16f51cf56df5023a627e5ab80fc369e0ad49bd1afc8"
+    },
+    {
+      "id": "algolia-artifact-ref-0a7ba520b57896bd-c3505ca1458617b6",
+      "url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/search/searchForFacetValues.yml",
+      "kind": "referenced-document",
+      "version": "main",
+      "retrieved_at": "2026-08-09",
+      "sha256": "0a7ba520b57896bda9bb0d636ff70a4ca6f734af7153af65ae3dcd221afd2b83"
+    },
+    {
+      "id": "algolia-artifact-ref-0a0f0b8b7a92c532-66407099337dff10",
+      "url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/manage_indices/operationIndex.yml",
+      "kind": "referenced-document",
+      "version": "main",
+      "retrieved_at": "2026-08-09",
+      "sha256": "0a0f0b8b7a92c532953980477d5d4ac008a3db4fb644584a7144910e7e2f276b"
+    },
+    {
+      "id": "algolia-artifact-ref-46f6519d5ee74d2b-cba0a40953f357d2",
+      "url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/search/searchSingleIndex.yml",
+      "kind": "referenced-document",
+      "version": "main",
+      "retrieved_at": "2026-08-09",
+      "sha256": "46f6519d5ee74d2b8621899170040a227fccc6f345b3588a1a1925333cdeff11"
+    },
+    {
+      "id": "algolia-artifact-ref-9be2186fc03cb106-e5bd37739c56deff",
+      "url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/rules/saveRules.yml",
+      "kind": "referenced-document",
+      "version": "main",
+      "retrieved_at": "2026-08-09",
+      "sha256": "9be2186fc03cb106e8ad55fc3f2e4f171028a5c9ad80f828903938ca784805ff"
+    },
+    {
+      "id": "algolia-artifact-ref-03c8d0471a3cc4f4-346978c5fc30aca4",
+      "url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/rules/clearRules.yml",
+      "kind": "referenced-document",
+      "version": "main",
+      "retrieved_at": "2026-08-09",
+      "sha256": "03c8d0471a3cc4f461d17e7f1526673ff99a8078510f3a6f161e7652a98627c8"
+    },
+    {
+      "id": "algolia-artifact-ref-da0bb0b9a9831b86-322e240801a049c2",
+      "url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/rules/searchRules.yml",
+      "kind": "referenced-document",
+      "version": "main",
+      "retrieved_at": "2026-08-09",
+      "sha256": "da0bb0b9a9831b86eda39cbf56bcba75a06aeca32235cdc72a1ef0dfcceb130f"
+    },
+    {
+      "id": "algolia-artifact-ref-32315787adcc9ae0-a740ef43ed4f114f",
+      "url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/rules/rule.yml",
+      "kind": "referenced-document",
+      "version": "main",
+      "retrieved_at": "2026-08-09",
+      "sha256": "32315787adcc9ae01a167f76a55a34b3998bf1c54089779f929f25b7d538f760"
+    },
+    {
+      "id": "algolia-artifact-ref-ee0f197f0f2b9084-8d94af32039d495e",
+      "url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/settings/settings.yml",
+      "kind": "referenced-document",
+      "version": "main",
+      "retrieved_at": "2026-08-09",
+      "sha256": "ee0f197f0f2b9084c263abdd7e800813907d52f24b01985623685ef76b71ba54"
+    },
+    {
+      "id": "algolia-artifact-ref-261b3694537b3370-f8cf1f2d0b7e9509",
+      "url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/synonyms/saveSynonyms.yml",
+      "kind": "referenced-document",
+      "version": "main",
+      "retrieved_at": "2026-08-09",
+      "sha256": "261b3694537b3370aed662f57c901d4e7c73dd6a9345bc992b3d735fba6d8493"
+    },
+    {
+      "id": "algolia-artifact-ref-f34a909083a77ad7-f91f216f5ac61799",
+      "url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/synonyms/clearSynonyms.yml",
+      "kind": "referenced-document",
+      "version": "main",
+      "retrieved_at": "2026-08-09",
+      "sha256": "f34a909083a77ad78943de227e02829580e5731a329d155cf6d078665e7d2556"
+    },
+    {
+      "id": "algolia-artifact-ref-78f9f1e9b4a94190-8500385371dfbcb5",
+      "url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/synonyms/searchSynonyms.yml",
+      "kind": "referenced-document",
+      "version": "main",
+      "retrieved_at": "2026-08-09",
+      "sha256": "78f9f1e9b4a941900f060cf6eb0e0ae60b6511292bdeffd23fd8ae1c3cd8b9e1"
+    },
+    {
+      "id": "algolia-artifact-ref-93eed174f36abc4f-186f3dc2e8e48e4d",
+      "url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/synonyms/synonym.yml",
+      "kind": "referenced-document",
+      "version": "main",
+      "retrieved_at": "2026-08-09",
+      "sha256": "93eed174f36abc4f9bc0dae8f5a059c7dbd72061f09bd817f35e71b427d4bfd8"
+    },
+    {
+      "id": "algolia-artifact-ref-5805cc12f59b832c-dc10e8a372377648",
+      "url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/advanced/getTask.yml",
+      "kind": "referenced-document",
+      "version": "main",
+      "retrieved_at": "2026-08-09",
+      "sha256": "5805cc12f59b832cdc427dfdd7b41033e282c3dcaf151987a78c3b6b2408e2ef"
+    },
+    {
+      "id": "algolia-artifact-ref-bc549c376cfe380f-b052c281c0721f6c",
+      "url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/objects/object.yml",
+      "kind": "referenced-document",
+      "version": "main",
+      "retrieved_at": "2026-08-09",
+      "sha256": "bc549c376cfe380fb415292116fb651f9a702428a806d906273bbcb8e94e6dc3"
+    },
+    {
+      "id": "algolia-artifact-ref-7eb98c4dd4026c76-6a5e39885ed01262",
+      "url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/objects/partialUpdate.yml",
+      "kind": "referenced-document",
+      "version": "main",
+      "retrieved_at": "2026-08-09",
+      "sha256": "7eb98c4dd4026c767cb84425b23fe27bf576e1ddff7e0d034e13cec60987bdb8"
+    },
+    {
+      "id": "algolia-artifact-ref-9f1db7d9bbbe864e-41e7b5fa59fa0291",
+      "url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/keys/keys.yml",
+      "kind": "referenced-document",
+      "version": "main",
+      "retrieved_at": "2026-08-09",
+      "sha256": "9f1db7d9bbbe864e3c96d46cd0c531903892e26f4862ea30faad77fdf7bcbb2f"
+    },
+    {
+      "id": "algolia-artifact-ref-367c0d2303fdf52f-2ab7e340d2e5cea7",
+      "url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/keys/key.yml",
+      "kind": "referenced-document",
+      "version": "main",
+      "retrieved_at": "2026-08-09",
+      "sha256": "367c0d2303fdf52f3ca8d27df9ab50b33b5bef712b5a55340de01539cdb6397a"
+    },
+    {
+      "id": "algolia-artifact-ref-b6937ebc8beab6f2-36452fe9ee4740b3",
+      "url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/keys/restoreApiKey.yml",
+      "kind": "referenced-document",
+      "version": "main",
+      "retrieved_at": "2026-08-09",
+      "sha256": "b6937ebc8beab6f26e53c5a1c400d121407d144cccbbf9b312502ef9c56e8642"
+    },
+    {
+      "id": "algolia-artifact-ref-1558687ceb6a40bc-7489c266609203d0",
+      "url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/advanced/getLogs.yml",
+      "kind": "referenced-document",
+      "version": "main",
+      "retrieved_at": "2026-08-09",
+      "sha256": "1558687ceb6a40bc86299a224ffb0bb8b578a864e8d401800e7e0026c22aae8f"
+    },
+    {
+      "id": "algolia-artifact-ref-2333e896041d2fbb-57429681f2b6a53b",
+      "url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/vault/vaultSources.yml",
+      "kind": "referenced-document",
+      "version": "main",
+      "retrieved_at": "2026-08-09",
+      "sha256": "2333e896041d2fbbb6ae1de4664d7a9ea7740d8e1702ff34e247626fb99fc9d2"
+    },
+    {
+      "id": "algolia-artifact-ref-d8e97f048d6148db-81237db23250fed3",
+      "url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/vault/appendSource.yml",
+      "kind": "referenced-document",
+      "version": "main",
+      "retrieved_at": "2026-08-09",
+      "sha256": "d8e97f048d6148dbfb8154a2f70fe7825bcc8fc471506408aff1bc0e999180a7"
+    },
+    {
+      "id": "algolia-artifact-ref-3486842c71c08aff-18a4ae7054631f7a",
+      "url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/vault/deleteSource.yml",
+      "kind": "referenced-document",
+      "version": "main",
+      "retrieved_at": "2026-08-09",
+      "sha256": "3486842c71c08aff0e3d925d2e2445465d9d1c298f1c1a42efd060d81817943e"
+    },
+    {
+      "id": "algolia-artifact-ref-53f16f47b95b85e4-c5ba553b8fd80b31",
+      "url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/advanced/getAppTask.yml",
+      "kind": "referenced-document",
+      "version": "main",
+      "retrieved_at": "2026-08-09",
+      "sha256": "53f16f47b95b85e4a063f9b4b2d9164554d637a293283750f9f6874682ddcf42"
+    },
+    {
+      "id": "algolia-artifact-ref-c748ff4947772582-cbfda72506f6f83b",
+      "url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/helpers/accountCopyIndex.yml",
+      "kind": "referenced-document",
+      "version": "main",
+      "retrieved_at": "2026-08-09",
+      "sha256": "c748ff4947772582614f2ef029af150b81c8055a9a3532d6b4b8b812c5ccac9d"
+    },
+    {
+      "id": "algolia-artifact-ref-a584bebcf9c3bde2-b93ebee0ed114146",
+      "url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/helpers/browseObjects.yml",
+      "kind": "referenced-document",
+      "version": "main",
+      "retrieved_at": "2026-08-09",
+      "sha256": "a584bebcf9c3bde2308719e0337f43fa9141802a40145d80e9b38fb2da8900a4"
+    },
+    {
+      "id": "algolia-artifact-ref-8426e780e7f08bd3-81fe54a09f350513",
+      "url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/helpers/chunkedBatch.yml",
+      "kind": "referenced-document",
+      "version": "main",
+      "retrieved_at": "2026-08-09",
+      "sha256": "8426e780e7f08bd36cc575c5fa0b51c9d3391a432a020e71a132f3abfdab6ff4"
+    },
+    {
+      "id": "algolia-artifact-ref-c230c6f19abf7191-4c6e9824dcb7145a",
+      "url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/helpers/deleteObjects.yml",
+      "kind": "referenced-document",
+      "version": "main",
+      "retrieved_at": "2026-08-09",
+      "sha256": "c230c6f19abf71916b9ea446793431278847ea1e7659904d1cf0f2ce7bcd6c35"
+    },
+    {
+      "id": "algolia-artifact-ref-5ec909a1eedea31f-2c15d731ff5abf73",
+      "url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/helpers/generateSecuredApiKey.yml",
+      "kind": "referenced-document",
+      "version": "main",
+      "retrieved_at": "2026-08-09",
+      "sha256": "5ec909a1eedea31f04bc7fc47fd5a5c2ec7d0f8001e8f1c884e172e9c49238e6"
+    },
+    {
+      "id": "algolia-artifact-ref-4dbc1c37e8543a2c-558b13d82184cf3d",
+      "url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/helpers/indexExists.yml",
+      "kind": "referenced-document",
+      "version": "main",
+      "retrieved_at": "2026-08-09",
+      "sha256": "4dbc1c37e8543a2cf6c04ed072a8b3c1cd07944b2656c84f9b368170710b4f31"
+    },
+    {
+      "id": "algolia-artifact-ref-697a6cb052a30292-07eca022d97ebb05",
+      "url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/helpers/partialUpdateObjects.yml",
+      "kind": "referenced-document",
+      "version": "main",
+      "retrieved_at": "2026-08-09",
+      "sha256": "697a6cb052a302924b60d28a630d4c7c53cf4330c1af1e68730232488f5a45b7"
+    },
+    {
+      "id": "algolia-artifact-ref-951e9b93f38a5d29-eb0505d7c1ba4795",
+      "url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/helpers/partialUpdateObjectsWithTransformation.yml",
+      "kind": "referenced-document",
+      "version": "main",
+      "retrieved_at": "2026-08-09",
+      "sha256": "951e9b93f38a5d29c6a9dc51c1eeb07ec6ce1b02a9e5623696f36651c30c0155"
+    },
+    {
+      "id": "algolia-artifact-ref-0143d41d27e4e781-b1acdedef78cff51",
+      "url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/helpers/replaceAllObjects.yml",
+      "kind": "referenced-document",
+      "version": "main",
+      "retrieved_at": "2026-08-09",
+      "sha256": "0143d41d27e4e781497f2a6d8c1330565f658b4014f28742c63ba6b1a1e77af0"
+    },
+    {
+      "id": "algolia-artifact-ref-36c052307e9b9232-d426d2527aa2da0e",
+      "url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/helpers/replaceAllObjectsWithTransformation.yml",
+      "kind": "referenced-document",
+      "version": "main",
+      "retrieved_at": "2026-08-09",
+      "sha256": "36c052307e9b923200065987b3fedf531a899cd122ba12c93f4f3f0057fcc284"
+    },
+    {
+      "id": "algolia-artifact-ref-aff29f35e393fd6d-2bfc676a6d5aebba",
+      "url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/helpers/saveObjects.yml",
+      "kind": "referenced-document",
+      "version": "main",
+      "retrieved_at": "2026-08-09",
+      "sha256": "aff29f35e393fd6da24844f460da306b920a3fbeb472c6c2f21c710abfc0f412"
+    },
+    {
+      "id": "algolia-artifact-ref-be27f4fe5ed17baa-16ad7fe7a4c4fbfc",
+      "url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/helpers/saveObjectsWithTransformation.yml",
+      "kind": "referenced-document",
+      "version": "main",
+      "retrieved_at": "2026-08-09",
+      "sha256": "be27f4fe5ed17baa7dfd1d7bf7439d63c880f48e054f265707971c5b13f31ab2"
+    },
+    {
+      "id": "algolia-artifact-ref-8d90118d94243a4d-a230bc30229f1813",
+      "url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/common/helpers/setClientApiKey.yml",
+      "kind": "referenced-document",
+      "version": "main",
+      "retrieved_at": "2026-08-09",
+      "sha256": "8d90118d94243a4dd2f8358e234d75349f984425ac1aa42cb8f55e3c205dac4e"
+    },
+    {
+      "id": "algolia-artifact-ref-0a743c13915f5693-f308f9b0f91cb102",
+      "url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/helpers/waitForApiKey.yml",
+      "kind": "referenced-document",
+      "version": "main",
+      "retrieved_at": "2026-08-09",
+      "sha256": "0a743c13915f5693f78fecfa5c0215272e777a810b3f2e3e1e1cf6fb2629b80b"
+    },
+    {
+      "id": "algolia-artifact-ref-eb9e2a13497b1922-4cfd254fafd5e1dc",
+      "url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/helpers/waitForAppTask.yml",
+      "kind": "referenced-document",
+      "version": "main",
+      "retrieved_at": "2026-08-09",
+      "sha256": "eb9e2a13497b1922569271f2f8cfebdd3fcd8e7c6f72d01aa495469b17ad924f"
+    },
+    {
+      "id": "algolia-artifact-ref-03fb05129ffe6bfb-354f621c5a617624",
+      "url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/helpers/waitForTask.yml",
+      "kind": "referenced-document",
+      "version": "main",
+      "retrieved_at": "2026-08-09",
+      "sha256": "03fb05129ffe6bfb5818d3f7d3d6920899ae2438452f85f090fa4df0a28f49f9"
+    },
+    {
+      "id": "algolia-artifact-ref-9eb0b052f74162f6-ffe66a50b57b8041",
+      "url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/common/paths/customRequest.yml",
+      "kind": "referenced-document",
+      "version": "main",
+      "retrieved_at": "2026-08-09",
+      "sha256": "9eb0b052f74162f6f30dbfb4998d56ac286f22961b73042a6fabdcabb73755e5"
+    }
+  ],
   "endpoints": [
-    { "method": "GET", "path": "/1/indexes", "covered_by": { "stream": "indices" } },
-    { "method": "GET", "path": "/1/keys", "covered_by": { "stream": "api_keys" } },
-    { "method": "GET", "path": "/1/indexes/{indexName}/settings", "covered_by": { "stream": "index_settings" } },
-    { "method": "GET", "path": "/1/security/sources", "covered_by": { "stream": "vault_sources" } },
-    { "method": "GET", "path": "/1/dictionaries/*/settings", "covered_by": { "stream": "dictionary_settings" } },
-    { "method": "GET", "path": "/1/dictionaries/*/languages", "covered_by": { "stream": "dictionary_languages" } },
-    { "method": "GET", "path": "/1/logs", "covered_by": { "stream": "logs" } },
-    { "method": "PUT", "path": "/1/indexes/{indexName}/settings", "covered_by": { "write": "update_index_settings" } },
-    { "method": "POST", "path": "/1/keys", "covered_by": { "write": "create_api_key" } },
-
-    { "method": "GET", "path": "/{path}", "excluded": { "category": "non_data_endpoint", "reason": "generic custom-request passthrough helper (customRequest.yml), not a resource endpoint of its own" } },
-
-    { "method": "POST", "path": "/1/indexes/{indexName}/query", "excluded": { "category": "out_of_scope", "reason": "full-text search query execution is a data-plane read (arbitrary query params, not a stable list/detail resource); this connector reads index/key/settings metadata, not search results" } },
-    { "method": "POST", "path": "/1/indexes/*/queries", "excluded": { "category": "out_of_scope", "reason": "multi-index federated search query execution; same data-plane scope narrowing as searchSingleIndex" } },
-    { "method": "POST", "path": "/1/indexes/{indexName}/facets/{facetName}/query", "excluded": { "category": "out_of_scope", "reason": "facet-value search query execution; data-plane, not a metadata resource" } },
-    { "method": "POST", "path": "/1/indexes/{indexName}/browse", "excluded": { "category": "out_of_scope", "reason": "bulk record browse/export of index contents; this connector's records are index/key/settings CONFIGURATION, not the underlying search records themselves (a genuinely different, much larger data surface deferred to a future dedicated records connector)" } },
-
-    { "method": "POST", "path": "/1/indexes/{indexName}", "excluded": { "category": "out_of_scope", "reason": "adds/replaces a single search record (addObject); record-level write on the data plane, not a config-plane mutation this connector's writes.json covers" } },
-    { "method": "DELETE", "path": "/1/indexes/{indexName}", "excluded": { "category": "destructive_admin", "reason": "deletes an entire index and all its records/settings" } },
-    { "method": "GET", "path": "/1/indexes/{indexName}/{objectID}", "excluded": { "category": "out_of_scope", "reason": "single search-record retrieval; data-plane, not a metadata resource this connector streams" } },
-    { "method": "PUT", "path": "/1/indexes/{indexName}/{objectID}", "excluded": { "category": "out_of_scope", "reason": "creates/replaces a single search record by objectID; record-level data-plane write" } },
-    { "method": "DELETE", "path": "/1/indexes/{indexName}/{objectID}", "excluded": { "category": "destructive_admin", "reason": "deletes a single search record" } },
-    { "method": "POST", "path": "/1/indexes/{indexName}/deleteByQuery", "excluded": { "category": "destructive_admin", "reason": "bulk-deletes every record matching a query filter; irreversible mass deletion" } },
-    { "method": "POST", "path": "/1/indexes/{indexName}/clear", "excluded": { "category": "destructive_admin", "reason": "deletes every record in the index while keeping settings; irreversible" } },
-    { "method": "POST", "path": "/1/indexes/{indexName}/{objectID}/partial", "excluded": { "category": "out_of_scope", "reason": "partial record update; record-level data-plane write" } },
-    { "method": "POST", "path": "/1/indexes/{indexName}/batch", "excluded": { "category": "out_of_scope", "reason": "batched record add/update/delete operations; record-level data-plane write, and a batch body shape the dialect's single-record write action model doesn't fit" } },
-    { "method": "POST", "path": "/1/indexes/*/batch", "excluded": { "category": "out_of_scope", "reason": "multi-index batched record operations; same data-plane/batch-shape scope narrowing as the single-index batch endpoint" } },
-    { "method": "POST", "path": "/1/indexes/*/objects", "excluded": { "category": "out_of_scope", "reason": "bulk multi-object retrieval by objectID; data-plane read, not a metadata list/detail resource" } },
-
-    { "method": "PUT", "path": "/1/indexes/{indexName}/synonyms/{objectID}", "excluded": { "category": "out_of_scope", "reason": "creates/replaces a single synonym rule; a narrow per-record config-plane write not yet worth a dedicated action alongside searchSynonyms' read gap below" } },
-    { "method": "GET", "path": "/1/indexes/{indexName}/synonyms/{objectID}", "excluded": { "category": "out_of_scope", "reason": "single-synonym detail lookup by objectID, not a list resource; listing synonyms requires searchSynonyms (see below)" } },
-    { "method": "DELETE", "path": "/1/indexes/{indexName}/synonyms/{objectID}", "excluded": { "category": "destructive_admin", "reason": "deletes a single synonym rule, changing live search relevance for the index" } },
-    { "method": "POST", "path": "/1/indexes/{indexName}/synonyms/batch", "excluded": { "category": "out_of_scope", "reason": "batched synonym save; batch-shape scope narrowing, same as object batch" } },
-    { "method": "POST", "path": "/1/indexes/{indexName}/synonyms/clear", "excluded": { "category": "destructive_admin", "reason": "deletes every synonym rule for the index" } },
-    { "method": "POST", "path": "/1/indexes/{indexName}/synonyms/search", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: the only way to list ALL synonyms is this POST-with-body 'search' endpoint (empty query returns everything, page/hitsPerPage paginated); the engine's declarative stream dialect has no wired mechanism to send a stream-level request body (streams.json's StreamSpec.Body field is accepted by the schema but never read by the read-path engine -- read.go's declarative loop always sends a nil body) -- implementing this as a real list stream would require either an engine change (wiring stream.Body through) or a Tier-2 StreamHook, both out of scope for this Pass B pass; documented here rather than silently worked around" } },
-
-    { "method": "GET", "path": "/1/indexes/{indexName}/rules/{objectID}", "excluded": { "category": "out_of_scope", "reason": "single-rule detail lookup by objectID, not a list resource; same searchRules POST-body gap as synonyms below" } },
-    { "method": "PUT", "path": "/1/indexes/{indexName}/rules/{objectID}", "excluded": { "category": "out_of_scope", "reason": "creates/replaces a single query rule; per-record config-plane write" } },
-    { "method": "DELETE", "path": "/1/indexes/{indexName}/rules/{objectID}", "excluded": { "category": "destructive_admin", "reason": "deletes a single query rule, changing live search behavior for the index" } },
-    { "method": "POST", "path": "/1/indexes/{indexName}/rules/batch", "excluded": { "category": "out_of_scope", "reason": "batched rule save; batch-shape scope narrowing, same as object batch" } },
-    { "method": "POST", "path": "/1/indexes/{indexName}/rules/clear", "excluded": { "category": "destructive_admin", "reason": "deletes every query rule for the index" } },
-    { "method": "POST", "path": "/1/indexes/{indexName}/rules/search", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: identical POST-with-body 'list all rules via empty query' gap as searchSynonyms above -- stream.Body is unwired in the declarative read path" } },
-
-    { "method": "POST", "path": "/1/keys/{key}/restore", "excluded": { "category": "requires_elevated_scope", "reason": "restores a previously-deleted API key; admin-ACL credential-lifecycle action, not a routine reverse-ETL write" } },
-    { "method": "GET", "path": "/1/keys/{key}", "excluded": { "category": "out_of_scope", "reason": "single-key detail lookup by key value; api_keys already streams every key's full object from the list endpoint, so this adds no new data, only a redundant per-key path" } },
-    { "method": "PUT", "path": "/1/keys/{key}", "excluded": { "category": "requires_elevated_scope", "reason": "rotates/reconfigures an existing live API key's ACL and scope; a credential-management action riskier than creating a brand-new key" } },
-    { "method": "DELETE", "path": "/1/keys/{key}", "excluded": { "category": "destructive_admin", "reason": "permanently revokes a live API key; any integration still using it starts failing immediately" } },
-
-    { "method": "POST", "path": "/1/dictionaries/{dictionaryName}/batch", "excluded": { "category": "out_of_scope", "reason": "batched custom-dictionary-entry save/delete; record-level data-plane write with a batch body shape, not a single-resource mutation this connector's writes.json models" } },
-    { "method": "POST", "path": "/1/dictionaries/{dictionaryName}/search", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: same POST-with-body 'list custom dictionary entries via empty query' gap as searchSynonyms/searchRules above" } },
-    { "method": "PUT", "path": "/1/dictionaries/*/settings", "excluded": { "category": "out_of_scope", "reason": "toggles standard stop-word dictionary entries on/off per language; a narrow settings-flag write not yet paired with a dedicated action in this pass" } },
-
-    { "method": "POST", "path": "/1/clusters/mapping", "excluded": { "category": "deprecated", "reason": "Algolia's OpenAPI spec marks every multi-cluster (userID mapping) endpoint deprecated: true" } },
-    { "method": "GET", "path": "/1/clusters/mapping", "excluded": { "category": "deprecated", "reason": "deprecated multi-cluster listUserIds endpoint" } },
-    { "method": "POST", "path": "/1/clusters/mapping/batch", "excluded": { "category": "deprecated", "reason": "deprecated multi-cluster batchAssignUserIds endpoint" } },
-    { "method": "GET", "path": "/1/clusters/mapping/top", "excluded": { "category": "deprecated", "reason": "deprecated multi-cluster getTopUserIds endpoint" } },
-    { "method": "GET", "path": "/1/clusters/mapping/{userID}", "excluded": { "category": "deprecated", "reason": "deprecated multi-cluster getUserId endpoint" } },
-    { "method": "DELETE", "path": "/1/clusters/mapping/{userID}", "excluded": { "category": "deprecated", "reason": "deprecated multi-cluster removeUserId endpoint" } },
-    { "method": "GET", "path": "/1/clusters", "excluded": { "category": "deprecated", "reason": "deprecated multi-cluster listClusters endpoint" } },
-    { "method": "POST", "path": "/1/clusters/mapping/search", "excluded": { "category": "deprecated", "reason": "deprecated multi-cluster searchUserIds endpoint" } },
-    { "method": "GET", "path": "/1/clusters/mapping/pending", "excluded": { "category": "deprecated", "reason": "deprecated multi-cluster hasPendingMappings endpoint" } },
-
-    { "method": "POST", "path": "/1/security/sources/append", "excluded": { "category": "requires_elevated_scope", "reason": "appends a new allowed source IP range to the application's security allowlist; admin-ACL network-security config change" } },
-    { "method": "DELETE", "path": "/1/security/sources/{source}", "excluded": { "category": "destructive_admin", "reason": "removes an allowed source IP range; can immediately block legitimate traffic from that range if misapplied" } },
-
-    { "method": "GET", "path": "/1/task/{taskID}", "excluded": { "category": "out_of_scope", "reason": "polls the status of a single async application-level task by taskID; a taskID is only known transiently right after issuing a mutation, so there is no stable id list to stream against" } },
-    { "method": "GET", "path": "/1/indexes/{indexName}/task/{taskID}", "excluded": { "category": "out_of_scope", "reason": "polls the status of a single async per-index indexing task by taskID; same no-stable-id-list scope narrowing as getAppTask" } },
-
-    { "method": "POST", "path": "/1/indexes/{indexName}/operation", "excluded": { "category": "destructive_admin", "reason": "copies or moves (renames) an entire index, overwriting the destination index's existing data/settings" } }
+    {
+      "method": "GET",
+      "path": "/1/clusters",
+      "provenance": {
+        "artifact": "algolia-artifact-ref-1090185c8c703e57-a8ed058917f64766",
+        "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/multiclusters/listClusters.yml",
+        "source_kind": "referenced-document",
+        "version": "main",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1090185c8c703e57a0974ce07988dd18a534d17a10b422fe899b7f1ad5514351",
+        "coordinate": "#/get"
+      },
+      "operation": {
+        "model": "deprecated",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "deprecated multi-cluster listClusters endpoint",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/1/clusters/mapping",
+      "provenance": {
+        "artifact": "algolia-artifact-ref-3bc6b13d4a4787ea-50675c17d4ce3ade",
+        "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/multiclusters/userIds.yml",
+        "source_kind": "referenced-document",
+        "version": "main",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3bc6b13d4a4787eafe7ad1453c257098cabc5735c5ac35918af9b033ed7612f6",
+        "coordinate": "#/get"
+      },
+      "operation": {
+        "model": "deprecated",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "deprecated multi-cluster listUserIds endpoint",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/1/clusters/mapping",
+      "provenance": {
+        "artifact": "algolia-artifact-ref-3bc6b13d4a4787ea-50675c17d4ce3ade",
+        "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/multiclusters/userIds.yml",
+        "source_kind": "referenced-document",
+        "version": "main",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3bc6b13d4a4787eafe7ad1453c257098cabc5735c5ac35918af9b033ed7612f6",
+        "coordinate": "#/post"
+      },
+      "operation": {
+        "model": "deprecated",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Algolia's OpenAPI spec marks every multi-cluster (userID mapping) endpoint deprecated: true",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/1/clusters/mapping/batch",
+      "provenance": {
+        "artifact": "algolia-artifact-ref-d8cd2fd86345329c-a87a43bd0d170507",
+        "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/multiclusters/batchAssignUserIds.yml",
+        "source_kind": "referenced-document",
+        "version": "main",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d8cd2fd86345329cae65eb9aecc768b2e724d0bccad342fd9a8e961abb91e7b9",
+        "coordinate": "#/post"
+      },
+      "operation": {
+        "model": "deprecated",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "deprecated multi-cluster batchAssignUserIds endpoint",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/1/clusters/mapping/pending",
+      "provenance": {
+        "artifact": "algolia-artifact-ref-1fd2928522278004-8773fc0cae986f3a",
+        "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/multiclusters/hasPendingMappings.yml",
+        "source_kind": "referenced-document",
+        "version": "main",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1fd2928522278004538f8a7219d5789300bb231f953ce9928b444a5c684b0d7d",
+        "coordinate": "#/get"
+      },
+      "operation": {
+        "model": "deprecated",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "deprecated multi-cluster hasPendingMappings endpoint",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/1/clusters/mapping/search",
+      "provenance": {
+        "artifact": "algolia-artifact-ref-8f488650446c59aa-2b96c90cb17f94d6",
+        "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/multiclusters/searchUserIds.yml",
+        "source_kind": "referenced-document",
+        "version": "main",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8f488650446c59aa38023bce1b4ff1a93dc5e91e255ac9ff1f8af56b4cdccf0d",
+        "coordinate": "#/post"
+      },
+      "operation": {
+        "model": "deprecated",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "deprecated multi-cluster searchUserIds endpoint",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/1/clusters/mapping/top",
+      "provenance": {
+        "artifact": "algolia-artifact-ref-60607527f6288601-8d8803661a6f88c2",
+        "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/multiclusters/getTopUserIds.yml",
+        "source_kind": "referenced-document",
+        "version": "main",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60607527f6288601d34f128b6508449c06549eea50be2bf799ffd9db981d3eed",
+        "coordinate": "#/get"
+      },
+      "operation": {
+        "model": "deprecated",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "deprecated multi-cluster getTopUserIds endpoint",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/1/clusters/mapping/{userID}",
+      "provenance": {
+        "artifact": "algolia-artifact-ref-f5588ce62b114895-63abb995fc8b529d",
+        "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/multiclusters/userId.yml",
+        "source_kind": "referenced-document",
+        "version": "main",
+        "retrieved_at": "2026-08-09",
+        "sha256": "f5588ce62b114895306934925fa4ea884d570b97fc309f1260fe4f3a9e3baea6",
+        "coordinate": "#/get"
+      },
+      "operation": {
+        "model": "deprecated",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "deprecated multi-cluster getUserId endpoint",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/1/clusters/mapping/{userID}",
+      "provenance": {
+        "artifact": "algolia-artifact-ref-f5588ce62b114895-63abb995fc8b529d",
+        "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/multiclusters/userId.yml",
+        "source_kind": "referenced-document",
+        "version": "main",
+        "retrieved_at": "2026-08-09",
+        "sha256": "f5588ce62b114895306934925fa4ea884d570b97fc309f1260fe4f3a9e3baea6",
+        "coordinate": "#/delete"
+      },
+      "operation": {
+        "model": "deprecated",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "deprecated multi-cluster removeUserId endpoint",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/1/dictionaries/*/languages",
+      "provenance": {
+        "artifact": "algolia-artifact-ref-57e235c80c8e6c4f-8d69eb6a510d3684",
+        "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/dictionaries/getDictionaryLanguages.yml",
+        "source_kind": "referenced-document",
+        "version": "main",
+        "retrieved_at": "2026-08-09",
+        "sha256": "57e235c80c8e6c4f4558c2f0cf2ca840a66c1f74b5b1215f36214773b7e7e3dc",
+        "coordinate": "#/get"
+      },
+      "covered_by": {
+        "stream": "dictionary_languages"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/1/dictionaries/*/settings",
+      "provenance": {
+        "artifact": "algolia-artifact-ref-2b4599997a79761c-15a0eef825dabfc2",
+        "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/dictionaries/dictionarySettings.yml",
+        "source_kind": "referenced-document",
+        "version": "main",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2b4599997a79761cd119e2f55ecb911165c7a03c8c4bf623b0bce74efbb16ac3",
+        "coordinate": "#/get"
+      },
+      "covered_by": {
+        "stream": "dictionary_settings"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/1/dictionaries/*/settings",
+      "provenance": {
+        "artifact": "algolia-artifact-ref-2b4599997a79761c-15a0eef825dabfc2",
+        "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/dictionaries/dictionarySettings.yml",
+        "source_kind": "referenced-document",
+        "version": "main",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2b4599997a79761cd119e2f55ecb911165c7a03c8c4bf623b0bce74efbb16ac3",
+        "coordinate": "#/put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "toggles standard stop-word dictionary entries on/off per language; a narrow settings-flag write not yet paired with a dedicated action in this pass",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/1/dictionaries/{dictionaryName}/batch",
+      "provenance": {
+        "artifact": "algolia-artifact-ref-828fe267f0c4923f-133a9452676ebbcd",
+        "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/dictionaries/batchDictionaryEntries.yml",
+        "source_kind": "referenced-document",
+        "version": "main",
+        "retrieved_at": "2026-08-09",
+        "sha256": "828fe267f0c4923f21815331adef15057f623355496c4fef811a9a710d7839df",
+        "coordinate": "#/post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "batched custom-dictionary-entry save/delete; record-level data-plane write with a batch body shape, not a single-resource mutation this connector's writes.json models",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/1/dictionaries/{dictionaryName}/search",
+      "provenance": {
+        "artifact": "algolia-artifact-ref-68fe344d74442bf9-72d83272bdef0a71",
+        "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/dictionaries/searchDictionaryEntries.yml",
+        "source_kind": "referenced-document",
+        "version": "main",
+        "retrieved_at": "2026-08-09",
+        "sha256": "68fe344d74442bf9643b30ec07a76ed0a52ed5d2c796502486656887a6312a46",
+        "coordinate": "#/post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "ENGINE_GAP: same POST-with-body 'list custom dictionary entries via empty query' gap as searchSynonyms/searchRules above",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/1/indexes",
+      "provenance": {
+        "artifact": "algolia-artifact-ref-e40da6c1f01d3272-4bf8e84525a4a6de",
+        "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/manage_indices/listIndices.yml",
+        "source_kind": "referenced-document",
+        "version": "main",
+        "retrieved_at": "2026-08-09",
+        "sha256": "e40da6c1f01d32721d1793e341a2e60431516aa0286e0902c70db5b8a73e199f",
+        "coordinate": "#/get"
+      },
+      "covered_by": {
+        "stream": "indices"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/1/indexes/*/batch",
+      "provenance": {
+        "artifact": "algolia-artifact-ref-1a51e890ee6ffe3a-5ada104b2fcb37cf",
+        "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/objects/multipleBatch.yml",
+        "source_kind": "referenced-document",
+        "version": "main",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1a51e890ee6ffe3aad2c749908844fd68de8e76bdb929153220dbf6ab207e199",
+        "coordinate": "#/post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "multi-index batched record operations; same data-plane/batch-shape scope narrowing as the single-index batch endpoint",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/1/indexes/*/objects",
+      "provenance": {
+        "artifact": "algolia-artifact-ref-9e85a5a8c1797e14-e83da6deda99902c",
+        "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/objects/getObjects.yml",
+        "source_kind": "referenced-document",
+        "version": "main",
+        "retrieved_at": "2026-08-09",
+        "sha256": "9e85a5a8c1797e1437f8df4c7e83d9b1cfee66f7ad725432a322e0ee401e5c82",
+        "coordinate": "#/post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "bulk multi-object retrieval by objectID; data-plane read, not a metadata list/detail resource",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/1/indexes/*/queries",
+      "provenance": {
+        "artifact": "algolia-artifact-ref-66251cfd44621d29-cf263f6a32aa8c48",
+        "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/search/search.yml",
+        "source_kind": "referenced-document",
+        "version": "main",
+        "retrieved_at": "2026-08-09",
+        "sha256": "66251cfd44621d294c085872f10314a23b2d2a0d8d9247a387e0ca4601c8b5fb",
+        "coordinate": "#/post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "multi-index federated search query execution; same data-plane scope narrowing as searchSingleIndex",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/1/indexes/{indexName}",
+      "provenance": {
+        "artifact": "algolia-artifact-ref-3ccabbc79ec3c0b0-686842411f5ac440",
+        "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/objects/objects.yml",
+        "source_kind": "referenced-document",
+        "version": "main",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3ccabbc79ec3c0b0f178425633fe0a5951a34e6a45a62d9734771b1f1462fab6",
+        "coordinate": "#/post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "adds/replaces a single search record (addObject); record-level write on the data plane, not a config-plane mutation this connector's writes.json covers",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/1/indexes/{indexName}",
+      "provenance": {
+        "artifact": "algolia-artifact-ref-3ccabbc79ec3c0b0-686842411f5ac440",
+        "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/objects/objects.yml",
+        "source_kind": "referenced-document",
+        "version": "main",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3ccabbc79ec3c0b0f178425633fe0a5951a34e6a45a62d9734771b1f1462fab6",
+        "coordinate": "#/delete"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "deletes an entire index and all its records/settings",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/1/indexes/{indexName}/batch",
+      "provenance": {
+        "artifact": "algolia-artifact-ref-7997ecee0360cf61-c21de34855301b79",
+        "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/objects/batch.yml",
+        "source_kind": "referenced-document",
+        "version": "main",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7997ecee0360cf617b8a60b6b8af7ff28ec7724a5013e67cfb81ea827817ac20",
+        "coordinate": "#/post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "batched record add/update/delete operations; record-level data-plane write, and a batch body shape the dialect's single-record write action model doesn't fit",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/1/indexes/{indexName}/browse",
+      "provenance": {
+        "artifact": "algolia-artifact-ref-da60527058b74c4b-ee6faf9596b4cdd4",
+        "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/search/browse.yml",
+        "source_kind": "referenced-document",
+        "version": "main",
+        "retrieved_at": "2026-08-09",
+        "sha256": "da60527058b74c4b80d89c97ad4a8ce330ce40a2610eb62f369fc3ee62db8145",
+        "coordinate": "#/post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "bulk record browse/export of index contents; this connector's records are index/key/settings CONFIGURATION, not the underlying search records themselves (a genuinely different, much larger data surface deferred to a future dedicated records connector)",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/1/indexes/{indexName}/clear",
+      "provenance": {
+        "artifact": "algolia-artifact-ref-0283f261f0217211-c5ea01dedf7aaa5b",
+        "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/objects/clearObjects.yml",
+        "source_kind": "referenced-document",
+        "version": "main",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0283f261f0217211fc7d90c45c32bda83b10d65b8af57ba47ef14e8e356fa16a",
+        "coordinate": "#/post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "deletes every record in the index while keeping settings; irreversible",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/1/indexes/{indexName}/deleteByQuery",
+      "provenance": {
+        "artifact": "algolia-artifact-ref-875d0aff780f834d-a0890d35118e56a5",
+        "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/objects/deleteBy.yml",
+        "source_kind": "referenced-document",
+        "version": "main",
+        "retrieved_at": "2026-08-09",
+        "sha256": "875d0aff780f834d0814f16f51cf56df5023a627e5ab80fc369e0ad49bd1afc8",
+        "coordinate": "#/post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "bulk-deletes every record matching a query filter; irreversible mass deletion",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/1/indexes/{indexName}/facets/{facetName}/query",
+      "provenance": {
+        "artifact": "algolia-artifact-ref-0a7ba520b57896bd-c3505ca1458617b6",
+        "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/search/searchForFacetValues.yml",
+        "source_kind": "referenced-document",
+        "version": "main",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0a7ba520b57896bda9bb0d636ff70a4ca6f734af7153af65ae3dcd221afd2b83",
+        "coordinate": "#/post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "facet-value search query execution; data-plane, not a metadata resource",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/1/indexes/{indexName}/operation",
+      "provenance": {
+        "artifact": "algolia-artifact-ref-0a0f0b8b7a92c532-66407099337dff10",
+        "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/manage_indices/operationIndex.yml",
+        "source_kind": "referenced-document",
+        "version": "main",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0a0f0b8b7a92c532953980477d5d4ac008a3db4fb644584a7144910e7e2f276b",
+        "coordinate": "#/post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "copies or moves (renames) an entire index, overwriting the destination index's existing data/settings",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/1/indexes/{indexName}/query",
+      "provenance": {
+        "artifact": "algolia-artifact-ref-46f6519d5ee74d2b-cba0a40953f357d2",
+        "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/search/searchSingleIndex.yml",
+        "source_kind": "referenced-document",
+        "version": "main",
+        "retrieved_at": "2026-08-09",
+        "sha256": "46f6519d5ee74d2b8621899170040a227fccc6f345b3588a1a1925333cdeff11",
+        "coordinate": "#/post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "full-text search query execution is a data-plane read (arbitrary query params, not a stable list/detail resource); this connector reads index/key/settings metadata, not search results",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/1/indexes/{indexName}/rules/batch",
+      "provenance": {
+        "artifact": "algolia-artifact-ref-9be2186fc03cb106-e5bd37739c56deff",
+        "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/rules/saveRules.yml",
+        "source_kind": "referenced-document",
+        "version": "main",
+        "retrieved_at": "2026-08-09",
+        "sha256": "9be2186fc03cb106e8ad55fc3f2e4f171028a5c9ad80f828903938ca784805ff",
+        "coordinate": "#/post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "batched rule save; batch-shape scope narrowing, same as object batch",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/1/indexes/{indexName}/rules/clear",
+      "provenance": {
+        "artifact": "algolia-artifact-ref-03c8d0471a3cc4f4-346978c5fc30aca4",
+        "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/rules/clearRules.yml",
+        "source_kind": "referenced-document",
+        "version": "main",
+        "retrieved_at": "2026-08-09",
+        "sha256": "03c8d0471a3cc4f461d17e7f1526673ff99a8078510f3a6f161e7652a98627c8",
+        "coordinate": "#/post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "deletes every query rule for the index",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/1/indexes/{indexName}/rules/search",
+      "provenance": {
+        "artifact": "algolia-artifact-ref-da0bb0b9a9831b86-322e240801a049c2",
+        "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/rules/searchRules.yml",
+        "source_kind": "referenced-document",
+        "version": "main",
+        "retrieved_at": "2026-08-09",
+        "sha256": "da0bb0b9a9831b86eda39cbf56bcba75a06aeca32235cdc72a1ef0dfcceb130f",
+        "coordinate": "#/post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "ENGINE_GAP: identical POST-with-body 'list all rules via empty query' gap as searchSynonyms above -- stream.Body is unwired in the declarative read path",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/1/indexes/{indexName}/rules/{objectID}",
+      "provenance": {
+        "artifact": "algolia-artifact-ref-32315787adcc9ae0-a740ef43ed4f114f",
+        "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/rules/rule.yml",
+        "source_kind": "referenced-document",
+        "version": "main",
+        "retrieved_at": "2026-08-09",
+        "sha256": "32315787adcc9ae01a167f76a55a34b3998bf1c54089779f929f25b7d538f760",
+        "coordinate": "#/get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-rule detail lookup by objectID, not a list resource; same searchRules POST-body gap as synonyms below",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/1/indexes/{indexName}/rules/{objectID}",
+      "provenance": {
+        "artifact": "algolia-artifact-ref-32315787adcc9ae0-a740ef43ed4f114f",
+        "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/rules/rule.yml",
+        "source_kind": "referenced-document",
+        "version": "main",
+        "retrieved_at": "2026-08-09",
+        "sha256": "32315787adcc9ae01a167f76a55a34b3998bf1c54089779f929f25b7d538f760",
+        "coordinate": "#/put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "creates/replaces a single query rule; per-record config-plane write",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/1/indexes/{indexName}/rules/{objectID}",
+      "provenance": {
+        "artifact": "algolia-artifact-ref-32315787adcc9ae0-a740ef43ed4f114f",
+        "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/rules/rule.yml",
+        "source_kind": "referenced-document",
+        "version": "main",
+        "retrieved_at": "2026-08-09",
+        "sha256": "32315787adcc9ae01a167f76a55a34b3998bf1c54089779f929f25b7d538f760",
+        "coordinate": "#/delete"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "deletes a single query rule, changing live search behavior for the index",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/1/indexes/{indexName}/settings",
+      "provenance": {
+        "artifact": "algolia-artifact-ref-ee0f197f0f2b9084-8d94af32039d495e",
+        "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/settings/settings.yml",
+        "source_kind": "referenced-document",
+        "version": "main",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ee0f197f0f2b9084c263abdd7e800813907d52f24b01985623685ef76b71ba54",
+        "coordinate": "#/get"
+      },
+      "covered_by": {
+        "stream": "index_settings"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/1/indexes/{indexName}/settings",
+      "provenance": {
+        "artifact": "algolia-artifact-ref-ee0f197f0f2b9084-8d94af32039d495e",
+        "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/settings/settings.yml",
+        "source_kind": "referenced-document",
+        "version": "main",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ee0f197f0f2b9084c263abdd7e800813907d52f24b01985623685ef76b71ba54",
+        "coordinate": "#/put"
+      },
+      "covered_by": {
+        "write": "update_index_settings"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/1/indexes/{indexName}/synonyms/batch",
+      "provenance": {
+        "artifact": "algolia-artifact-ref-261b3694537b3370-f8cf1f2d0b7e9509",
+        "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/synonyms/saveSynonyms.yml",
+        "source_kind": "referenced-document",
+        "version": "main",
+        "retrieved_at": "2026-08-09",
+        "sha256": "261b3694537b3370aed662f57c901d4e7c73dd6a9345bc992b3d735fba6d8493",
+        "coordinate": "#/post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "batched synonym save; batch-shape scope narrowing, same as object batch",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/1/indexes/{indexName}/synonyms/clear",
+      "provenance": {
+        "artifact": "algolia-artifact-ref-f34a909083a77ad7-f91f216f5ac61799",
+        "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/synonyms/clearSynonyms.yml",
+        "source_kind": "referenced-document",
+        "version": "main",
+        "retrieved_at": "2026-08-09",
+        "sha256": "f34a909083a77ad78943de227e02829580e5731a329d155cf6d078665e7d2556",
+        "coordinate": "#/post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "deletes every synonym rule for the index",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/1/indexes/{indexName}/synonyms/search",
+      "provenance": {
+        "artifact": "algolia-artifact-ref-78f9f1e9b4a94190-8500385371dfbcb5",
+        "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/synonyms/searchSynonyms.yml",
+        "source_kind": "referenced-document",
+        "version": "main",
+        "retrieved_at": "2026-08-09",
+        "sha256": "78f9f1e9b4a941900f060cf6eb0e0ae60b6511292bdeffd23fd8ae1c3cd8b9e1",
+        "coordinate": "#/post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "ENGINE_GAP: the only way to list ALL synonyms is this POST-with-body 'search' endpoint (empty query returns everything, page/hitsPerPage paginated); the engine's declarative stream dialect has no wired mechanism to send a stream-level request body (streams.json's StreamSpec.Body field is accepted by the schema but never read by the read-path engine -- read.go's declarative loop always sends a nil body) -- implementing this as a real list stream would require either an engine change (wiring stream.Body through) or a Tier-2 StreamHook, both out of scope for this Pass B pass; documented here rather than silently worked around",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/1/indexes/{indexName}/synonyms/{objectID}",
+      "provenance": {
+        "artifact": "algolia-artifact-ref-93eed174f36abc4f-186f3dc2e8e48e4d",
+        "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/synonyms/synonym.yml",
+        "source_kind": "referenced-document",
+        "version": "main",
+        "retrieved_at": "2026-08-09",
+        "sha256": "93eed174f36abc4f9bc0dae8f5a059c7dbd72061f09bd817f35e71b427d4bfd8",
+        "coordinate": "#/get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-synonym detail lookup by objectID, not a list resource; listing synonyms requires searchSynonyms (see below)",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/1/indexes/{indexName}/synonyms/{objectID}",
+      "provenance": {
+        "artifact": "algolia-artifact-ref-93eed174f36abc4f-186f3dc2e8e48e4d",
+        "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/synonyms/synonym.yml",
+        "source_kind": "referenced-document",
+        "version": "main",
+        "retrieved_at": "2026-08-09",
+        "sha256": "93eed174f36abc4f9bc0dae8f5a059c7dbd72061f09bd817f35e71b427d4bfd8",
+        "coordinate": "#/put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "creates/replaces a single synonym rule; a narrow per-record config-plane write not yet worth a dedicated action alongside searchSynonyms' read gap below",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/1/indexes/{indexName}/synonyms/{objectID}",
+      "provenance": {
+        "artifact": "algolia-artifact-ref-93eed174f36abc4f-186f3dc2e8e48e4d",
+        "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/synonyms/synonym.yml",
+        "source_kind": "referenced-document",
+        "version": "main",
+        "retrieved_at": "2026-08-09",
+        "sha256": "93eed174f36abc4f9bc0dae8f5a059c7dbd72061f09bd817f35e71b427d4bfd8",
+        "coordinate": "#/delete"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "deletes a single synonym rule, changing live search relevance for the index",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/1/indexes/{indexName}/task/{taskID}",
+      "provenance": {
+        "artifact": "algolia-artifact-ref-5805cc12f59b832c-dc10e8a372377648",
+        "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/advanced/getTask.yml",
+        "source_kind": "referenced-document",
+        "version": "main",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5805cc12f59b832cdc427dfdd7b41033e282c3dcaf151987a78c3b6b2408e2ef",
+        "coordinate": "#/get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "polls the status of a single async per-index indexing task by taskID; same no-stable-id-list scope narrowing as getAppTask",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/1/indexes/{indexName}/{objectID}",
+      "provenance": {
+        "artifact": "algolia-artifact-ref-bc549c376cfe380f-b052c281c0721f6c",
+        "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/objects/object.yml",
+        "source_kind": "referenced-document",
+        "version": "main",
+        "retrieved_at": "2026-08-09",
+        "sha256": "bc549c376cfe380fb415292116fb651f9a702428a806d906273bbcb8e94e6dc3",
+        "coordinate": "#/get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single search-record retrieval; data-plane, not a metadata resource this connector streams",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/1/indexes/{indexName}/{objectID}",
+      "provenance": {
+        "artifact": "algolia-artifact-ref-bc549c376cfe380f-b052c281c0721f6c",
+        "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/objects/object.yml",
+        "source_kind": "referenced-document",
+        "version": "main",
+        "retrieved_at": "2026-08-09",
+        "sha256": "bc549c376cfe380fb415292116fb651f9a702428a806d906273bbcb8e94e6dc3",
+        "coordinate": "#/put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "creates/replaces a single search record by objectID; record-level data-plane write",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/1/indexes/{indexName}/{objectID}",
+      "provenance": {
+        "artifact": "algolia-artifact-ref-bc549c376cfe380f-b052c281c0721f6c",
+        "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/objects/object.yml",
+        "source_kind": "referenced-document",
+        "version": "main",
+        "retrieved_at": "2026-08-09",
+        "sha256": "bc549c376cfe380fb415292116fb651f9a702428a806d906273bbcb8e94e6dc3",
+        "coordinate": "#/delete"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "deletes a single search record",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/1/indexes/{indexName}/{objectID}/partial",
+      "provenance": {
+        "artifact": "algolia-artifact-ref-7eb98c4dd4026c76-6a5e39885ed01262",
+        "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/objects/partialUpdate.yml",
+        "source_kind": "referenced-document",
+        "version": "main",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7eb98c4dd4026c767cb84425b23fe27bf576e1ddff7e0d034e13cec60987bdb8",
+        "coordinate": "#/post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "partial record update; record-level data-plane write",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/1/keys",
+      "provenance": {
+        "artifact": "algolia-artifact-ref-9f1db7d9bbbe864e-41e7b5fa59fa0291",
+        "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/keys/keys.yml",
+        "source_kind": "referenced-document",
+        "version": "main",
+        "retrieved_at": "2026-08-09",
+        "sha256": "9f1db7d9bbbe864e3c96d46cd0c531903892e26f4862ea30faad77fdf7bcbb2f",
+        "coordinate": "#/get"
+      },
+      "covered_by": {
+        "stream": "api_keys"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/1/keys",
+      "provenance": {
+        "artifact": "algolia-artifact-ref-9f1db7d9bbbe864e-41e7b5fa59fa0291",
+        "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/keys/keys.yml",
+        "source_kind": "referenced-document",
+        "version": "main",
+        "retrieved_at": "2026-08-09",
+        "sha256": "9f1db7d9bbbe864e3c96d46cd0c531903892e26f4862ea30faad77fdf7bcbb2f",
+        "coordinate": "#/post"
+      },
+      "covered_by": {
+        "write": "create_api_key"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/1/keys/{key}",
+      "provenance": {
+        "artifact": "algolia-artifact-ref-367c0d2303fdf52f-2ab7e340d2e5cea7",
+        "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/keys/key.yml",
+        "source_kind": "referenced-document",
+        "version": "main",
+        "retrieved_at": "2026-08-09",
+        "sha256": "367c0d2303fdf52f3ca8d27df9ab50b33b5bef712b5a55340de01539cdb6397a",
+        "coordinate": "#/get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-key detail lookup by key value; api_keys already streams every key's full object from the list endpoint, so this adds no new data, only a redundant per-key path",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/1/keys/{key}",
+      "provenance": {
+        "artifact": "algolia-artifact-ref-367c0d2303fdf52f-2ab7e340d2e5cea7",
+        "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/keys/key.yml",
+        "source_kind": "referenced-document",
+        "version": "main",
+        "retrieved_at": "2026-08-09",
+        "sha256": "367c0d2303fdf52f3ca8d27df9ab50b33b5bef712b5a55340de01539cdb6397a",
+        "coordinate": "#/put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "rotates/reconfigures an existing live API key's ACL and scope; a credential-management action riskier than creating a brand-new key",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/1/keys/{key}",
+      "provenance": {
+        "artifact": "algolia-artifact-ref-367c0d2303fdf52f-2ab7e340d2e5cea7",
+        "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/keys/key.yml",
+        "source_kind": "referenced-document",
+        "version": "main",
+        "retrieved_at": "2026-08-09",
+        "sha256": "367c0d2303fdf52f3ca8d27df9ab50b33b5bef712b5a55340de01539cdb6397a",
+        "coordinate": "#/delete"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "permanently revokes a live API key; any integration still using it starts failing immediately",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/1/keys/{key}/restore",
+      "provenance": {
+        "artifact": "algolia-artifact-ref-b6937ebc8beab6f2-36452fe9ee4740b3",
+        "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/keys/restoreApiKey.yml",
+        "source_kind": "referenced-document",
+        "version": "main",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b6937ebc8beab6f26e53c5a1c400d121407d144cccbbf9b312502ef9c56e8642",
+        "coordinate": "#/post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "restores a previously-deleted API key; admin-ACL credential-lifecycle action, not a routine reverse-ETL write",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/1/logs",
+      "provenance": {
+        "artifact": "algolia-artifact-ref-1558687ceb6a40bc-7489c266609203d0",
+        "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/advanced/getLogs.yml",
+        "source_kind": "referenced-document",
+        "version": "main",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1558687ceb6a40bc86299a224ffb0bb8b578a864e8d401800e7e0026c22aae8f",
+        "coordinate": "#/get"
+      },
+      "covered_by": {
+        "stream": "logs"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/1/security/sources",
+      "provenance": {
+        "artifact": "algolia-artifact-ref-2333e896041d2fbb-57429681f2b6a53b",
+        "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/vault/vaultSources.yml",
+        "source_kind": "referenced-document",
+        "version": "main",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2333e896041d2fbbb6ae1de4664d7a9ea7740d8e1702ff34e247626fb99fc9d2",
+        "coordinate": "#/get"
+      },
+      "covered_by": {
+        "stream": "vault_sources"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/1/security/sources",
+      "provenance": {
+        "artifact": "algolia-artifact-ref-2333e896041d2fbb-57429681f2b6a53b",
+        "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/vault/vaultSources.yml",
+        "source_kind": "referenced-document",
+        "version": "main",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2333e896041d2fbbb6ae1de4664d7a9ea7740d8e1702ff34e247626fb99fc9d2",
+        "coordinate": "#/put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/1/security/sources/append",
+      "provenance": {
+        "artifact": "algolia-artifact-ref-d8e97f048d6148db-81237db23250fed3",
+        "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/vault/appendSource.yml",
+        "source_kind": "referenced-document",
+        "version": "main",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d8e97f048d6148dbfb8154a2f70fe7825bcc8fc471506408aff1bc0e999180a7",
+        "coordinate": "#/post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "appends a new allowed source IP range to the application's security allowlist; admin-ACL network-security config change",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/1/security/sources/{source}",
+      "provenance": {
+        "artifact": "algolia-artifact-ref-3486842c71c08aff-18a4ae7054631f7a",
+        "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/vault/deleteSource.yml",
+        "source_kind": "referenced-document",
+        "version": "main",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3486842c71c08aff0e3d925d2e2445465d9d1c298f1c1a42efd060d81817943e",
+        "coordinate": "#/delete"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "removes an allowed source IP range; can immediately block legitimate traffic from that range if misapplied",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/1/task/{taskID}",
+      "provenance": {
+        "artifact": "algolia-artifact-ref-53f16f47b95b85e4-c5ba553b8fd80b31",
+        "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/paths/advanced/getAppTask.yml",
+        "source_kind": "referenced-document",
+        "version": "main",
+        "retrieved_at": "2026-08-09",
+        "sha256": "53f16f47b95b85e4a063f9b4b2d9164554d637a293283750f9f6874682ddcf42",
+        "coordinate": "#/get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "polls the status of a single async application-level task by taskID; a taskID is only known transiently right after issuing a mutation, so there is no stable id list to stream against",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/accountCopyIndex",
+      "provenance": {
+        "artifact": "algolia-artifact-ref-c748ff4947772582-cbfda72506f6f83b",
+        "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/helpers/accountCopyIndex.yml",
+        "source_kind": "referenced-document",
+        "version": "main",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c748ff4947772582614f2ef029af150b81c8055a9a3532d6b4b8b812c5ccac9d",
+        "coordinate": "#/method/get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/browseObjects",
+      "provenance": {
+        "artifact": "algolia-artifact-ref-a584bebcf9c3bde2-b93ebee0ed114146",
+        "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/helpers/browseObjects.yml",
+        "source_kind": "referenced-document",
+        "version": "main",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a584bebcf9c3bde2308719e0337f43fa9141802a40145d80e9b38fb2da8900a4",
+        "coordinate": "#/method/get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/chunkedBatch",
+      "provenance": {
+        "artifact": "algolia-artifact-ref-8426e780e7f08bd3-81fe54a09f350513",
+        "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/helpers/chunkedBatch.yml",
+        "source_kind": "referenced-document",
+        "version": "main",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8426e780e7f08bd36cc575c5fa0b51c9d3391a432a020e71a132f3abfdab6ff4",
+        "coordinate": "#/method/get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/deleteObjects",
+      "provenance": {
+        "artifact": "algolia-artifact-ref-c230c6f19abf7191-4c6e9824dcb7145a",
+        "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/helpers/deleteObjects.yml",
+        "source_kind": "referenced-document",
+        "version": "main",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c230c6f19abf71916b9ea446793431278847ea1e7659904d1cf0f2ce7bcd6c35",
+        "coordinate": "#/method/post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/generateSecuredApiKey",
+      "provenance": {
+        "artifact": "algolia-artifact-ref-5ec909a1eedea31f-2c15d731ff5abf73",
+        "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/helpers/generateSecuredApiKey.yml",
+        "source_kind": "referenced-document",
+        "version": "main",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ec909a1eedea31f04bc7fc47fd5a5c2ec7d0f8001e8f1c884e172e9c49238e6",
+        "coordinate": "#/method/get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/indexExists",
+      "provenance": {
+        "artifact": "algolia-artifact-ref-4dbc1c37e8543a2c-558b13d82184cf3d",
+        "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/helpers/indexExists.yml",
+        "source_kind": "referenced-document",
+        "version": "main",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4dbc1c37e8543a2cf6c04ed072a8b3c1cd07944b2656c84f9b368170710b4f31",
+        "coordinate": "#/method/get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/partialUpdateObjects",
+      "provenance": {
+        "artifact": "algolia-artifact-ref-697a6cb052a30292-07eca022d97ebb05",
+        "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/helpers/partialUpdateObjects.yml",
+        "source_kind": "referenced-document",
+        "version": "main",
+        "retrieved_at": "2026-08-09",
+        "sha256": "697a6cb052a302924b60d28a630d4c7c53cf4330c1af1e68730232488f5a45b7",
+        "coordinate": "#/method/post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/partialUpdateObjectsWithTransformation",
+      "provenance": {
+        "artifact": "algolia-artifact-ref-951e9b93f38a5d29-eb0505d7c1ba4795",
+        "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/helpers/partialUpdateObjectsWithTransformation.yml",
+        "source_kind": "referenced-document",
+        "version": "main",
+        "retrieved_at": "2026-08-09",
+        "sha256": "951e9b93f38a5d29c6a9dc51c1eeb07ec6ce1b02a9e5623696f36651c30c0155",
+        "coordinate": "#/method/post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/replaceAllObjects",
+      "provenance": {
+        "artifact": "algolia-artifact-ref-0143d41d27e4e781-b1acdedef78cff51",
+        "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/helpers/replaceAllObjects.yml",
+        "source_kind": "referenced-document",
+        "version": "main",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0143d41d27e4e781497f2a6d8c1330565f658b4014f28742c63ba6b1a1e77af0",
+        "coordinate": "#/method/get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/replaceAllObjectsWithTransformation",
+      "provenance": {
+        "artifact": "algolia-artifact-ref-36c052307e9b9232-d426d2527aa2da0e",
+        "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/helpers/replaceAllObjectsWithTransformation.yml",
+        "source_kind": "referenced-document",
+        "version": "main",
+        "retrieved_at": "2026-08-09",
+        "sha256": "36c052307e9b923200065987b3fedf531a899cd122ba12c93f4f3f0057fcc284",
+        "coordinate": "#/method/get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/saveObjects",
+      "provenance": {
+        "artifact": "algolia-artifact-ref-aff29f35e393fd6d-2bfc676a6d5aebba",
+        "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/helpers/saveObjects.yml",
+        "source_kind": "referenced-document",
+        "version": "main",
+        "retrieved_at": "2026-08-09",
+        "sha256": "aff29f35e393fd6da24844f460da306b920a3fbeb472c6c2f21c710abfc0f412",
+        "coordinate": "#/method/get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/saveObjectsWithTransformation",
+      "provenance": {
+        "artifact": "algolia-artifact-ref-be27f4fe5ed17baa-16ad7fe7a4c4fbfc",
+        "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/helpers/saveObjectsWithTransformation.yml",
+        "source_kind": "referenced-document",
+        "version": "main",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be27f4fe5ed17baa7dfd1d7bf7439d63c880f48e054f265707971c5b13f31ab2",
+        "coordinate": "#/method/get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/setClientApiKey",
+      "provenance": {
+        "artifact": "algolia-artifact-ref-8d90118d94243a4d-a230bc30229f1813",
+        "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/common/helpers/setClientApiKey.yml",
+        "source_kind": "referenced-document",
+        "version": "main",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8d90118d94243a4dd2f8358e234d75349f984425ac1aa42cb8f55e3c205dac4e",
+        "coordinate": "#/method/get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/waitForApiKey",
+      "provenance": {
+        "artifact": "algolia-artifact-ref-0a743c13915f5693-f308f9b0f91cb102",
+        "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/helpers/waitForApiKey.yml",
+        "source_kind": "referenced-document",
+        "version": "main",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0a743c13915f5693f78fecfa5c0215272e777a810b3f2e3e1e1cf6fb2629b80b",
+        "coordinate": "#/method/get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/waitForAppTask",
+      "provenance": {
+        "artifact": "algolia-artifact-ref-eb9e2a13497b1922-4cfd254fafd5e1dc",
+        "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/helpers/waitForAppTask.yml",
+        "source_kind": "referenced-document",
+        "version": "main",
+        "retrieved_at": "2026-08-09",
+        "sha256": "eb9e2a13497b1922569271f2f8cfebdd3fcd8e7c6f72d01aa495469b17ad924f",
+        "coordinate": "#/method/get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/waitForTask",
+      "provenance": {
+        "artifact": "algolia-artifact-ref-03fb05129ffe6bfb-354f621c5a617624",
+        "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/helpers/waitForTask.yml",
+        "source_kind": "referenced-document",
+        "version": "main",
+        "retrieved_at": "2026-08-09",
+        "sha256": "03fb05129ffe6bfb5818d3f7d3d6920899ae2438452f85f090fa4df0a28f49f9",
+        "coordinate": "#/method/get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{path}",
+      "provenance": {
+        "artifact": "algolia-artifact-ref-9eb0b052f74162f6-ffe66a50b57b8041",
+        "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/common/paths/customRequest.yml",
+        "source_kind": "referenced-document",
+        "version": "main",
+        "retrieved_at": "2026-08-09",
+        "sha256": "9eb0b052f74162f6f30dbfb4998d56ac286f22961b73042a6fabdcabb73755e5",
+        "coordinate": "#/get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "generic custom-request passthrough helper (customRequest.yml), not a resource endpoint of its own",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/{path}",
+      "provenance": {
+        "artifact": "algolia-artifact-ref-9eb0b052f74162f6-ffe66a50b57b8041",
+        "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/common/paths/customRequest.yml",
+        "source_kind": "referenced-document",
+        "version": "main",
+        "retrieved_at": "2026-08-09",
+        "sha256": "9eb0b052f74162f6f30dbfb4998d56ac286f22961b73042a6fabdcabb73755e5",
+        "coordinate": "#/post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/{path}",
+      "provenance": {
+        "artifact": "algolia-artifact-ref-9eb0b052f74162f6-ffe66a50b57b8041",
+        "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/common/paths/customRequest.yml",
+        "source_kind": "referenced-document",
+        "version": "main",
+        "retrieved_at": "2026-08-09",
+        "sha256": "9eb0b052f74162f6f30dbfb4998d56ac286f22961b73042a6fabdcabb73755e5",
+        "coordinate": "#/put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/{path}",
+      "provenance": {
+        "artifact": "algolia-artifact-ref-9eb0b052f74162f6-ffe66a50b57b8041",
+        "source_url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/common/paths/customRequest.yml",
+        "source_kind": "referenced-document",
+        "version": "main",
+        "retrieved_at": "2026-08-09",
+        "sha256": "9eb0b052f74162f6f30dbfb4998d56ac286f22961b73042a6fabdcabb73755e5",
+        "coordinate": "#/delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    }
   ]
 }

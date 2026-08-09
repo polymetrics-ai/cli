@@ -1,0 +1,1027 @@
+{
+  "tagline": "Run Printify's declared streams and reverse-ETL actions.",
+  "usage": "pm printify \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "api get app oauth accept",
+        "blueprint detail list",
+        "blueprint print providers list",
+        "blueprint variants list",
+        "blueprints list",
+        "order detail list",
+        "orders list",
+        "print provider detail list",
+        "print providers list",
+        "product detail list",
+        "product gpsr list",
+        "products list",
+        "shipping profiles list",
+        "shops list",
+        "upload detail list",
+        "uploads list",
+        "v2 shipping economy list",
+        "v2 shipping express list",
+        "v2 shipping methods list",
+        "v2 shipping priority list",
+        "v2 shipping standard list",
+        "webhooks list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "api post app oauth tokens",
+        "api post app oauth tokens refresh",
+        "api post v1 shops shop-id express-json",
+        "archive uploaded image apply",
+        "calculate order shipping apply",
+        "cancel order apply",
+        "create product apply",
+        "create webhook apply",
+        "delete product apply",
+        "delete webhook apply",
+        "disconnect shop apply",
+        "mark product publishing failed apply",
+        "mark product publishing succeeded apply",
+        "publish product apply",
+        "send order to production apply",
+        "simulate webhook apply",
+        "submit express order apply",
+        "submit order apply",
+        "unpublish product apply",
+        "update product apply",
+        "update webhook apply",
+        "upload image apply"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "api get app oauth accept",
+      "summary": "Documented GET /app/oauth/accept (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.printify.com/openapi.json",
+      "examples": [
+        "pm printify api get app oauth accept --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/app/oauth/accept"
+        }
+      ],
+      "operation": "printify.get.app-oauth-accept",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api post app oauth tokens",
+      "summary": "Documented POST /app/oauth/tokens (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.printify.com/openapi.json",
+      "examples": [
+        "pm printify api post app oauth tokens --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/app/oauth/tokens"
+        }
+      ],
+      "operation": "printify.post.app-oauth-tokens",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post app oauth tokens refresh",
+      "summary": "Documented POST /app/oauth/tokens/refresh (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.printify.com/openapi.json",
+      "examples": [
+        "pm printify api post app oauth tokens refresh --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/app/oauth/tokens/refresh"
+        }
+      ],
+      "operation": "printify.post.app-oauth-tokens-refresh",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 shops shop-id express-json",
+      "summary": "Documented POST /v1/shops/{shop_id}/express.json (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.printify.com/openapi.json",
+      "examples": [
+        "pm printify api post v1 shops shop-id express-json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/shops/{shop_id}/express.json"
+        }
+      ],
+      "operation": "printify.post.v1-shops-shop-id-express-json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "archive uploaded image apply",
+      "summary": "Plan and execute the archive uploaded image reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "archive_uploaded_image",
+      "source_url": "https://developers.printify.com/openapi.json",
+      "flags": [
+        {
+          "name": "image_id",
+          "type": "string",
+          "summary": "Required image id record field.",
+          "maps_to": "record.image_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm printify archive uploaded image apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/uploads/{image_id}/archive.json"
+        }
+      ],
+      "risk": "archives an uploaded image",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "blueprint detail list",
+      "summary": "Run the blueprint detail ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "blueprint_detail",
+      "source_url": "https://developers.printify.com/openapi.json",
+      "examples": [
+        "pm printify blueprint detail list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/catalog/blueprints/{blueprint_id}.json"
+        }
+      ]
+    },
+    {
+      "path": "blueprint print providers list",
+      "summary": "Run the blueprint print providers ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "blueprint_print_providers",
+      "source_url": "https://developers.printify.com/openapi.json",
+      "examples": [
+        "pm printify blueprint print providers list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/catalog/blueprints/{blueprint_id}/print_providers.json"
+        }
+      ]
+    },
+    {
+      "path": "blueprint variants list",
+      "summary": "Run the blueprint variants ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "blueprint_variants",
+      "source_url": "https://developers.printify.com/openapi.json",
+      "examples": [
+        "pm printify blueprint variants list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/catalog/blueprints/{blueprint_id}/print_providers/{print_provider_id}/variants.json"
+        }
+      ]
+    },
+    {
+      "path": "blueprints list",
+      "summary": "Run the blueprints ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "blueprints",
+      "source_url": "https://developers.printify.com/openapi.json",
+      "examples": [
+        "pm printify blueprints list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/catalog/blueprints.json"
+        }
+      ]
+    },
+    {
+      "path": "calculate order shipping apply",
+      "summary": "Plan and execute the calculate order shipping reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "calculate_order_shipping",
+      "source_url": "https://developers.printify.com/openapi.json",
+      "examples": [
+        "pm printify calculate order shipping apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/shops/{shop_id}/orders/shipping.json"
+        }
+      ],
+      "risk": "calculates shipping costs for a prospective order without submitting it",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "cancel order apply",
+      "summary": "Plan and execute the cancel order reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "cancel_order",
+      "source_url": "https://developers.printify.com/openapi.json",
+      "flags": [
+        {
+          "name": "order_id",
+          "type": "string",
+          "summary": "Required order id record field.",
+          "maps_to": "record.order_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm printify cancel order apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/shops/{shop_id}/orders/{order_id}/cancel.json"
+        }
+      ],
+      "risk": "cancels an unpaid order",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create product apply",
+      "summary": "Plan and execute the create product reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_product",
+      "source_url": "https://developers.printify.com/openapi.json",
+      "flags": [
+        {
+          "name": "blueprint_id",
+          "type": "integer",
+          "summary": "Required blueprint id record field.",
+          "maps_to": "record.blueprint_id",
+          "required": true
+        },
+        {
+          "name": "print_provider_id",
+          "type": "integer",
+          "summary": "Required print provider id record field.",
+          "maps_to": "record.print_provider_id",
+          "required": true
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "summary": "Required title record field.",
+          "maps_to": "record.title",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm printify create product apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/shops/{shop_id}/products.json"
+        }
+      ],
+      "risk": "creates a product in the configured shop",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create webhook apply",
+      "summary": "Plan and execute the create webhook reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_webhook",
+      "source_url": "https://developers.printify.com/openapi.json",
+      "flags": [
+        {
+          "name": "topic",
+          "type": "string",
+          "summary": "Required topic record field.",
+          "maps_to": "record.topic",
+          "required": true
+        },
+        {
+          "name": "url",
+          "type": "string",
+          "summary": "Required url record field.",
+          "maps_to": "record.url",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm printify create webhook apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/shops/{shop_id}/webhooks.json"
+        }
+      ],
+      "risk": "creates a webhook subscription for the configured shop",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete product apply",
+      "summary": "Plan and execute the delete product reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_product",
+      "source_url": "https://developers.printify.com/openapi.json",
+      "flags": [
+        {
+          "name": "product_id",
+          "type": "string",
+          "summary": "Required product id record field.",
+          "maps_to": "record.product_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm printify delete product apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/shops/{shop_id}/products/{product_id}.json"
+        }
+      ],
+      "risk": "deletes a product from the configured shop",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete webhook apply",
+      "summary": "Plan and execute the delete webhook reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_webhook",
+      "source_url": "https://developers.printify.com/openapi.json",
+      "flags": [
+        {
+          "name": "host",
+          "type": "string",
+          "summary": "Required host record field.",
+          "maps_to": "record.host",
+          "required": true
+        },
+        {
+          "name": "webhook_id",
+          "type": "string",
+          "summary": "Required webhook id record field.",
+          "maps_to": "record.webhook_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm printify delete webhook apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/shops/{shop_id}/webhooks/{webhook_id}.json"
+        }
+      ],
+      "risk": "deletes a webhook subscription after host safeguard matching",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "disconnect shop apply",
+      "summary": "Plan and execute the disconnect shop reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "disconnect_shop",
+      "source_url": "https://developers.printify.com/openapi.json",
+      "examples": [
+        "pm printify disconnect shop apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/shops/{shop_id}/connection.json"
+        }
+      ],
+      "risk": "disconnects the configured shop from the Printify account",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "mark product publishing failed apply",
+      "summary": "Plan and execute the mark product publishing failed reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "mark_product_publishing_failed",
+      "source_url": "https://developers.printify.com/openapi.json",
+      "flags": [
+        {
+          "name": "product_id",
+          "type": "string",
+          "summary": "Required product id record field.",
+          "maps_to": "record.product_id",
+          "required": true
+        },
+        {
+          "name": "reason",
+          "type": "string",
+          "summary": "Required reason record field.",
+          "maps_to": "record.reason",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm printify mark product publishing failed apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/shops/{shop_id}/products/{product_id}/publishing_failed.json"
+        }
+      ],
+      "risk": "marks product publishing as failed",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "mark product publishing succeeded apply",
+      "summary": "Plan and execute the mark product publishing succeeded reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "mark_product_publishing_succeeded",
+      "source_url": "https://developers.printify.com/openapi.json",
+      "examples": [
+        "pm printify mark product publishing succeeded apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/shops/{shop_id}/products/{product_id}/publishing_succeeded.json"
+        }
+      ],
+      "risk": "marks product publishing as succeeded and stores an external handle",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "order detail list",
+      "summary": "Run the order detail ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "order_detail",
+      "source_url": "https://developers.printify.com/openapi.json",
+      "examples": [
+        "pm printify order detail list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/shops/{shop_id}/orders/{order_id}.json"
+        }
+      ]
+    },
+    {
+      "path": "orders list",
+      "summary": "Run the orders ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "orders",
+      "source_url": "https://developers.printify.com/openapi.json",
+      "examples": [
+        "pm printify orders list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/shops/{shop_id}/orders.json"
+        }
+      ]
+    },
+    {
+      "path": "print provider detail list",
+      "summary": "Run the print provider detail ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "print_provider_detail",
+      "source_url": "https://developers.printify.com/openapi.json",
+      "examples": [
+        "pm printify print provider detail list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/catalog/print_providers/{print_provider_id}.json"
+        }
+      ]
+    },
+    {
+      "path": "print providers list",
+      "summary": "Run the print providers ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "print_providers",
+      "source_url": "https://developers.printify.com/openapi.json",
+      "examples": [
+        "pm printify print providers list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/catalog/print_providers.json"
+        }
+      ]
+    },
+    {
+      "path": "product detail list",
+      "summary": "Run the product detail ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "product_detail",
+      "source_url": "https://developers.printify.com/openapi.json",
+      "examples": [
+        "pm printify product detail list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/shops/{shop_id}/products/{product_id}.json"
+        }
+      ]
+    },
+    {
+      "path": "product gpsr list",
+      "summary": "Run the product gpsr ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "product_gpsr",
+      "source_url": "https://developers.printify.com/openapi.json",
+      "examples": [
+        "pm printify product gpsr list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/shops/{shop_id}/products/{product_id}/gpsr.json"
+        }
+      ]
+    },
+    {
+      "path": "products list",
+      "summary": "Run the products ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "products",
+      "source_url": "https://developers.printify.com/openapi.json",
+      "examples": [
+        "pm printify products list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/shops/{shop_id}/products.json"
+        }
+      ]
+    },
+    {
+      "path": "publish product apply",
+      "summary": "Plan and execute the publish product reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "publish_product",
+      "source_url": "https://developers.printify.com/openapi.json",
+      "flags": [
+        {
+          "name": "product_id",
+          "type": "string",
+          "summary": "Required product id record field.",
+          "maps_to": "record.product_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm printify publish product apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/shops/{shop_id}/products/{product_id}/publish.json"
+        }
+      ],
+      "risk": "publishes a product to the connected sales channel",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "send order to production apply",
+      "summary": "Plan and execute the send order to production reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "send_order_to_production",
+      "source_url": "https://developers.printify.com/openapi.json",
+      "flags": [
+        {
+          "name": "order_id",
+          "type": "string",
+          "summary": "Required order id record field.",
+          "maps_to": "record.order_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm printify send order to production apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/shops/{shop_id}/orders/{order_id}/send_to_production.json"
+        }
+      ],
+      "risk": "sends an existing order to production",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "shipping profiles list",
+      "summary": "Run the shipping profiles ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "shipping_profiles",
+      "source_url": "https://developers.printify.com/openapi.json",
+      "examples": [
+        "pm printify shipping profiles list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/catalog/blueprints/{blueprint_id}/print_providers/{print_provider_id}/shipping.json"
+        }
+      ]
+    },
+    {
+      "path": "shops list",
+      "summary": "Run the shops ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "shops",
+      "source_url": "https://developers.printify.com/openapi.json",
+      "examples": [
+        "pm printify shops list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/shops.json"
+        }
+      ]
+    },
+    {
+      "path": "simulate webhook apply",
+      "summary": "Plan and execute the simulate webhook reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "simulate_webhook",
+      "source_url": "https://developers.printify.com/openapi.json",
+      "flags": [
+        {
+          "name": "webhook_id",
+          "type": "string",
+          "summary": "Required webhook id record field.",
+          "maps_to": "record.webhook_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm printify simulate webhook apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/shops/{shop_id}/webhooks/{webhook_id}/simulate"
+        }
+      ],
+      "risk": "sends a webhook simulation event for testing",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "submit express order apply",
+      "summary": "Plan and execute the submit express order reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "submit_express_order",
+      "source_url": "https://developers.printify.com/openapi.json",
+      "examples": [
+        "pm printify submit express order apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/shops/{shop_id}/orders/express.json"
+        }
+      ],
+      "risk": "submits a Printify Express order",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "submit order apply",
+      "summary": "Plan and execute the submit order reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "submit_order",
+      "source_url": "https://developers.printify.com/openapi.json",
+      "examples": [
+        "pm printify submit order apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/shops/{shop_id}/orders.json"
+        }
+      ],
+      "risk": "submits an order to Printify",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "unpublish product apply",
+      "summary": "Plan and execute the unpublish product reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "unpublish_product",
+      "source_url": "https://developers.printify.com/openapi.json",
+      "flags": [
+        {
+          "name": "product_id",
+          "type": "string",
+          "summary": "Required product id record field.",
+          "maps_to": "record.product_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm printify unpublish product apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/shops/{shop_id}/products/{product_id}/unpublish.json"
+        }
+      ],
+      "risk": "notifies Printify that a product has been unpublished",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update product apply",
+      "summary": "Plan and execute the update product reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_product",
+      "source_url": "https://developers.printify.com/openapi.json",
+      "flags": [
+        {
+          "name": "product_id",
+          "type": "string",
+          "summary": "Required product id record field.",
+          "maps_to": "record.product_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm printify update product apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v1/shops/{shop_id}/products/{product_id}.json"
+        }
+      ],
+      "risk": "updates an existing product in the configured shop",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update webhook apply",
+      "summary": "Plan and execute the update webhook reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_webhook",
+      "source_url": "https://developers.printify.com/openapi.json",
+      "flags": [
+        {
+          "name": "webhook_id",
+          "type": "string",
+          "summary": "Required webhook id record field.",
+          "maps_to": "record.webhook_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm printify update webhook apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v1/shops/{shop_id}/webhooks/{webhook_id}.json"
+        }
+      ],
+      "risk": "updates an existing webhook subscription",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "upload detail list",
+      "summary": "Run the upload detail ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "upload_detail",
+      "source_url": "https://developers.printify.com/openapi.json",
+      "examples": [
+        "pm printify upload detail list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/uploads/{image_id}.json"
+        }
+      ]
+    },
+    {
+      "path": "upload image apply",
+      "summary": "Plan and execute the upload image reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "upload_image",
+      "source_url": "https://developers.printify.com/openapi.json",
+      "flags": [
+        {
+          "name": "file_name",
+          "type": "string",
+          "summary": "Required file name record field.",
+          "maps_to": "record.file_name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm printify upload image apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/uploads/images.json"
+        }
+      ],
+      "risk": "uploads an image into the Printify media library",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "uploads list",
+      "summary": "Run the uploads ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "uploads",
+      "source_url": "https://developers.printify.com/openapi.json",
+      "examples": [
+        "pm printify uploads list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/uploads.json"
+        }
+      ]
+    },
+    {
+      "path": "v2 shipping economy list",
+      "summary": "Run the v2 shipping economy ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "v2_shipping_economy",
+      "source_url": "https://developers.printify.com/openapi.json",
+      "examples": [
+        "pm printify v2 shipping economy list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/catalog/blueprints/{blueprint_id}/print_providers/{print_provider_id}/shipping/economy.json"
+        }
+      ]
+    },
+    {
+      "path": "v2 shipping express list",
+      "summary": "Run the v2 shipping express ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "v2_shipping_express",
+      "source_url": "https://developers.printify.com/openapi.json",
+      "examples": [
+        "pm printify v2 shipping express list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/catalog/blueprints/{blueprint_id}/print_providers/{print_provider_id}/shipping/express.json"
+        }
+      ]
+    },
+    {
+      "path": "v2 shipping methods list",
+      "summary": "Run the v2 shipping methods ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "v2_shipping_methods",
+      "source_url": "https://developers.printify.com/openapi.json",
+      "examples": [
+        "pm printify v2 shipping methods list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/catalog/blueprints/{blueprint_id}/print_providers/{print_provider_id}/shipping.json"
+        }
+      ]
+    },
+    {
+      "path": "v2 shipping priority list",
+      "summary": "Run the v2 shipping priority ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "v2_shipping_priority",
+      "source_url": "https://developers.printify.com/openapi.json",
+      "examples": [
+        "pm printify v2 shipping priority list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/catalog/blueprints/{blueprint_id}/print_providers/{print_provider_id}/shipping/priority.json"
+        }
+      ]
+    },
+    {
+      "path": "v2 shipping standard list",
+      "summary": "Run the v2 shipping standard ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "v2_shipping_standard",
+      "source_url": "https://developers.printify.com/openapi.json",
+      "examples": [
+        "pm printify v2 shipping standard list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/catalog/blueprints/{blueprint_id}/print_providers/{print_provider_id}/shipping/standard.json"
+        }
+      ]
+    },
+    {
+      "path": "webhooks list",
+      "summary": "Run the webhooks ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "webhooks",
+      "source_url": "https://developers.printify.com/openapi.json",
+      "examples": [
+        "pm printify webhooks list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/shops/{shop_id}/webhooks.json"
+        }
+      ]
+    }
+  ]
+}

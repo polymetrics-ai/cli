@@ -1,0 +1,2371 @@
+{
+  "operations": [
+    {
+      "id": "fulcrum.get.api-v2-memberships-json",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/memberships.json",
+      "description": "/api/v2/memberships.json is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/memberships.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.api-v2-photos-json",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/photos.json",
+      "description": "/api/v2/photos.json is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/photos.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.post.api-v2-records-json",
+      "kind": "rest_write",
+      "summary": "POST /api/v2/records.json",
+      "description": "/api/v2/records.json is a mutation endpoint; this bundle has no reviewed write record schema, approval risk, or legacy write contract for that operation",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v2/records.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.api-v2-roles-json",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/roles.json",
+      "description": "/api/v2/roles.json is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/roles.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.api-v2-signatures-json",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/signatures.json",
+      "description": "/api/v2/signatures.json is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/signatures.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.api-v2-videos-json",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/videos.json",
+      "description": "/api/v2/videos.json is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/videos.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.api-v2-webhooks-json",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/webhooks.json",
+      "description": "/api/v2/webhooks.json is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/webhooks.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-attachments",
+      "kind": "rest_read",
+      "summary": "GET /v2/attachments",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/attachments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.post.v2-attachments",
+      "kind": "rest_write",
+      "summary": "POST /v2/attachments",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/attachments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.post.v2-attachments-copy-all",
+      "kind": "rest_write",
+      "summary": "POST /v2/attachments/copy_all",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/attachments/copy_all",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.post.v2-attachments-finalize",
+      "kind": "rest_write",
+      "summary": "POST /v2/attachments/finalize",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/attachments/finalize",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-attachments-attachment-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/attachments/{attachment_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/attachments/{attachment_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.delete.v2-attachments-attachment-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/attachments/{attachment_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/attachments/{attachment_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-audio-json",
+      "kind": "rest_read",
+      "summary": "GET /v2/audio.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/audio.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-audio-tracks-geojson",
+      "kind": "rest_read",
+      "summary": "GET /v2/audio/tracks.geojson",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/audio/tracks.geojson",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-audio-tracks-gpx",
+      "kind": "rest_read",
+      "summary": "GET /v2/audio/tracks.gpx",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/audio/tracks.gpx",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-audio-tracks-json",
+      "kind": "rest_read",
+      "summary": "GET /v2/audio/tracks.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/audio/tracks.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-audio-tracks-kml",
+      "kind": "rest_read",
+      "summary": "GET /v2/audio/tracks.kml",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/audio/tracks.kml",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.post.v2-audio-upload-json",
+      "kind": "rest_write",
+      "summary": "POST /v2/audio/upload.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/audio/upload.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-audio-audio-id-json",
+      "kind": "rest_read",
+      "summary": "GET /v2/audio/{audio_id}.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/audio/{audio_id}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-audio-audio-id-mp4",
+      "kind": "rest_read",
+      "summary": "GET /v2/audio/{audio_id}.mp4",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/audio/{audio_id}.mp4",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-audio-audio-id-track-geojson",
+      "kind": "rest_read",
+      "summary": "GET /v2/audio/{audio_id}/track.geojson",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/audio/{audio_id}/track.geojson",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-audio-audio-id-track-gpx",
+      "kind": "rest_read",
+      "summary": "GET /v2/audio/{audio_id}/track.gpx",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/audio/{audio_id}/track.gpx",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-audio-audio-id-track-json",
+      "kind": "rest_read",
+      "summary": "GET /v2/audio/{audio_id}/track.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/audio/{audio_id}/track.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-audio-audio-id-track-kml",
+      "kind": "rest_read",
+      "summary": "GET /v2/audio/{audio_id}/track.kml",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/audio/{audio_id}/track.kml",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-audit-logs-json",
+      "kind": "rest_read",
+      "summary": "GET /v2/audit_logs.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/audit_logs.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-audit-logs-audit-log-id-json",
+      "kind": "rest_read",
+      "summary": "GET /v2/audit_logs/{audit_log_id}.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/audit_logs/{audit_log_id}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-authorizations-json",
+      "kind": "rest_read",
+      "summary": "GET /v2/authorizations.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/authorizations.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.post.v2-authorizations-json",
+      "kind": "rest_write",
+      "summary": "POST /v2/authorizations.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/authorizations.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-authorizations-authorization-id-json",
+      "kind": "rest_read",
+      "summary": "GET /v2/authorizations/{authorization_id}.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/authorizations/{authorization_id}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.put.v2-authorizations-authorization-id-json",
+      "kind": "rest_write",
+      "summary": "PUT /v2/authorizations/{authorization_id}.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/authorizations/{authorization_id}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.delete.v2-authorizations-authorization-id-json",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/authorizations/{authorization_id}.json",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/authorizations/{authorization_id}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-batch-json",
+      "kind": "rest_read",
+      "summary": "GET /v2/batch.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/batch.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.post.v2-batch-json",
+      "kind": "rest_write",
+      "summary": "POST /v2/batch.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/batch.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-batch-batch-id-json",
+      "kind": "rest_read",
+      "summary": "GET /v2/batch/{batch_id}.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/batch/{batch_id}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.post.v2-batch-batch-id-operations-json",
+      "kind": "rest_write",
+      "summary": "POST /v2/batch/{batch_id}/operations.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/batch/{batch_id}/operations.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.post.v2-batch-batch-id-start-json",
+      "kind": "rest_write",
+      "summary": "POST /v2/batch/{batch_id}/start.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/batch/{batch_id}/start.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-changesets-json",
+      "kind": "rest_read",
+      "summary": "GET /v2/changesets.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/changesets.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.post.v2-changesets-json",
+      "kind": "rest_write",
+      "summary": "POST /v2/changesets.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/changesets.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-changesets-changeset-id-json",
+      "kind": "rest_read",
+      "summary": "GET /v2/changesets/{changeset_id}.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/changesets/{changeset_id}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.put.v2-changesets-changeset-id-json",
+      "kind": "rest_write",
+      "summary": "PUT /v2/changesets/{changeset_id}.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/changesets/{changeset_id}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.put.v2-changesets-changeset-id-close-json",
+      "kind": "rest_write",
+      "summary": "PUT /v2/changesets/{changeset_id}/close.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/changesets/{changeset_id}/close.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-choice-lists-json",
+      "kind": "rest_read",
+      "summary": "GET /v2/choice_lists.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/choice_lists.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.post.v2-choice-lists-json",
+      "kind": "rest_write",
+      "summary": "POST /v2/choice_lists.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/choice_lists.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-choice-lists-choice-list-id-json",
+      "kind": "rest_read",
+      "summary": "GET /v2/choice_lists/{choice_list_id}.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/choice_lists/{choice_list_id}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.put.v2-choice-lists-choice-list-id-json",
+      "kind": "rest_write",
+      "summary": "PUT /v2/choice_lists/{choice_list_id}.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/choice_lists/{choice_list_id}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.delete.v2-choice-lists-choice-list-id-json",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/choice_lists/{choice_list_id}.json",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/choice_lists/{choice_list_id}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-classification-sets-json",
+      "kind": "rest_read",
+      "summary": "GET /v2/classification_sets.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/classification_sets.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.post.v2-classification-sets-json",
+      "kind": "rest_write",
+      "summary": "POST /v2/classification_sets.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/classification_sets.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-classification-sets-classification-set-id-json",
+      "kind": "rest_read",
+      "summary": "GET /v2/classification_sets/{classification_set_id}.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/classification_sets/{classification_set_id}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.put.v2-classification-sets-classification-set-id-json",
+      "kind": "rest_write",
+      "summary": "PUT /v2/classification_sets/{classification_set_id}.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/classification_sets/{classification_set_id}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.delete.v2-classification-sets-classification-set-id-json",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/classification_sets/{classification_set_id}.json",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/classification_sets/{classification_set_id}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-forms-json",
+      "kind": "rest_read",
+      "summary": "GET /v2/forms.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/forms.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.post.v2-forms-json",
+      "kind": "rest_write",
+      "summary": "POST /v2/forms.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/forms.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-forms-form-id-json",
+      "kind": "rest_read",
+      "summary": "GET /v2/forms/{form_id}.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/forms/{form_id}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.put.v2-forms-form-id-json",
+      "kind": "rest_write",
+      "summary": "PUT /v2/forms/{form_id}.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/forms/{form_id}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.delete.v2-forms-form-id-json",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/forms/{form_id}.json",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/forms/{form_id}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-forms-form-id-history-json",
+      "kind": "rest_read",
+      "summary": "GET /v2/forms/{form_id}/history.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/forms/{form_id}/history.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-groups-json",
+      "kind": "rest_read",
+      "summary": "GET /v2/groups.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/groups.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.post.v2-groups-json",
+      "kind": "rest_write",
+      "summary": "POST /v2/groups.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/groups.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.post.v2-groups-change-permissions-json",
+      "kind": "rest_write",
+      "summary": "POST /v2/groups/change_permissions.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/groups/change_permissions.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-groups-group-id-json",
+      "kind": "rest_read",
+      "summary": "GET /v2/groups/{group_id}.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/groups/{group_id}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.put.v2-groups-group-id-json",
+      "kind": "rest_write",
+      "summary": "PUT /v2/groups/{group_id}.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/groups/{group_id}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.delete.v2-groups-group-id-json",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/groups/{group_id}.json",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/groups/{group_id}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-groups-group-id-resource-json",
+      "kind": "rest_read",
+      "summary": "GET /v2/groups/{group_id}/{resource}.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/groups/{group_id}/{resource}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-layers-json",
+      "kind": "rest_read",
+      "summary": "GET /v2/layers.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/layers.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.post.v2-layers-json",
+      "kind": "rest_write",
+      "summary": "POST /v2/layers.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/layers.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-layers-layer-id-json",
+      "kind": "rest_read",
+      "summary": "GET /v2/layers/{layer_id}.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/layers/{layer_id}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.put.v2-layers-layer-id-json",
+      "kind": "rest_write",
+      "summary": "PUT /v2/layers/{layer_id}.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/layers/{layer_id}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.delete.v2-layers-layer-id-json",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/layers/{layer_id}.json",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/layers/{layer_id}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-memberships-json",
+      "kind": "rest_read",
+      "summary": "GET /v2/memberships.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/memberships.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.post.v2-memberships-json",
+      "kind": "rest_write",
+      "summary": "POST /v2/memberships.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/memberships.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.post.v2-memberships-change-permissions-json",
+      "kind": "rest_write",
+      "summary": "POST /v2/memberships/change_permissions.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/memberships/change_permissions.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-memberships-membership-id-json",
+      "kind": "rest_read",
+      "summary": "GET /v2/memberships/{membership_id}.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/memberships/{membership_id}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.put.v2-memberships-membership-id-json",
+      "kind": "rest_write",
+      "summary": "PUT /v2/memberships/{membership_id}.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/memberships/{membership_id}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.delete.v2-memberships-membership-id-json",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/memberships/{membership_id}.json",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/memberships/{membership_id}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-permissions-json",
+      "kind": "rest_read",
+      "summary": "GET /v2/permissions.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/permissions.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-photos-json",
+      "kind": "rest_read",
+      "summary": "GET /v2/photos.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/photos.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.post.v2-photos-json",
+      "kind": "rest_write",
+      "summary": "POST /v2/photos.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/photos.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-photos-photo-id-jpg",
+      "kind": "rest_read",
+      "summary": "GET /v2/photos/{photo_id}.jpg",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/photos/{photo_id}.jpg",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-photos-photo-id-json",
+      "kind": "rest_read",
+      "summary": "GET /v2/photos/{photo_id}.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/photos/{photo_id}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-photos-photo-id-large-jpg",
+      "kind": "rest_read",
+      "summary": "GET /v2/photos/{photo_id}/large.jpg",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/photos/{photo_id}/large.jpg",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-photos-photo-id-large-json",
+      "kind": "rest_read",
+      "summary": "GET /v2/photos/{photo_id}/large.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/photos/{photo_id}/large.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-photos-photo-id-thumbnail-jpg",
+      "kind": "rest_read",
+      "summary": "GET /v2/photos/{photo_id}/thumbnail.jpg",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/photos/{photo_id}/thumbnail.jpg",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-photos-photo-id-thumbnail-json",
+      "kind": "rest_read",
+      "summary": "GET /v2/photos/{photo_id}/thumbnail.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/photos/{photo_id}/thumbnail.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-projects-json",
+      "kind": "rest_read",
+      "summary": "GET /v2/projects.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/projects.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.post.v2-projects-json",
+      "kind": "rest_write",
+      "summary": "POST /v2/projects.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/projects.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-projects-project-id-json",
+      "kind": "rest_read",
+      "summary": "GET /v2/projects/{project_id}.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/projects/{project_id}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.put.v2-projects-project-id-json",
+      "kind": "rest_write",
+      "summary": "PUT /v2/projects/{project_id}.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/projects/{project_id}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.delete.v2-projects-project-id-json",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/projects/{project_id}.json",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/projects/{project_id}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-query",
+      "kind": "rest_read",
+      "summary": "GET /v2/query",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/query",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.post.v2-query",
+      "kind": "rest_write",
+      "summary": "POST /v2/query",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/query",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-records-json",
+      "kind": "rest_read",
+      "summary": "GET /v2/records.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/records.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.post.v2-records-json",
+      "kind": "rest_write",
+      "summary": "POST /v2/records.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/records.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-records-history-json",
+      "kind": "rest_read",
+      "summary": "GET /v2/records/history.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/records/history.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-records-record-id-json",
+      "kind": "rest_read",
+      "summary": "GET /v2/records/{record_id}.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/records/{record_id}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.put.v2-records-record-id-json",
+      "kind": "rest_write",
+      "summary": "PUT /v2/records/{record_id}.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/records/{record_id}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.patch.v2-records-record-id-json",
+      "kind": "rest_write",
+      "summary": "PATCH /v2/records/{record_id}.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/v2/records/{record_id}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.delete.v2-records-record-id-json",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/records/{record_id}.json",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/records/{record_id}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-records-record-id-history-json",
+      "kind": "rest_read",
+      "summary": "GET /v2/records/{record_id}/history.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/records/{record_id}/history.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-report-templates-json",
+      "kind": "rest_read",
+      "summary": "GET /v2/report_templates.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/report_templates.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.post.v2-report-templates-json",
+      "kind": "rest_write",
+      "summary": "POST /v2/report_templates.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/report_templates.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-report-templates-id-json",
+      "kind": "rest_read",
+      "summary": "GET /v2/report_templates/{id}.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/report_templates/{id}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.put.v2-report-templates-id-json",
+      "kind": "rest_write",
+      "summary": "PUT /v2/report_templates/{id}.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/report_templates/{id}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.delete.v2-report-templates-id-json",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/report_templates/{id}.json",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/report_templates/{id}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.post.v2-reports-json",
+      "kind": "rest_write",
+      "summary": "POST /v2/reports.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/reports.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-reports-report-id-pdf",
+      "kind": "rest_read",
+      "summary": "GET /v2/reports/{report_id}.pdf",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/reports/{report_id}.pdf",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-roles-json",
+      "kind": "rest_read",
+      "summary": "GET /v2/roles.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/roles.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-signatures-json",
+      "kind": "rest_read",
+      "summary": "GET /v2/signatures.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/signatures.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.post.v2-signatures-json",
+      "kind": "rest_write",
+      "summary": "POST /v2/signatures.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/signatures.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-signatures-signature-id-json",
+      "kind": "rest_read",
+      "summary": "GET /v2/signatures/{signature_id}.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/signatures/{signature_id}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-signatures-signature-id-png",
+      "kind": "rest_read",
+      "summary": "GET /v2/signatures/{signature_id}.png",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/signatures/{signature_id}.png",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-signatures-signature-id-thumbnail-json",
+      "kind": "rest_read",
+      "summary": "GET /v2/signatures/{signature_id}/thumbnail.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/signatures/{signature_id}/thumbnail.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-signatures-signature-id-thumbnail-png",
+      "kind": "rest_read",
+      "summary": "GET /v2/signatures/{signature_id}/thumbnail.png",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/signatures/{signature_id}/thumbnail.png",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-sketches-json",
+      "kind": "rest_read",
+      "summary": "GET /v2/sketches.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/sketches.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.post.v2-sketches-json",
+      "kind": "rest_write",
+      "summary": "POST /v2/sketches.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/sketches.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-sketches-sketch-id-jpg",
+      "kind": "rest_read",
+      "summary": "GET /v2/sketches/{sketch_id}.jpg",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/sketches/{sketch_id}.jpg",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-sketches-sketch-id-json",
+      "kind": "rest_read",
+      "summary": "GET /v2/sketches/{sketch_id}.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/sketches/{sketch_id}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-sketches-sketch-id-large-jpg",
+      "kind": "rest_read",
+      "summary": "GET /v2/sketches/{sketch_id}/large.jpg",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/sketches/{sketch_id}/large.jpg",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-sketches-sketch-id-large-json",
+      "kind": "rest_read",
+      "summary": "GET /v2/sketches/{sketch_id}/large.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/sketches/{sketch_id}/large.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-sketches-sketch-id-thumbnail-jpg",
+      "kind": "rest_read",
+      "summary": "GET /v2/sketches/{sketch_id}/thumbnail.jpg",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/sketches/{sketch_id}/thumbnail.jpg",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-sketches-sketch-id-thumbnail-json",
+      "kind": "rest_read",
+      "summary": "GET /v2/sketches/{sketch_id}/thumbnail.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/sketches/{sketch_id}/thumbnail.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-users-json",
+      "kind": "rest_read",
+      "summary": "GET /v2/users.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/users.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-videos-json",
+      "kind": "rest_read",
+      "summary": "GET /v2/videos.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/videos.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-videos-tracks-geojson",
+      "kind": "rest_read",
+      "summary": "GET /v2/videos/tracks.geojson",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/videos/tracks.geojson",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-videos-tracks-gpx",
+      "kind": "rest_read",
+      "summary": "GET /v2/videos/tracks.gpx",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/videos/tracks.gpx",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-videos-tracks-kml",
+      "kind": "rest_read",
+      "summary": "GET /v2/videos/tracks.kml",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/videos/tracks.kml",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.post.v2-videos-upload-json",
+      "kind": "rest_write",
+      "summary": "POST /v2/videos/upload.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/videos/upload.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-videos-video-id-json",
+      "kind": "rest_read",
+      "summary": "GET /v2/videos/{video_id}.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/videos/{video_id}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-videos-video-id-mp4",
+      "kind": "rest_read",
+      "summary": "GET /v2/videos/{video_id}.mp4",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/videos/{video_id}.mp4",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-videos-video-id-medium-mp4",
+      "kind": "rest_read",
+      "summary": "GET /v2/videos/{video_id}/medium.mp4",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/videos/{video_id}/medium.mp4",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-videos-video-id-small-mp4",
+      "kind": "rest_read",
+      "summary": "GET /v2/videos/{video_id}/small.mp4",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/videos/{video_id}/small.mp4",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-videos-video-id-thumbnail-huge-jpg",
+      "kind": "rest_read",
+      "summary": "GET /v2/videos/{video_id}/thumbnail_huge.jpg",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/videos/{video_id}/thumbnail_huge.jpg",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-videos-video-id-thumbnail-huge-square-jpg",
+      "kind": "rest_read",
+      "summary": "GET /v2/videos/{video_id}/thumbnail_huge_square.jpg",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/videos/{video_id}/thumbnail_huge_square.jpg",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-videos-video-id-thumbnail-large-jpg",
+      "kind": "rest_read",
+      "summary": "GET /v2/videos/{video_id}/thumbnail_large.jpg",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/videos/{video_id}/thumbnail_large.jpg",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-videos-video-id-thumbnail-large-square-jpg",
+      "kind": "rest_read",
+      "summary": "GET /v2/videos/{video_id}/thumbnail_large_square.jpg",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/videos/{video_id}/thumbnail_large_square.jpg",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-videos-video-id-thumbnail-medium-jpg",
+      "kind": "rest_read",
+      "summary": "GET /v2/videos/{video_id}/thumbnail_medium.jpg",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/videos/{video_id}/thumbnail_medium.jpg",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-videos-video-id-thumbnail-medium-square-jpg",
+      "kind": "rest_read",
+      "summary": "GET /v2/videos/{video_id}/thumbnail_medium_square.jpg",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/videos/{video_id}/thumbnail_medium_square.jpg",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-videos-video-id-thumbnail-small-jpg",
+      "kind": "rest_read",
+      "summary": "GET /v2/videos/{video_id}/thumbnail_small.jpg",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/videos/{video_id}/thumbnail_small.jpg",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-videos-video-id-thumbnail-small-square-jpg",
+      "kind": "rest_read",
+      "summary": "GET /v2/videos/{video_id}/thumbnail_small_square.jpg",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/videos/{video_id}/thumbnail_small_square.jpg",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-videos-video-id-track-geojson",
+      "kind": "rest_read",
+      "summary": "GET /v2/videos/{video_id}/track.geojson",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/videos/{video_id}/track.geojson",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-videos-video-id-track-gpx",
+      "kind": "rest_read",
+      "summary": "GET /v2/videos/{video_id}/track.gpx",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/videos/{video_id}/track.gpx",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-videos-video-id-track-json",
+      "kind": "rest_read",
+      "summary": "GET /v2/videos/{video_id}/track.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/videos/{video_id}/track.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-videos-video-id-track-kml",
+      "kind": "rest_read",
+      "summary": "GET /v2/videos/{video_id}/track.kml",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/videos/{video_id}/track.kml",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-webhooks-json",
+      "kind": "rest_read",
+      "summary": "GET /v2/webhooks.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/webhooks.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.post.v2-webhooks-json",
+      "kind": "rest_write",
+      "summary": "POST /v2/webhooks.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/webhooks.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-webhooks-webhook-id-json",
+      "kind": "rest_read",
+      "summary": "GET /v2/webhooks/{webhook_id}.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/webhooks/{webhook_id}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.put.v2-webhooks-webhook-id-json",
+      "kind": "rest_write",
+      "summary": "PUT /v2/webhooks/{webhook_id}.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/webhooks/{webhook_id}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.delete.v2-webhooks-webhook-id-json",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/webhooks/{webhook_id}.json",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/webhooks/{webhook_id}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-workflows-json",
+      "kind": "rest_read",
+      "summary": "GET /v2/workflows.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/workflows.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.post.v2-workflows-json",
+      "kind": "rest_write",
+      "summary": "POST /v2/workflows.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/workflows.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.get.v2-workflows-workflow-id-json",
+      "kind": "rest_read",
+      "summary": "GET /v2/workflows/{workflow_id}.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/workflows/{workflow_id}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.put.v2-workflows-workflow-id-json",
+      "kind": "rest_write",
+      "summary": "PUT /v2/workflows/{workflow_id}.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/workflows/{workflow_id}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fulcrum.delete.v2-workflows-workflow-id-json",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/workflows/{workflow_id}.json",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/workflows/{workflow_id}.json",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

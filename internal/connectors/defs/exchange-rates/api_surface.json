@@ -1,14 +1,125 @@
 {
-  "api": "exchangeratesapi.io v1 (https://api.exchangeratesapi.io/v1)",
+  "api": "exchangeratesapi.io v1 (https://api.exchangeratesapi.io/v1); provider artifact version: v1",
   "docs": "https://exchangeratesapi.io/documentation/",
-  "reviewed_at": "2026-07-04",
-  "scope": "Pass B full-surface expansion: exchangeratesapi.io's full documented v1 surface is exactly 6 read-only GET endpoints (symbols, latest, historical /{date}, convert, timeseries, fluctuation) and no write/mutation endpoints of any kind (it is a pure public FX-rate data API). 4 of the 6 are now covered: latest (already migrated), plus convert/timeseries/fluctuation newly added this pass -- all 3 are single-object JSON responses expressible via records.single_object exactly like latest, requiring only new spec.json config keys for their required from/to/amount or start_date/end_date query parameters (no engine gap). The remaining 2 (historical /{date}, symbols) stay excluded for the same genuine engine gaps identified in the prior review -- re-confirmed, not re-derived: historical iteration has no declarative per-call-varying-path looping primitive, and symbols' code->string map does not fit records.keyed_object (which requires map VALUES to themselves be objects). See docs.md Known limits for both.",
+  "reviewed_at": "2026-08-09",
+  "operation_ledger_version": 2,
+  "scope": "Exact existing-surface evidence fallback: the preserved source inventory contains 6 official-survey operation entries, exactly matching the immutable count. Shared executable bindings for the same provider method/path are merged into one normalized endpoint. The cited official html_reference artifact is retained as the v2 provenance root; no operation was inferred from a documentation crawl. Prior source-surface scope: Pass B full-surface expansion: exchangeratesapi.io's full documented v1 surface is exactly 6 read-only GET endpoints (symbols, latest, historical /{date}, convert, timeseries, fluctuation) and no write/mutation endpoints of any kind (it is a pure public FX-rate data API). 4 of the 6 are now covered: latest (already migrated), plus convert/timeseries/fluctuation newly added this pass -- all 3 are single-object JSON responses expressible via records.single_object exactly like latest, requiring only new spec.json config keys for their required from/to/amount or start_date/end_date query parameters (no engine gap). The remaining 2 (historical /{date}, symbols) stay excluded for the same genuine engine gaps identified in the prior review -- re-confirmed, not re-derived: historical iteration has no declarative per-call-varying-path looping primitive, and symbols' code-\u003estring map does not fit records.keyed_object (which requires map VALUES to themselves be objects). See docs.md Known limits for both.",
+  "artifacts": [
+    {
+      "id": "exchange-rates-artifact-2026-08-09",
+      "url": "https://exchangeratesapi.io/documentation/",
+      "kind": "html_reference",
+      "version": "v1",
+      "retrieved_at": "2026-08-09",
+      "sha256": "c417dd40948ea3eab875a7ab5d098fc357c30a53f8e29fc41d930bcaaa71836f"
+    }
+  ],
   "endpoints": [
-    { "method": "GET", "path": "/latest", "covered_by": { "stream": "latest" } },
-    { "method": "GET", "path": "/{date}", "excluded": { "category": "out_of_scope", "reason": "date-by-date iteration over a start_date..end_date window within a single Read call has no declarative pagination/looping equivalent (not a body-token/page-number/offset shape, and fan_out's ids_from varies a discovered id list, not a computed date range); requires a StreamHook, forbidden in this JSON-only wave" } },
-    { "method": "GET", "path": "/symbols", "excluded": { "category": "out_of_scope", "reason": "the response is a {code: display_name} map that legacy explodes into one record per currency code; evaluated against the engine's records.keyed_object/key_field flatten (S4 engine mini-wave item 3) and confirmed NOT applicable -- recordsAtKeyed (read.go) requires every map value to itself decode as a JSON object and silently skips scalar values, so a code->string map would emit zero records. An ENGINE_GAP distinct from (narrower than) the one keyed_object already closes for appfigures' map-of-objects shape." } },
-    { "method": "GET", "path": "/convert", "covered_by": { "stream": "convert" } },
-    { "method": "GET", "path": "/timeseries", "covered_by": { "stream": "timeseries" } },
-    { "method": "GET", "path": "/fluctuation", "covered_by": { "stream": "fluctuation" } }
+    {
+      "method": "GET",
+      "path": "/convert",
+      "provenance": {
+        "artifact": "exchange-rates-artifact-2026-08-09",
+        "source_url": "https://exchangeratesapi.io/documentation/",
+        "source_kind": "html_reference",
+        "version": "v1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c417dd40948ea3eab875a7ab5d098fc357c30a53f8e29fc41d930bcaaa71836f",
+        "coordinate": "existing-complete-surface[GET /convert]"
+      },
+      "covered_by": {
+        "stream": "convert"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/fluctuation",
+      "provenance": {
+        "artifact": "exchange-rates-artifact-2026-08-09",
+        "source_url": "https://exchangeratesapi.io/documentation/",
+        "source_kind": "html_reference",
+        "version": "v1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c417dd40948ea3eab875a7ab5d098fc357c30a53f8e29fc41d930bcaaa71836f",
+        "coordinate": "existing-complete-surface[GET /fluctuation]"
+      },
+      "covered_by": {
+        "stream": "fluctuation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/latest",
+      "provenance": {
+        "artifact": "exchange-rates-artifact-2026-08-09",
+        "source_url": "https://exchangeratesapi.io/documentation/",
+        "source_kind": "html_reference",
+        "version": "v1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c417dd40948ea3eab875a7ab5d098fc357c30a53f8e29fc41d930bcaaa71836f",
+        "coordinate": "existing-complete-surface[GET /latest]"
+      },
+      "covered_by": {
+        "stream": "latest"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/symbols",
+      "provenance": {
+        "artifact": "exchange-rates-artifact-2026-08-09",
+        "source_url": "https://exchangeratesapi.io/documentation/",
+        "source_kind": "html_reference",
+        "version": "v1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c417dd40948ea3eab875a7ab5d098fc357c30a53f8e29fc41d930bcaaa71836f",
+        "coordinate": "existing-complete-surface[GET /symbols]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "the response is a {code: display_name} map that legacy explodes into one record per currency code; evaluated against the engine's records.keyed_object/key_field flatten (S4 engine mini-wave item 3) and confirmed NOT applicable -- recordsAtKeyed (read.go) requires every map value to itself decode as a JSON object and silently skips scalar values, so a code-\u003estring map would emit zero records. An ENGINE_GAP distinct from (narrower than) the one keyed_object already closes for appfigures' map-of-objects shape.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/timeseries",
+      "provenance": {
+        "artifact": "exchange-rates-artifact-2026-08-09",
+        "source_url": "https://exchangeratesapi.io/documentation/",
+        "source_kind": "html_reference",
+        "version": "v1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c417dd40948ea3eab875a7ab5d098fc357c30a53f8e29fc41d930bcaaa71836f",
+        "coordinate": "existing-complete-surface[GET /timeseries]"
+      },
+      "covered_by": {
+        "stream": "timeseries"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{date}",
+      "provenance": {
+        "artifact": "exchange-rates-artifact-2026-08-09",
+        "source_url": "https://exchangeratesapi.io/documentation/",
+        "source_kind": "html_reference",
+        "version": "v1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c417dd40948ea3eab875a7ab5d098fc357c30a53f8e29fc41d930bcaaa71836f",
+        "coordinate": "existing-complete-surface[GET /{date}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "date-by-date iteration over a start_date..end_date window within a single Read call has no declarative pagination/looping equivalent (not a body-token/page-number/offset shape, and fan_out's ids_from varies a discovered id list, not a computed date range); requires a StreamHook, forbidden in this JSON-only wave",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    }
   ]
 }

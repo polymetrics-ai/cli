@@ -1,0 +1,3874 @@
+{
+  "tagline": "Run RepairShopr's declared streams and reverse-ETL actions.",
+  "usage": "pm repairshopr \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "api get api v1 appointments",
+        "api get api v1 line-items",
+        "api get api v1 payments",
+        "api get api v1 users",
+        "api get appointment-types",
+        "api get appointment-types id",
+        "api get appointments",
+        "api get appointments id",
+        "api get callerid",
+        "api get canned-responses",
+        "api get canned-responses settings",
+        "api get contacts",
+        "api get contacts id",
+        "api get contracts",
+        "api get contracts id",
+        "api get customer-assets",
+        "api get customer-assets assets-by-contact contact-id",
+        "api get customer-assets chat-information-by-ids",
+        "api get customer-assets id",
+        "api get customer-assets id installed-applications",
+        "api get customer-assets id patches",
+        "api get customers",
+        "api get customers autocomplete",
+        "api get customers customer-id payment-profiles",
+        "api get customers customer-id payment-profiles id",
+        "api get customers customer-id phones",
+        "api get customers id",
+        "api get customers latest",
+        "api get estimates",
+        "api get estimates id",
+        "api get invoices",
+        "api get invoices id",
+        "api get invoices id ticket",
+        "api get items",
+        "api get leads",
+        "api get leads id",
+        "api get line-items",
+        "api get me",
+        "api get new-ticket-forms",
+        "api get new-ticket-forms id",
+        "api get payment-methods",
+        "api get payments",
+        "api get payments id",
+        "api get portal-users",
+        "api get products",
+        "api get products barcode",
+        "api get products categories",
+        "api get products id",
+        "api get products product-id product-serials",
+        "api get purchase-orders",
+        "api get purchase-orders id",
+        "api get rmm-alerts",
+        "api get rmm-alerts id",
+        "api get schedules",
+        "api get schedules id",
+        "api get search",
+        "api get settings",
+        "api get settings printing",
+        "api get settings tabs",
+        "api get ticket-blueprints",
+        "api get ticket-comments",
+        "api get ticket-timers",
+        "api get tickets",
+        "api get tickets id",
+        "api get tickets id comments",
+        "api get tickets settings",
+        "api get tickets ticket-id worksheet-results",
+        "api get tickets ticket-id worksheet-results id",
+        "api get timelogs",
+        "api get timelogs last",
+        "api get user-devices id",
+        "api get users",
+        "api get users id",
+        "api get vendors",
+        "api get vendors id",
+        "api get wiki-pages",
+        "api get wiki-pages id",
+        "assets list",
+        "customers list",
+        "estimates list",
+        "invoices list",
+        "tickets list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "api delete appointment-types id",
+        "api delete appointments id",
+        "api delete canned-responses id",
+        "api delete contacts id",
+        "api delete contracts id",
+        "api delete customers customer-id payment-profiles id",
+        "api delete customers customer-id phones id",
+        "api delete customers id",
+        "api delete estimates id",
+        "api delete estimates id line-items line-item-id",
+        "api delete invoices id",
+        "api delete invoices id line-items line-item-id",
+        "api delete portal-users id",
+        "api delete products id delete-image",
+        "api delete rmm-alerts id",
+        "api delete schedules id",
+        "api delete tickets id",
+        "api delete tickets ticket-id worksheet-results id",
+        "api delete wiki-pages id",
+        "api patch canned-responses id",
+        "api post api v1 customers",
+        "api post appointment-types",
+        "api post appointments",
+        "api post canned-responses",
+        "api post contacts",
+        "api post contracts",
+        "api post customer-assets",
+        "api post customers",
+        "api post customers customer-id payment-profiles",
+        "api post customers customer-id phones",
+        "api post estimates",
+        "api post estimates id convert-to-invoice",
+        "api post estimates id email",
+        "api post estimates id line-items",
+        "api post estimates id print",
+        "api post invoices",
+        "api post invoices id email",
+        "api post invoices id line-items",
+        "api post invoices id print",
+        "api post leads",
+        "api post new-ticket-forms id process-form",
+        "api post otp-login",
+        "api post payments",
+        "api post portal-users",
+        "api post portal-users create-invitation",
+        "api post products",
+        "api post products id add-images",
+        "api post products product-id product-serials",
+        "api post products product-id product-serials attach-to-line-item",
+        "api post purchase-orders",
+        "api post purchase-orders id attachments",
+        "api post purchase-orders id create-po-line-item",
+        "api post purchase-orders id receive",
+        "api post rmm public-scripts asset-id schedule",
+        "api post rmm-alerts",
+        "api post rmm-alerts id mute",
+        "api post schedules",
+        "api post schedules id add-line-item",
+        "api post schedules id remove-line-item",
+        "api post ticket-blueprints id apply",
+        "api post tickets",
+        "api post tickets id add-line-item",
+        "api post tickets id attach-file-url",
+        "api post tickets id charge-timer-entry",
+        "api post tickets id comment",
+        "api post tickets id delete-attachment",
+        "api post tickets id delete-timer-entry",
+        "api post tickets id print",
+        "api post tickets id remove-line-item",
+        "api post tickets id timer-entry",
+        "api post tickets ticket-id worksheet-results",
+        "api post user-devices",
+        "api post vendors",
+        "api post wiki-pages",
+        "api put appointment-types id",
+        "api put appointments id",
+        "api put contacts id",
+        "api put contracts id",
+        "api put customer-assets id",
+        "api put customers customer-id payment-profiles id",
+        "api put customers customer-id phones id",
+        "api put customers id",
+        "api put estimates id",
+        "api put estimates id line-items line-item-id",
+        "api put invoices id",
+        "api put invoices id line-items line-item-id",
+        "api put leads id",
+        "api put portal-users id",
+        "api put products id",
+        "api put products id location-quantities",
+        "api put products product-id product-serials id",
+        "api put purchase-orders id",
+        "api put schedules id",
+        "api put schedules id line-items schedule-line-item-id",
+        "api put tickets id",
+        "api put tickets id update-line-item",
+        "api put tickets id update-timer-entry",
+        "api put tickets ticket-id worksheet-results id",
+        "api put timelogs",
+        "api put user-devices id",
+        "api put vendors id",
+        "api put wiki-pages id"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "api delete appointment-types id",
+      "summary": "Documented DELETE /appointment_types/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api delete appointment-types id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/appointment_types/{id}"
+        }
+      ],
+      "operation": "repairshopr.delete.appointment-types-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete appointments id",
+      "summary": "Documented DELETE /appointments/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api delete appointments id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/appointments/{id}"
+        }
+      ],
+      "operation": "repairshopr.delete.appointments-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete canned-responses id",
+      "summary": "Documented DELETE /canned_responses/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api delete canned-responses id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/canned_responses/{id}"
+        }
+      ],
+      "operation": "repairshopr.delete.canned-responses-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete contacts id",
+      "summary": "Documented DELETE /contacts/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api delete contacts id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/contacts/{id}"
+        }
+      ],
+      "operation": "repairshopr.delete.contacts-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete contracts id",
+      "summary": "Documented DELETE /contracts/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api delete contracts id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/contracts/{id}"
+        }
+      ],
+      "operation": "repairshopr.delete.contracts-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete customers customer-id payment-profiles id",
+      "summary": "Documented DELETE /customers/{customer_id}/payment_profiles/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api delete customers customer-id payment-profiles id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/customers/{customer_id}/payment_profiles/{id}"
+        }
+      ],
+      "operation": "repairshopr.delete.customers-customer-id-payment-profiles-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete customers customer-id phones id",
+      "summary": "Documented DELETE /customers/{customer_id}/phones/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api delete customers customer-id phones id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/customers/{customer_id}/phones/{id}"
+        }
+      ],
+      "operation": "repairshopr.delete.customers-customer-id-phones-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete customers id",
+      "summary": "Documented DELETE /customers/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api delete customers id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/customers/{id}"
+        }
+      ],
+      "operation": "repairshopr.delete.customers-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete estimates id",
+      "summary": "Documented DELETE /estimates/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api delete estimates id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/estimates/{id}"
+        }
+      ],
+      "operation": "repairshopr.delete.estimates-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete estimates id line-items line-item-id",
+      "summary": "Documented DELETE /estimates/{id}/line_items/{line_item_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api delete estimates id line-items line-item-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/estimates/{id}/line_items/{line_item_id}"
+        }
+      ],
+      "operation": "repairshopr.delete.estimates-id-line-items-line-item-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete invoices id",
+      "summary": "Documented DELETE /invoices/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api delete invoices id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/invoices/{id}"
+        }
+      ],
+      "operation": "repairshopr.delete.invoices-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete invoices id line-items line-item-id",
+      "summary": "Documented DELETE /invoices/{id}/line_items/{line_item_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api delete invoices id line-items line-item-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/invoices/{id}/line_items/{line_item_id}"
+        }
+      ],
+      "operation": "repairshopr.delete.invoices-id-line-items-line-item-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete portal-users id",
+      "summary": "Documented DELETE /portal_users/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api delete portal-users id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/portal_users/{id}"
+        }
+      ],
+      "operation": "repairshopr.delete.portal-users-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete products id delete-image",
+      "summary": "Documented DELETE /products/{id}/delete_image (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api delete products id delete-image --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/products/{id}/delete_image"
+        }
+      ],
+      "operation": "repairshopr.delete.products-id-delete-image",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete rmm-alerts id",
+      "summary": "Documented DELETE /rmm_alerts/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api delete rmm-alerts id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/rmm_alerts/{id}"
+        }
+      ],
+      "operation": "repairshopr.delete.rmm-alerts-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete schedules id",
+      "summary": "Documented DELETE /schedules/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api delete schedules id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/schedules/{id}"
+        }
+      ],
+      "operation": "repairshopr.delete.schedules-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete tickets id",
+      "summary": "Documented DELETE /tickets/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api delete tickets id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/tickets/{id}"
+        }
+      ],
+      "operation": "repairshopr.delete.tickets-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete tickets ticket-id worksheet-results id",
+      "summary": "Documented DELETE /tickets/{ticket_id}/worksheet_results/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api delete tickets ticket-id worksheet-results id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/tickets/{ticket_id}/worksheet_results/{id}"
+        }
+      ],
+      "operation": "repairshopr.delete.tickets-ticket-id-worksheet-results-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete wiki-pages id",
+      "summary": "Documented DELETE /wiki_pages/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api delete wiki-pages id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/wiki_pages/{id}"
+        }
+      ],
+      "operation": "repairshopr.delete.wiki-pages-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api get api v1 appointments",
+      "summary": "Documented GET /api/v1/appointments (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api get api v1 appointments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/appointments"
+        }
+      ],
+      "operation": "repairshopr.get.api-v1-appointments",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v1 line-items",
+      "summary": "Documented GET /api/v1/line_items (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api get api v1 line-items --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/line_items"
+        }
+      ],
+      "operation": "repairshopr.get.api-v1-line-items",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v1 payments",
+      "summary": "Documented GET /api/v1/payments (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api get api v1 payments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/payments"
+        }
+      ],
+      "operation": "repairshopr.get.api-v1-payments",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v1 users",
+      "summary": "Documented GET /api/v1/users (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api get api v1 users --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/users"
+        }
+      ],
+      "operation": "repairshopr.get.api-v1-users",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get appointment-types",
+      "summary": "Documented GET /appointment_types (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api get appointment-types --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/appointment_types"
+        }
+      ],
+      "operation": "repairshopr.get.appointment-types",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get appointment-types id",
+      "summary": "Documented GET /appointment_types/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api get appointment-types id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/appointment_types/{id}"
+        }
+      ],
+      "operation": "repairshopr.get.appointment-types-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get appointments",
+      "summary": "Documented GET /appointments (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api get appointments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/appointments"
+        }
+      ],
+      "operation": "repairshopr.get.appointments",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get appointments id",
+      "summary": "Documented GET /appointments/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api get appointments id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/appointments/{id}"
+        }
+      ],
+      "operation": "repairshopr.get.appointments-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get callerid",
+      "summary": "Documented GET /callerid (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api get callerid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/callerid"
+        }
+      ],
+      "operation": "repairshopr.get.callerid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get canned-responses",
+      "summary": "Documented GET /canned_responses (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api get canned-responses --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/canned_responses"
+        }
+      ],
+      "operation": "repairshopr.get.canned-responses",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get canned-responses settings",
+      "summary": "Documented GET /canned_responses/settings (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api get canned-responses settings --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/canned_responses/settings"
+        }
+      ],
+      "operation": "repairshopr.get.canned-responses-settings",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get contacts",
+      "summary": "Documented GET /contacts (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api get contacts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/contacts"
+        }
+      ],
+      "operation": "repairshopr.get.contacts",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get contacts id",
+      "summary": "Documented GET /contacts/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api get contacts id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/contacts/{id}"
+        }
+      ],
+      "operation": "repairshopr.get.contacts-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get contracts",
+      "summary": "Documented GET /contracts (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api get contracts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/contracts"
+        }
+      ],
+      "operation": "repairshopr.get.contracts",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get contracts id",
+      "summary": "Documented GET /contracts/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api get contracts id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/contracts/{id}"
+        }
+      ],
+      "operation": "repairshopr.get.contracts-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get customer-assets",
+      "summary": "Documented GET /customer_assets (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api get customer-assets --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customer_assets"
+        }
+      ],
+      "operation": "repairshopr.get.customer-assets",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get customer-assets assets-by-contact contact-id",
+      "summary": "Documented GET /customer_assets/assets_by_contact/{contact_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api get customer-assets assets-by-contact contact-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customer_assets/assets_by_contact/{contact_id}"
+        }
+      ],
+      "operation": "repairshopr.get.customer-assets-assets-by-contact-contact-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get customer-assets chat-information-by-ids",
+      "summary": "Documented GET /customer_assets/chat_information_by_ids (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api get customer-assets chat-information-by-ids --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customer_assets/chat_information_by_ids"
+        }
+      ],
+      "operation": "repairshopr.get.customer-assets-chat-information-by-ids",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get customer-assets id",
+      "summary": "Documented GET /customer_assets/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api get customer-assets id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customer_assets/{id}"
+        }
+      ],
+      "operation": "repairshopr.get.customer-assets-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get customer-assets id installed-applications",
+      "summary": "Documented GET /customer_assets/{id}/installed_applications (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api get customer-assets id installed-applications --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customer_assets/{id}/installed_applications"
+        }
+      ],
+      "operation": "repairshopr.get.customer-assets-id-installed-applications",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get customer-assets id patches",
+      "summary": "Documented GET /customer_assets/{id}/patches (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api get customer-assets id patches --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customer_assets/{id}/patches"
+        }
+      ],
+      "operation": "repairshopr.get.customer-assets-id-patches",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get customers",
+      "summary": "Documented GET /customers (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api get customers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customers"
+        }
+      ],
+      "operation": "repairshopr.get.customers",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get customers autocomplete",
+      "summary": "Documented GET /customers/autocomplete (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api get customers autocomplete --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customers/autocomplete"
+        }
+      ],
+      "operation": "repairshopr.get.customers-autocomplete",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get customers customer-id payment-profiles",
+      "summary": "Documented GET /customers/{customer_id}/payment_profiles (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api get customers customer-id payment-profiles --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customers/{customer_id}/payment_profiles"
+        }
+      ],
+      "operation": "repairshopr.get.customers-customer-id-payment-profiles",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get customers customer-id payment-profiles id",
+      "summary": "Documented GET /customers/{customer_id}/payment_profiles/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api get customers customer-id payment-profiles id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customers/{customer_id}/payment_profiles/{id}"
+        }
+      ],
+      "operation": "repairshopr.get.customers-customer-id-payment-profiles-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get customers customer-id phones",
+      "summary": "Documented GET /customers/{customer_id}/phones (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api get customers customer-id phones --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customers/{customer_id}/phones"
+        }
+      ],
+      "operation": "repairshopr.get.customers-customer-id-phones",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get customers id",
+      "summary": "Documented GET /customers/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api get customers id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customers/{id}"
+        }
+      ],
+      "operation": "repairshopr.get.customers-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get customers latest",
+      "summary": "Documented GET /customers/latest (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api get customers latest --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customers/latest"
+        }
+      ],
+      "operation": "repairshopr.get.customers-latest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get estimates",
+      "summary": "Documented GET /estimates (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api get estimates --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/estimates"
+        }
+      ],
+      "operation": "repairshopr.get.estimates",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get estimates id",
+      "summary": "Documented GET /estimates/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api get estimates id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/estimates/{id}"
+        }
+      ],
+      "operation": "repairshopr.get.estimates-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get invoices",
+      "summary": "Documented GET /invoices (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api get invoices --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/invoices"
+        }
+      ],
+      "operation": "repairshopr.get.invoices",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get invoices id",
+      "summary": "Documented GET /invoices/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api get invoices id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/invoices/{id}"
+        }
+      ],
+      "operation": "repairshopr.get.invoices-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get invoices id ticket",
+      "summary": "Documented GET /invoices/{id}/ticket (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api get invoices id ticket --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/invoices/{id}/ticket"
+        }
+      ],
+      "operation": "repairshopr.get.invoices-id-ticket",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get items",
+      "summary": "Documented GET /items (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api get items --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/items"
+        }
+      ],
+      "operation": "repairshopr.get.items",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get leads",
+      "summary": "Documented GET /leads (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api get leads --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/leads"
+        }
+      ],
+      "operation": "repairshopr.get.leads",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get leads id",
+      "summary": "Documented GET /leads/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api get leads id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/leads/{id}"
+        }
+      ],
+      "operation": "repairshopr.get.leads-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get line-items",
+      "summary": "Documented GET /line_items (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api get line-items --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/line_items"
+        }
+      ],
+      "operation": "repairshopr.get.line-items",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get me",
+      "summary": "Documented GET /me (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api get me --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/me"
+        }
+      ],
+      "operation": "repairshopr.get.me",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get new-ticket-forms",
+      "summary": "Documented GET /new_ticket_forms (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api get new-ticket-forms --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/new_ticket_forms"
+        }
+      ],
+      "operation": "repairshopr.get.new-ticket-forms",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get new-ticket-forms id",
+      "summary": "Documented GET /new_ticket_forms/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api get new-ticket-forms id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/new_ticket_forms/{id}"
+        }
+      ],
+      "operation": "repairshopr.get.new-ticket-forms-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get payment-methods",
+      "summary": "Documented GET /payment_methods (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api get payment-methods --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/payment_methods"
+        }
+      ],
+      "operation": "repairshopr.get.payment-methods",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get payments",
+      "summary": "Documented GET /payments (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api get payments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/payments"
+        }
+      ],
+      "operation": "repairshopr.get.payments",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get payments id",
+      "summary": "Documented GET /payments/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api get payments id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/payments/{id}"
+        }
+      ],
+      "operation": "repairshopr.get.payments-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get portal-users",
+      "summary": "Documented GET /portal_users (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api get portal-users --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/portal_users"
+        }
+      ],
+      "operation": "repairshopr.get.portal-users",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get products",
+      "summary": "Documented GET /products (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api get products --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/products"
+        }
+      ],
+      "operation": "repairshopr.get.products",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get products barcode",
+      "summary": "Documented GET /products/barcode (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api get products barcode --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/products/barcode"
+        }
+      ],
+      "operation": "repairshopr.get.products-barcode",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get products categories",
+      "summary": "Documented GET /products/categories (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api get products categories --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/products/categories"
+        }
+      ],
+      "operation": "repairshopr.get.products-categories",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get products id",
+      "summary": "Documented GET /products/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api get products id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/products/{id}"
+        }
+      ],
+      "operation": "repairshopr.get.products-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get products product-id product-serials",
+      "summary": "Documented GET /products/{product_id}/product_serials (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api get products product-id product-serials --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/products/{product_id}/product_serials"
+        }
+      ],
+      "operation": "repairshopr.get.products-product-id-product-serials",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get purchase-orders",
+      "summary": "Documented GET /purchase_orders (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api get purchase-orders --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/purchase_orders"
+        }
+      ],
+      "operation": "repairshopr.get.purchase-orders",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get purchase-orders id",
+      "summary": "Documented GET /purchase_orders/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api get purchase-orders id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/purchase_orders/{id}"
+        }
+      ],
+      "operation": "repairshopr.get.purchase-orders-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get rmm-alerts",
+      "summary": "Documented GET /rmm_alerts (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api get rmm-alerts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rmm_alerts"
+        }
+      ],
+      "operation": "repairshopr.get.rmm-alerts",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get rmm-alerts id",
+      "summary": "Documented GET /rmm_alerts/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api get rmm-alerts id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rmm_alerts/{id}"
+        }
+      ],
+      "operation": "repairshopr.get.rmm-alerts-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get schedules",
+      "summary": "Documented GET /schedules (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api get schedules --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/schedules"
+        }
+      ],
+      "operation": "repairshopr.get.schedules",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get schedules id",
+      "summary": "Documented GET /schedules/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api get schedules id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/schedules/{id}"
+        }
+      ],
+      "operation": "repairshopr.get.schedules-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get search",
+      "summary": "Documented GET /search (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api get search --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/search"
+        }
+      ],
+      "operation": "repairshopr.get.search",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get settings",
+      "summary": "Documented GET /settings (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api get settings --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/settings"
+        }
+      ],
+      "operation": "repairshopr.get.settings",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get settings printing",
+      "summary": "Documented GET /settings/printing (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api get settings printing --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/settings/printing"
+        }
+      ],
+      "operation": "repairshopr.get.settings-printing",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get settings tabs",
+      "summary": "Documented GET /settings/tabs (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api get settings tabs --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/settings/tabs"
+        }
+      ],
+      "operation": "repairshopr.get.settings-tabs",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get ticket-blueprints",
+      "summary": "Documented GET /ticket_blueprints (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api get ticket-blueprints --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/ticket_blueprints"
+        }
+      ],
+      "operation": "repairshopr.get.ticket-blueprints",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get ticket-comments",
+      "summary": "Documented GET /ticket_comments (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api get ticket-comments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/ticket_comments"
+        }
+      ],
+      "operation": "repairshopr.get.ticket-comments",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get ticket-timers",
+      "summary": "Documented GET /ticket_timers (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api get ticket-timers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/ticket_timers"
+        }
+      ],
+      "operation": "repairshopr.get.ticket-timers",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get tickets",
+      "summary": "Documented GET /tickets (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api get tickets --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tickets"
+        }
+      ],
+      "operation": "repairshopr.get.tickets",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get tickets id",
+      "summary": "Documented GET /tickets/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api get tickets id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tickets/{id}"
+        }
+      ],
+      "operation": "repairshopr.get.tickets-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get tickets id comments",
+      "summary": "Documented GET /tickets/{id}/comments (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api get tickets id comments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tickets/{id}/comments"
+        }
+      ],
+      "operation": "repairshopr.get.tickets-id-comments",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get tickets settings",
+      "summary": "Documented GET /tickets/settings (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api get tickets settings --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tickets/settings"
+        }
+      ],
+      "operation": "repairshopr.get.tickets-settings",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get tickets ticket-id worksheet-results",
+      "summary": "Documented GET /tickets/{ticket_id}/worksheet_results (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api get tickets ticket-id worksheet-results --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tickets/{ticket_id}/worksheet_results"
+        }
+      ],
+      "operation": "repairshopr.get.tickets-ticket-id-worksheet-results",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get tickets ticket-id worksheet-results id",
+      "summary": "Documented GET /tickets/{ticket_id}/worksheet_results/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api get tickets ticket-id worksheet-results id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tickets/{ticket_id}/worksheet_results/{id}"
+        }
+      ],
+      "operation": "repairshopr.get.tickets-ticket-id-worksheet-results-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get timelogs",
+      "summary": "Documented GET /timelogs (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api get timelogs --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/timelogs"
+        }
+      ],
+      "operation": "repairshopr.get.timelogs",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get timelogs last",
+      "summary": "Documented GET /timelogs/last (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api get timelogs last --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/timelogs/last"
+        }
+      ],
+      "operation": "repairshopr.get.timelogs-last",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get user-devices id",
+      "summary": "Documented GET /user_devices/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api get user-devices id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/user_devices/{id}"
+        }
+      ],
+      "operation": "repairshopr.get.user-devices-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get users",
+      "summary": "Documented GET /users (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api get users --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users"
+        }
+      ],
+      "operation": "repairshopr.get.users",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get users id",
+      "summary": "Documented GET /users/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api get users id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users/{id}"
+        }
+      ],
+      "operation": "repairshopr.get.users-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get vendors",
+      "summary": "Documented GET /vendors (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api get vendors --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/vendors"
+        }
+      ],
+      "operation": "repairshopr.get.vendors",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get vendors id",
+      "summary": "Documented GET /vendors/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api get vendors id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/vendors/{id}"
+        }
+      ],
+      "operation": "repairshopr.get.vendors-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get wiki-pages",
+      "summary": "Documented GET /wiki_pages (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api get wiki-pages --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/wiki_pages"
+        }
+      ],
+      "operation": "repairshopr.get.wiki-pages",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get wiki-pages id",
+      "summary": "Documented GET /wiki_pages/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api get wiki-pages id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/wiki_pages/{id}"
+        }
+      ],
+      "operation": "repairshopr.get.wiki-pages-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api patch canned-responses id",
+      "summary": "Documented PATCH /canned_responses/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api patch canned-responses id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/canned_responses/{id}"
+        }
+      ],
+      "operation": "repairshopr.patch.canned-responses-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api v1 customers",
+      "summary": "Documented POST /api/v1/customers (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api post api v1 customers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/customers"
+        }
+      ],
+      "operation": "repairshopr.post.api-v1-customers",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post appointment-types",
+      "summary": "Documented POST /appointment_types (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api post appointment-types --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/appointment_types"
+        }
+      ],
+      "operation": "repairshopr.post.appointment-types",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post appointments",
+      "summary": "Documented POST /appointments (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api post appointments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/appointments"
+        }
+      ],
+      "operation": "repairshopr.post.appointments",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post canned-responses",
+      "summary": "Documented POST /canned_responses (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api post canned-responses --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/canned_responses"
+        }
+      ],
+      "operation": "repairshopr.post.canned-responses",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post contacts",
+      "summary": "Documented POST /contacts (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api post contacts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/contacts"
+        }
+      ],
+      "operation": "repairshopr.post.contacts",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post contracts",
+      "summary": "Documented POST /contracts (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api post contracts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/contracts"
+        }
+      ],
+      "operation": "repairshopr.post.contracts",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post customer-assets",
+      "summary": "Documented POST /customer_assets (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api post customer-assets --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/customer_assets"
+        }
+      ],
+      "operation": "repairshopr.post.customer-assets",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post customers",
+      "summary": "Documented POST /customers (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api post customers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/customers"
+        }
+      ],
+      "operation": "repairshopr.post.customers",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post customers customer-id payment-profiles",
+      "summary": "Documented POST /customers/{customer_id}/payment_profiles (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api post customers customer-id payment-profiles --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/customers/{customer_id}/payment_profiles"
+        }
+      ],
+      "operation": "repairshopr.post.customers-customer-id-payment-profiles",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post customers customer-id phones",
+      "summary": "Documented POST /customers/{customer_id}/phones (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api post customers customer-id phones --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/customers/{customer_id}/phones"
+        }
+      ],
+      "operation": "repairshopr.post.customers-customer-id-phones",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post estimates",
+      "summary": "Documented POST /estimates (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api post estimates --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/estimates"
+        }
+      ],
+      "operation": "repairshopr.post.estimates",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post estimates id convert-to-invoice",
+      "summary": "Documented POST /estimates/{id}/convert_to_invoice (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api post estimates id convert-to-invoice --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/estimates/{id}/convert_to_invoice"
+        }
+      ],
+      "operation": "repairshopr.post.estimates-id-convert-to-invoice",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post estimates id email",
+      "summary": "Documented POST /estimates/{id}/email (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api post estimates id email --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/estimates/{id}/email"
+        }
+      ],
+      "operation": "repairshopr.post.estimates-id-email",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post estimates id line-items",
+      "summary": "Documented POST /estimates/{id}/line_items (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api post estimates id line-items --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/estimates/{id}/line_items"
+        }
+      ],
+      "operation": "repairshopr.post.estimates-id-line-items",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post estimates id print",
+      "summary": "Documented POST /estimates/{id}/print (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api post estimates id print --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/estimates/{id}/print"
+        }
+      ],
+      "operation": "repairshopr.post.estimates-id-print",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post invoices",
+      "summary": "Documented POST /invoices (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api post invoices --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/invoices"
+        }
+      ],
+      "operation": "repairshopr.post.invoices",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post invoices id email",
+      "summary": "Documented POST /invoices/{id}/email (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api post invoices id email --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/invoices/{id}/email"
+        }
+      ],
+      "operation": "repairshopr.post.invoices-id-email",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post invoices id line-items",
+      "summary": "Documented POST /invoices/{id}/line_items (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api post invoices id line-items --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/invoices/{id}/line_items"
+        }
+      ],
+      "operation": "repairshopr.post.invoices-id-line-items",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post invoices id print",
+      "summary": "Documented POST /invoices/{id}/print (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api post invoices id print --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/invoices/{id}/print"
+        }
+      ],
+      "operation": "repairshopr.post.invoices-id-print",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post leads",
+      "summary": "Documented POST /leads (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api post leads --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/leads"
+        }
+      ],
+      "operation": "repairshopr.post.leads",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post new-ticket-forms id process-form",
+      "summary": "Documented POST /new_ticket_forms/{id}/process_form (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api post new-ticket-forms id process-form --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/new_ticket_forms/{id}/process_form"
+        }
+      ],
+      "operation": "repairshopr.post.new-ticket-forms-id-process-form",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post otp-login",
+      "summary": "Documented POST /otp_login (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api post otp-login --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/otp_login"
+        }
+      ],
+      "operation": "repairshopr.post.otp-login",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post payments",
+      "summary": "Documented POST /payments (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api post payments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/payments"
+        }
+      ],
+      "operation": "repairshopr.post.payments",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post portal-users",
+      "summary": "Documented POST /portal_users (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api post portal-users --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/portal_users"
+        }
+      ],
+      "operation": "repairshopr.post.portal-users",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post portal-users create-invitation",
+      "summary": "Documented POST /portal_users/create_invitation (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api post portal-users create-invitation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/portal_users/create_invitation"
+        }
+      ],
+      "operation": "repairshopr.post.portal-users-create-invitation",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post products",
+      "summary": "Documented POST /products (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api post products --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/products"
+        }
+      ],
+      "operation": "repairshopr.post.products",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post products id add-images",
+      "summary": "Documented POST /products/{id}/add_images (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api post products id add-images --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/products/{id}/add_images"
+        }
+      ],
+      "operation": "repairshopr.post.products-id-add-images",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post products product-id product-serials",
+      "summary": "Documented POST /products/{product_id}/product_serials (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api post products product-id product-serials --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/products/{product_id}/product_serials"
+        }
+      ],
+      "operation": "repairshopr.post.products-product-id-product-serials",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post products product-id product-serials attach-to-line-item",
+      "summary": "Documented POST /products/{product_id}/product_serials/attach_to_line_item (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api post products product-id product-serials attach-to-line-item --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/products/{product_id}/product_serials/attach_to_line_item"
+        }
+      ],
+      "operation": "repairshopr.post.products-product-id-product-serials-attach-to-line-item",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post purchase-orders",
+      "summary": "Documented POST /purchase_orders (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api post purchase-orders --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/purchase_orders"
+        }
+      ],
+      "operation": "repairshopr.post.purchase-orders",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post purchase-orders id attachments",
+      "summary": "Documented POST /purchase_orders/{id}/attachments (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api post purchase-orders id attachments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/purchase_orders/{id}/attachments"
+        }
+      ],
+      "operation": "repairshopr.post.purchase-orders-id-attachments",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post purchase-orders id create-po-line-item",
+      "summary": "Documented POST /purchase_orders/{id}/create_po_line_item (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api post purchase-orders id create-po-line-item --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/purchase_orders/{id}/create_po_line_item"
+        }
+      ],
+      "operation": "repairshopr.post.purchase-orders-id-create-po-line-item",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post purchase-orders id receive",
+      "summary": "Documented POST /purchase_orders/{id}/receive (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api post purchase-orders id receive --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/purchase_orders/{id}/receive"
+        }
+      ],
+      "operation": "repairshopr.post.purchase-orders-id-receive",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post rmm public-scripts asset-id schedule",
+      "summary": "Documented POST /rmm/public_scripts/{asset_id}/schedule (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api post rmm public-scripts asset-id schedule --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rmm/public_scripts/{asset_id}/schedule"
+        }
+      ],
+      "operation": "repairshopr.post.rmm-public-scripts-asset-id-schedule",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post rmm-alerts",
+      "summary": "Documented POST /rmm_alerts (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api post rmm-alerts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rmm_alerts"
+        }
+      ],
+      "operation": "repairshopr.post.rmm-alerts",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post rmm-alerts id mute",
+      "summary": "Documented POST /rmm_alerts/{id}/mute (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api post rmm-alerts id mute --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rmm_alerts/{id}/mute"
+        }
+      ],
+      "operation": "repairshopr.post.rmm-alerts-id-mute",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post schedules",
+      "summary": "Documented POST /schedules (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api post schedules --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/schedules"
+        }
+      ],
+      "operation": "repairshopr.post.schedules",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post schedules id add-line-item",
+      "summary": "Documented POST /schedules/{id}/add_line_item (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api post schedules id add-line-item --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/schedules/{id}/add_line_item"
+        }
+      ],
+      "operation": "repairshopr.post.schedules-id-add-line-item",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post schedules id remove-line-item",
+      "summary": "Documented POST /schedules/{id}/remove_line_item (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api post schedules id remove-line-item --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/schedules/{id}/remove_line_item"
+        }
+      ],
+      "operation": "repairshopr.post.schedules-id-remove-line-item",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post ticket-blueprints id apply",
+      "summary": "Documented POST /ticket_blueprints/{id}/apply (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api post ticket-blueprints id apply --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/ticket_blueprints/{id}/apply"
+        }
+      ],
+      "operation": "repairshopr.post.ticket-blueprints-id-apply",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post tickets",
+      "summary": "Documented POST /tickets (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api post tickets --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/tickets"
+        }
+      ],
+      "operation": "repairshopr.post.tickets",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post tickets id add-line-item",
+      "summary": "Documented POST /tickets/{id}/add_line_item (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api post tickets id add-line-item --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/tickets/{id}/add_line_item"
+        }
+      ],
+      "operation": "repairshopr.post.tickets-id-add-line-item",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post tickets id attach-file-url",
+      "summary": "Documented POST /tickets/{id}/attach_file_url (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api post tickets id attach-file-url --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/tickets/{id}/attach_file_url"
+        }
+      ],
+      "operation": "repairshopr.post.tickets-id-attach-file-url",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post tickets id charge-timer-entry",
+      "summary": "Documented POST /tickets/{id}/charge_timer_entry (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api post tickets id charge-timer-entry --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/tickets/{id}/charge_timer_entry"
+        }
+      ],
+      "operation": "repairshopr.post.tickets-id-charge-timer-entry",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post tickets id comment",
+      "summary": "Documented POST /tickets/{id}/comment (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api post tickets id comment --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/tickets/{id}/comment"
+        }
+      ],
+      "operation": "repairshopr.post.tickets-id-comment",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post tickets id delete-attachment",
+      "summary": "Documented POST /tickets/{id}/delete_attachment (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api post tickets id delete-attachment --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/tickets/{id}/delete_attachment"
+        }
+      ],
+      "operation": "repairshopr.post.tickets-id-delete-attachment",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post tickets id delete-timer-entry",
+      "summary": "Documented POST /tickets/{id}/delete_timer_entry (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api post tickets id delete-timer-entry --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/tickets/{id}/delete_timer_entry"
+        }
+      ],
+      "operation": "repairshopr.post.tickets-id-delete-timer-entry",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post tickets id print",
+      "summary": "Documented POST /tickets/{id}/print (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api post tickets id print --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/tickets/{id}/print"
+        }
+      ],
+      "operation": "repairshopr.post.tickets-id-print",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post tickets id remove-line-item",
+      "summary": "Documented POST /tickets/{id}/remove_line_item (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api post tickets id remove-line-item --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/tickets/{id}/remove_line_item"
+        }
+      ],
+      "operation": "repairshopr.post.tickets-id-remove-line-item",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post tickets id timer-entry",
+      "summary": "Documented POST /tickets/{id}/timer_entry (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api post tickets id timer-entry --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/tickets/{id}/timer_entry"
+        }
+      ],
+      "operation": "repairshopr.post.tickets-id-timer-entry",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post tickets ticket-id worksheet-results",
+      "summary": "Documented POST /tickets/{ticket_id}/worksheet_results (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api post tickets ticket-id worksheet-results --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/tickets/{ticket_id}/worksheet_results"
+        }
+      ],
+      "operation": "repairshopr.post.tickets-ticket-id-worksheet-results",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post user-devices",
+      "summary": "Documented POST /user_devices (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api post user-devices --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/user_devices"
+        }
+      ],
+      "operation": "repairshopr.post.user-devices",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post vendors",
+      "summary": "Documented POST /vendors (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api post vendors --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/vendors"
+        }
+      ],
+      "operation": "repairshopr.post.vendors",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post wiki-pages",
+      "summary": "Documented POST /wiki_pages (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api post wiki-pages --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/wiki_pages"
+        }
+      ],
+      "operation": "repairshopr.post.wiki-pages",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put appointment-types id",
+      "summary": "Documented PUT /appointment_types/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api put appointment-types id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/appointment_types/{id}"
+        }
+      ],
+      "operation": "repairshopr.put.appointment-types-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put appointments id",
+      "summary": "Documented PUT /appointments/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api put appointments id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/appointments/{id}"
+        }
+      ],
+      "operation": "repairshopr.put.appointments-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put contacts id",
+      "summary": "Documented PUT /contacts/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api put contacts id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/contacts/{id}"
+        }
+      ],
+      "operation": "repairshopr.put.contacts-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put contracts id",
+      "summary": "Documented PUT /contracts/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api put contracts id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/contracts/{id}"
+        }
+      ],
+      "operation": "repairshopr.put.contracts-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put customer-assets id",
+      "summary": "Documented PUT /customer_assets/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api put customer-assets id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/customer_assets/{id}"
+        }
+      ],
+      "operation": "repairshopr.put.customer-assets-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put customers customer-id payment-profiles id",
+      "summary": "Documented PUT /customers/{customer_id}/payment_profiles/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api put customers customer-id payment-profiles id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/customers/{customer_id}/payment_profiles/{id}"
+        }
+      ],
+      "operation": "repairshopr.put.customers-customer-id-payment-profiles-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put customers customer-id phones id",
+      "summary": "Documented PUT /customers/{customer_id}/phones/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api put customers customer-id phones id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/customers/{customer_id}/phones/{id}"
+        }
+      ],
+      "operation": "repairshopr.put.customers-customer-id-phones-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put customers id",
+      "summary": "Documented PUT /customers/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api put customers id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/customers/{id}"
+        }
+      ],
+      "operation": "repairshopr.put.customers-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put estimates id",
+      "summary": "Documented PUT /estimates/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api put estimates id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/estimates/{id}"
+        }
+      ],
+      "operation": "repairshopr.put.estimates-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put estimates id line-items line-item-id",
+      "summary": "Documented PUT /estimates/{id}/line_items/{line_item_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api put estimates id line-items line-item-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/estimates/{id}/line_items/{line_item_id}"
+        }
+      ],
+      "operation": "repairshopr.put.estimates-id-line-items-line-item-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put invoices id",
+      "summary": "Documented PUT /invoices/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api put invoices id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/invoices/{id}"
+        }
+      ],
+      "operation": "repairshopr.put.invoices-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put invoices id line-items line-item-id",
+      "summary": "Documented PUT /invoices/{id}/line_items/{line_item_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api put invoices id line-items line-item-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/invoices/{id}/line_items/{line_item_id}"
+        }
+      ],
+      "operation": "repairshopr.put.invoices-id-line-items-line-item-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put leads id",
+      "summary": "Documented PUT /leads/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api put leads id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/leads/{id}"
+        }
+      ],
+      "operation": "repairshopr.put.leads-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put portal-users id",
+      "summary": "Documented PUT /portal_users/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api put portal-users id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/portal_users/{id}"
+        }
+      ],
+      "operation": "repairshopr.put.portal-users-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put products id",
+      "summary": "Documented PUT /products/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api put products id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/products/{id}"
+        }
+      ],
+      "operation": "repairshopr.put.products-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put products id location-quantities",
+      "summary": "Documented PUT /products/{id}/location_quantities (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api put products id location-quantities --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/products/{id}/location_quantities"
+        }
+      ],
+      "operation": "repairshopr.put.products-id-location-quantities",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put products product-id product-serials id",
+      "summary": "Documented PUT /products/{product_id}/product_serials/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api put products product-id product-serials id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/products/{product_id}/product_serials/{id}"
+        }
+      ],
+      "operation": "repairshopr.put.products-product-id-product-serials-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put purchase-orders id",
+      "summary": "Documented PUT /purchase_orders/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api put purchase-orders id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/purchase_orders/{id}"
+        }
+      ],
+      "operation": "repairshopr.put.purchase-orders-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put schedules id",
+      "summary": "Documented PUT /schedules/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api put schedules id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/schedules/{id}"
+        }
+      ],
+      "operation": "repairshopr.put.schedules-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put schedules id line-items schedule-line-item-id",
+      "summary": "Documented PUT /schedules/{id}/line_items/{schedule_line_item_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api put schedules id line-items schedule-line-item-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/schedules/{id}/line_items/{schedule_line_item_id}"
+        }
+      ],
+      "operation": "repairshopr.put.schedules-id-line-items-schedule-line-item-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put tickets id",
+      "summary": "Documented PUT /tickets/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api put tickets id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/tickets/{id}"
+        }
+      ],
+      "operation": "repairshopr.put.tickets-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put tickets id update-line-item",
+      "summary": "Documented PUT /tickets/{id}/update_line_item (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api put tickets id update-line-item --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/tickets/{id}/update_line_item"
+        }
+      ],
+      "operation": "repairshopr.put.tickets-id-update-line-item",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put tickets id update-timer-entry",
+      "summary": "Documented PUT /tickets/{id}/update_timer_entry (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api put tickets id update-timer-entry --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/tickets/{id}/update_timer_entry"
+        }
+      ],
+      "operation": "repairshopr.put.tickets-id-update-timer-entry",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put tickets ticket-id worksheet-results id",
+      "summary": "Documented PUT /tickets/{ticket_id}/worksheet_results/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api put tickets ticket-id worksheet-results id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/tickets/{ticket_id}/worksheet_results/{id}"
+        }
+      ],
+      "operation": "repairshopr.put.tickets-ticket-id-worksheet-results-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put timelogs",
+      "summary": "Documented PUT /timelogs (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api put timelogs --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/timelogs"
+        }
+      ],
+      "operation": "repairshopr.put.timelogs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put user-devices id",
+      "summary": "Documented PUT /user_devices/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api put user-devices id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/user_devices/{id}"
+        }
+      ],
+      "operation": "repairshopr.put.user-devices-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put vendors id",
+      "summary": "Documented PUT /vendors/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api put vendors id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/vendors/{id}"
+        }
+      ],
+      "operation": "repairshopr.put.vendors-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put wiki-pages id",
+      "summary": "Documented PUT /wiki_pages/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr api put wiki-pages id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/wiki_pages/{id}"
+        }
+      ],
+      "operation": "repairshopr.put.wiki-pages-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "assets list",
+      "summary": "Run the assets ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "assets",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr assets list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/customer_assets"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "customers list",
+      "summary": "Run the customers ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "customers",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr customers list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/customers"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "estimates list",
+      "summary": "Run the estimates ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "estimates",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr estimates list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/estimates"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "invoices list",
+      "summary": "Run the invoices ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "invoices",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr invoices list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/invoices"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "tickets list",
+      "summary": "Run the tickets ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tickets",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "examples": [
+        "pm repairshopr tickets list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/tickets"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    }
+  ]
+}

@@ -1,0 +1,1137 @@
+{
+  "operations": [
+    {
+      "id": "elasticemail.post.campaigns-automation-name-trigger",
+      "kind": "rest_write",
+      "summary": "POST /campaigns/automation/{name}/trigger",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/campaigns/automation/{name}/trigger",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "elasticemail.get.campaigns-name",
+      "kind": "rest_read",
+      "summary": "GET /campaigns/{name}",
+      "description": "single-campaign detail; identical record shape to the campaigns list stream's per-item object, already covered by that stream",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/campaigns/{name}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "elasticemail.post.contacts-delete",
+      "kind": "rest_write",
+      "summary": "POST /contacts/delete",
+      "description": "bulk multi-contact delete-by-email-list over the same collection DELETE /contacts/{email} already covers per-record; this dialect expresses the per-record mutation shape via delete_contact, not a bulk batch endpoint",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/contacts/delete",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "elasticemail.post.contacts-export",
+      "kind": "rest_write",
+      "summary": "POST /contacts/export",
+      "description": "asynchronous bulk contact export job kickoff, not a synchronous read/write record operation",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/contacts/export",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "elasticemail.get.contacts-export-id-status",
+      "kind": "rest_read",
+      "summary": "GET /contacts/export/{id}/status",
+      "description": "polls the status of an asynchronous export job this bundle does not kick off; not a syncable object stream",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/contacts/export/{id}/status",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "elasticemail.post.contacts-import",
+      "kind": "rest_write",
+      "summary": "POST /contacts/import",
+      "description": "asynchronous bulk-file contact import job (submit a file, poll for completion), not a synchronous single-record write",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/contacts/import",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "elasticemail.get.contacts-email",
+      "kind": "rest_read",
+      "summary": "GET /contacts/{email}",
+      "description": "single-contact detail; identical record shape to the contacts list stream's per-item object, already covered by that stream",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/contacts/{email}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "elasticemail.get.domains-domain",
+      "kind": "rest_read",
+      "summary": "GET /domains/{domain}",
+      "description": "single-domain detail; identical record shape to the domains list stream's per-item object, already covered by that stream",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/domains/{domain}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "elasticemail.put.domains-domain",
+      "kind": "rest_write",
+      "summary": "PUT /domains/{domain}",
+      "description": "mutates DNS-verification-dependent domain settings (tracking type, VERP, custom bounce domain) that require the domain's DNS records already be correctly configured externally; a mismatched write silently fails DNS validation rather than erroring cleanly, and is narrower breadth-vs-cost triage than create/delete this pass",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/domains/{domain}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "elasticemail.get.domains-domain-restricted",
+      "kind": "rest_read",
+      "summary": "GET /domains/{domain}/restricted",
+      "description": "returns domain-restriction/compliance flags for a single domain, not an independently syncable object",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/domains/{domain}/restricted",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "elasticemail.put.domains-domain-verification",
+      "kind": "rest_write",
+      "summary": "PUT /domains/{domain}/verification",
+      "description": "triggers DNS re-verification of a domain's SPF/DKIM/DMARC/MX records against externally-configured DNS state; a caller-issued re-check with no data payload of its own, out of scope this pass",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/domains/{domain}/verification",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "elasticemail.patch.domains-email-default",
+      "kind": "rest_write",
+      "summary": "PATCH /domains/{email}/default",
+      "description": "sets the default sending domain for a specific email/subaccount identity; a narrow account-configuration toggle, out of scope this pass",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/domains/{email}/default",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "elasticemail.post.emails",
+      "kind": "rest_write",
+      "summary": "POST /emails",
+      "description": "one-shot transactional/marketing email-send action; outside this connector's contact/campaign/list data-management scope, not a syncable resource mutation",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/emails",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "elasticemail.post.emails-mergefile",
+      "kind": "rest_write",
+      "summary": "POST /emails/mergefile",
+      "description": "multipart mail-merge send with an uploaded recipient file as the request body, not a JSON record write",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/emails/mergefile",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "elasticemail.post.emails-transactional",
+      "kind": "rest_write",
+      "summary": "POST /emails/transactional",
+      "description": "one-shot transactional email-send action; same out-of-scope reasoning as POST /emails",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/emails/transactional",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "elasticemail.get.emails-msgid-view",
+      "kind": "rest_read",
+      "summary": "GET /emails/{msgid}/view",
+      "description": "renders a single sent email's rendered HTML content for viewing; not a syncable object record",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/emails/{msgid}/view",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "elasticemail.get.emails-transactionid-status",
+      "kind": "rest_read",
+      "summary": "GET /emails/{transactionid}/status",
+      "description": "delivery-status lookup for a single previously sent email; not modeled since the send action itself is out of scope",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/emails/{transactionid}/status",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "elasticemail.get.events",
+      "kind": "rest_read",
+      "summary": "GET /events",
+      "description": "raw per-recipient event-log stream (sent/opened/clicked/bounced timestamps); a large, high-volume analytics feed distinct from this connector's contact/campaign/list configuration-data scope, breadth-vs-cost triage this pass",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/events",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "elasticemail.get.events-channels-export-id-status",
+      "kind": "rest_read",
+      "summary": "GET /events/channels/export/{id}/status",
+      "description": "polls the status of an asynchronous per-channel export job this bundle does not kick off; not a syncable object stream",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/events/channels/export/{id}/status",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "elasticemail.get.events-channels-name",
+      "kind": "rest_read",
+      "summary": "GET /events/channels/{name}",
+      "description": "per-channel event-log feed; part of the excluded events log feed",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/events/channels/{name}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "elasticemail.post.events-channels-name-export",
+      "kind": "rest_write",
+      "summary": "POST /events/channels/{name}/export",
+      "description": "asynchronous per-channel bulk event-log export job kickoff, not a synchronous read/write record operation",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/events/channels/{name}/export",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "elasticemail.post.events-export",
+      "kind": "rest_write",
+      "summary": "POST /events/export",
+      "description": "asynchronous bulk event-log export job kickoff, not a synchronous read/write record operation",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/events/export",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "elasticemail.get.events-export-id-status",
+      "kind": "rest_read",
+      "summary": "GET /events/export/{id}/status",
+      "description": "polls the status of an asynchronous export job this bundle does not kick off; not a syncable object stream",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/events/export/{id}/status",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "elasticemail.get.events-transactionid",
+      "kind": "rest_read",
+      "summary": "GET /events/{transactionid}",
+      "description": "single-transaction event detail; part of the excluded events log feed",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/events/{transactionid}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "elasticemail.post.files",
+      "kind": "rest_write",
+      "summary": "POST /files",
+      "description": "multipart file upload (the file's raw bytes as the request body), not a JSON record write this dialect's body_type dialect (json/form/none) can express",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/files",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "elasticemail.get.files-name",
+      "kind": "rest_read",
+      "summary": "GET /files/{name}",
+      "description": "downloads the raw file bytes themselves, not a JSON-shaped record",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/files/{name}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "elasticemail.delete.files-name",
+      "kind": "rest_write",
+      "summary": "DELETE /files/{name}",
+      "description": "file deletion write deferred this pass; the files stream already surfaces every file's metadata, narrower breadth-vs-cost triage",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/files/{name}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "elasticemail.get.files-name-info",
+      "kind": "rest_read",
+      "summary": "GET /files/{name}/info",
+      "description": "single-file metadata detail; identical record shape to the files list stream's per-item object, already covered by that stream",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/files/{name}/info",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "elasticemail.put.inboundroute-order",
+      "kind": "rest_write",
+      "summary": "PUT /inboundroute/order",
+      "description": "reorders the full set of inbound routes by submitting a complete ordered id list in one call; a whole-collection reorder operation this dialect's per-record write shape does not model, narrower breadth-vs-cost triage this pass",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/inboundroute/order",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "elasticemail.get.inboundroute-id",
+      "kind": "rest_read",
+      "summary": "GET /inboundroute/{id}",
+      "description": "single-route detail; identical record shape to the inbound_routes list stream's per-item object, already covered by that stream",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/inboundroute/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "elasticemail.get.lists-listname-contacts",
+      "kind": "rest_read",
+      "summary": "GET /lists/{listname}/contacts",
+      "description": "contacts scoped to one list; same record shape as the contacts stream (a per-list filter), not a distinct resource this dialect models as a second stream",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/lists/{listname}/contacts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "elasticemail.get.lists-name",
+      "kind": "rest_read",
+      "summary": "GET /lists/{name}",
+      "description": "single-list detail; identical record shape to the lists list stream's per-item object, already covered by that stream",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/lists/{name}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "elasticemail.post.lists-name-contacts-remove",
+      "kind": "rest_write",
+      "summary": "POST /lists/{name}/contacts/remove",
+      "description": "bulk multi-contact removal from a list by email list; add_list_contacts covers the corresponding add-side mutation, the remove side is deferred as narrower breadth-vs-cost triage this pass",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/lists/{name}/contacts/remove",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "elasticemail.get.security-apikeys",
+      "kind": "rest_read",
+      "summary": "GET /security/apikeys",
+      "description": "enumerates the account's own API credential metadata; a security-credential-management resource, not a business-data stream",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/security/apikeys",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "elasticemail.post.security-apikeys",
+      "kind": "rest_write",
+      "summary": "POST /security/apikeys",
+      "description": "the create response returns the newly issued raw API key value itself — routing live secret material through a declarative write/fixture/record path is a credential-exfiltration risk this connector's scope excludes",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/security/apikeys",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "elasticemail.get.security-apikeys-name",
+      "kind": "rest_read",
+      "summary": "GET /security/apikeys/{name}",
+      "description": "single API-key metadata detail; same security-credential-management concern as the list endpoint",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/security/apikeys/{name}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "elasticemail.put.security-apikeys-name",
+      "kind": "rest_write",
+      "summary": "PUT /security/apikeys/{name}",
+      "description": "mutates an existing API key's access level/IP restriction; a security-credential-management action outside this connector's scope",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/security/apikeys/{name}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "elasticemail.delete.security-apikeys-name",
+      "kind": "rest_write",
+      "summary": "DELETE /security/apikeys/{name}",
+      "description": "revokes an API key, potentially the very credential a caller depends on; an irreversible security action outside this connector's scope",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/security/apikeys/{name}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "elasticemail.get.security-smtp",
+      "kind": "rest_read",
+      "summary": "GET /security/smtp",
+      "description": "enumerates the account's own SMTP credential metadata; a security-credential-management resource, not a business-data stream",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/security/smtp",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "elasticemail.post.security-smtp",
+      "kind": "rest_write",
+      "summary": "POST /security/smtp",
+      "description": "the create response returns the newly issued raw SMTP password itself — the same credential-material concern as security/apikeys POST",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/security/smtp",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "elasticemail.get.security-smtp-name",
+      "kind": "rest_read",
+      "summary": "GET /security/smtp/{name}",
+      "description": "single SMTP-credential metadata detail; same security-credential-management concern as the list endpoint",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/security/smtp/{name}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "elasticemail.put.security-smtp-name",
+      "kind": "rest_write",
+      "summary": "PUT /security/smtp/{name}",
+      "description": "mutates an existing SMTP credential's access restrictions; a security-credential-management action outside this connector's scope",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/security/smtp/{name}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "elasticemail.delete.security-smtp-name",
+      "kind": "rest_write",
+      "summary": "DELETE /security/smtp/{name}",
+      "description": "revokes an SMTP credential, potentially the very credential a caller's own outbound mail relay depends on; an irreversible security action outside this connector's scope",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/security/smtp/{name}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "elasticemail.get.segments-name",
+      "kind": "rest_read",
+      "summary": "GET /segments/{name}",
+      "description": "single-segment detail; identical record shape to the segments list stream's per-item object, already covered by that stream",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/segments/{name}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "elasticemail.get.statistics",
+      "kind": "rest_read",
+      "summary": "GET /statistics",
+      "description": "returns one account-wide cumulative-aggregate object for a date range, not a syncable per-record list",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/statistics",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "elasticemail.get.statistics-campaigns-name",
+      "kind": "rest_read",
+      "summary": "GET /statistics/campaigns/{name}",
+      "description": "single-campaign statistics detail; identical record shape to the statistics_campaigns list stream's per-item object, already covered by that stream",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/statistics/campaigns/{name}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "elasticemail.get.statistics-channels-name",
+      "kind": "rest_read",
+      "summary": "GET /statistics/channels/{name}",
+      "description": "single-channel statistics detail; identical record shape to the statistics_channels list stream's per-item object, already covered by that stream",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/statistics/channels/{name}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "elasticemail.post.subaccounts",
+      "kind": "rest_write",
+      "summary": "POST /subaccounts",
+      "description": "provisions a brand-new billing sub-account under the caller's own account, including its initial password; an account-provisioning admin action outside per-record data mutation scope",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/subaccounts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "elasticemail.get.subaccounts-email",
+      "kind": "rest_read",
+      "summary": "GET /subaccounts/{email}",
+      "description": "single-subaccount detail; identical record shape to the sub_accounts list stream's per-item object, already covered by that stream",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/subaccounts/{email}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "elasticemail.delete.subaccounts-email",
+      "kind": "rest_write",
+      "summary": "DELETE /subaccounts/{email}",
+      "description": "permanently removes a billing sub-account and all of its own contacts/campaigns/data; an irreversible account-level admin action",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/subaccounts/{email}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "elasticemail.get.subaccounts-email-apikey",
+      "kind": "rest_read",
+      "summary": "GET /subaccounts/{email}/apikey",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/subaccounts/{email}/apikey",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "elasticemail.patch.subaccounts-email-credits",
+      "kind": "rest_write",
+      "summary": "PATCH /subaccounts/{email}/credits",
+      "description": "adjusts a sub-account's billable email-sending credit balance; a billing/financial mutation outside this connector's data-management scope",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/subaccounts/{email}/credits",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "elasticemail.put.subaccounts-email-settings-email",
+      "kind": "rest_write",
+      "summary": "PUT /subaccounts/{email}/settings/email",
+      "description": "changes a sub-account's sending/tracking configuration on the caller's behalf; account-administration scope, out of scope this pass",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/subaccounts/{email}/settings/email",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "elasticemail.post.suppressions-bounces",
+      "kind": "rest_write",
+      "summary": "POST /suppressions/bounces",
+      "description": "manually adds an address to the bounce suppression list ahead of any real bounce event; an operator override this pass defers",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/suppressions/bounces",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "elasticemail.post.suppressions-bounces-import",
+      "kind": "rest_write",
+      "summary": "POST /suppressions/bounces/import",
+      "description": "asynchronous bulk-file bounce-suppression import job, not a synchronous single-record write",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/suppressions/bounces/import",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "elasticemail.post.suppressions-complaints",
+      "kind": "rest_write",
+      "summary": "POST /suppressions/complaints",
+      "description": "manually adds an address to the complaint suppression list ahead of any real spam-complaint event; an operator override this pass defers",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/suppressions/complaints",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "elasticemail.post.suppressions-complaints-import",
+      "kind": "rest_write",
+      "summary": "POST /suppressions/complaints/import",
+      "description": "asynchronous bulk-file complaint-suppression import job, not a synchronous single-record write",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/suppressions/complaints/import",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "elasticemail.post.suppressions-unsubscribes",
+      "kind": "rest_write",
+      "summary": "POST /suppressions/unsubscribes",
+      "description": "manually adds an address to the unsubscribe suppression list, the same compliance-sensitive override concern as suppressions/{email} DELETE; out of scope this pass",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/suppressions/unsubscribes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "elasticemail.post.suppressions-unsubscribes-import",
+      "kind": "rest_write",
+      "summary": "POST /suppressions/unsubscribes/import",
+      "description": "asynchronous bulk-file unsubscribe-suppression import job, not a synchronous single-record write",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/suppressions/unsubscribes/import",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "elasticemail.get.suppressions-email",
+      "kind": "rest_read",
+      "summary": "GET /suppressions/{email}",
+      "description": "single-suppression detail; identical record shape to the suppressions list stream's per-item object, already covered by that stream",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/suppressions/{email}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "elasticemail.delete.suppressions-email",
+      "kind": "rest_write",
+      "summary": "DELETE /suppressions/{email}",
+      "description": "manually removing a bounce/complaint/unsubscribe suppression re-enables sending to an address that was suppressed for deliverability or compliance (e.g. CAN-SPAM/GDPR unsubscribe) reasons; a compliance-sensitive override, out of scope this pass",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/suppressions/{email}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "elasticemail.get.templates-name",
+      "kind": "rest_read",
+      "summary": "GET /templates/{name}",
+      "description": "single-template detail; identical record shape to the templates list stream's per-item object, already covered by that stream",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/templates/{name}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "elasticemail.get.verifications",
+      "kind": "rest_read",
+      "summary": "GET /verifications",
+      "description": "email-address-verification job history; the verification subsystem is a separate metered feature independent of contact/campaign/list data, out of scope this pass",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/verifications",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "elasticemail.post.verifications-files",
+      "kind": "rest_write",
+      "summary": "POST /verifications/files",
+      "description": "multipart bulk-verification file upload, not a JSON record write; also part of the excluded verification subsystem",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/verifications/files",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "elasticemail.get.verifications-files-result",
+      "kind": "rest_read",
+      "summary": "GET /verifications/files/result",
+      "description": "part of the excluded verification subsystem",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/verifications/files/result",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "elasticemail.delete.verifications-files-id",
+      "kind": "rest_write",
+      "summary": "DELETE /verifications/files/{id}",
+      "description": "part of the excluded verification subsystem",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/verifications/files/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "elasticemail.get.verifications-files-id-result",
+      "kind": "rest_read",
+      "summary": "GET /verifications/files/{id}/result",
+      "description": "part of the excluded verification subsystem",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/verifications/files/{id}/result",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "elasticemail.get.verifications-files-id-result-download",
+      "kind": "rest_read",
+      "summary": "GET /verifications/files/{id}/result/download",
+      "description": "downloads a raw verification-result file, not a JSON-shaped record; also part of the excluded verification subsystem",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/verifications/files/{id}/result/download",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "elasticemail.post.verifications-files-id-verification",
+      "kind": "rest_write",
+      "summary": "POST /verifications/files/{id}/verification",
+      "description": "part of the excluded verification subsystem",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/verifications/files/{id}/verification",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "elasticemail.get.verifications-email",
+      "kind": "rest_read",
+      "summary": "GET /verifications/{email}",
+      "description": "single-verification-result detail; part of the excluded verification subsystem",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/verifications/{email}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "elasticemail.post.verifications-email",
+      "kind": "rest_write",
+      "summary": "POST /verifications/{email}",
+      "description": "submits a single email address for verification; part of the excluded verification subsystem",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/verifications/{email}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "elasticemail.delete.verifications-email",
+      "kind": "rest_write",
+      "summary": "DELETE /verifications/{email}",
+      "description": "removes a verification result record; part of the excluded verification subsystem",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/verifications/{email}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "elasticemail.get.webhook-publicid",
+      "kind": "rest_read",
+      "summary": "GET /webhook/{publicid}",
+      "description": "single-webhook detail; identical record shape to the webhooks list stream's per-item object, already covered by that stream",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/webhook/{publicid}",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

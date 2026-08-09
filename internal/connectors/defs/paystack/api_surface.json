@@ -1,82 +1,3416 @@
 {
-  "api": "Paystack API (https://api.paystack.co)",
+  "api": "Paystack API (https://api.paystack.co); provider artifact version: Paystack API v1.0.0; OpenAPI 3.0.1; main",
   "docs": "https://paystack.com/docs/api/",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only; the full Paystack surface (transfers, refunds, plans, products, settlements) is out of scope until Pass B",
+  "reviewed_at": "2026-08-09",
+  "operation_ledger_version": 2,
+  "scope": "Provider-artifact inventory generated from the cited openapi artifact (163 documented operations across 1 provider-owned source document(s)). Every documented operation is represented; existing source-surface bindings absent from the artifact are retained and flagged with present-in-surface-absent-from-artifact.",
+  "artifacts": [
+    {
+      "id": "paystack-artifact-2026-08-09",
+      "url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "kind": "openapi",
+      "version": "3.0.1",
+      "retrieved_at": "2026-08-09",
+      "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1"
+    }
+  ],
   "endpoints": [
     {
       "method": "GET",
+      "path": "/address_verification/states",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/address_verification/states\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/apple-pay/domain",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/apple-pay/domain\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/apple-pay/domain",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/apple-pay/domain\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/apple-pay/domain",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/apple-pay/domain\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/balance",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/balance\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "account balance snapshot, not a syncable object stream",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/balance/ledger",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/balance/ledger\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bank",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/bank\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bank/resolve",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/bank/resolve\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/bank/validate",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/bank/validate\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bulkcharge",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/bulkcharge\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/bulkcharge",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/bulkcharge\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bulkcharge/pause/{code}",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/bulkcharge/pause/{code}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bulkcharge/resume/{code}",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/bulkcharge/resume/{code}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bulkcharge/{code}",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/bulkcharge/{code}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bulkcharge/{code}/charges",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/bulkcharge/{code}/charges\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/charge",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/charge\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/charge/submit_address",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/charge/submit_address\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/charge/submit_birthday",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/charge/submit_birthday\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/charge/submit_otp",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/charge/submit_otp\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/charge/submit_phone",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/charge/submit_phone\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/charge/submit_pin",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/charge/submit_pin\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/charge/{reference}",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/charge/{reference}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/country",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/country\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/customer",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/customer\"].get"
+      },
       "covered_by": {
         "stream": "customers"
       }
     },
     {
-      "method": "GET",
-      "path": "/transaction",
-      "covered_by": {
-        "stream": "transactions"
+      "method": "POST",
+      "path": "/customer",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/customer\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/customer/authorization/deactivate",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/customer/authorization/deactivate\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/customer/authorization/initialize",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/customer/authorization/initialize\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     },
     {
       "method": "GET",
-      "path": "/subscription",
-      "covered_by": {
-        "stream": "subscriptions"
+      "path": "/customer/authorization/verify/{reference}",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/customer/authorization/verify/{reference}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/customer/set_risk_action",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/customer/set_risk_action\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     },
     {
       "method": "GET",
-      "path": "/paymentrequest",
-      "covered_by": {
-        "stream": "invoices"
+      "path": "/customer/{code}",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/customer/{code}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/customer/{code}",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/customer/{code}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/customer/{code}/identification",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/customer/{code}/identification\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/customer/{id}/directdebit-activation-charge",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/customer/{id}/directdebit-activation-charge\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customer/{id}/directdebit-mandate-authorizations",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/customer/{id}/directdebit-mandate-authorizations\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/customer/{id}/initialize-direct-debit",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/customer/{id}/initialize-direct-debit\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/decision/bin/{bin}",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/decision/bin/{bin}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/dedicated_account",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/dedicated_account\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/dedicated_account",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/dedicated_account\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/dedicated_account/assign",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/dedicated_account/assign\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/dedicated_account/available_providers",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/dedicated_account/available_providers\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/dedicated_account/requery",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/dedicated_account/requery\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/dedicated_account/split",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/dedicated_account/split\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/dedicated_account/split",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/dedicated_account/split\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/dedicated_account/{id}",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/dedicated_account/{id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/dedicated_account/{id}",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/dedicated_account/{id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/directdebit/activation-charge",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/directdebit/activation-charge\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/directdebit/mandate-authorizations",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/directdebit/mandate-authorizations\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/dispute",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/dispute\"].get"
+      },
       "covered_by": {
         "stream": "disputes"
       }
     },
     {
       "method": "GET",
-      "path": "/transfer",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "/transfer is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      "path": "/dispute/export",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/dispute/export\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
-      "path": "/refund",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "/refund is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      "path": "/dispute/transaction/{id}",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/dispute/transaction/{id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/dispute/{id}",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/dispute/{id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/dispute/{id}",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/dispute/{id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/dispute/{id}/evidence",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/dispute/{id}/evidence\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/dispute/{id}/resolve",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/dispute/{id}/resolve\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/dispute/{id}/upload_url",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/dispute/{id}/upload_url\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/integration/payment_session_timeout",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/integration/payment_session_timeout\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/integration/payment_session_timeout",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/integration/payment_session_timeout\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/order",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/order\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/order",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/order\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/order/product/{id}",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/order/product/{id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/order/{code}/validate",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/order/{code}/validate\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/order/{id}",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/order/{id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/page",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/page\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/page",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/page\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/page/check_slug_availability/{slug}",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/page/check_slug_availability/{slug}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/page/{id}",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/page/{id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/page/{id}",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/page/{id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/page/{id}/product",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/page/{id}/product\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/paymentrequest",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/paymentrequest\"].get"
+      },
+      "covered_by": {
+        "stream": "invoices"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/paymentrequest",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/paymentrequest\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/paymentrequest/archive/{id}",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/paymentrequest/archive/{id}\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/paymentrequest/finalize/{id}",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/paymentrequest/finalize/{id}\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/paymentrequest/notify/{id}",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/paymentrequest/notify/{id}\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/paymentrequest/totals",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/paymentrequest/totals\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/paymentrequest/verify/{id}",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/paymentrequest/verify/{id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/paymentrequest/{id}",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/paymentrequest/{id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/paymentrequest/{id}",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/paymentrequest/{id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     },
     {
       "method": "GET",
       "path": "/plan",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "/plan is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/plan\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "/plan is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/plan",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/plan\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/plan/{code}",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/plan/{code}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/plan/{code}",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/plan/{code}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     },
     {
       "method": "GET",
       "path": "/product",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "/product is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/product\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "/product is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/product",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/product\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     },
     {
       "method": "GET",
-      "path": "/balance",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "account balance snapshot, not a syncable object stream"
+      "path": "/product/{id}",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/product/{id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/product/{id}",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/product/{id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/product/{id}",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/product/{id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/refund",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/refund\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "/refund is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/refund",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/refund\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/refund/retry_with_customer_details/{id}",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/refund/retry_with_customer_details/{id}\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/refund/{id}",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/refund/{id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/settlement",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/settlement\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/settlement/{id}/transactions",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/settlement/{id}/transactions\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/split",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/split\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/split",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/split\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/split/{id}",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/split/{id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/split/{id}",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/split/{id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/split/{id}/subaccount/add",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/split/{id}/subaccount/add\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/split/{id}/subaccount/remove",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/split/{id}/subaccount/remove\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/storefront",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/storefront\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/storefront",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/storefront\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/storefront/verify/{slug}",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/storefront/verify/{slug}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/storefront/{id}",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/storefront/{id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/storefront/{id}",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/storefront/{id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/storefront/{id}",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/storefront/{id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/storefront/{id}/duplicate",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/storefront/{id}/duplicate\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/storefront/{id}/order",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/storefront/{id}/order\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/storefront/{id}/product",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/storefront/{id}/product\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/storefront/{id}/product",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/storefront/{id}/product\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/storefront/{id}/publish",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/storefront/{id}/publish\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/subaccount",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/subaccount\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/subaccount",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/subaccount\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/subaccount/{code}",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/subaccount/{code}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/subaccount/{code}",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/subaccount/{code}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/subscription",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/subscription\"].get"
+      },
+      "covered_by": {
+        "stream": "subscriptions"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/subscription",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/subscription\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/subscription/disable",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/subscription/disable\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/subscription/enable",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/subscription/enable\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/subscription/{code}",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/subscription/{code}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/subscription/{code}/manage/email",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/subscription/{code}/manage/email\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/subscription/{code}/manage/link",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/subscription/{code}/manage/link\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/terminal",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/terminal\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/terminal/commission_device",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/terminal/commission_device\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/terminal/decommission_device",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/terminal/decommission_device\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/terminal/{id}/event",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/terminal/{id}/event\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/terminal/{terminal_id}",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/terminal/{terminal_id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/terminal/{terminal_id}",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/terminal/{terminal_id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/terminal/{terminal_id}/event/{event_id}",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/terminal/{terminal_id}/event/{event_id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/terminal/{terminal_id}/presence",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/terminal/{terminal_id}/presence\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/transaction",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/transaction\"].get"
+      },
+      "covered_by": {
+        "stream": "transactions"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/transaction/charge_authorization",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/transaction/charge_authorization\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/transaction/export",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/transaction/export\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/transaction/initialize",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/transaction/initialize\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/transaction/partial_debit",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/transaction/partial_debit\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/transaction/timeline/{id}",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/transaction/timeline/{id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/transaction/totals",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/transaction/totals\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/transaction/verify/{reference}",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/transaction/verify/{reference}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/transaction/{id}",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/transaction/{id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/transfer",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/transfer\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "/transfer is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/transfer",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/transfer\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/transfer/bulk",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/transfer/bulk\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/transfer/disable_otp",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/transfer/disable_otp\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/transfer/disable_otp_finalize",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/transfer/disable_otp_finalize\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/transfer/enable_otp",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/transfer/enable_otp\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/transfer/export",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/transfer/export\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/transfer/finalize_transfer",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/transfer/finalize_transfer\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/transfer/resend_otp",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/transfer/resend_otp\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/transfer/verify/{reference}",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/transfer/verify/{reference}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/transfer/{code}",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/transfer/{code}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/transferrecipient",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/transferrecipient\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/transferrecipient",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/transferrecipient\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/transferrecipient/bulk",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/transferrecipient/bulk\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/transferrecipient/{code}",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/transferrecipient/{code}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/transferrecipient/{code}",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/transferrecipient/{code}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/transferrecipient/{code}",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/transferrecipient/{code}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/virtual_terminal",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/virtual_terminal\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/virtual_terminal",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/virtual_terminal\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/virtual_terminal/{code}",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/virtual_terminal/{code}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/virtual_terminal/{code}",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/virtual_terminal/{code}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/virtual_terminal/{code}/deactivate",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/virtual_terminal/{code}/deactivate\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/virtual_terminal/{code}/destination/assign",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/virtual_terminal/{code}/destination/assign\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/virtual_terminal/{code}/destination/unassign",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/virtual_terminal/{code}/destination/unassign\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/virtual_terminal/{code}/split_code",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/virtual_terminal/{code}/split_code\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/virtual_terminal/{code}/split_code",
+      "provenance": {
+        "artifact": "paystack-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4427de6c07533f3d4e2202560f53f7d959b3b71f0a7a33f6d270b375fb0187d1",
+        "coordinate": "paths[\"/virtual_terminal/{code}/split_code\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     }
   ]

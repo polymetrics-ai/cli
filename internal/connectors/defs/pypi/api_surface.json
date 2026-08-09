@@ -1,12 +1,32 @@
 {
-  "api": "PyPI JSON API (https://warehouse.pypa.io/api-reference/)",
+  "api": "PyPI JSON API (https://warehouse.pypa.io/api-reference/); provider artifact version: PyPI-specific JSON API current Warehouse documentation",
   "docs": "https://warehouse.pypa.io/api-reference/",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration, partial: only the project-metadata stream is implemented. The releases stream (legacy internal/connectors/pypi's second stream) is out of scope for this pass -- see the ENGINE_GAP blocker in this migration's report -- the dialect's records.path can only extract a single array/object at one dotted path, and cannot flatten a map-of-arrays keyed by version string (PyPI's 'releases' object) while stamping each record with its own map key as a field value; this requires a StreamHook (Tier 2) or an engine records-extraction primitive that does not exist today. PyPI is read-only and credential-free in legacy (Capabilities.Write is false) so no writes.json is shipped.",
+  "reviewed_at": "2026-08-09",
+  "operation_ledger_version": 2,
+  "scope": "Provider-artifact inventory generated from the cited html_reference artifact (2 documented operations across 1 provider-owned source document(s)). Every documented operation is represented; existing source-surface bindings absent from the artifact are retained and flagged with present-in-surface-absent-from-artifact.",
+  "artifacts": [
+    {
+      "id": "pypi-artifact-2026-08-09",
+      "url": "https://docs.pypi.org/api/json/",
+      "kind": "html_reference",
+      "version": "PyPI-specific JSON API current Warehouse documentation",
+      "retrieved_at": "2026-08-09",
+      "sha256": "3393408849fc2653e6ec92efa6ca838f6259ce70c7e5e8b4d4458f662c26c12e"
+    }
+  ],
   "endpoints": [
     {
       "method": "GET",
       "path": "/pypi/{project}/json",
+      "provenance": {
+        "artifact": "pypi-artifact-2026-08-09",
+        "source_url": "https://docs.pypi.org/api/json/",
+        "source_kind": "html_reference",
+        "version": "PyPI-specific JSON API current Warehouse documentation",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3393408849fc2653e6ec92efa6ca838f6259ce70c7e5e8b4d4458f662c26c12e",
+        "coordinate": "https://docs.pypi.org/api/json/#GET /pypi/{project}/json"
+      },
       "covered_by": {
         "stream": "project"
       }
@@ -14,25 +34,66 @@
     {
       "method": "GET",
       "path": "/pypi/{project}/{version}/json",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "ENGINE_GAP: powers the releases stream's map-of-arrays flatten-with-key-stamp behavior, which the current records.path/computed_fields dialect cannot express; see this migration's blockers[] and docs.md Known limits"
+      "provenance": {
+        "artifact": "pypi-artifact-2026-08-09",
+        "source_url": "https://docs.pypi.org/api/json/",
+        "source_kind": "html_reference",
+        "version": "PyPI-specific JSON API current Warehouse documentation",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3393408849fc2653e6ec92efa6ca838f6259ce70c7e5e8b4d4458f662c26c12e",
+        "coordinate": "https://docs.pypi.org/api/json/#GET /pypi/{project}/{version}/json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "ENGINE_GAP: powers the releases stream's map-of-arrays flatten-with-key-stamp behavior, which the current records.path/computed_fields dialect cannot express; see this migration's blockers[] and docs.md Known limits",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/simple/{project}/",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "not implemented in this bundle; legacy never implemented the Simple API index"
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pypi-artifact-2026-08-09",
+        "source_url": "https://docs.pypi.org/api/json/",
+        "source_kind": "html_reference",
+        "version": "PyPI-specific JSON API current Warehouse documentation",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3393408849fc2653e6ec92efa6ca838f6259ce70c7e5e8b4d4458f662c26c12e",
+        "coordinate": "existing-surface[GET /simple/{project}/]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "not implemented in this bundle; legacy never implemented the Simple API index",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/stats",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "aggregate registry-wide statistics, not a per-project syncable object stream"
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pypi-artifact-2026-08-09",
+        "source_url": "https://docs.pypi.org/api/json/",
+        "source_kind": "html_reference",
+        "version": "PyPI-specific JSON API current Warehouse documentation",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3393408849fc2653e6ec92efa6ca838f6259ce70c7e5e8b4d4458f662c26c12e",
+        "coordinate": "existing-surface[GET /stats]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "aggregate registry-wide statistics, not a per-project syncable object stream",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     }
   ]

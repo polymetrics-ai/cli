@@ -1,0 +1,151 @@
+{
+  "tagline": "Run IP2WHOIS's declared streams and reverse-ETL actions.",
+  "usage": "pm ip2whois \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "api get v2",
+        "api get v2-domain-lookup-nameservers-array",
+        "contacts admin list",
+        "contacts billing list",
+        "contacts registrant list",
+        "contacts tech list",
+        "whois list"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "api get v2",
+      "summary": "Documented GET /v2 (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.ip2whois.com/developers-api",
+      "examples": [
+        "pm ip2whois api get v2 --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2"
+        }
+      ],
+      "operation": "ip2whois.get.v2",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2-domain-lookup-nameservers-array",
+      "summary": "Documented GET /v2 (domain lookup, nameservers[] array) (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.ip2whois.com/developers-api",
+      "examples": [
+        "pm ip2whois api get v2-domain-lookup-nameservers-array --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2 (domain lookup, nameservers[] array)"
+        }
+      ],
+      "operation": "ip2whois.get.v2-domain-lookup-nameservers-array",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "contacts admin list",
+      "summary": "Run the contacts admin ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "contacts_admin",
+      "source_url": "https://www.ip2whois.com/developers-api",
+      "examples": [
+        "pm ip2whois contacts admin list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2 (domain lookup, admin sub-object)"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "contacts billing list",
+      "summary": "Run the contacts billing ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "contacts_billing",
+      "source_url": "https://www.ip2whois.com/developers-api",
+      "examples": [
+        "pm ip2whois contacts billing list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2 (domain lookup, billing sub-object)"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "contacts registrant list",
+      "summary": "Run the contacts registrant ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "contacts_registrant",
+      "source_url": "https://www.ip2whois.com/developers-api",
+      "examples": [
+        "pm ip2whois contacts registrant list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2 (domain lookup, registrant sub-object)"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "contacts tech list",
+      "summary": "Run the contacts tech ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "contacts_tech",
+      "source_url": "https://www.ip2whois.com/developers-api",
+      "examples": [
+        "pm ip2whois contacts tech list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2 (domain lookup, tech sub-object)"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "whois list",
+      "summary": "Run the whois ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "whois",
+      "source_url": "https://www.ip2whois.com/developers-api",
+      "examples": [
+        "pm ip2whois whois list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2 (domain lookup)"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    }
+  ]
+}

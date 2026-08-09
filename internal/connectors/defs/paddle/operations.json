@@ -1,0 +1,2313 @@
+{
+  "operations": [
+    {
+      "id": "paddle.get.adjustments",
+      "kind": "rest_read",
+      "summary": "GET /adjustments",
+      "description": "refund/credit adjustments not modeled by legacy; not implemented in this bundle",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/adjustments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.post.adjustments",
+      "kind": "rest_write",
+      "summary": "POST /adjustments",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/adjustments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.get.adjustments-adjustment-id-credit-note",
+      "kind": "rest_read",
+      "summary": "GET /adjustments/{adjustment_id}/credit-note",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/adjustments/{adjustment_id}/credit-note",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.get.checkout-domains",
+      "kind": "rest_read",
+      "summary": "GET /checkout-domains",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/checkout-domains",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.get.checkout-domains-domain-id",
+      "kind": "rest_read",
+      "summary": "GET /checkout-domains/{domain_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/checkout-domains/{domain_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.delete.checkout-domains-domain-id",
+      "kind": "rest_write",
+      "summary": "DELETE /checkout-domains/{domain_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/checkout-domains/{domain_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.post.checkout-domains-domain-id-verify-payment-method",
+      "kind": "rest_write",
+      "summary": "POST /checkout-domains/{domain_id}/verify-payment-method",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/checkout-domains/{domain_id}/verify-payment-method",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.get.client-tokens",
+      "kind": "rest_read",
+      "summary": "GET /client-tokens",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/client-tokens",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.post.client-tokens",
+      "kind": "rest_write",
+      "summary": "POST /client-tokens",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/client-tokens",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.get.client-tokens-client-token-id",
+      "kind": "rest_read",
+      "summary": "GET /client-tokens/{client_token_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/client-tokens/{client_token_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.patch.client-tokens-client-token-id",
+      "kind": "rest_write",
+      "summary": "PATCH /client-tokens/{client_token_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/client-tokens/{client_token_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.post.customers",
+      "kind": "rest_write",
+      "summary": "POST /customers",
+      "description": "legacy connector never implemented customer creation; not implemented in this bundle",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/customers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.get.customers-customer-id",
+      "kind": "rest_read",
+      "summary": "GET /customers/{customer_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/customers/{customer_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.patch.customers-customer-id",
+      "kind": "rest_write",
+      "summary": "PATCH /customers/{customer_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/customers/{customer_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.get.customers-customer-id-addresses",
+      "kind": "rest_read",
+      "summary": "GET /customers/{customer_id}/addresses",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/customers/{customer_id}/addresses",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.post.customers-customer-id-addresses",
+      "kind": "rest_write",
+      "summary": "POST /customers/{customer_id}/addresses",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/customers/{customer_id}/addresses",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.get.customers-customer-id-addresses-address-id",
+      "kind": "rest_read",
+      "summary": "GET /customers/{customer_id}/addresses/{address_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/customers/{customer_id}/addresses/{address_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.patch.customers-customer-id-addresses-address-id",
+      "kind": "rest_write",
+      "summary": "PATCH /customers/{customer_id}/addresses/{address_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/customers/{customer_id}/addresses/{address_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.post.customers-customer-id-auth-token",
+      "kind": "rest_write",
+      "summary": "POST /customers/{customer_id}/auth-token",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/customers/{customer_id}/auth-token",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.get.customers-customer-id-businesses",
+      "kind": "rest_read",
+      "summary": "GET /customers/{customer_id}/businesses",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/customers/{customer_id}/businesses",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.post.customers-customer-id-businesses",
+      "kind": "rest_write",
+      "summary": "POST /customers/{customer_id}/businesses",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/customers/{customer_id}/businesses",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.get.customers-customer-id-businesses-business-id",
+      "kind": "rest_read",
+      "summary": "GET /customers/{customer_id}/businesses/{business_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/customers/{customer_id}/businesses/{business_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.patch.customers-customer-id-businesses-business-id",
+      "kind": "rest_write",
+      "summary": "PATCH /customers/{customer_id}/businesses/{business_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/customers/{customer_id}/businesses/{business_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.get.customers-customer-id-credit-balances",
+      "kind": "rest_read",
+      "summary": "GET /customers/{customer_id}/credit-balances",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/customers/{customer_id}/credit-balances",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.get.customers-customer-id-payment-methods",
+      "kind": "rest_read",
+      "summary": "GET /customers/{customer_id}/payment-methods",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/customers/{customer_id}/payment-methods",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.get.customers-customer-id-payment-methods-payment-method-id",
+      "kind": "rest_read",
+      "summary": "GET /customers/{customer_id}/payment-methods/{payment_method_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/customers/{customer_id}/payment-methods/{payment_method_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.delete.customers-customer-id-payment-methods-payment-method-id",
+      "kind": "rest_write",
+      "summary": "DELETE /customers/{customer_id}/payment-methods/{payment_method_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/customers/{customer_id}/payment-methods/{payment_method_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.post.customers-customer-id-portal-sessions",
+      "kind": "rest_write",
+      "summary": "POST /customers/{customer_id}/portal-sessions",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/customers/{customer_id}/portal-sessions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.get.discount-groups",
+      "kind": "rest_read",
+      "summary": "GET /discount-groups",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/discount-groups",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.post.discount-groups",
+      "kind": "rest_write",
+      "summary": "POST /discount-groups",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/discount-groups",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.get.discount-groups-discount-group-id",
+      "kind": "rest_read",
+      "summary": "GET /discount-groups/{discount_group_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/discount-groups/{discount_group_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.patch.discount-groups-discount-group-id",
+      "kind": "rest_write",
+      "summary": "PATCH /discount-groups/{discount_group_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/discount-groups/{discount_group_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.get.discounts",
+      "kind": "rest_read",
+      "summary": "GET /discounts",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/discounts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.post.discounts",
+      "kind": "rest_write",
+      "summary": "POST /discounts",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/discounts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.get.discounts-discount-id",
+      "kind": "rest_read",
+      "summary": "GET /discounts/{discount_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/discounts/{discount_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.patch.discounts-discount-id",
+      "kind": "rest_write",
+      "summary": "PATCH /discounts/{discount_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/discounts/{discount_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.get.event-types",
+      "kind": "rest_read",
+      "summary": "GET /event-types",
+      "description": "webhook event-type catalog, not a syncable object stream",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/event-types",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.get.events",
+      "kind": "rest_read",
+      "summary": "GET /events",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/events",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.get.ips",
+      "kind": "rest_read",
+      "summary": "GET /ips",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/ips",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.get.metrics-active-subscribers",
+      "kind": "rest_read",
+      "summary": "GET /metrics/active-subscribers",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/metrics/active-subscribers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.get.metrics-chargebacks",
+      "kind": "rest_read",
+      "summary": "GET /metrics/chargebacks",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/metrics/chargebacks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.get.metrics-checkout-conversion",
+      "kind": "rest_read",
+      "summary": "GET /metrics/checkout-conversion",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/metrics/checkout-conversion",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.get.metrics-monthly-recurring-revenue",
+      "kind": "rest_read",
+      "summary": "GET /metrics/monthly-recurring-revenue",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/metrics/monthly-recurring-revenue",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.get.metrics-monthly-recurring-revenue-change",
+      "kind": "rest_read",
+      "summary": "GET /metrics/monthly-recurring-revenue-change",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/metrics/monthly-recurring-revenue-change",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.get.metrics-refunds",
+      "kind": "rest_read",
+      "summary": "GET /metrics/refunds",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/metrics/refunds",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.get.metrics-revenue",
+      "kind": "rest_read",
+      "summary": "GET /metrics/revenue",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/metrics/revenue",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.get.notification-settings",
+      "kind": "rest_read",
+      "summary": "GET /notification-settings",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/notification-settings",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.post.notification-settings",
+      "kind": "rest_write",
+      "summary": "POST /notification-settings",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/notification-settings",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.get.notification-settings-notification-setting-id",
+      "kind": "rest_read",
+      "summary": "GET /notification-settings/{notification_setting_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/notification-settings/{notification_setting_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.patch.notification-settings-notification-setting-id",
+      "kind": "rest_write",
+      "summary": "PATCH /notification-settings/{notification_setting_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/notification-settings/{notification_setting_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.delete.notification-settings-notification-setting-id",
+      "kind": "rest_write",
+      "summary": "DELETE /notification-settings/{notification_setting_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/notification-settings/{notification_setting_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.get.notifications",
+      "kind": "rest_read",
+      "summary": "GET /notifications",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/notifications",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.get.notifications-notification-id",
+      "kind": "rest_read",
+      "summary": "GET /notifications/{notification_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/notifications/{notification_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.get.notifications-notification-id-logs",
+      "kind": "rest_read",
+      "summary": "GET /notifications/{notification_id}/logs",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/notifications/{notification_id}/logs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.post.notifications-notification-id-replay",
+      "kind": "rest_write",
+      "summary": "POST /notifications/{notification_id}/replay",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/notifications/{notification_id}/replay",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.get.prices",
+      "kind": "rest_read",
+      "summary": "GET /prices",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/prices",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.post.prices",
+      "kind": "rest_write",
+      "summary": "POST /prices",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/prices",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.get.prices-price-id",
+      "kind": "rest_read",
+      "summary": "GET /prices/{price_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/prices/{price_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.patch.prices-price-id",
+      "kind": "rest_write",
+      "summary": "PATCH /prices/{price_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/prices/{price_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.post.pricing-preview",
+      "kind": "rest_write",
+      "summary": "POST /pricing-preview",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/pricing-preview",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.post.products",
+      "kind": "rest_write",
+      "summary": "POST /products",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/products",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.get.products-product-id",
+      "kind": "rest_read",
+      "summary": "GET /products/{product_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/products/{product_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.patch.products-product-id",
+      "kind": "rest_write",
+      "summary": "PATCH /products/{product_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/products/{product_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.get.reports",
+      "kind": "rest_read",
+      "summary": "GET /reports",
+      "description": "async report generation not modeled by legacy; not implemented in this bundle",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/reports",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.post.reports",
+      "kind": "rest_write",
+      "summary": "POST /reports",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/reports",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.get.reports-report-id",
+      "kind": "rest_read",
+      "summary": "GET /reports/{report_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/reports/{report_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.get.reports-report-id-download-url",
+      "kind": "rest_read",
+      "summary": "GET /reports/{report_id}/download-url",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/reports/{report_id}/download-url",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.get.simulation-types",
+      "kind": "rest_read",
+      "summary": "GET /simulation-types",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/simulation-types",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.get.simulations",
+      "kind": "rest_read",
+      "summary": "GET /simulations",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/simulations",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.post.simulations",
+      "kind": "rest_write",
+      "summary": "POST /simulations",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/simulations",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.get.simulations-simulation-id",
+      "kind": "rest_read",
+      "summary": "GET /simulations/{simulation_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/simulations/{simulation_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.patch.simulations-simulation-id",
+      "kind": "rest_write",
+      "summary": "PATCH /simulations/{simulation_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/simulations/{simulation_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.get.simulations-simulation-id-runs",
+      "kind": "rest_read",
+      "summary": "GET /simulations/{simulation_id}/runs",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/simulations/{simulation_id}/runs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.post.simulations-simulation-id-runs",
+      "kind": "rest_write",
+      "summary": "POST /simulations/{simulation_id}/runs",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/simulations/{simulation_id}/runs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.get.simulations-simulation-id-runs-simulation-run-id",
+      "kind": "rest_read",
+      "summary": "GET /simulations/{simulation_id}/runs/{simulation_run_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/simulations/{simulation_id}/runs/{simulation_run_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.get.simulations-simulation-id-runs-simulation-run-id-events",
+      "kind": "rest_read",
+      "summary": "GET /simulations/{simulation_id}/runs/{simulation_run_id}/events",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/simulations/{simulation_id}/runs/{simulation_run_id}/events",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.get.simulations-simulation-id-runs-simulation-run-id-events-simulation-event-id",
+      "kind": "rest_read",
+      "summary": "GET /simulations/{simulation_id}/runs/{simulation_run_id}/events/{simulation_event_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/simulations/{simulation_id}/runs/{simulation_run_id}/events/{simulation_event_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.post.simulations-simulation-id-runs-simulation-run-id-events-simulation-event-id-replay",
+      "kind": "rest_write",
+      "summary": "POST /simulations/{simulation_id}/runs/{simulation_run_id}/events/{simulation_event_id}/replay",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/simulations/{simulation_id}/runs/{simulation_run_id}/events/{simulation_event_id}/replay",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.get.subscriptions-subscription-id",
+      "kind": "rest_read",
+      "summary": "GET /subscriptions/{subscription_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/subscriptions/{subscription_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.patch.subscriptions-subscription-id",
+      "kind": "rest_write",
+      "summary": "PATCH /subscriptions/{subscription_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/subscriptions/{subscription_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.post.subscriptions-subscription-id-activate",
+      "kind": "rest_write",
+      "summary": "POST /subscriptions/{subscription_id}/activate",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/subscriptions/{subscription_id}/activate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.post.subscriptions-subscription-id-cancel",
+      "kind": "rest_write",
+      "summary": "POST /subscriptions/{subscription_id}/cancel",
+      "description": "subscription cancellation not modeled by legacy; not implemented in this bundle",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/subscriptions/{subscription_id}/cancel",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.post.subscriptions-subscription-id-charge",
+      "kind": "rest_write",
+      "summary": "POST /subscriptions/{subscription_id}/charge",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/subscriptions/{subscription_id}/charge",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.post.subscriptions-subscription-id-charge-preview",
+      "kind": "rest_write",
+      "summary": "POST /subscriptions/{subscription_id}/charge/preview",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/subscriptions/{subscription_id}/charge/preview",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.get.subscriptions-subscription-id-history",
+      "kind": "rest_read",
+      "summary": "GET /subscriptions/{subscription_id}/history",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/subscriptions/{subscription_id}/history",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.post.subscriptions-subscription-id-pause",
+      "kind": "rest_write",
+      "summary": "POST /subscriptions/{subscription_id}/pause",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/subscriptions/{subscription_id}/pause",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.patch.subscriptions-subscription-id-preview",
+      "kind": "rest_write",
+      "summary": "PATCH /subscriptions/{subscription_id}/preview",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/subscriptions/{subscription_id}/preview",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.post.subscriptions-subscription-id-resume",
+      "kind": "rest_write",
+      "summary": "POST /subscriptions/{subscription_id}/resume",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/subscriptions/{subscription_id}/resume",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.get.subscriptions-subscription-id-update-payment-method-transaction",
+      "kind": "rest_read",
+      "summary": "GET /subscriptions/{subscription_id}/update-payment-method-transaction",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/subscriptions/{subscription_id}/update-payment-method-transaction",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.post.transactions",
+      "kind": "rest_write",
+      "summary": "POST /transactions",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/transactions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.post.transactions-preview",
+      "kind": "rest_write",
+      "summary": "POST /transactions/preview",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/transactions/preview",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.get.transactions-transaction-id",
+      "kind": "rest_read",
+      "summary": "GET /transactions/{transaction_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/transactions/{transaction_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.patch.transactions-transaction-id",
+      "kind": "rest_write",
+      "summary": "PATCH /transactions/{transaction_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/transactions/{transaction_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.get.transactions-transaction-id-invoice",
+      "kind": "rest_read",
+      "summary": "GET /transactions/{transaction_id}/invoice",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/transactions/{transaction_id}/invoice",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.post.transactions-transaction-id-revise",
+      "kind": "rest_write",
+      "summary": "POST /transactions/{transaction_id}/revise",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/transactions/{transaction_id}/revise",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paddle.webhook.address-created-post",
+      "kind": "composite",
+      "summary": "WEBHOOK address.created#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK address.created#POST"
+        ]
+      }
+    },
+    {
+      "id": "paddle.webhook.address-imported-post",
+      "kind": "composite",
+      "summary": "WEBHOOK address.imported#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK address.imported#POST"
+        ]
+      }
+    },
+    {
+      "id": "paddle.webhook.address-updated-post",
+      "kind": "composite",
+      "summary": "WEBHOOK address.updated#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK address.updated#POST"
+        ]
+      }
+    },
+    {
+      "id": "paddle.webhook.adjustment-created-post",
+      "kind": "composite",
+      "summary": "WEBHOOK adjustment.created#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK adjustment.created#POST"
+        ]
+      }
+    },
+    {
+      "id": "paddle.webhook.adjustment-updated-post",
+      "kind": "composite",
+      "summary": "WEBHOOK adjustment.updated#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK adjustment.updated#POST"
+        ]
+      }
+    },
+    {
+      "id": "paddle.webhook.api-key-created-post",
+      "kind": "composite",
+      "summary": "WEBHOOK api_key.created#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK api_key.created#POST"
+        ]
+      }
+    },
+    {
+      "id": "paddle.webhook.api-key-expired-post",
+      "kind": "composite",
+      "summary": "WEBHOOK api_key.expired#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK api_key.expired#POST"
+        ]
+      }
+    },
+    {
+      "id": "paddle.webhook.api-key-expiring-post",
+      "kind": "composite",
+      "summary": "WEBHOOK api_key.expiring#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK api_key.expiring#POST"
+        ]
+      }
+    },
+    {
+      "id": "paddle.webhook.api-key-revoked-post",
+      "kind": "composite",
+      "summary": "WEBHOOK api_key.revoked#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK api_key.revoked#POST"
+        ]
+      }
+    },
+    {
+      "id": "paddle.webhook.api-key-updated-post",
+      "kind": "composite",
+      "summary": "WEBHOOK api_key.updated#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK api_key.updated#POST"
+        ]
+      }
+    },
+    {
+      "id": "paddle.webhook.api-key-exposure-created-post",
+      "kind": "composite",
+      "summary": "WEBHOOK api_key_exposure.created#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK api_key_exposure.created#POST"
+        ]
+      }
+    },
+    {
+      "id": "paddle.webhook.business-created-post",
+      "kind": "composite",
+      "summary": "WEBHOOK business.created#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK business.created#POST"
+        ]
+      }
+    },
+    {
+      "id": "paddle.webhook.business-imported-post",
+      "kind": "composite",
+      "summary": "WEBHOOK business.imported#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK business.imported#POST"
+        ]
+      }
+    },
+    {
+      "id": "paddle.webhook.business-updated-post",
+      "kind": "composite",
+      "summary": "WEBHOOK business.updated#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK business.updated#POST"
+        ]
+      }
+    },
+    {
+      "id": "paddle.webhook.client-token-created-post",
+      "kind": "composite",
+      "summary": "WEBHOOK client_token.created#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK client_token.created#POST"
+        ]
+      }
+    },
+    {
+      "id": "paddle.webhook.client-token-revoked-post",
+      "kind": "composite",
+      "summary": "WEBHOOK client_token.revoked#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK client_token.revoked#POST"
+        ]
+      }
+    },
+    {
+      "id": "paddle.webhook.client-token-updated-post",
+      "kind": "composite",
+      "summary": "WEBHOOK client_token.updated#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK client_token.updated#POST"
+        ]
+      }
+    },
+    {
+      "id": "paddle.webhook.customer-created-post",
+      "kind": "composite",
+      "summary": "WEBHOOK customer.created#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK customer.created#POST"
+        ]
+      }
+    },
+    {
+      "id": "paddle.webhook.customer-imported-post",
+      "kind": "composite",
+      "summary": "WEBHOOK customer.imported#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK customer.imported#POST"
+        ]
+      }
+    },
+    {
+      "id": "paddle.webhook.customer-updated-post",
+      "kind": "composite",
+      "summary": "WEBHOOK customer.updated#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK customer.updated#POST"
+        ]
+      }
+    },
+    {
+      "id": "paddle.webhook.discount-created-post",
+      "kind": "composite",
+      "summary": "WEBHOOK discount.created#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK discount.created#POST"
+        ]
+      }
+    },
+    {
+      "id": "paddle.webhook.discount-imported-post",
+      "kind": "composite",
+      "summary": "WEBHOOK discount.imported#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK discount.imported#POST"
+        ]
+      }
+    },
+    {
+      "id": "paddle.webhook.discount-updated-post",
+      "kind": "composite",
+      "summary": "WEBHOOK discount.updated#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK discount.updated#POST"
+        ]
+      }
+    },
+    {
+      "id": "paddle.webhook.discount-group-created-post",
+      "kind": "composite",
+      "summary": "WEBHOOK discount_group.created#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK discount_group.created#POST"
+        ]
+      }
+    },
+    {
+      "id": "paddle.webhook.discount-group-updated-post",
+      "kind": "composite",
+      "summary": "WEBHOOK discount_group.updated#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK discount_group.updated#POST"
+        ]
+      }
+    },
+    {
+      "id": "paddle.webhook.payment-method-deleted-post",
+      "kind": "composite",
+      "summary": "WEBHOOK payment_method.deleted#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK payment_method.deleted#POST"
+        ]
+      }
+    },
+    {
+      "id": "paddle.webhook.payment-method-saved-post",
+      "kind": "composite",
+      "summary": "WEBHOOK payment_method.saved#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK payment_method.saved#POST"
+        ]
+      }
+    },
+    {
+      "id": "paddle.webhook.payout-created-post",
+      "kind": "composite",
+      "summary": "WEBHOOK payout.created#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK payout.created#POST"
+        ]
+      }
+    },
+    {
+      "id": "paddle.webhook.payout-paid-post",
+      "kind": "composite",
+      "summary": "WEBHOOK payout.paid#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK payout.paid#POST"
+        ]
+      }
+    },
+    {
+      "id": "paddle.webhook.price-created-post",
+      "kind": "composite",
+      "summary": "WEBHOOK price.created#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK price.created#POST"
+        ]
+      }
+    },
+    {
+      "id": "paddle.webhook.price-imported-post",
+      "kind": "composite",
+      "summary": "WEBHOOK price.imported#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK price.imported#POST"
+        ]
+      }
+    },
+    {
+      "id": "paddle.webhook.price-updated-post",
+      "kind": "composite",
+      "summary": "WEBHOOK price.updated#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK price.updated#POST"
+        ]
+      }
+    },
+    {
+      "id": "paddle.webhook.product-created-post",
+      "kind": "composite",
+      "summary": "WEBHOOK product.created#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK product.created#POST"
+        ]
+      }
+    },
+    {
+      "id": "paddle.webhook.product-imported-post",
+      "kind": "composite",
+      "summary": "WEBHOOK product.imported#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK product.imported#POST"
+        ]
+      }
+    },
+    {
+      "id": "paddle.webhook.product-updated-post",
+      "kind": "composite",
+      "summary": "WEBHOOK product.updated#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK product.updated#POST"
+        ]
+      }
+    },
+    {
+      "id": "paddle.webhook.report-created-post",
+      "kind": "composite",
+      "summary": "WEBHOOK report.created#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK report.created#POST"
+        ]
+      }
+    },
+    {
+      "id": "paddle.webhook.report-updated-post",
+      "kind": "composite",
+      "summary": "WEBHOOK report.updated#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK report.updated#POST"
+        ]
+      }
+    },
+    {
+      "id": "paddle.webhook.subscription-activated-post",
+      "kind": "composite",
+      "summary": "WEBHOOK subscription.activated#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK subscription.activated#POST"
+        ]
+      }
+    },
+    {
+      "id": "paddle.webhook.subscription-canceled-post",
+      "kind": "composite",
+      "summary": "WEBHOOK subscription.canceled#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK subscription.canceled#POST"
+        ]
+      }
+    },
+    {
+      "id": "paddle.webhook.subscription-created-post",
+      "kind": "composite",
+      "summary": "WEBHOOK subscription.created#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK subscription.created#POST"
+        ]
+      }
+    },
+    {
+      "id": "paddle.webhook.subscription-imported-post",
+      "kind": "composite",
+      "summary": "WEBHOOK subscription.imported#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK subscription.imported#POST"
+        ]
+      }
+    },
+    {
+      "id": "paddle.webhook.subscription-past-due-post",
+      "kind": "composite",
+      "summary": "WEBHOOK subscription.past_due#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK subscription.past_due#POST"
+        ]
+      }
+    },
+    {
+      "id": "paddle.webhook.subscription-paused-post",
+      "kind": "composite",
+      "summary": "WEBHOOK subscription.paused#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK subscription.paused#POST"
+        ]
+      }
+    },
+    {
+      "id": "paddle.webhook.subscription-resumed-post",
+      "kind": "composite",
+      "summary": "WEBHOOK subscription.resumed#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK subscription.resumed#POST"
+        ]
+      }
+    },
+    {
+      "id": "paddle.webhook.subscription-trialing-post",
+      "kind": "composite",
+      "summary": "WEBHOOK subscription.trialing#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK subscription.trialing#POST"
+        ]
+      }
+    },
+    {
+      "id": "paddle.webhook.subscription-updated-post",
+      "kind": "composite",
+      "summary": "WEBHOOK subscription.updated#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK subscription.updated#POST"
+        ]
+      }
+    },
+    {
+      "id": "paddle.webhook.transaction-billed-post",
+      "kind": "composite",
+      "summary": "WEBHOOK transaction.billed#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK transaction.billed#POST"
+        ]
+      }
+    },
+    {
+      "id": "paddle.webhook.transaction-canceled-post",
+      "kind": "composite",
+      "summary": "WEBHOOK transaction.canceled#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK transaction.canceled#POST"
+        ]
+      }
+    },
+    {
+      "id": "paddle.webhook.transaction-completed-post",
+      "kind": "composite",
+      "summary": "WEBHOOK transaction.completed#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK transaction.completed#POST"
+        ]
+      }
+    },
+    {
+      "id": "paddle.webhook.transaction-created-post",
+      "kind": "composite",
+      "summary": "WEBHOOK transaction.created#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK transaction.created#POST"
+        ]
+      }
+    },
+    {
+      "id": "paddle.webhook.transaction-paid-post",
+      "kind": "composite",
+      "summary": "WEBHOOK transaction.paid#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK transaction.paid#POST"
+        ]
+      }
+    },
+    {
+      "id": "paddle.webhook.transaction-past-due-post",
+      "kind": "composite",
+      "summary": "WEBHOOK transaction.past_due#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK transaction.past_due#POST"
+        ]
+      }
+    },
+    {
+      "id": "paddle.webhook.transaction-payment-failed-post",
+      "kind": "composite",
+      "summary": "WEBHOOK transaction.payment_failed#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK transaction.payment_failed#POST"
+        ]
+      }
+    },
+    {
+      "id": "paddle.webhook.transaction-ready-post",
+      "kind": "composite",
+      "summary": "WEBHOOK transaction.ready#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK transaction.ready#POST"
+        ]
+      }
+    },
+    {
+      "id": "paddle.webhook.transaction-revised-post",
+      "kind": "composite",
+      "summary": "WEBHOOK transaction.revised#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK transaction.revised#POST"
+        ]
+      }
+    },
+    {
+      "id": "paddle.webhook.transaction-updated-post",
+      "kind": "composite",
+      "summary": "WEBHOOK transaction.updated#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK transaction.updated#POST"
+        ]
+      }
+    }
+  ]
+}

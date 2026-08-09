@@ -1,20 +1,951 @@
 {
-  "api": "Google Blogger API v3 (https://www.googleapis.com/blogger/v3)",
+  "api": "Google Blogger API v3 (https://www.googleapis.com/blogger/v3); provider artifact version: v3; discovery revision 20260804",
   "docs": "https://developers.google.com/blogger/docs/3.0/reference",
-  "reviewed_at": "2026-07-03",
-  "scope": "Pass B expansion of the practical read surface for the configured blog: blogs, posts, pages, comments, and page-view counts. URL lookup and write/moderation endpoints remain excluded with concrete config/scope reasons.",
+  "reviewed_at": "2026-08-09",
+  "operation_ledger_version": 2,
+  "scope": "Provider-artifact inventory generated from the cited openapi artifact (33 documented operations across 1 provider-owned source document(s)). Every documented operation is represented; existing source-surface bindings absent from the artifact are retained and flagged with present-in-surface-absent-from-artifact.",
+  "artifacts": [
+    {
+      "id": "blogger-artifact-2026-08-09",
+      "url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+      "kind": "openapi",
+      "version": "v3; discovery revision 20260804",
+      "retrieved_at": "2026-08-09",
+      "sha256": "634c4bc88771c039560717e3fa118cf7ea47d33bced6b3f434fa4e482277e2fe"
+    }
+  ],
   "endpoints": [
-    { "method": "GET", "path": "/blogs/{blogId}", "covered_by": { "stream": "blogs" } },
-    { "method": "GET", "path": "/blogs/{blogId}/posts", "covered_by": { "stream": "posts" } },
-    { "method": "GET", "path": "/blogs/{blogId}/pages", "covered_by": { "stream": "pages" } },
-    { "method": "GET", "path": "/blogs/{blogId}/comments", "covered_by": { "stream": "comments" } },
-    { "method": "GET", "path": "/blogs/byurl", "excluded": { "category": "out_of_scope", "reason": "lookup by URL requires a separate blog URL input, but this bundle's spec is keyed by the configured blog_id and adding a second identity mode would widen the accepted config contract" } },
-    { "method": "GET", "path": "/blogs/{blogId}/posts/{postId}", "excluded": { "category": "duplicate_of", "reason": "single-post fetch is a narrower case of the posts stream already covered" } },
-    { "method": "POST", "path": "/blogs/{blogId}/posts", "excluded": { "category": "requires_elevated_scope", "reason": "post creation requires Blogger write OAuth scopes; this connector's credential contract is read-only and legacy Write returns ErrUnsupportedOperation" } },
-    { "method": "PUT", "path": "/blogs/{blogId}/posts/{postId}", "excluded": { "category": "requires_elevated_scope", "reason": "post updates require Blogger write OAuth scopes; this connector's credential contract is read-only and legacy Write returns ErrUnsupportedOperation" } },
-    { "method": "DELETE", "path": "/blogs/{blogId}/posts/{postId}", "excluded": { "category": "destructive_admin", "reason": "post deletion is destructive and requires Blogger write/admin OAuth scope; legacy exposes no delete write action" } },
-    { "method": "GET", "path": "/blogs/{blogId}/pageviews", "covered_by": { "stream": "pageviews" } },
-    { "method": "GET", "path": "/blogs/{blogId}/comments/{commentId}", "excluded": { "category": "duplicate_of", "reason": "single-comment fetch is a narrower case of the comments stream already covered" } },
-    { "method": "POST", "path": "/blogs/{blogId}/comments/{commentId}?moderate=true", "excluded": { "category": "requires_elevated_scope", "reason": "comment moderation requires elevated blog-admin scope; out of scope, not read by legacy" } }
+    {
+      "method": "GET",
+      "path": "/blogs/byurl",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "blogger-artifact-2026-08-09",
+        "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+        "source_kind": "openapi",
+        "version": "v3; discovery revision 20260804",
+        "retrieved_at": "2026-08-09",
+        "sha256": "634c4bc88771c039560717e3fa118cf7ea47d33bced6b3f434fa4e482277e2fe",
+        "coordinate": "existing-surface[GET /blogs/byurl]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "lookup by URL requires a separate blog URL input, but this bundle's spec is keyed by the configured blog_id and adding a second identity mode would widen the accepted config contract",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/blogs/{blogId}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "blogger-artifact-2026-08-09",
+        "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+        "source_kind": "openapi",
+        "version": "v3; discovery revision 20260804",
+        "retrieved_at": "2026-08-09",
+        "sha256": "634c4bc88771c039560717e3fa118cf7ea47d33bced6b3f434fa4e482277e2fe",
+        "coordinate": "existing-surface[GET /blogs/{blogId}]"
+      },
+      "covered_by": {
+        "stream": "blogs"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/blogs/{blogId}/comments",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "blogger-artifact-2026-08-09",
+        "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+        "source_kind": "openapi",
+        "version": "v3; discovery revision 20260804",
+        "retrieved_at": "2026-08-09",
+        "sha256": "634c4bc88771c039560717e3fa118cf7ea47d33bced6b3f434fa4e482277e2fe",
+        "coordinate": "existing-surface[GET /blogs/{blogId}/comments]"
+      },
+      "covered_by": {
+        "stream": "comments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/blogs/{blogId}/comments/{commentId}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "blogger-artifact-2026-08-09",
+        "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+        "source_kind": "openapi",
+        "version": "v3; discovery revision 20260804",
+        "retrieved_at": "2026-08-09",
+        "sha256": "634c4bc88771c039560717e3fa118cf7ea47d33bced6b3f434fa4e482277e2fe",
+        "coordinate": "existing-surface[GET /blogs/{blogId}/comments/{commentId}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-comment fetch is a narrower case of the comments stream already covered",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/blogs/{blogId}/comments/{commentId}?moderate=true",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "blogger-artifact-2026-08-09",
+        "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+        "source_kind": "openapi",
+        "version": "v3; discovery revision 20260804",
+        "retrieved_at": "2026-08-09",
+        "sha256": "634c4bc88771c039560717e3fa118cf7ea47d33bced6b3f434fa4e482277e2fe",
+        "coordinate": "existing-surface[POST /blogs/{blogId}/comments/{commentId}?moderate=true]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "comment moderation requires elevated blog-admin scope; out of scope, not read by legacy",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/blogs/{blogId}/pages",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "blogger-artifact-2026-08-09",
+        "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+        "source_kind": "openapi",
+        "version": "v3; discovery revision 20260804",
+        "retrieved_at": "2026-08-09",
+        "sha256": "634c4bc88771c039560717e3fa118cf7ea47d33bced6b3f434fa4e482277e2fe",
+        "coordinate": "existing-surface[GET /blogs/{blogId}/pages]"
+      },
+      "covered_by": {
+        "stream": "pages"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/blogs/{blogId}/pageviews",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "blogger-artifact-2026-08-09",
+        "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+        "source_kind": "openapi",
+        "version": "v3; discovery revision 20260804",
+        "retrieved_at": "2026-08-09",
+        "sha256": "634c4bc88771c039560717e3fa118cf7ea47d33bced6b3f434fa4e482277e2fe",
+        "coordinate": "existing-surface[GET /blogs/{blogId}/pageviews]"
+      },
+      "covered_by": {
+        "stream": "pageviews"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/blogs/{blogId}/posts",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "blogger-artifact-2026-08-09",
+        "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+        "source_kind": "openapi",
+        "version": "v3; discovery revision 20260804",
+        "retrieved_at": "2026-08-09",
+        "sha256": "634c4bc88771c039560717e3fa118cf7ea47d33bced6b3f434fa4e482277e2fe",
+        "coordinate": "existing-surface[GET /blogs/{blogId}/posts]"
+      },
+      "covered_by": {
+        "stream": "posts"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/blogs/{blogId}/posts",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "blogger-artifact-2026-08-09",
+        "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+        "source_kind": "openapi",
+        "version": "v3; discovery revision 20260804",
+        "retrieved_at": "2026-08-09",
+        "sha256": "634c4bc88771c039560717e3fa118cf7ea47d33bced6b3f434fa4e482277e2fe",
+        "coordinate": "existing-surface[POST /blogs/{blogId}/posts]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "post creation requires Blogger write OAuth scopes; this connector's credential contract is read-only and legacy Write returns ErrUnsupportedOperation",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/blogs/{blogId}/posts/{postId}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "blogger-artifact-2026-08-09",
+        "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+        "source_kind": "openapi",
+        "version": "v3; discovery revision 20260804",
+        "retrieved_at": "2026-08-09",
+        "sha256": "634c4bc88771c039560717e3fa118cf7ea47d33bced6b3f434fa4e482277e2fe",
+        "coordinate": "existing-surface[GET /blogs/{blogId}/posts/{postId}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-post fetch is a narrower case of the posts stream already covered",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/blogs/{blogId}/posts/{postId}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "blogger-artifact-2026-08-09",
+        "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+        "source_kind": "openapi",
+        "version": "v3; discovery revision 20260804",
+        "retrieved_at": "2026-08-09",
+        "sha256": "634c4bc88771c039560717e3fa118cf7ea47d33bced6b3f434fa4e482277e2fe",
+        "coordinate": "existing-surface[PUT /blogs/{blogId}/posts/{postId}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "post updates require Blogger write OAuth scopes; this connector's credential contract is read-only and legacy Write returns ErrUnsupportedOperation",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/blogs/{blogId}/posts/{postId}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "blogger-artifact-2026-08-09",
+        "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+        "source_kind": "openapi",
+        "version": "v3; discovery revision 20260804",
+        "retrieved_at": "2026-08-09",
+        "sha256": "634c4bc88771c039560717e3fa118cf7ea47d33bced6b3f434fa4e482277e2fe",
+        "coordinate": "existing-surface[DELETE /blogs/{blogId}/posts/{postId}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "post deletion is destructive and requires Blogger write/admin OAuth scope; legacy exposes no delete write action",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/blogs/byurl",
+      "provenance": {
+        "artifact": "blogger-artifact-2026-08-09",
+        "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+        "source_kind": "openapi",
+        "version": "v3; discovery revision 20260804",
+        "retrieved_at": "2026-08-09",
+        "sha256": "634c4bc88771c039560717e3fa118cf7ea47d33bced6b3f434fa4e482277e2fe",
+        "coordinate": "resources[\"blogs\"].methods[\"getByUrl\"]"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/blogs/{blogId}",
+      "provenance": {
+        "artifact": "blogger-artifact-2026-08-09",
+        "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+        "source_kind": "openapi",
+        "version": "v3; discovery revision 20260804",
+        "retrieved_at": "2026-08-09",
+        "sha256": "634c4bc88771c039560717e3fa118cf7ea47d33bced6b3f434fa4e482277e2fe",
+        "coordinate": "resources[\"blogs\"].methods[\"get\"]"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/blogs/{blogId}/comments",
+      "provenance": {
+        "artifact": "blogger-artifact-2026-08-09",
+        "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+        "source_kind": "openapi",
+        "version": "v3; discovery revision 20260804",
+        "retrieved_at": "2026-08-09",
+        "sha256": "634c4bc88771c039560717e3fa118cf7ea47d33bced6b3f434fa4e482277e2fe",
+        "coordinate": "resources[\"comments\"].methods[\"listByBlog\"]"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/blogs/{blogId}/pages",
+      "provenance": {
+        "artifact": "blogger-artifact-2026-08-09",
+        "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+        "source_kind": "openapi",
+        "version": "v3; discovery revision 20260804",
+        "retrieved_at": "2026-08-09",
+        "sha256": "634c4bc88771c039560717e3fa118cf7ea47d33bced6b3f434fa4e482277e2fe",
+        "coordinate": "resources[\"pages\"].methods[\"list\"]"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/blogs/{blogId}/pages",
+      "provenance": {
+        "artifact": "blogger-artifact-2026-08-09",
+        "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+        "source_kind": "openapi",
+        "version": "v3; discovery revision 20260804",
+        "retrieved_at": "2026-08-09",
+        "sha256": "634c4bc88771c039560717e3fa118cf7ea47d33bced6b3f434fa4e482277e2fe",
+        "coordinate": "resources[\"pages\"].methods[\"insert\"]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/blogs/{blogId}/pages/{pageId}",
+      "provenance": {
+        "artifact": "blogger-artifact-2026-08-09",
+        "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+        "source_kind": "openapi",
+        "version": "v3; discovery revision 20260804",
+        "retrieved_at": "2026-08-09",
+        "sha256": "634c4bc88771c039560717e3fa118cf7ea47d33bced6b3f434fa4e482277e2fe",
+        "coordinate": "resources[\"pages\"].methods[\"get\"]"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/blogs/{blogId}/pages/{pageId}",
+      "provenance": {
+        "artifact": "blogger-artifact-2026-08-09",
+        "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+        "source_kind": "openapi",
+        "version": "v3; discovery revision 20260804",
+        "retrieved_at": "2026-08-09",
+        "sha256": "634c4bc88771c039560717e3fa118cf7ea47d33bced6b3f434fa4e482277e2fe",
+        "coordinate": "resources[\"pages\"].methods[\"update\"]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v3/blogs/{blogId}/pages/{pageId}",
+      "provenance": {
+        "artifact": "blogger-artifact-2026-08-09",
+        "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+        "source_kind": "openapi",
+        "version": "v3; discovery revision 20260804",
+        "retrieved_at": "2026-08-09",
+        "sha256": "634c4bc88771c039560717e3fa118cf7ea47d33bced6b3f434fa4e482277e2fe",
+        "coordinate": "resources[\"pages\"].methods[\"patch\"]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/blogs/{blogId}/pages/{pageId}",
+      "provenance": {
+        "artifact": "blogger-artifact-2026-08-09",
+        "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+        "source_kind": "openapi",
+        "version": "v3; discovery revision 20260804",
+        "retrieved_at": "2026-08-09",
+        "sha256": "634c4bc88771c039560717e3fa118cf7ea47d33bced6b3f434fa4e482277e2fe",
+        "coordinate": "resources[\"pages\"].methods[\"delete\"]"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/blogs/{blogId}/pages/{pageId}/publish",
+      "provenance": {
+        "artifact": "blogger-artifact-2026-08-09",
+        "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+        "source_kind": "openapi",
+        "version": "v3; discovery revision 20260804",
+        "retrieved_at": "2026-08-09",
+        "sha256": "634c4bc88771c039560717e3fa118cf7ea47d33bced6b3f434fa4e482277e2fe",
+        "coordinate": "resources[\"pages\"].methods[\"publish\"]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/blogs/{blogId}/pages/{pageId}/revert",
+      "provenance": {
+        "artifact": "blogger-artifact-2026-08-09",
+        "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+        "source_kind": "openapi",
+        "version": "v3; discovery revision 20260804",
+        "retrieved_at": "2026-08-09",
+        "sha256": "634c4bc88771c039560717e3fa118cf7ea47d33bced6b3f434fa4e482277e2fe",
+        "coordinate": "resources[\"pages\"].methods[\"revert\"]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/blogs/{blogId}/pageviews",
+      "provenance": {
+        "artifact": "blogger-artifact-2026-08-09",
+        "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+        "source_kind": "openapi",
+        "version": "v3; discovery revision 20260804",
+        "retrieved_at": "2026-08-09",
+        "sha256": "634c4bc88771c039560717e3fa118cf7ea47d33bced6b3f434fa4e482277e2fe",
+        "coordinate": "resources[\"pageViews\"].methods[\"get\"]"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/blogs/{blogId}/posts",
+      "provenance": {
+        "artifact": "blogger-artifact-2026-08-09",
+        "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+        "source_kind": "openapi",
+        "version": "v3; discovery revision 20260804",
+        "retrieved_at": "2026-08-09",
+        "sha256": "634c4bc88771c039560717e3fa118cf7ea47d33bced6b3f434fa4e482277e2fe",
+        "coordinate": "resources[\"posts\"].methods[\"list\"]"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/blogs/{blogId}/posts",
+      "provenance": {
+        "artifact": "blogger-artifact-2026-08-09",
+        "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+        "source_kind": "openapi",
+        "version": "v3; discovery revision 20260804",
+        "retrieved_at": "2026-08-09",
+        "sha256": "634c4bc88771c039560717e3fa118cf7ea47d33bced6b3f434fa4e482277e2fe",
+        "coordinate": "resources[\"posts\"].methods[\"insert\"]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/blogs/{blogId}/posts/bypath",
+      "provenance": {
+        "artifact": "blogger-artifact-2026-08-09",
+        "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+        "source_kind": "openapi",
+        "version": "v3; discovery revision 20260804",
+        "retrieved_at": "2026-08-09",
+        "sha256": "634c4bc88771c039560717e3fa118cf7ea47d33bced6b3f434fa4e482277e2fe",
+        "coordinate": "resources[\"posts\"].methods[\"getByPath\"]"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/blogs/{blogId}/posts/search",
+      "provenance": {
+        "artifact": "blogger-artifact-2026-08-09",
+        "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+        "source_kind": "openapi",
+        "version": "v3; discovery revision 20260804",
+        "retrieved_at": "2026-08-09",
+        "sha256": "634c4bc88771c039560717e3fa118cf7ea47d33bced6b3f434fa4e482277e2fe",
+        "coordinate": "resources[\"posts\"].methods[\"search\"]"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/blogs/{blogId}/posts/{postId}",
+      "provenance": {
+        "artifact": "blogger-artifact-2026-08-09",
+        "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+        "source_kind": "openapi",
+        "version": "v3; discovery revision 20260804",
+        "retrieved_at": "2026-08-09",
+        "sha256": "634c4bc88771c039560717e3fa118cf7ea47d33bced6b3f434fa4e482277e2fe",
+        "coordinate": "resources[\"posts\"].methods[\"get\"]"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/blogs/{blogId}/posts/{postId}",
+      "provenance": {
+        "artifact": "blogger-artifact-2026-08-09",
+        "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+        "source_kind": "openapi",
+        "version": "v3; discovery revision 20260804",
+        "retrieved_at": "2026-08-09",
+        "sha256": "634c4bc88771c039560717e3fa118cf7ea47d33bced6b3f434fa4e482277e2fe",
+        "coordinate": "resources[\"posts\"].methods[\"update\"]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v3/blogs/{blogId}/posts/{postId}",
+      "provenance": {
+        "artifact": "blogger-artifact-2026-08-09",
+        "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+        "source_kind": "openapi",
+        "version": "v3; discovery revision 20260804",
+        "retrieved_at": "2026-08-09",
+        "sha256": "634c4bc88771c039560717e3fa118cf7ea47d33bced6b3f434fa4e482277e2fe",
+        "coordinate": "resources[\"posts\"].methods[\"patch\"]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/blogs/{blogId}/posts/{postId}",
+      "provenance": {
+        "artifact": "blogger-artifact-2026-08-09",
+        "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+        "source_kind": "openapi",
+        "version": "v3; discovery revision 20260804",
+        "retrieved_at": "2026-08-09",
+        "sha256": "634c4bc88771c039560717e3fa118cf7ea47d33bced6b3f434fa4e482277e2fe",
+        "coordinate": "resources[\"posts\"].methods[\"delete\"]"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/blogs/{blogId}/posts/{postId}/comments",
+      "provenance": {
+        "artifact": "blogger-artifact-2026-08-09",
+        "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+        "source_kind": "openapi",
+        "version": "v3; discovery revision 20260804",
+        "retrieved_at": "2026-08-09",
+        "sha256": "634c4bc88771c039560717e3fa118cf7ea47d33bced6b3f434fa4e482277e2fe",
+        "coordinate": "resources[\"comments\"].methods[\"list\"]"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/blogs/{blogId}/posts/{postId}/comments/{commentId}",
+      "provenance": {
+        "artifact": "blogger-artifact-2026-08-09",
+        "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+        "source_kind": "openapi",
+        "version": "v3; discovery revision 20260804",
+        "retrieved_at": "2026-08-09",
+        "sha256": "634c4bc88771c039560717e3fa118cf7ea47d33bced6b3f434fa4e482277e2fe",
+        "coordinate": "resources[\"comments\"].methods[\"get\"]"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/blogs/{blogId}/posts/{postId}/comments/{commentId}",
+      "provenance": {
+        "artifact": "blogger-artifact-2026-08-09",
+        "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+        "source_kind": "openapi",
+        "version": "v3; discovery revision 20260804",
+        "retrieved_at": "2026-08-09",
+        "sha256": "634c4bc88771c039560717e3fa118cf7ea47d33bced6b3f434fa4e482277e2fe",
+        "coordinate": "resources[\"comments\"].methods[\"delete\"]"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/blogs/{blogId}/posts/{postId}/comments/{commentId}/approve",
+      "provenance": {
+        "artifact": "blogger-artifact-2026-08-09",
+        "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+        "source_kind": "openapi",
+        "version": "v3; discovery revision 20260804",
+        "retrieved_at": "2026-08-09",
+        "sha256": "634c4bc88771c039560717e3fa118cf7ea47d33bced6b3f434fa4e482277e2fe",
+        "coordinate": "resources[\"comments\"].methods[\"approve\"]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/blogs/{blogId}/posts/{postId}/comments/{commentId}/removecontent",
+      "provenance": {
+        "artifact": "blogger-artifact-2026-08-09",
+        "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+        "source_kind": "openapi",
+        "version": "v3; discovery revision 20260804",
+        "retrieved_at": "2026-08-09",
+        "sha256": "634c4bc88771c039560717e3fa118cf7ea47d33bced6b3f434fa4e482277e2fe",
+        "coordinate": "resources[\"comments\"].methods[\"removeContent\"]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/blogs/{blogId}/posts/{postId}/comments/{commentId}/spam",
+      "provenance": {
+        "artifact": "blogger-artifact-2026-08-09",
+        "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+        "source_kind": "openapi",
+        "version": "v3; discovery revision 20260804",
+        "retrieved_at": "2026-08-09",
+        "sha256": "634c4bc88771c039560717e3fa118cf7ea47d33bced6b3f434fa4e482277e2fe",
+        "coordinate": "resources[\"comments\"].methods[\"markAsSpam\"]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/blogs/{blogId}/posts/{postId}/publish",
+      "provenance": {
+        "artifact": "blogger-artifact-2026-08-09",
+        "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+        "source_kind": "openapi",
+        "version": "v3; discovery revision 20260804",
+        "retrieved_at": "2026-08-09",
+        "sha256": "634c4bc88771c039560717e3fa118cf7ea47d33bced6b3f434fa4e482277e2fe",
+        "coordinate": "resources[\"posts\"].methods[\"publish\"]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/blogs/{blogId}/posts/{postId}/revert",
+      "provenance": {
+        "artifact": "blogger-artifact-2026-08-09",
+        "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+        "source_kind": "openapi",
+        "version": "v3; discovery revision 20260804",
+        "retrieved_at": "2026-08-09",
+        "sha256": "634c4bc88771c039560717e3fa118cf7ea47d33bced6b3f434fa4e482277e2fe",
+        "coordinate": "resources[\"posts\"].methods[\"revert\"]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/users/{userId}",
+      "provenance": {
+        "artifact": "blogger-artifact-2026-08-09",
+        "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+        "source_kind": "openapi",
+        "version": "v3; discovery revision 20260804",
+        "retrieved_at": "2026-08-09",
+        "sha256": "634c4bc88771c039560717e3fa118cf7ea47d33bced6b3f434fa4e482277e2fe",
+        "coordinate": "resources[\"users\"].methods[\"get\"]"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/users/{userId}/blogs",
+      "provenance": {
+        "artifact": "blogger-artifact-2026-08-09",
+        "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+        "source_kind": "openapi",
+        "version": "v3; discovery revision 20260804",
+        "retrieved_at": "2026-08-09",
+        "sha256": "634c4bc88771c039560717e3fa118cf7ea47d33bced6b3f434fa4e482277e2fe",
+        "coordinate": "resources[\"blogs\"].methods[\"listByUser\"]"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/users/{userId}/blogs/{blogId}",
+      "provenance": {
+        "artifact": "blogger-artifact-2026-08-09",
+        "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+        "source_kind": "openapi",
+        "version": "v3; discovery revision 20260804",
+        "retrieved_at": "2026-08-09",
+        "sha256": "634c4bc88771c039560717e3fa118cf7ea47d33bced6b3f434fa4e482277e2fe",
+        "coordinate": "resources[\"blogUserInfos\"].methods[\"get\"]"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/users/{userId}/blogs/{blogId}/posts",
+      "provenance": {
+        "artifact": "blogger-artifact-2026-08-09",
+        "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+        "source_kind": "openapi",
+        "version": "v3; discovery revision 20260804",
+        "retrieved_at": "2026-08-09",
+        "sha256": "634c4bc88771c039560717e3fa118cf7ea47d33bced6b3f434fa4e482277e2fe",
+        "coordinate": "resources[\"postUserInfos\"].methods[\"list\"]"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/users/{userId}/blogs/{blogId}/posts/{postId}",
+      "provenance": {
+        "artifact": "blogger-artifact-2026-08-09",
+        "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+        "source_kind": "openapi",
+        "version": "v3; discovery revision 20260804",
+        "retrieved_at": "2026-08-09",
+        "sha256": "634c4bc88771c039560717e3fa118cf7ea47d33bced6b3f434fa4e482277e2fe",
+        "coordinate": "resources[\"postUserInfos\"].methods[\"get\"]"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    }
   ]
 }

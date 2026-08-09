@@ -1,0 +1,1097 @@
+{
+  "tagline": "Run Sharetribe's declared streams and reverse-ETL actions.",
+  "usage": "pm sharetribe \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "api get integration-api availability-exceptions query",
+        "api get integration-api listings show",
+        "api get integration-api messages query",
+        "api get integration-api stock-adjustments query",
+        "api get integration-api stock-reservations show",
+        "api get integration-api transactions show",
+        "api get integration-api users show",
+        "api get listings query",
+        "api get listings show",
+        "api get reviews query",
+        "api get reviews show",
+        "api get timeslots query",
+        "api get users show",
+        "events list",
+        "file attachments list",
+        "files list",
+        "listings list",
+        "marketplace list",
+        "transactions list",
+        "users list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "api post integration-api images upload",
+        "api post own-listings create",
+        "api post own-listings create-draft",
+        "api post own-listings open",
+        "api post own-listings publish-draft",
+        "api post transactions initiate",
+        "api post v1 integration-api file-downloads create",
+        "api post v1 integration-api file-uploads create",
+        "api post v1 integration-api files create",
+        "approve listing apply",
+        "approve user apply",
+        "close listing apply",
+        "create availability exception apply",
+        "create listing apply",
+        "create stock adjustment apply",
+        "delete availability exception apply",
+        "open listing apply",
+        "set listing stock apply",
+        "transition transaction apply",
+        "transition transaction speculative apply",
+        "update listing apply",
+        "update transaction metadata apply",
+        "update user permissions apply",
+        "update user profile apply",
+        "verify user email apply"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "api get integration-api availability-exceptions query",
+      "summary": "Documented GET /integration_api/availability_exceptions/query (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+      "examples": [
+        "pm sharetribe api get integration-api availability-exceptions query --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/integration_api/availability_exceptions/query"
+        }
+      ],
+      "operation": "sharetribe.get.integration-api-availability-exceptions-query",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get integration-api listings show",
+      "summary": "Documented GET /integration_api/listings/show (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+      "examples": [
+        "pm sharetribe api get integration-api listings show --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/integration_api/listings/show"
+        }
+      ],
+      "operation": "sharetribe.get.integration-api-listings-show",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get integration-api messages query",
+      "summary": "Documented GET /integration_api/messages/query (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+      "examples": [
+        "pm sharetribe api get integration-api messages query --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/integration_api/messages/query"
+        }
+      ],
+      "operation": "sharetribe.get.integration-api-messages-query",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get integration-api stock-adjustments query",
+      "summary": "Documented GET /integration_api/stock_adjustments/query (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+      "examples": [
+        "pm sharetribe api get integration-api stock-adjustments query --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/integration_api/stock_adjustments/query"
+        }
+      ],
+      "operation": "sharetribe.get.integration-api-stock-adjustments-query",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get integration-api stock-reservations show",
+      "summary": "Documented GET /integration_api/stock_reservations/show (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+      "examples": [
+        "pm sharetribe api get integration-api stock-reservations show --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/integration_api/stock_reservations/show"
+        }
+      ],
+      "operation": "sharetribe.get.integration-api-stock-reservations-show",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get integration-api transactions show",
+      "summary": "Documented GET /integration_api/transactions/show (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+      "examples": [
+        "pm sharetribe api get integration-api transactions show --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/integration_api/transactions/show"
+        }
+      ],
+      "operation": "sharetribe.get.integration-api-transactions-show",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get integration-api users show",
+      "summary": "Documented GET /integration_api/users/show (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+      "examples": [
+        "pm sharetribe api get integration-api users show --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/integration_api/users/show"
+        }
+      ],
+      "operation": "sharetribe.get.integration-api-users-show",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get listings query",
+      "summary": "Documented GET /listings/query (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+      "examples": [
+        "pm sharetribe api get listings query --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/listings/query"
+        }
+      ],
+      "operation": "sharetribe.get.listings-query",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get listings show",
+      "summary": "Documented GET /listings/show (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+      "examples": [
+        "pm sharetribe api get listings show --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/listings/show"
+        }
+      ],
+      "operation": "sharetribe.get.listings-show",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get reviews query",
+      "summary": "Documented GET /reviews/query (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+      "examples": [
+        "pm sharetribe api get reviews query --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/reviews/query"
+        }
+      ],
+      "operation": "sharetribe.get.reviews-query",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get reviews show",
+      "summary": "Documented GET /reviews/show (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+      "examples": [
+        "pm sharetribe api get reviews show --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/reviews/show"
+        }
+      ],
+      "operation": "sharetribe.get.reviews-show",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get timeslots query",
+      "summary": "Documented GET /timeslots/query (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+      "examples": [
+        "pm sharetribe api get timeslots query --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/timeslots/query"
+        }
+      ],
+      "operation": "sharetribe.get.timeslots-query",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get users show",
+      "summary": "Documented GET /users/show (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+      "examples": [
+        "pm sharetribe api get users show --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users/show"
+        }
+      ],
+      "operation": "sharetribe.get.users-show",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api post integration-api images upload",
+      "summary": "Documented POST /integration_api/images/upload (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+      "examples": [
+        "pm sharetribe api post integration-api images upload --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/integration_api/images/upload"
+        }
+      ],
+      "operation": "sharetribe.post.integration-api-images-upload",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post own-listings create",
+      "summary": "Documented POST /own_listings/create (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+      "examples": [
+        "pm sharetribe api post own-listings create --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/own_listings/create"
+        }
+      ],
+      "operation": "sharetribe.post.own-listings-create",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post own-listings create-draft",
+      "summary": "Documented POST /own_listings/create_draft (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+      "examples": [
+        "pm sharetribe api post own-listings create-draft --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/own_listings/create_draft"
+        }
+      ],
+      "operation": "sharetribe.post.own-listings-create-draft",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post own-listings open",
+      "summary": "Documented POST /own_listings/open (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+      "examples": [
+        "pm sharetribe api post own-listings open --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/own_listings/open"
+        }
+      ],
+      "operation": "sharetribe.post.own-listings-open",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post own-listings publish-draft",
+      "summary": "Documented POST /own_listings/publish_draft (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+      "examples": [
+        "pm sharetribe api post own-listings publish-draft --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/own_listings/publish_draft"
+        }
+      ],
+      "operation": "sharetribe.post.own-listings-publish-draft",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post transactions initiate",
+      "summary": "Documented POST /transactions/initiate (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+      "examples": [
+        "pm sharetribe api post transactions initiate --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/transactions/initiate"
+        }
+      ],
+      "operation": "sharetribe.post.transactions-initiate",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 integration-api file-downloads create",
+      "summary": "Documented POST /v1/integration_api/file_downloads/create (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+      "examples": [
+        "pm sharetribe api post v1 integration-api file-downloads create --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/integration_api/file_downloads/create"
+        }
+      ],
+      "operation": "sharetribe.post.v1-integration-api-file-downloads-create",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 integration-api file-uploads create",
+      "summary": "Documented POST /v1/integration_api/file_uploads/create (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+      "examples": [
+        "pm sharetribe api post v1 integration-api file-uploads create --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/integration_api/file_uploads/create"
+        }
+      ],
+      "operation": "sharetribe.post.v1-integration-api-file-uploads-create",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 integration-api files create",
+      "summary": "Documented POST /v1/integration_api/files/create (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+      "examples": [
+        "pm sharetribe api post v1 integration-api files create --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/integration_api/files/create"
+        }
+      ],
+      "operation": "sharetribe.post.v1-integration-api-files-create",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "approve listing apply",
+      "summary": "Plan and execute the approve listing reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "approve_listing",
+      "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm sharetribe approve listing apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/integration_api/listings/approve"
+        }
+      ],
+      "risk": "approves a listing currently in pendingApproval state, setting it to published and making it publicly visible; review before enabling in a caller with untrusted input if the marketplace relies on manual listing moderation",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "approve user apply",
+      "summary": "Plan and execute the approve user reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "approve_user",
+      "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm sharetribe approve user apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/integration_api/users/approve"
+        }
+      ],
+      "risk": "approves a pending user account, setting its state to active and granting it marketplace access; higher-scrutiny than listing writes since it grants account access",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "close listing apply",
+      "summary": "Plan and execute the close listing reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "close_listing",
+      "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm sharetribe close listing apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/integration_api/listings/close"
+        }
+      ],
+      "risk": "sets the listing's state to closed; it stops being discoverable via the public Marketplace API listings/query endpoint but remains reachable by id or through related transactions",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create availability exception apply",
+      "summary": "Plan and execute the create availability exception reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_availability_exception",
+      "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+      "flags": [
+        {
+          "name": "end",
+          "type": "string",
+          "summary": "Required end record field.",
+          "maps_to": "record.end",
+          "required": true
+        },
+        {
+          "name": "listingId",
+          "type": "string",
+          "summary": "Required listingId record field.",
+          "maps_to": "record.listingId",
+          "required": true
+        },
+        {
+          "name": "seats",
+          "type": "integer",
+          "summary": "Required seats record field.",
+          "maps_to": "record.seats",
+          "required": true
+        },
+        {
+          "name": "start",
+          "type": "string",
+          "summary": "Required start record field.",
+          "maps_to": "record.start",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm sharetribe create availability exception apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/integration_api/availability_exceptions/create"
+        }
+      ],
+      "risk": "overrides a listing's availability plan for a given time range (e.g. blocking it out or opening extra seats); low-risk external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create listing apply",
+      "summary": "Plan and execute the create listing reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_listing",
+      "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+      "flags": [
+        {
+          "name": "authorId",
+          "type": "string",
+          "summary": "Required authorId record field.",
+          "maps_to": "record.authorId",
+          "required": true
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "summary": "Required title record field.",
+          "maps_to": "record.title",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm sharetribe create listing apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/integration_api/listings/create"
+        }
+      ],
+      "risk": "creates a new marketplace listing; low-risk external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create stock adjustment apply",
+      "summary": "Plan and execute the create stock adjustment reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_stock_adjustment",
+      "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+      "flags": [
+        {
+          "name": "listingId",
+          "type": "string",
+          "summary": "Required listingId record field.",
+          "maps_to": "record.listingId",
+          "required": true
+        },
+        {
+          "name": "quantity",
+          "type": "integer",
+          "summary": "Required quantity record field.",
+          "maps_to": "record.quantity",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm sharetribe create stock adjustment apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/integration_api/stock_adjustments/create"
+        }
+      ],
+      "risk": "creates an immutable stock adjustment for a listing (increases or decreases available stock by quantity); low-risk external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete availability exception apply",
+      "summary": "Plan and execute the delete availability exception reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_availability_exception",
+      "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm sharetribe delete availability exception apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/integration_api/availability_exceptions/delete"
+        }
+      ],
+      "risk": "permanently removes an availability exception by id, restoring the listing's default availability plan for that time range",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "events list",
+      "summary": "Run the events ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "events",
+      "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+      "examples": [
+        "pm sharetribe events list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/integration_api/events/query"
+        }
+      ]
+    },
+    {
+      "path": "file attachments list",
+      "summary": "Run the file attachments ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "file_attachments",
+      "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+      "examples": [
+        "pm sharetribe file attachments list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/integration_api/file_attachments/query"
+        }
+      ]
+    },
+    {
+      "path": "files list",
+      "summary": "Run the files ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "files",
+      "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+      "examples": [
+        "pm sharetribe files list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/integration_api/files/query"
+        }
+      ]
+    },
+    {
+      "path": "listings list",
+      "summary": "Run the listings ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "listings",
+      "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+      "examples": [
+        "pm sharetribe listings list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/integration_api/listings/query"
+        }
+      ]
+    },
+    {
+      "path": "marketplace list",
+      "summary": "Run the marketplace ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "marketplace",
+      "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+      "examples": [
+        "pm sharetribe marketplace list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/integration_api/marketplace/show"
+        }
+      ]
+    },
+    {
+      "path": "open listing apply",
+      "summary": "Plan and execute the open listing reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "open_listing",
+      "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm sharetribe open listing apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/integration_api/listings/open"
+        }
+      ],
+      "risk": "sets a closed listing's state back to published, making it publicly discoverable again; low-risk, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "set listing stock apply",
+      "summary": "Plan and execute the set listing stock reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "set_listing_stock",
+      "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+      "flags": [
+        {
+          "name": "listingId",
+          "type": "string",
+          "summary": "Required listingId record field.",
+          "maps_to": "record.listingId",
+          "required": true
+        },
+        {
+          "name": "newTotal",
+          "type": "integer",
+          "summary": "Required newTotal record field.",
+          "maps_to": "record.newTotal",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm sharetribe set listing stock apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/integration_api/stock/compare_and_set"
+        }
+      ],
+      "risk": "sets a listing's total available stock via a compare-and-set (only applied if the listing's current stock matches oldTotal); low-risk external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "transactions list",
+      "summary": "Run the transactions ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "transactions",
+      "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+      "examples": [
+        "pm sharetribe transactions list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/integration_api/transactions/query"
+        }
+      ]
+    },
+    {
+      "path": "transition transaction apply",
+      "summary": "Plan and execute the transition transaction reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "transition_transaction",
+      "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+      "examples": [
+        "pm sharetribe transition transaction apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/integration_api/transactions/transition"
+        }
+      ],
+      "risk": "transitions a real transaction to a new state via the marketplace's transaction process (e.g. accepting/declining a booking, marking payment); only operator-actor transitions are permitted; a maximum of 100 transitions per transaction; can trigger real payment capture/payout actions depending on the process definition",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "transition transaction speculative apply",
+      "summary": "Plan and execute the transition transaction speculative reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "transition_transaction_speculative",
+      "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+      "examples": [
+        "pm sharetribe transition transaction speculative apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/integration_api/transactions/transition_speculative"
+        }
+      ],
+      "risk": "simulates a transaction transition to validate parameters or preview the resulting price breakdown; the transaction state is NOT actually changed — safe to call freely, no approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update listing apply",
+      "summary": "Plan and execute the update listing reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_listing",
+      "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm sharetribe update listing apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/integration_api/listings/update"
+        }
+      ],
+      "risk": "mutates an existing listing's details by id; cannot be used to change listing state (use close_listing/open_listing/approve_listing for that); publicData/privateData/metadata are merged with the existing object on the top level, not deep-merged",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update transaction metadata apply",
+      "summary": "Plan and execute the update transaction metadata reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_transaction_metadata",
+      "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+      "examples": [
+        "pm sharetribe update transaction metadata apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/integration_api/transactions/update_metadata"
+        }
+      ],
+      "risk": "mutates an existing transaction's metadata (merged with the existing object on the top level, not deep-merged); low-risk, does not affect payment/process state",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update user permissions apply",
+      "summary": "Plan and execute the update user permissions reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_user_permissions",
+      "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm sharetribe update user permissions apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/integration_api/users/update_permissions"
+        }
+      ],
+      "risk": "changes what a user is permitted to do on the marketplace (post listings, initiate transactions, read); a higher-scrutiny access-control mutation, review before enabling in a caller with untrusted input",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update user profile apply",
+      "summary": "Plan and execute the update user profile reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_user_profile",
+      "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm sharetribe update user profile apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/integration_api/users/update_profile"
+        }
+      ],
+      "risk": "mutates an existing user's profile fields by id; publicData/protectedData/privateData/metadata are merged with the existing object on the top level, not deep-merged",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "users list",
+      "summary": "Run the users ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "users",
+      "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+      "examples": [
+        "pm sharetribe users list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/integration_api/users/query"
+        }
+      ]
+    },
+    {
+      "path": "verify user email apply",
+      "summary": "Plan and execute the verify user email reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "verify_user_email",
+      "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+      "flags": [
+        {
+          "name": "email",
+          "type": "string",
+          "summary": "Required email record field.",
+          "maps_to": "record.email",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm sharetribe verify user email apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/integration_api/users/verify_email"
+        }
+      ],
+      "risk": "marks the given email address as verified for the user; low-risk account-state mutation",
+      "approval": "requires plan, preview, approval, and execute"
+    }
+  ]
+}

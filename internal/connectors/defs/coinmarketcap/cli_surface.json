@@ -1,0 +1,2366 @@
+{
+  "tagline": "Run CoinMarketCap's declared streams and reverse-ETL actions.",
+  "usage": "pm coinmarketcap \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "altcoin season index historical list",
+        "altcoin season index latest list",
+        "api get v1 blockchain statistics latest",
+        "api get v1 cmc-index historical",
+        "api get v1 cmc-index latest",
+        "api get v1 cmc10-index historical",
+        "api get v1 cmc10-index latest",
+        "api get v1 community trending token",
+        "api get v1 community trending topic",
+        "api get v1 content latest",
+        "api get v1 content posts comments",
+        "api get v1 content posts latest",
+        "api get v1 content posts top",
+        "api get v1 cryptocurrency airdrop",
+        "api get v1 cryptocurrency airdrops",
+        "api get v1 cryptocurrency categories",
+        "api get v1 cryptocurrency category",
+        "api get v1 cryptocurrency info",
+        "api get v1 cryptocurrency listings historical",
+        "api get v1 cryptocurrency listings latest",
+        "api get v1 cryptocurrency listings new",
+        "api get v1 cryptocurrency map",
+        "api get v1 cryptocurrency market-pairs latest",
+        "api get v1 cryptocurrency multiplier",
+        "api get v1 cryptocurrency ohlcv historical",
+        "api get v1 cryptocurrency ohlcv latest",
+        "api get v1 cryptocurrency price-performance-stats latest",
+        "api get v1 cryptocurrency quotes historical",
+        "api get v1 cryptocurrency quotes latest",
+        "api get v1 cryptocurrency trending gainers-losers",
+        "api get v1 cryptocurrency trending latest",
+        "api get v1 cryptocurrency trending most-visited",
+        "api get v1 derivatives exchanges",
+        "api get v1 derivatives positions",
+        "api get v1 dex holders count",
+        "api get v1 dex holders tag-count",
+        "api get v1 dex holders trend list",
+        "api get v1 dex liquidity-change list",
+        "api get v1 dex platform detail",
+        "api get v1 dex platform list",
+        "api get v1 dex search",
+        "api get v1 dex security detail",
+        "api get v1 dex token",
+        "api get v1 dex token pools",
+        "api get v1 dex token price",
+        "api get v1 dex token-liquidity query",
+        "api get v1 dex tokens transactions",
+        "api get v1 exchange assets",
+        "api get v1 exchange info",
+        "api get v1 exchange listings latest",
+        "api get v1 exchange map",
+        "api get v1 exchange market-pairs latest",
+        "api get v1 exchange quotes historical",
+        "api get v1 exchange quotes latest",
+        "api get v1 fiat map",
+        "api get v1 k-line candles",
+        "api get v1 k-line points",
+        "api get v1 partners flipside-crypto fcas listings latest",
+        "api get v1 partners flipside-crypto fcas quotes latest",
+        "api get v1 simple price",
+        "api get v1 tools postman",
+        "api get v1 tools price-conversion",
+        "api get v2 cryptocurrency market-pairs latest",
+        "api get v2 cryptocurrency ohlcv historical",
+        "api get v2 cryptocurrency ohlcv latest",
+        "api get v2 cryptocurrency price-performance-stats latest",
+        "api get v2 cryptocurrency quotes historical",
+        "api get v2 cryptocurrency quotes latest",
+        "api get v2 dex multiplier",
+        "api get v2 simple price",
+        "api get v3 cryptocurrency listings latest",
+        "api get v3 cryptocurrency quotes historical",
+        "api get v3 fear-and-greed historical",
+        "api get v3 index cmc100-historical",
+        "api get v3 index cmc100-latest",
+        "api get v3 index cmc20-historical",
+        "api get v3 index cmc20-latest",
+        "api get v4 dex listings info",
+        "api get v4 dex listings quotes",
+        "api get v4 dex networks list",
+        "api get v4 dex pairs ohlcv historical",
+        "api get v4 dex pairs ohlcv latest",
+        "api get v4 dex pairs quotes latest",
+        "api get v4 dex pairs trade latest",
+        "api get v4 dex spot-pairs latest",
+        "api get v5 cryptocurrency derivatives market-pairs list latest",
+        "api get v5 derivatives liquidations cryptocurrency list latest",
+        "api get v5 derivatives liquidations exchange list latest",
+        "api get v5 derivatives liquidations quotes latest",
+        "api get v5 exchange derivatives list",
+        "api get v5 exchange derivatives market-pairs list latest",
+        "api get v5 real-world-assets assets list",
+        "api get v5 real-world-assets info",
+        "api get v5 real-world-assets issuers",
+        "api get v5 real-world-assets issuers list",
+        "api get v5 real-world-assets map",
+        "api get v5 real-world-assets market-pairs list",
+        "api get v5 real-world-assets quotes latest",
+        "cryptocurrency info list",
+        "cryptocurrency quotes latest list",
+        "fear and greed latest list",
+        "global metrics list",
+        "global metrics quotes historical list",
+        "key info list",
+        "price conversion list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "api post v1 dex gainer-loser list",
+        "api post v1 dex holders detail",
+        "api post v1 dex holders list",
+        "api post v1 dex meme list",
+        "api post v1 dex new list",
+        "api post v1 dex token price batch",
+        "api post v1 dex tokens batch-query",
+        "api post v1 dex tokens trending list"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "altcoin season index historical list",
+      "summary": "Run the altcoin season index historical ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "altcoin_season_index_historical",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap altcoin season index historical list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/altcoin-season-index/historical"
+        }
+      ]
+    },
+    {
+      "path": "altcoin season index latest list",
+      "summary": "Run the altcoin season index latest ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "altcoin_season_index_latest",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap altcoin season index latest list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/altcoin-season-index/latest"
+        }
+      ]
+    },
+    {
+      "path": "api get v1 blockchain statistics latest",
+      "summary": "Documented GET /v1/blockchain/statistics/latest (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v1 blockchain statistics latest --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/blockchain/statistics/latest"
+        }
+      ],
+      "operation": "coinmarketcap.get.v1-blockchain-statistics-latest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 cmc-index historical",
+      "summary": "Documented GET /v1/cmc-index/historical (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v1 cmc-index historical --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/cmc-index/historical"
+        }
+      ],
+      "operation": "coinmarketcap.get.v1-cmc-index-historical",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 cmc-index latest",
+      "summary": "Documented GET /v1/cmc-index/latest (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v1 cmc-index latest --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/cmc-index/latest"
+        }
+      ],
+      "operation": "coinmarketcap.get.v1-cmc-index-latest",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 cmc10-index historical",
+      "summary": "Documented GET /v1/cmc10-index/historical (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v1 cmc10-index historical --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/cmc10-index/historical"
+        }
+      ],
+      "operation": "coinmarketcap.get.v1-cmc10-index-historical",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 cmc10-index latest",
+      "summary": "Documented GET /v1/cmc10-index/latest (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v1 cmc10-index latest --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/cmc10-index/latest"
+        }
+      ],
+      "operation": "coinmarketcap.get.v1-cmc10-index-latest",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 community trending token",
+      "summary": "Documented GET /v1/community/trending/token (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v1 community trending token --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/community/trending/token"
+        }
+      ],
+      "operation": "coinmarketcap.get.v1-community-trending-token",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 community trending topic",
+      "summary": "Documented GET /v1/community/trending/topic (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v1 community trending topic --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/community/trending/topic"
+        }
+      ],
+      "operation": "coinmarketcap.get.v1-community-trending-topic",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 content latest",
+      "summary": "Documented GET /v1/content/latest (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v1 content latest --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/content/latest"
+        }
+      ],
+      "operation": "coinmarketcap.get.v1-content-latest",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 content posts comments",
+      "summary": "Documented GET /v1/content/posts/comments (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v1 content posts comments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/content/posts/comments"
+        }
+      ],
+      "operation": "coinmarketcap.get.v1-content-posts-comments",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 content posts latest",
+      "summary": "Documented GET /v1/content/posts/latest (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v1 content posts latest --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/content/posts/latest"
+        }
+      ],
+      "operation": "coinmarketcap.get.v1-content-posts-latest",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 content posts top",
+      "summary": "Documented GET /v1/content/posts/top (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v1 content posts top --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/content/posts/top"
+        }
+      ],
+      "operation": "coinmarketcap.get.v1-content-posts-top",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 cryptocurrency airdrop",
+      "summary": "Documented GET /v1/cryptocurrency/airdrop (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v1 cryptocurrency airdrop --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/cryptocurrency/airdrop"
+        }
+      ],
+      "operation": "coinmarketcap.get.v1-cryptocurrency-airdrop",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 cryptocurrency airdrops",
+      "summary": "Documented GET /v1/cryptocurrency/airdrops (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v1 cryptocurrency airdrops --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/cryptocurrency/airdrops"
+        }
+      ],
+      "operation": "coinmarketcap.get.v1-cryptocurrency-airdrops",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 cryptocurrency categories",
+      "summary": "Documented GET /v1/cryptocurrency/categories (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v1 cryptocurrency categories --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/cryptocurrency/categories"
+        }
+      ],
+      "operation": "coinmarketcap.get.v1-cryptocurrency-categories",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 cryptocurrency category",
+      "summary": "Documented GET /v1/cryptocurrency/category (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v1 cryptocurrency category --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/cryptocurrency/category"
+        }
+      ],
+      "operation": "coinmarketcap.get.v1-cryptocurrency-category",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 cryptocurrency info",
+      "summary": "Documented GET /v1/cryptocurrency/info (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v1 cryptocurrency info --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/cryptocurrency/info"
+        }
+      ],
+      "operation": "coinmarketcap.get.v1-cryptocurrency-info",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 cryptocurrency listings historical",
+      "summary": "Documented GET /v1/cryptocurrency/listings/historical (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v1 cryptocurrency listings historical --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/cryptocurrency/listings/historical"
+        }
+      ],
+      "operation": "coinmarketcap.get.v1-cryptocurrency-listings-historical",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 cryptocurrency listings latest",
+      "summary": "Documented GET /v1/cryptocurrency/listings/latest (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v1 cryptocurrency listings latest --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/cryptocurrency/listings/latest"
+        }
+      ],
+      "operation": "coinmarketcap.get.v1-cryptocurrency-listings-latest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 cryptocurrency listings new",
+      "summary": "Documented GET /v1/cryptocurrency/listings/new (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v1 cryptocurrency listings new --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/cryptocurrency/listings/new"
+        }
+      ],
+      "operation": "coinmarketcap.get.v1-cryptocurrency-listings-new",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 cryptocurrency map",
+      "summary": "Documented GET /v1/cryptocurrency/map (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v1 cryptocurrency map --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/cryptocurrency/map"
+        }
+      ],
+      "operation": "coinmarketcap.get.v1-cryptocurrency-map",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 cryptocurrency market-pairs latest",
+      "summary": "Documented GET /v1/cryptocurrency/market-pairs/latest (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v1 cryptocurrency market-pairs latest --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/cryptocurrency/market-pairs/latest"
+        }
+      ],
+      "operation": "coinmarketcap.get.v1-cryptocurrency-market-pairs-latest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 cryptocurrency multiplier",
+      "summary": "Documented GET /v1/cryptocurrency/multiplier (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v1 cryptocurrency multiplier --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/cryptocurrency/multiplier"
+        }
+      ],
+      "operation": "coinmarketcap.get.v1-cryptocurrency-multiplier",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 cryptocurrency ohlcv historical",
+      "summary": "Documented GET /v1/cryptocurrency/ohlcv/historical (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v1 cryptocurrency ohlcv historical --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/cryptocurrency/ohlcv/historical"
+        }
+      ],
+      "operation": "coinmarketcap.get.v1-cryptocurrency-ohlcv-historical",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 cryptocurrency ohlcv latest",
+      "summary": "Documented GET /v1/cryptocurrency/ohlcv/latest (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v1 cryptocurrency ohlcv latest --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/cryptocurrency/ohlcv/latest"
+        }
+      ],
+      "operation": "coinmarketcap.get.v1-cryptocurrency-ohlcv-latest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 cryptocurrency price-performance-stats latest",
+      "summary": "Documented GET /v1/cryptocurrency/price-performance-stats/latest (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v1 cryptocurrency price-performance-stats latest --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/cryptocurrency/price-performance-stats/latest"
+        }
+      ],
+      "operation": "coinmarketcap.get.v1-cryptocurrency-price-performance-stats-latest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 cryptocurrency quotes historical",
+      "summary": "Documented GET /v1/cryptocurrency/quotes/historical (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v1 cryptocurrency quotes historical --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/cryptocurrency/quotes/historical"
+        }
+      ],
+      "operation": "coinmarketcap.get.v1-cryptocurrency-quotes-historical",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 cryptocurrency quotes latest",
+      "summary": "Documented GET /v1/cryptocurrency/quotes/latest (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v1 cryptocurrency quotes latest --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/cryptocurrency/quotes/latest"
+        }
+      ],
+      "operation": "coinmarketcap.get.v1-cryptocurrency-quotes-latest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 cryptocurrency trending gainers-losers",
+      "summary": "Documented GET /v1/cryptocurrency/trending/gainers-losers (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v1 cryptocurrency trending gainers-losers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/cryptocurrency/trending/gainers-losers"
+        }
+      ],
+      "operation": "coinmarketcap.get.v1-cryptocurrency-trending-gainers-losers",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 cryptocurrency trending latest",
+      "summary": "Documented GET /v1/cryptocurrency/trending/latest (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v1 cryptocurrency trending latest --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/cryptocurrency/trending/latest"
+        }
+      ],
+      "operation": "coinmarketcap.get.v1-cryptocurrency-trending-latest",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 cryptocurrency trending most-visited",
+      "summary": "Documented GET /v1/cryptocurrency/trending/most-visited (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v1 cryptocurrency trending most-visited --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/cryptocurrency/trending/most-visited"
+        }
+      ],
+      "operation": "coinmarketcap.get.v1-cryptocurrency-trending-most-visited",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 derivatives exchanges",
+      "summary": "Documented GET /v1/derivatives/exchanges (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v1 derivatives exchanges --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/derivatives/exchanges"
+        }
+      ],
+      "operation": "coinmarketcap.get.v1-derivatives-exchanges",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 derivatives positions",
+      "summary": "Documented GET /v1/derivatives/positions (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v1 derivatives positions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/derivatives/positions"
+        }
+      ],
+      "operation": "coinmarketcap.get.v1-derivatives-positions",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 dex holders count",
+      "summary": "Documented GET /v1/dex/holders/count (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v1 dex holders count --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/dex/holders/count"
+        }
+      ],
+      "operation": "coinmarketcap.get.v1-dex-holders-count",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 dex holders tag-count",
+      "summary": "Documented GET /v1/dex/holders/tag_count (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v1 dex holders tag-count --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/dex/holders/tag_count"
+        }
+      ],
+      "operation": "coinmarketcap.get.v1-dex-holders-tag-count",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 dex holders trend list",
+      "summary": "Documented GET /v1/dex/holders/trend/list (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v1 dex holders trend list --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/dex/holders/trend/list"
+        }
+      ],
+      "operation": "coinmarketcap.get.v1-dex-holders-trend-list",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 dex liquidity-change list",
+      "summary": "Documented GET /v1/dex/liquidity-change/list (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v1 dex liquidity-change list --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/dex/liquidity-change/list"
+        }
+      ],
+      "operation": "coinmarketcap.get.v1-dex-liquidity-change-list",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 dex platform detail",
+      "summary": "Documented GET /v1/dex/platform/detail (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v1 dex platform detail --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/dex/platform/detail"
+        }
+      ],
+      "operation": "coinmarketcap.get.v1-dex-platform-detail",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 dex platform list",
+      "summary": "Documented GET /v1/dex/platform/list (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v1 dex platform list --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/dex/platform/list"
+        }
+      ],
+      "operation": "coinmarketcap.get.v1-dex-platform-list",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 dex search",
+      "summary": "Documented GET /v1/dex/search (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v1 dex search --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/dex/search"
+        }
+      ],
+      "operation": "coinmarketcap.get.v1-dex-search",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 dex security detail",
+      "summary": "Documented GET /v1/dex/security/detail (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v1 dex security detail --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/dex/security/detail"
+        }
+      ],
+      "operation": "coinmarketcap.get.v1-dex-security-detail",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 dex token",
+      "summary": "Documented GET /v1/dex/token (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v1 dex token --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/dex/token"
+        }
+      ],
+      "operation": "coinmarketcap.get.v1-dex-token",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 dex token pools",
+      "summary": "Documented GET /v1/dex/token/pools (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v1 dex token pools --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/dex/token/pools"
+        }
+      ],
+      "operation": "coinmarketcap.get.v1-dex-token-pools",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 dex token price",
+      "summary": "Documented GET /v1/dex/token/price (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v1 dex token price --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/dex/token/price"
+        }
+      ],
+      "operation": "coinmarketcap.get.v1-dex-token-price",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 dex token-liquidity query",
+      "summary": "Documented GET /v1/dex/token-liquidity/query (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v1 dex token-liquidity query --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/dex/token-liquidity/query"
+        }
+      ],
+      "operation": "coinmarketcap.get.v1-dex-token-liquidity-query",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 dex tokens transactions",
+      "summary": "Documented GET /v1/dex/tokens/transactions (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v1 dex tokens transactions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/dex/tokens/transactions"
+        }
+      ],
+      "operation": "coinmarketcap.get.v1-dex-tokens-transactions",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 exchange assets",
+      "summary": "Documented GET /v1/exchange/assets (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v1 exchange assets --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/exchange/assets"
+        }
+      ],
+      "operation": "coinmarketcap.get.v1-exchange-assets",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 exchange info",
+      "summary": "Documented GET /v1/exchange/info (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v1 exchange info --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/exchange/info"
+        }
+      ],
+      "operation": "coinmarketcap.get.v1-exchange-info",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 exchange listings latest",
+      "summary": "Documented GET /v1/exchange/listings/latest (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v1 exchange listings latest --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/exchange/listings/latest"
+        }
+      ],
+      "operation": "coinmarketcap.get.v1-exchange-listings-latest",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 exchange map",
+      "summary": "Documented GET /v1/exchange/map (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v1 exchange map --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/exchange/map"
+        }
+      ],
+      "operation": "coinmarketcap.get.v1-exchange-map",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 exchange market-pairs latest",
+      "summary": "Documented GET /v1/exchange/market-pairs/latest (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v1 exchange market-pairs latest --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/exchange/market-pairs/latest"
+        }
+      ],
+      "operation": "coinmarketcap.get.v1-exchange-market-pairs-latest",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 exchange quotes historical",
+      "summary": "Documented GET /v1/exchange/quotes/historical (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v1 exchange quotes historical --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/exchange/quotes/historical"
+        }
+      ],
+      "operation": "coinmarketcap.get.v1-exchange-quotes-historical",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 exchange quotes latest",
+      "summary": "Documented GET /v1/exchange/quotes/latest (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v1 exchange quotes latest --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/exchange/quotes/latest"
+        }
+      ],
+      "operation": "coinmarketcap.get.v1-exchange-quotes-latest",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 fiat map",
+      "summary": "Documented GET /v1/fiat/map (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v1 fiat map --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/fiat/map"
+        }
+      ],
+      "operation": "coinmarketcap.get.v1-fiat-map",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 k-line candles",
+      "summary": "Documented GET /v1/k-line/candles (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v1 k-line candles --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/k-line/candles"
+        }
+      ],
+      "operation": "coinmarketcap.get.v1-k-line-candles",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 k-line points",
+      "summary": "Documented GET /v1/k-line/points (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v1 k-line points --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/k-line/points"
+        }
+      ],
+      "operation": "coinmarketcap.get.v1-k-line-points",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 partners flipside-crypto fcas listings latest",
+      "summary": "Documented GET /v1/partners/flipside-crypto/fcas/listings/latest (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v1 partners flipside-crypto fcas listings latest --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/partners/flipside-crypto/fcas/listings/latest"
+        }
+      ],
+      "operation": "coinmarketcap.get.v1-partners-flipside-crypto-fcas-listings-latest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 partners flipside-crypto fcas quotes latest",
+      "summary": "Documented GET /v1/partners/flipside-crypto/fcas/quotes/latest (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v1 partners flipside-crypto fcas quotes latest --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/partners/flipside-crypto/fcas/quotes/latest"
+        }
+      ],
+      "operation": "coinmarketcap.get.v1-partners-flipside-crypto-fcas-quotes-latest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 simple price",
+      "summary": "Documented GET /v1/simple/price (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v1 simple price --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/simple/price"
+        }
+      ],
+      "operation": "coinmarketcap.get.v1-simple-price",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 tools postman",
+      "summary": "Documented GET /v1/tools/postman (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v1 tools postman --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/tools/postman"
+        }
+      ],
+      "operation": "coinmarketcap.get.v1-tools-postman",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 tools price-conversion",
+      "summary": "Documented GET /v1/tools/price-conversion (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v1 tools price-conversion --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/tools/price-conversion"
+        }
+      ],
+      "operation": "coinmarketcap.get.v1-tools-price-conversion",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 cryptocurrency market-pairs latest",
+      "summary": "Documented GET /v2/cryptocurrency/market-pairs/latest (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v2 cryptocurrency market-pairs latest --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/cryptocurrency/market-pairs/latest"
+        }
+      ],
+      "operation": "coinmarketcap.get.v2-cryptocurrency-market-pairs-latest",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 cryptocurrency ohlcv historical",
+      "summary": "Documented GET /v2/cryptocurrency/ohlcv/historical (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v2 cryptocurrency ohlcv historical --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/cryptocurrency/ohlcv/historical"
+        }
+      ],
+      "operation": "coinmarketcap.get.v2-cryptocurrency-ohlcv-historical",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 cryptocurrency ohlcv latest",
+      "summary": "Documented GET /v2/cryptocurrency/ohlcv/latest (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v2 cryptocurrency ohlcv latest --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/cryptocurrency/ohlcv/latest"
+        }
+      ],
+      "operation": "coinmarketcap.get.v2-cryptocurrency-ohlcv-latest",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 cryptocurrency price-performance-stats latest",
+      "summary": "Documented GET /v2/cryptocurrency/price-performance-stats/latest (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v2 cryptocurrency price-performance-stats latest --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/cryptocurrency/price-performance-stats/latest"
+        }
+      ],
+      "operation": "coinmarketcap.get.v2-cryptocurrency-price-performance-stats-latest",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 cryptocurrency quotes historical",
+      "summary": "Documented GET /v2/cryptocurrency/quotes/historical (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v2 cryptocurrency quotes historical --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/cryptocurrency/quotes/historical"
+        }
+      ],
+      "operation": "coinmarketcap.get.v2-cryptocurrency-quotes-historical",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 cryptocurrency quotes latest",
+      "summary": "Documented GET /v2/cryptocurrency/quotes/latest (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v2 cryptocurrency quotes latest --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/cryptocurrency/quotes/latest"
+        }
+      ],
+      "operation": "coinmarketcap.get.v2-cryptocurrency-quotes-latest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 dex multiplier",
+      "summary": "Documented GET /v2/dex/multiplier (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v2 dex multiplier --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/dex/multiplier"
+        }
+      ],
+      "operation": "coinmarketcap.get.v2-dex-multiplier",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 simple price",
+      "summary": "Documented GET /v2/simple/price (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v2 simple price --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/simple/price"
+        }
+      ],
+      "operation": "coinmarketcap.get.v2-simple-price",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 cryptocurrency listings latest",
+      "summary": "Documented GET /v3/cryptocurrency/listings/latest (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v3 cryptocurrency listings latest --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/cryptocurrency/listings/latest"
+        }
+      ],
+      "operation": "coinmarketcap.get.v3-cryptocurrency-listings-latest",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 cryptocurrency quotes historical",
+      "summary": "Documented GET /v3/cryptocurrency/quotes/historical (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v3 cryptocurrency quotes historical --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/cryptocurrency/quotes/historical"
+        }
+      ],
+      "operation": "coinmarketcap.get.v3-cryptocurrency-quotes-historical",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 fear-and-greed historical",
+      "summary": "Documented GET /v3/fear-and-greed/historical (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v3 fear-and-greed historical --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/fear-and-greed/historical"
+        }
+      ],
+      "operation": "coinmarketcap.get.v3-fear-and-greed-historical",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 index cmc100-historical",
+      "summary": "Documented GET /v3/index/cmc100-historical (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v3 index cmc100-historical --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/index/cmc100-historical"
+        }
+      ],
+      "operation": "coinmarketcap.get.v3-index-cmc100-historical",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 index cmc100-latest",
+      "summary": "Documented GET /v3/index/cmc100-latest (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v3 index cmc100-latest --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/index/cmc100-latest"
+        }
+      ],
+      "operation": "coinmarketcap.get.v3-index-cmc100-latest",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 index cmc20-historical",
+      "summary": "Documented GET /v3/index/cmc20-historical (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v3 index cmc20-historical --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/index/cmc20-historical"
+        }
+      ],
+      "operation": "coinmarketcap.get.v3-index-cmc20-historical",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 index cmc20-latest",
+      "summary": "Documented GET /v3/index/cmc20-latest (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v3 index cmc20-latest --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/index/cmc20-latest"
+        }
+      ],
+      "operation": "coinmarketcap.get.v3-index-cmc20-latest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v4 dex listings info",
+      "summary": "Documented GET /v4/dex/listings/info (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v4 dex listings info --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v4/dex/listings/info"
+        }
+      ],
+      "operation": "coinmarketcap.get.v4-dex-listings-info",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v4 dex listings quotes",
+      "summary": "Documented GET /v4/dex/listings/quotes (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v4 dex listings quotes --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v4/dex/listings/quotes"
+        }
+      ],
+      "operation": "coinmarketcap.get.v4-dex-listings-quotes",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v4 dex networks list",
+      "summary": "Documented GET /v4/dex/networks/list (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v4 dex networks list --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v4/dex/networks/list"
+        }
+      ],
+      "operation": "coinmarketcap.get.v4-dex-networks-list",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v4 dex pairs ohlcv historical",
+      "summary": "Documented GET /v4/dex/pairs/ohlcv/historical (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v4 dex pairs ohlcv historical --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v4/dex/pairs/ohlcv/historical"
+        }
+      ],
+      "operation": "coinmarketcap.get.v4-dex-pairs-ohlcv-historical",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v4 dex pairs ohlcv latest",
+      "summary": "Documented GET /v4/dex/pairs/ohlcv/latest (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v4 dex pairs ohlcv latest --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v4/dex/pairs/ohlcv/latest"
+        }
+      ],
+      "operation": "coinmarketcap.get.v4-dex-pairs-ohlcv-latest",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v4 dex pairs quotes latest",
+      "summary": "Documented GET /v4/dex/pairs/quotes/latest (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v4 dex pairs quotes latest --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v4/dex/pairs/quotes/latest"
+        }
+      ],
+      "operation": "coinmarketcap.get.v4-dex-pairs-quotes-latest",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v4 dex pairs trade latest",
+      "summary": "Documented GET /v4/dex/pairs/trade/latest (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v4 dex pairs trade latest --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v4/dex/pairs/trade/latest"
+        }
+      ],
+      "operation": "coinmarketcap.get.v4-dex-pairs-trade-latest",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v4 dex spot-pairs latest",
+      "summary": "Documented GET /v4/dex/spot-pairs/latest (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v4 dex spot-pairs latest --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v4/dex/spot-pairs/latest"
+        }
+      ],
+      "operation": "coinmarketcap.get.v4-dex-spot-pairs-latest",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v5 cryptocurrency derivatives market-pairs list latest",
+      "summary": "Documented GET /v5/cryptocurrency/derivatives/market-pairs/list/latest (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v5 cryptocurrency derivatives market-pairs list latest --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v5/cryptocurrency/derivatives/market-pairs/list/latest"
+        }
+      ],
+      "operation": "coinmarketcap.get.v5-cryptocurrency-derivatives-market-pairs-list-latest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v5 derivatives liquidations cryptocurrency list latest",
+      "summary": "Documented GET /v5/derivatives/liquidations/cryptocurrency/list/latest (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v5 derivatives liquidations cryptocurrency list latest --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v5/derivatives/liquidations/cryptocurrency/list/latest"
+        }
+      ],
+      "operation": "coinmarketcap.get.v5-derivatives-liquidations-cryptocurrency-list-latest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v5 derivatives liquidations exchange list latest",
+      "summary": "Documented GET /v5/derivatives/liquidations/exchange/list/latest (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v5 derivatives liquidations exchange list latest --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v5/derivatives/liquidations/exchange/list/latest"
+        }
+      ],
+      "operation": "coinmarketcap.get.v5-derivatives-liquidations-exchange-list-latest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v5 derivatives liquidations quotes latest",
+      "summary": "Documented GET /v5/derivatives/liquidations/quotes/latest (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v5 derivatives liquidations quotes latest --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v5/derivatives/liquidations/quotes/latest"
+        }
+      ],
+      "operation": "coinmarketcap.get.v5-derivatives-liquidations-quotes-latest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v5 exchange derivatives list",
+      "summary": "Documented GET /v5/exchange/derivatives/list (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v5 exchange derivatives list --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v5/exchange/derivatives/list"
+        }
+      ],
+      "operation": "coinmarketcap.get.v5-exchange-derivatives-list",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v5 exchange derivatives market-pairs list latest",
+      "summary": "Documented GET /v5/exchange/derivatives/market-pairs/list/latest (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v5 exchange derivatives market-pairs list latest --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v5/exchange/derivatives/market-pairs/list/latest"
+        }
+      ],
+      "operation": "coinmarketcap.get.v5-exchange-derivatives-market-pairs-list-latest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v5 real-world-assets assets list",
+      "summary": "Documented GET /v5/real-world-assets/assets/list (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v5 real-world-assets assets list --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v5/real-world-assets/assets/list"
+        }
+      ],
+      "operation": "coinmarketcap.get.v5-real-world-assets-assets-list",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v5 real-world-assets info",
+      "summary": "Documented GET /v5/real-world-assets/info (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v5 real-world-assets info --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v5/real-world-assets/info"
+        }
+      ],
+      "operation": "coinmarketcap.get.v5-real-world-assets-info",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v5 real-world-assets issuers",
+      "summary": "Documented GET /v5/real-world-assets/issuers (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v5 real-world-assets issuers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v5/real-world-assets/issuers"
+        }
+      ],
+      "operation": "coinmarketcap.get.v5-real-world-assets-issuers",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v5 real-world-assets issuers list",
+      "summary": "Documented GET /v5/real-world-assets/issuers/list (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v5 real-world-assets issuers list --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v5/real-world-assets/issuers/list"
+        }
+      ],
+      "operation": "coinmarketcap.get.v5-real-world-assets-issuers-list",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v5 real-world-assets map",
+      "summary": "Documented GET /v5/real-world-assets/map (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v5 real-world-assets map --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v5/real-world-assets/map"
+        }
+      ],
+      "operation": "coinmarketcap.get.v5-real-world-assets-map",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v5 real-world-assets market-pairs list",
+      "summary": "Documented GET /v5/real-world-assets/market-pairs/list (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v5 real-world-assets market-pairs list --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v5/real-world-assets/market-pairs/list"
+        }
+      ],
+      "operation": "coinmarketcap.get.v5-real-world-assets-market-pairs-list",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v5 real-world-assets quotes latest",
+      "summary": "Documented GET /v5/real-world-assets/quotes/latest (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api get v5 real-world-assets quotes latest --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v5/real-world-assets/quotes/latest"
+        }
+      ],
+      "operation": "coinmarketcap.get.v5-real-world-assets-quotes-latest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api post v1 dex gainer-loser list",
+      "summary": "Documented POST /v1/dex/gainer-loser/list (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api post v1 dex gainer-loser list --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/dex/gainer-loser/list"
+        }
+      ],
+      "operation": "coinmarketcap.post.v1-dex-gainer-loser-list",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 dex holders detail",
+      "summary": "Documented POST /v1/dex/holders/detail (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api post v1 dex holders detail --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/dex/holders/detail"
+        }
+      ],
+      "operation": "coinmarketcap.post.v1-dex-holders-detail",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 dex holders list",
+      "summary": "Documented POST /v1/dex/holders/list (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api post v1 dex holders list --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/dex/holders/list"
+        }
+      ],
+      "operation": "coinmarketcap.post.v1-dex-holders-list",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 dex meme list",
+      "summary": "Documented POST /v1/dex/meme/list (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api post v1 dex meme list --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/dex/meme/list"
+        }
+      ],
+      "operation": "coinmarketcap.post.v1-dex-meme-list",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 dex new list",
+      "summary": "Documented POST /v1/dex/new/list (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api post v1 dex new list --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/dex/new/list"
+        }
+      ],
+      "operation": "coinmarketcap.post.v1-dex-new-list",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 dex token price batch",
+      "summary": "Documented POST /v1/dex/token/price/batch (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api post v1 dex token price batch --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/dex/token/price/batch"
+        }
+      ],
+      "operation": "coinmarketcap.post.v1-dex-token-price-batch",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 dex tokens batch-query",
+      "summary": "Documented POST /v1/dex/tokens/batch-query (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api post v1 dex tokens batch-query --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/dex/tokens/batch-query"
+        }
+      ],
+      "operation": "coinmarketcap.post.v1-dex-tokens-batch-query",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 dex tokens trending list",
+      "summary": "Documented POST /v1/dex/tokens/trending/list (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap api post v1 dex tokens trending list --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/dex/tokens/trending/list"
+        }
+      ],
+      "operation": "coinmarketcap.post.v1-dex-tokens-trending-list",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "cryptocurrency info list",
+      "summary": "Run the cryptocurrency info ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "cryptocurrency_info",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap cryptocurrency info list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/cryptocurrency/info"
+        }
+      ]
+    },
+    {
+      "path": "cryptocurrency quotes latest list",
+      "summary": "Run the cryptocurrency quotes latest ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "cryptocurrency_quotes_latest",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap cryptocurrency quotes latest list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/cryptocurrency/quotes/latest"
+        }
+      ]
+    },
+    {
+      "path": "fear and greed latest list",
+      "summary": "Run the fear and greed latest ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "fear_and_greed_latest",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap fear and greed latest list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/fear-and-greed/latest"
+        }
+      ]
+    },
+    {
+      "path": "global metrics list",
+      "summary": "Run the global metrics ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "global_metrics",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap global metrics list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/global-metrics/quotes/latest"
+        }
+      ]
+    },
+    {
+      "path": "global metrics quotes historical list",
+      "summary": "Run the global metrics quotes historical ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "global_metrics_quotes_historical",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap global metrics quotes historical list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/global-metrics/quotes/historical"
+        }
+      ]
+    },
+    {
+      "path": "key info list",
+      "summary": "Run the key info ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "key_info",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap key info list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/key/info"
+        }
+      ]
+    },
+    {
+      "path": "price conversion list",
+      "summary": "Run the price conversion ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "price_conversion",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "examples": [
+        "pm coinmarketcap price conversion list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/tools/price-conversion"
+        }
+      ]
+    }
+  ]
+}

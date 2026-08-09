@@ -1,0 +1,1207 @@
+{
+  "operations": [
+    {
+      "id": "copper.post.operation",
+      "kind": "rest_write",
+      "summary": "POST /",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "copper.get.account",
+      "kind": "rest_read",
+      "summary": "GET /account",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/account",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "copper.post.activities",
+      "kind": "rest_write",
+      "summary": "POST /activities",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/activities",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "copper.post.activities-search",
+      "kind": "rest_write",
+      "summary": "POST /activities/search",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/activities/search",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "copper.delete.activities-delete-activity-id",
+      "kind": "rest_write",
+      "summary": "DELETE /activities/{delete_activity_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/activities/{delete_activity_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "copper.get.activities-example-activity-id",
+      "kind": "rest_read",
+      "summary": "GET /activities/{example_activity_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/activities/{example_activity_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "copper.get.activity-types",
+      "kind": "rest_read",
+      "summary": "GET /activity_types",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/activity_types",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "copper.post.companies",
+      "kind": "rest_write",
+      "summary": "POST /companies",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/companies",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "copper.post.companies-search",
+      "kind": "rest_write",
+      "summary": "POST /companies/search",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/companies/search",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "copper.delete.companies-delete-company-id",
+      "kind": "rest_write",
+      "summary": "DELETE /companies/{delete_company_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/companies/{delete_company_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "copper.get.companies-example-company-id",
+      "kind": "rest_read",
+      "summary": "GET /companies/{example_company_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/companies/{example_company_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "copper.put.companies-example-company-id",
+      "kind": "rest_write",
+      "summary": "PUT /companies/{example_company_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/companies/{example_company_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "copper.post.companies-example-company-id-activities",
+      "kind": "rest_write",
+      "summary": "POST /companies/{example_company_id}/activities",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/companies/{example_company_id}/activities",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "copper.get.contact-types",
+      "kind": "rest_read",
+      "summary": "GET /contact_types",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/contact_types",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "copper.get.custom-activity-types",
+      "kind": "rest_read",
+      "summary": "GET /custom_activity_types",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/custom_activity_types",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "copper.post.custom-activity-types",
+      "kind": "rest_write",
+      "summary": "POST /custom_activity_types",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/custom_activity_types",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "copper.get.custom-activity-types-custom-activity-type-id",
+      "kind": "rest_read",
+      "summary": "GET /custom_activity_types/{custom_activity_type_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/custom_activity_types/{custom_activity_type_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "copper.put.custom-activity-types-custom-activity-type-id",
+      "kind": "rest_write",
+      "summary": "PUT /custom_activity_types/{custom_activity_type_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/custom_activity_types/{custom_activity_type_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "copper.get.custom-field-definitions",
+      "kind": "rest_read",
+      "summary": "GET /custom_field_definitions",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/custom_field_definitions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "copper.post.custom-field-definitions",
+      "kind": "rest_write",
+      "summary": "POST /custom_field_definitions",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/custom_field_definitions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "copper.get.custom-field-definitions-custom-field-definition-id",
+      "kind": "rest_read",
+      "summary": "GET /custom_field_definitions/{custom_field_definition_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/custom_field_definitions/{custom_field_definition_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "copper.put.custom-field-definitions-custom-field-definition-id",
+      "kind": "rest_write",
+      "summary": "PUT /custom_field_definitions/{custom_field_definition_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/custom_field_definitions/{custom_field_definition_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "copper.delete.custom-field-definitions-custom-field-definition-id",
+      "kind": "rest_write",
+      "summary": "DELETE /custom_field_definitions/{custom_field_definition_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/custom_field_definitions/{custom_field_definition_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "copper.get.customer-sources",
+      "kind": "rest_read",
+      "summary": "GET /customer_sources",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/customer_sources",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "copper.get.lead-statuses",
+      "kind": "rest_read",
+      "summary": "GET /lead_statuses",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/lead_statuses",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "copper.post.leads",
+      "kind": "rest_write",
+      "summary": "POST /leads",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/leads",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "copper.post.leads-search",
+      "kind": "rest_write",
+      "summary": "POST /leads/search",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/leads/search",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "copper.put.leads-upsert",
+      "kind": "rest_write",
+      "summary": "PUT /leads/upsert",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/leads/upsert",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "copper.get.leads-example-lead-id",
+      "kind": "rest_read",
+      "summary": "GET /leads/{example_lead_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/leads/{example_lead_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "copper.put.leads-example-lead-id",
+      "kind": "rest_write",
+      "summary": "PUT /leads/{example_lead_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/leads/{example_lead_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "copper.delete.leads-example-lead-id",
+      "kind": "rest_write",
+      "summary": "DELETE /leads/{example_lead_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/leads/{example_lead_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "copper.post.leads-example-lead-id-activities",
+      "kind": "rest_write",
+      "summary": "POST /leads/{example_lead_id}/activities",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/leads/{example_lead_id}/activities",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "copper.post.leads-example-leadconvert-id-convert",
+      "kind": "rest_write",
+      "summary": "POST /leads/{example_leadconvert_id}/convert",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/leads/{example_leadconvert_id}/convert",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "copper.get.loss-reasons",
+      "kind": "rest_read",
+      "summary": "GET /loss_reasons",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/loss_reasons",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "copper.post.opportunities",
+      "kind": "rest_write",
+      "summary": "POST /opportunities",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/opportunities",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "copper.post.opportunities-search",
+      "kind": "rest_write",
+      "summary": "POST /opportunities/search",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/opportunities/search",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "copper.delete.opportunities-delete-opportunity-id",
+      "kind": "rest_write",
+      "summary": "DELETE /opportunities/{delete_opportunity_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/opportunities/{delete_opportunity_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "copper.get.opportunities-example-opportunity-id",
+      "kind": "rest_read",
+      "summary": "GET /opportunities/{example_opportunity_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/opportunities/{example_opportunity_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "copper.put.opportunities-example-opportunity-id",
+      "kind": "rest_write",
+      "summary": "PUT /opportunities/{example_opportunity_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/opportunities/{example_opportunity_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "copper.post.people",
+      "kind": "rest_write",
+      "summary": "POST /people",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/people",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "copper.post.people-fetch-by-email",
+      "kind": "rest_write",
+      "summary": "POST /people/fetch_by_email",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/people/fetch_by_email",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "copper.post.people-search",
+      "kind": "rest_write",
+      "summary": "POST /people/search",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/people/search",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "copper.get.people-example-person-id",
+      "kind": "rest_read",
+      "summary": "GET /people/{example_person_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/people/{example_person_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "copper.put.people-example-person-id",
+      "kind": "rest_write",
+      "summary": "PUT /people/{example_person_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/people/{example_person_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "copper.delete.people-example-person-id",
+      "kind": "rest_write",
+      "summary": "DELETE /people/{example_person_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/people/{example_person_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "copper.post.people-example-person-id-activities",
+      "kind": "rest_write",
+      "summary": "POST /people/{example_person_id}/activities",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/people/{example_person_id}/activities",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "copper.get.pipeline-stages",
+      "kind": "rest_read",
+      "summary": "GET /pipeline_stages",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/pipeline_stages",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "copper.get.pipeline-stages-pipeline-pipeline-id",
+      "kind": "rest_read",
+      "summary": "GET /pipeline_stages/pipeline/{pipeline_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/pipeline_stages/pipeline/{pipeline_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "copper.get.pipelines",
+      "kind": "rest_read",
+      "summary": "GET /pipelines",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/pipelines",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "copper.post.projects",
+      "kind": "rest_write",
+      "summary": "POST /projects",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/projects",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "copper.post.projects-search",
+      "kind": "rest_write",
+      "summary": "POST /projects/search",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/projects/search",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "copper.delete.projects-delete-project-id",
+      "kind": "rest_write",
+      "summary": "DELETE /projects/{delete_project_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/projects/{delete_project_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "copper.get.projects-example-project-id",
+      "kind": "rest_read",
+      "summary": "GET /projects/{example_project_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/projects/{example_project_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "copper.put.projects-example-project-id",
+      "kind": "rest_write",
+      "summary": "PUT /projects/{example_project_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/projects/{example_project_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "copper.get.related-links",
+      "kind": "rest_read",
+      "summary": "GET /related_links",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/related_links",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "copper.post.related-links",
+      "kind": "rest_write",
+      "summary": "POST /related_links",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/related_links",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "copper.delete.related-links-connection-id",
+      "kind": "rest_write",
+      "summary": "DELETE /related_links/{connection_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/related_links/{connection_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "copper.post.search",
+      "kind": "rest_write",
+      "summary": "POST /search",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/search",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "copper.post.tasks",
+      "kind": "rest_write",
+      "summary": "POST /tasks",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/tasks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "copper.post.tasks-search",
+      "kind": "rest_write",
+      "summary": "POST /tasks/search",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/tasks/search",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "copper.delete.tasks-delete-task-id",
+      "kind": "rest_write",
+      "summary": "DELETE /tasks/{delete_task_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/tasks/{delete_task_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "copper.get.tasks-example-task-id",
+      "kind": "rest_read",
+      "summary": "GET /tasks/{example_task_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/tasks/{example_task_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "copper.put.tasks-example-task-id",
+      "kind": "rest_write",
+      "summary": "PUT /tasks/{example_task_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/tasks/{example_task_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "copper.post.users-search",
+      "kind": "rest_write",
+      "summary": "POST /users/search",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/users/search",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "copper.get.users-example-user-id",
+      "kind": "rest_read",
+      "summary": "GET /users/{example_user_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/users/{example_user_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "copper.get.webhooks",
+      "kind": "rest_read",
+      "summary": "GET /webhooks",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/webhooks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "copper.post.webhooks",
+      "kind": "rest_write",
+      "summary": "POST /webhooks",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/webhooks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "copper.delete.webhooks-example-webhook-id",
+      "kind": "rest_write",
+      "summary": "DELETE /webhooks/{example_webhook_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/webhooks/{example_webhook_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "copper.get.webhooks-example-webhook-id",
+      "kind": "rest_read",
+      "summary": "GET /webhooks{example_webhook_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/webhooks{example_webhook_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "copper.get.entity-id-files",
+      "kind": "rest_read",
+      "summary": "GET /{entity_id}/files",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/{entity_id}/files",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "copper.post.entity-id-files",
+      "kind": "rest_write",
+      "summary": "POST /{entity_id}/files",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/{entity_id}/files",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "copper.get.entity-id-files-s3-signed-url",
+      "kind": "rest_read",
+      "summary": "GET /{entity_id}/files/s3_signed_url",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/{entity_id}/files/s3_signed_url",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "copper.get.entity-id-files-file-id",
+      "kind": "rest_read",
+      "summary": "GET /{entity_id}/files/{file_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/{entity_id}/files/{file_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "copper.post.entity-id-related",
+      "kind": "rest_write",
+      "summary": "POST /{entity_id}/related",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/{entity_id}/related",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "copper.delete.entity-id-related",
+      "kind": "rest_write",
+      "summary": "DELETE /{entity_id}/related",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/{entity_id}/related",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "copper.get.entity-id-related",
+      "kind": "rest_read",
+      "summary": "GET /{entity_id}/related/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/{entity_id}/related/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "copper.get.entity-id-related-related-entity-name",
+      "kind": "rest_read",
+      "summary": "GET /{entity_id}/related/{related_entity_name}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/{entity_id}/related/{related_entity_name}",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

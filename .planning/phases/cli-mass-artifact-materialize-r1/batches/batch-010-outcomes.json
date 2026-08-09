@@ -1,0 +1,259 @@
+{
+  "schema_version": 1,
+  "batch": "batch-010",
+  "manifest": "batches/batch-010-manifest.json",
+  "outcomes": [
+    {
+      "connector": "dremio",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-010-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference traversal exceeds the 64-document limit"
+    },
+    {
+      "connector": "e-conomic",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-010-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host), and official reference fallback \"https://www.e-conomic.com/developer/about-the-rest-api\" failed: artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    },
+    {
+      "connector": "ezofficeinventory",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-010-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    },
+    {
+      "connector": "factorial",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-010-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "jamf-pro",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-010-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "looker",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-010-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "mode",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-010-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    },
+    {
+      "connector": "outbrain-amplify",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-010-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract), and official reference fallback \"https://developer.outbrain.com/home-page/amplify-api/documentation/\" failed: artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    },
+    {
+      "connector": "pardot",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-010-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: artifact inventory yielded 6 operation(s), below the ledger's 181"
+    },
+    {
+      "connector": "picqer",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-010-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference \"https://picqer.com/manifest.json\" is a machine-readable artifact that could not be parsed: OpenAPI/Swagger: decode OpenAPI or Swagger artifact: yaml: line 6: found unknown escape character; Postman: Postman collection has no request items"
+    },
+    {
+      "connector": "recharge",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-010-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference \"https://developer.rechargepayments.com/_nuxt/manifest.86f0036f.json\" is a machine-readable artifact that could not be parsed: OpenAPI/Swagger: artifact is not an OpenAPI or Swagger document; Postman: Postman collection has no request items"
+    },
+    {
+      "connector": "recruitee",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-010-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    },
+    {
+      "connector": "salesforce",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-010-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract), and official reference fallback \"https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/intro_rest.htm\" failed: artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    },
+    {
+      "connector": "sigma-computing",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-010-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference traversal exceeds the 64-document limit), and official reference fallback \"https://help.sigmacomputing.com/reference/get-started-sigma-api\" failed: artifact operation inventory is unknown: candidate reference traversal exceeds the 64-document limit"
+    },
+    {
+      "connector": "snapchat-marketing",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-010-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference link \"https://developers.snap.com/lens-studio/references/guides/overview.md\" could not be fetched: fetch artifact: provider returned HTTP 404), and official reference fallback \"https://developers.snap.com/marketing-api/Ads-API/introduction\" failed: artifact operation inventory is unknown: official reference traversal exceeds the 64-document limit"
+    },
+    {
+      "connector": "spotify-ads",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-010-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference link \"https://developer.spotify.com/documentation/ads-api/reference/v1.2/get_cost_estimate\" could not be fetched: fetch artifact: provider returned HTTP 404), and official reference fallback \"https://developer.spotify.com/documentation/ads-api/reference/v3.0/getAdAccount\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "surveymonkey",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-010-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host), and official reference fallback \"https://developer.surveymonkey.com/api/v3/\" failed: artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    },
+    {
+      "connector": "taboola",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-010-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host), and official reference fallback \"https://developers.taboola.com/backstage-api/reference/authentication-basics\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "thrive-learning",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-010-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract), and official reference fallback \"https://docs.thrivelearning.com/apidocs/thrive-api-v1\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "track-pms",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-010-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "trustpilot",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-010-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    },
+    {
+      "connector": "veeqo",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-010-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference \"https://developers.veeqo.com/sitemap-0.xml\" is neither a parseable OpenAPI/Swagger or Postman artifact nor a recognized reference document), and official reference fallback \"https://developers.veeqo.com/api/\" failed: artifact operation inventory is unknown: official reference traversal exceeds the 64-document limit"
+    },
+    {
+      "connector": "visma-economic",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-010-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host), and official reference fallback \"https://www.e-conomic.com/developer/about-the-rest-api\" failed: artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    },
+    {
+      "connector": "vitally",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-010-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: artifact inventory yielded 1 operation(s), below the ledger's 100"
+    },
+    {
+      "connector": "vwo",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-010-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host), and official reference fallback \"https://developers.wingify.com/llms.txt\" failed: artifact operation inventory is unknown: official reference traversal exceeds the 64-document limit"
+    },
+    {
+      "connector": "woocommerce",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-010-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host), and official reference fallback \"https://developer.woocommerce.com/docs/apis/rest-api/\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "wordpress",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-010-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference contains a selected link that failed URL admission), and official reference fallback \"https://developer.wordpress.org/rest-api/\" failed: artifact operation inventory is unknown: official reference contains a selected link that failed URL admission"
+    },
+    {
+      "connector": "workable",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-010-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host), and official reference fallback \"https://workable.readme.io/reference/generate-an-access-token\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "manifest": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-002-manifest.json",
+  "candidates": 1,
+  "included": [
+    {
+      "connector": "clickup-api",
+      "artifact": {
+        "kind": "openapi",
+        "url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+        "version": "ClickUp Public API v2; OpenAPI 3.1.0; info.version 2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2120b590bed02240fe24df897afcc9b59564dff4f90e3e58a665586dd0f31685"
+      },
+      "artifact_operations": 137,
+      "declared_operations": 185,
+      "operation_split": {
+        "executable": 28,
+        "provider_blocked": 8,
+        "excluded": 149
+      },
+      "cli_commands": 185,
+      "implemented_commands": 26,
+      "named_dependency_commands": 159,
+      "flagged_discrepancies": 48,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 157
+    }
+  ],
+  "dropped": []
+}

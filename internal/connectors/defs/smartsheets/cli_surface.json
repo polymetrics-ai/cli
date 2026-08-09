@@ -1,0 +1,3755 @@
+{
+  "tagline": "Run Smartsheets's declared streams and reverse-ETL actions.",
+  "usage": "pm smartsheets \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "api get reports reportid columns",
+        "api get reports reportid columns columnvirtualid",
+        "api get reports reportid definition",
+        "api get reports reportid scope",
+        "api get search",
+        "api get search sheets sheetid",
+        "api get serverinfo",
+        "asset share list",
+        "asset shares list",
+        "contact list",
+        "contacts list",
+        "current user list",
+        "dashboard list",
+        "dashboard path list",
+        "dashboard publish list",
+        "dashboards list",
+        "events list",
+        "favorite list",
+        "favorites list",
+        "folder children list",
+        "folder metadata list",
+        "folder path list",
+        "group list",
+        "groups list",
+        "home contents list",
+        "home folders list",
+        "org sheets list",
+        "report list",
+        "report path list",
+        "report publish list",
+        "reports list",
+        "sheet attachment list",
+        "sheet attachment versions list",
+        "sheet attachments list",
+        "sheet automation rule list",
+        "sheet automation rules list",
+        "sheet cell history list",
+        "sheet column list",
+        "sheet columns list",
+        "sheet comment list",
+        "sheet cross sheet reference list",
+        "sheet cross sheet references list",
+        "sheet discussion attachments list",
+        "sheet discussion list",
+        "sheet discussions list",
+        "sheet list",
+        "sheet path list",
+        "sheet proof attachments list",
+        "sheet proof discussions list",
+        "sheet proof list",
+        "sheet proof request actions list",
+        "sheet proof versions list",
+        "sheet proofs list",
+        "sheet publish list",
+        "sheet row attachments list",
+        "sheet row discussions list",
+        "sheet row list",
+        "sheet rows list",
+        "sheet sent update request list",
+        "sheet sent update requests list",
+        "sheet summary fields list",
+        "sheet summary list",
+        "sheet update request list",
+        "sheet update requests list",
+        "sheet version list",
+        "sheets list",
+        "user alternate email list",
+        "user alternate emails list",
+        "user list",
+        "user plans list",
+        "users list",
+        "webhook list",
+        "webhooks list",
+        "workspace children list",
+        "workspace metadata list",
+        "workspaces list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "add alternate emails apply",
+        "add favorites apply",
+        "add group members apply",
+        "add report columns apply",
+        "add report scope apply",
+        "add sheet columns apply",
+        "add sheet rows apply",
+        "add summary fields apply",
+        "api delete favorites favoritetype",
+        "api delete folders folderid",
+        "api delete groups groupid",
+        "api delete reports reportid",
+        "api delete reports reportid columns columnvirtualid",
+        "api delete shares shareid",
+        "api delete sheets sheetid",
+        "api delete sheets sheetid rows",
+        "api delete sheets sheetid summary fields",
+        "api delete sights sightid",
+        "api delete token",
+        "api delete users userid",
+        "api delete users userid plans planid",
+        "api delete workspaces workspaceid",
+        "api patch shares shareid",
+        "api post filteredevents",
+        "api post folders folderid sheets import",
+        "api post imageurls",
+        "api post reports reportid emails",
+        "api post shares",
+        "api post sheets import",
+        "api post sheets sheetid attachments attachmentid versions",
+        "api post sheets sheetid emails",
+        "api post sheets sheetid proofs proofid attachments",
+        "api post sheets sheetid rows emails",
+        "api post sheets sheetid rows rowid columns columnid cellimages",
+        "api post sheets sheetid rows rowid proofs",
+        "api post sheets sheetid summary fields fieldid images",
+        "api post token",
+        "api post users",
+        "api post users userid deactivate",
+        "api post users userid plans planid downgrade",
+        "api post users userid plans planid upgrade",
+        "api post users userid profileimage",
+        "api post users userid reactivate",
+        "api post webhooks webhookid resetsharedsecret",
+        "api post workspaces workspaceid sheets import",
+        "api put reports reportid columns columnvirtualid",
+        "api put sheets sheetid updaterequests updaterequestid",
+        "api put users userid",
+        "attach url to comment apply",
+        "attach url to row apply",
+        "attach url to sheet apply",
+        "copy dashboard apply",
+        "copy folder apply",
+        "copy rows apply",
+        "copy sheet apply",
+        "copy workspace apply",
+        "create cross sheet reference apply",
+        "create discussion comment apply",
+        "create folder in folder apply",
+        "create group apply",
+        "create home folder apply",
+        "create proof discussion apply",
+        "create proof request apply",
+        "create proof version apply",
+        "create report apply",
+        "create row discussion apply",
+        "create sheet apply",
+        "create sheet discussion apply",
+        "create sheet in folder apply",
+        "create sheet in workspace apply",
+        "create update request apply",
+        "create webhook apply",
+        "create workspace apply",
+        "create workspace folder apply",
+        "delete alternate email apply",
+        "delete automation rule apply",
+        "delete comment apply",
+        "delete favorite apply",
+        "delete group member apply",
+        "delete proof apply",
+        "delete proof requests apply",
+        "delete proof version apply",
+        "delete sent update request apply",
+        "delete sheet attachment apply",
+        "delete sheet attachment versions apply",
+        "delete sheet column apply",
+        "delete sheet discussion apply",
+        "delete update request apply",
+        "delete webhook apply",
+        "make alternate email primary apply",
+        "move dashboard apply",
+        "move folder apply",
+        "move rows apply",
+        "move sheet apply",
+        "remove report scope apply",
+        "set dashboard publish apply",
+        "set report publish apply",
+        "set sheet publish apply",
+        "sort sheet rows apply",
+        "update automation rule apply",
+        "update comment apply",
+        "update dashboard apply",
+        "update folder apply",
+        "update group apply",
+        "update proof apply",
+        "update report definition apply",
+        "update sheet apply",
+        "update sheet column apply",
+        "update sheet rows apply",
+        "update summary fields apply",
+        "update webhook apply",
+        "update workspace apply"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "add alternate emails apply",
+      "summary": "Plan and execute the add alternate emails reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "add_alternate_emails",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets add alternate emails apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/users/{userId}/alternateemails"
+        }
+      ],
+      "risk": "adds alternate email addresses to a user",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "add favorites apply",
+      "summary": "Plan and execute the add favorites reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "add_favorites",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets add favorites apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/favorites"
+        }
+      ],
+      "risk": "adds one or more favorites",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "add group members apply",
+      "summary": "Plan and execute the add group members reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "add_group_members",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets add group members apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/groups/{groupId}/members"
+        }
+      ],
+      "risk": "adds members to a group",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "add report columns apply",
+      "summary": "Plan and execute the add report columns reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "add_report_columns",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets add report columns apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/reports/{reportId}/columns"
+        }
+      ],
+      "risk": "adds columns to a report",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "add report scope apply",
+      "summary": "Plan and execute the add report scope reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "add_report_scope",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets add report scope apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/reports/{reportId}/scope"
+        }
+      ],
+      "risk": "adds sheets to a report scope",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "add sheet columns apply",
+      "summary": "Plan and execute the add sheet columns reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "add_sheet_columns",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets add sheet columns apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/sheets/{sheetId}/columns"
+        }
+      ],
+      "risk": "adds columns to a sheet",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "add sheet rows apply",
+      "summary": "Plan and execute the add sheet rows reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "add_sheet_rows",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets add sheet rows apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/sheets/{sheetId}/rows"
+        }
+      ],
+      "risk": "adds rows to a sheet",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "add summary fields apply",
+      "summary": "Plan and execute the add summary fields reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "add_summary_fields",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets add summary fields apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/sheets/{sheetId}/summary/fields"
+        }
+      ],
+      "risk": "adds sheet summary fields",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "api delete favorites favoritetype",
+      "summary": "Documented DELETE /favorites/{favoriteType} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets api delete favorites favoritetype --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/favorites/{favoriteType}"
+        }
+      ],
+      "operation": "smartsheets.delete.favorites-favoritetype",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete folders folderid",
+      "summary": "Documented DELETE /folders/{folderId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets api delete folders folderid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/folders/{folderId}"
+        }
+      ],
+      "operation": "smartsheets.delete.folders-folderid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete groups groupid",
+      "summary": "Documented DELETE /groups/{groupId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets api delete groups groupid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/groups/{groupId}"
+        }
+      ],
+      "operation": "smartsheets.delete.groups-groupid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete reports reportid",
+      "summary": "Documented DELETE /reports/{reportId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets api delete reports reportid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/reports/{reportId}"
+        }
+      ],
+      "operation": "smartsheets.delete.reports-reportid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete reports reportid columns columnvirtualid",
+      "summary": "Documented DELETE /reports/{reportId}/columns/{columnVirtualId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets api delete reports reportid columns columnvirtualid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/reports/{reportId}/columns/{columnVirtualId}"
+        }
+      ],
+      "operation": "smartsheets.delete.reports-reportid-columns-columnvirtualid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete shares shareid",
+      "summary": "Documented DELETE /shares/{shareId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets api delete shares shareid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/shares/{shareId}"
+        }
+      ],
+      "operation": "smartsheets.delete.shares-shareid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete sheets sheetid",
+      "summary": "Documented DELETE /sheets/{sheetId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets api delete sheets sheetid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/sheets/{sheetId}"
+        }
+      ],
+      "operation": "smartsheets.delete.sheets-sheetid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete sheets sheetid rows",
+      "summary": "Documented DELETE /sheets/{sheetId}/rows (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets api delete sheets sheetid rows --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/sheets/{sheetId}/rows"
+        }
+      ],
+      "operation": "smartsheets.delete.sheets-sheetid-rows",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete sheets sheetid summary fields",
+      "summary": "Documented DELETE /sheets/{sheetId}/summary/fields (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets api delete sheets sheetid summary fields --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/sheets/{sheetId}/summary/fields"
+        }
+      ],
+      "operation": "smartsheets.delete.sheets-sheetid-summary-fields",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete sights sightid",
+      "summary": "Documented DELETE /sights/{sightId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets api delete sights sightid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/sights/{sightId}"
+        }
+      ],
+      "operation": "smartsheets.delete.sights-sightid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete token",
+      "summary": "Documented DELETE /token (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets api delete token --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/token"
+        }
+      ],
+      "operation": "smartsheets.delete.token",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete users userid",
+      "summary": "Documented DELETE /users/{userId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets api delete users userid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/users/{userId}"
+        }
+      ],
+      "operation": "smartsheets.delete.users-userid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete users userid plans planid",
+      "summary": "Documented DELETE /users/{userId}/plans/{planId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets api delete users userid plans planid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/users/{userId}/plans/{planId}"
+        }
+      ],
+      "operation": "smartsheets.delete.users-userid-plans-planid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete workspaces workspaceid",
+      "summary": "Documented DELETE /workspaces/{workspaceId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets api delete workspaces workspaceid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/workspaces/{workspaceId}"
+        }
+      ],
+      "operation": "smartsheets.delete.workspaces-workspaceid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api get reports reportid columns",
+      "summary": "Documented GET /reports/{reportId}/columns (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets api get reports reportid columns --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/reports/{reportId}/columns"
+        }
+      ],
+      "operation": "smartsheets.get.reports-reportid-columns",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get reports reportid columns columnvirtualid",
+      "summary": "Documented GET /reports/{reportId}/columns/{columnVirtualId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets api get reports reportid columns columnvirtualid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/reports/{reportId}/columns/{columnVirtualId}"
+        }
+      ],
+      "operation": "smartsheets.get.reports-reportid-columns-columnvirtualid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get reports reportid definition",
+      "summary": "Documented GET /reports/{reportId}/definition (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets api get reports reportid definition --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/reports/{reportId}/definition"
+        }
+      ],
+      "operation": "smartsheets.get.reports-reportid-definition",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get reports reportid scope",
+      "summary": "Documented GET /reports/{reportId}/scope (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets api get reports reportid scope --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/reports/{reportId}/scope"
+        }
+      ],
+      "operation": "smartsheets.get.reports-reportid-scope",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get search",
+      "summary": "Documented GET /search (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets api get search --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/search"
+        }
+      ],
+      "operation": "smartsheets.get.search",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get search sheets sheetid",
+      "summary": "Documented GET /search/sheets/{sheetId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets api get search sheets sheetid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/search/sheets/{sheetId}"
+        }
+      ],
+      "operation": "smartsheets.get.search-sheets-sheetid",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get serverinfo",
+      "summary": "Documented GET /serverinfo (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets api get serverinfo --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/serverinfo"
+        }
+      ],
+      "operation": "smartsheets.get.serverinfo",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api patch shares shareid",
+      "summary": "Documented PATCH /shares/{shareId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets api patch shares shareid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/shares/{shareId}"
+        }
+      ],
+      "operation": "smartsheets.patch.shares-shareid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post filteredevents",
+      "summary": "Documented POST /filteredEvents (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets api post filteredevents --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/filteredEvents"
+        }
+      ],
+      "operation": "smartsheets.post.filteredevents",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post folders folderid sheets import",
+      "summary": "Documented POST /folders/{folderId}/sheets/import (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets api post folders folderid sheets import --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/folders/{folderId}/sheets/import"
+        }
+      ],
+      "operation": "smartsheets.post.folders-folderid-sheets-import",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post imageurls",
+      "summary": "Documented POST /imageurls (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets api post imageurls --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/imageurls"
+        }
+      ],
+      "operation": "smartsheets.post.imageurls",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post reports reportid emails",
+      "summary": "Documented POST /reports/{reportId}/emails (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets api post reports reportid emails --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/reports/{reportId}/emails"
+        }
+      ],
+      "operation": "smartsheets.post.reports-reportid-emails",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post shares",
+      "summary": "Documented POST /shares (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets api post shares --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/shares"
+        }
+      ],
+      "operation": "smartsheets.post.shares",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post sheets import",
+      "summary": "Documented POST /sheets/import (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets api post sheets import --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/sheets/import"
+        }
+      ],
+      "operation": "smartsheets.post.sheets-import",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post sheets sheetid attachments attachmentid versions",
+      "summary": "Documented POST /sheets/{sheetId}/attachments/{attachmentId}/versions (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets api post sheets sheetid attachments attachmentid versions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/sheets/{sheetId}/attachments/{attachmentId}/versions"
+        }
+      ],
+      "operation": "smartsheets.post.sheets-sheetid-attachments-attachmentid-versions",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post sheets sheetid emails",
+      "summary": "Documented POST /sheets/{sheetId}/emails (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets api post sheets sheetid emails --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/sheets/{sheetId}/emails"
+        }
+      ],
+      "operation": "smartsheets.post.sheets-sheetid-emails",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post sheets sheetid proofs proofid attachments",
+      "summary": "Documented POST /sheets/{sheetId}/proofs/{proofId}/attachments (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets api post sheets sheetid proofs proofid attachments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/sheets/{sheetId}/proofs/{proofId}/attachments"
+        }
+      ],
+      "operation": "smartsheets.post.sheets-sheetid-proofs-proofid-attachments",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post sheets sheetid rows emails",
+      "summary": "Documented POST /sheets/{sheetId}/rows/emails (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets api post sheets sheetid rows emails --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/sheets/{sheetId}/rows/emails"
+        }
+      ],
+      "operation": "smartsheets.post.sheets-sheetid-rows-emails",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post sheets sheetid rows rowid columns columnid cellimages",
+      "summary": "Documented POST /sheets/{sheetId}/rows/{rowId}/columns/{columnId}/cellimages (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets api post sheets sheetid rows rowid columns columnid cellimages --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/sheets/{sheetId}/rows/{rowId}/columns/{columnId}/cellimages"
+        }
+      ],
+      "operation": "smartsheets.post.sheets-sheetid-rows-rowid-columns-columnid-cellimages",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post sheets sheetid rows rowid proofs",
+      "summary": "Documented POST /sheets/{sheetId}/rows/{rowId}/proofs (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets api post sheets sheetid rows rowid proofs --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/sheets/{sheetId}/rows/{rowId}/proofs"
+        }
+      ],
+      "operation": "smartsheets.post.sheets-sheetid-rows-rowid-proofs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post sheets sheetid summary fields fieldid images",
+      "summary": "Documented POST /sheets/{sheetId}/summary/fields/{fieldId}/images (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets api post sheets sheetid summary fields fieldid images --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/sheets/{sheetId}/summary/fields/{fieldId}/images"
+        }
+      ],
+      "operation": "smartsheets.post.sheets-sheetid-summary-fields-fieldid-images",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post token",
+      "summary": "Documented POST /token (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets api post token --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/token"
+        }
+      ],
+      "operation": "smartsheets.post.token",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post users",
+      "summary": "Documented POST /users (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets api post users --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/users"
+        }
+      ],
+      "operation": "smartsheets.post.users",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post users userid deactivate",
+      "summary": "Documented POST /users/{userId}/deactivate (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets api post users userid deactivate --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/users/{userId}/deactivate"
+        }
+      ],
+      "operation": "smartsheets.post.users-userid-deactivate",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post users userid plans planid downgrade",
+      "summary": "Documented POST /users/{userId}/plans/{planId}/downgrade (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets api post users userid plans planid downgrade --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/users/{userId}/plans/{planId}/downgrade"
+        }
+      ],
+      "operation": "smartsheets.post.users-userid-plans-planid-downgrade",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post users userid plans planid upgrade",
+      "summary": "Documented POST /users/{userId}/plans/{planId}/upgrade (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets api post users userid plans planid upgrade --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/users/{userId}/plans/{planId}/upgrade"
+        }
+      ],
+      "operation": "smartsheets.post.users-userid-plans-planid-upgrade",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post users userid profileimage",
+      "summary": "Documented POST /users/{userId}/profileimage (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets api post users userid profileimage --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/users/{userId}/profileimage"
+        }
+      ],
+      "operation": "smartsheets.post.users-userid-profileimage",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post users userid reactivate",
+      "summary": "Documented POST /users/{userId}/reactivate (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets api post users userid reactivate --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/users/{userId}/reactivate"
+        }
+      ],
+      "operation": "smartsheets.post.users-userid-reactivate",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post webhooks webhookid resetsharedsecret",
+      "summary": "Documented POST /webhooks/{webhookId}/resetSharedSecret (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets api post webhooks webhookid resetsharedsecret --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/webhooks/{webhookId}/resetSharedSecret"
+        }
+      ],
+      "operation": "smartsheets.post.webhooks-webhookid-resetsharedsecret",
+      "risk": "high",
+      "approval": "not implemented: the provider webhook-URL mutation has no dedicated security-reviewed execution contract",
+      "notes": "named_dependency=review.webhook_url_mutation: the provider webhook-URL mutation has no dedicated security-reviewed execution contract"
+    },
+    {
+      "path": "api post workspaces workspaceid sheets import",
+      "summary": "Documented POST /workspaces/{workspaceId}/sheets/import (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets api post workspaces workspaceid sheets import --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/workspaces/{workspaceId}/sheets/import"
+        }
+      ],
+      "operation": "smartsheets.post.workspaces-workspaceid-sheets-import",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put reports reportid columns columnvirtualid",
+      "summary": "Documented PUT /reports/{reportId}/columns/{columnVirtualId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets api put reports reportid columns columnvirtualid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/reports/{reportId}/columns/{columnVirtualId}"
+        }
+      ],
+      "operation": "smartsheets.put.reports-reportid-columns-columnvirtualid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put sheets sheetid updaterequests updaterequestid",
+      "summary": "Documented PUT /sheets/{sheetId}/updaterequests/{updateRequestId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets api put sheets sheetid updaterequests updaterequestid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/sheets/{sheetId}/updaterequests/{updateRequestId}"
+        }
+      ],
+      "operation": "smartsheets.put.sheets-sheetid-updaterequests-updaterequestid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put users userid",
+      "summary": "Documented PUT /users/{userId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets api put users userid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/users/{userId}"
+        }
+      ],
+      "operation": "smartsheets.put.users-userid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "asset share list",
+      "summary": "Run the asset share ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "asset_share",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets asset share list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/shares/{shareId}"
+        }
+      ]
+    },
+    {
+      "path": "asset shares list",
+      "summary": "Run the asset shares ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "asset_shares",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets asset shares list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/shares"
+        }
+      ]
+    },
+    {
+      "path": "attach url to comment apply",
+      "summary": "Plan and execute the attach url to comment reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "attach_url_to_comment",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets attach url to comment apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/sheets/{sheetId}/comments/{commentId}/attachments"
+        }
+      ],
+      "risk": "adds a URL attachment to a comment",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "attach url to row apply",
+      "summary": "Plan and execute the attach url to row reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "attach_url_to_row",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets attach url to row apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/sheets/{sheetId}/rows/{rowId}/attachments"
+        }
+      ],
+      "risk": "adds a URL attachment to a row",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "attach url to sheet apply",
+      "summary": "Plan and execute the attach url to sheet reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "attach_url_to_sheet",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets attach url to sheet apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/sheets/{sheetId}/attachments"
+        }
+      ],
+      "risk": "adds a URL attachment to a sheet",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "contact list",
+      "summary": "Run the contact ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "contact",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets contact list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/contacts/{contactId}"
+        }
+      ]
+    },
+    {
+      "path": "contacts list",
+      "summary": "Run the contacts ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "contacts",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets contacts list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/contacts"
+        }
+      ]
+    },
+    {
+      "path": "copy dashboard apply",
+      "summary": "Plan and execute the copy dashboard reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "copy_dashboard",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets copy dashboard apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/sights/{sightId}/copy"
+        }
+      ],
+      "risk": "copies a dashboard",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "copy folder apply",
+      "summary": "Plan and execute the copy folder reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "copy_folder",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets copy folder apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/folders/{folderId}/copy"
+        }
+      ],
+      "risk": "copies a folder to a destination",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "copy rows apply",
+      "summary": "Plan and execute the copy rows reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "copy_rows",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets copy rows apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/sheets/{sheetId}/rows/copy"
+        }
+      ],
+      "risk": "copies rows to another sheet",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "copy sheet apply",
+      "summary": "Plan and execute the copy sheet reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "copy_sheet",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets copy sheet apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/sheets/{sheetId}/copy"
+        }
+      ],
+      "risk": "copies a sheet",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "copy workspace apply",
+      "summary": "Plan and execute the copy workspace reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "copy_workspace",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets copy workspace apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/workspaces/{workspaceId}/copy"
+        }
+      ],
+      "risk": "copies a workspace",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create cross sheet reference apply",
+      "summary": "Plan and execute the create cross sheet reference reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_cross_sheet_reference",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets create cross sheet reference apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/sheets/{sheetId}/crosssheetreferences"
+        }
+      ],
+      "risk": "creates cross-sheet references",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create discussion comment apply",
+      "summary": "Plan and execute the create discussion comment reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_discussion_comment",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets create discussion comment apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/sheets/{sheetId}/discussions/{discussionId}/comments"
+        }
+      ],
+      "risk": "adds a comment to a discussion",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create folder in folder apply",
+      "summary": "Plan and execute the create folder in folder reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_folder_in_folder",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets create folder in folder apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/folders/{folderId}/folders"
+        }
+      ],
+      "risk": "creates a child folder",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create group apply",
+      "summary": "Plan and execute the create group reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_group",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets create group apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/groups"
+        }
+      ],
+      "risk": "creates an organization group",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create home folder apply",
+      "summary": "Plan and execute the create home folder reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_home_folder",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets create home folder apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/home/folders"
+        }
+      ],
+      "risk": "creates a folder in home",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create proof discussion apply",
+      "summary": "Plan and execute the create proof discussion reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_proof_discussion",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets create proof discussion apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/sheets/{sheetId}/proofs/{proofId}/discussions"
+        }
+      ],
+      "risk": "creates a proof discussion",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create proof request apply",
+      "summary": "Plan and execute the create proof request reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_proof_request",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets create proof request apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/sheets/{sheetId}/proofs/{proofId}/requests"
+        }
+      ],
+      "risk": "creates proof requests",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create proof version apply",
+      "summary": "Plan and execute the create proof version reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_proof_version",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets create proof version apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/sheets/{sheetId}/proofs/{proofId}/versions"
+        }
+      ],
+      "risk": "creates a proof version from JSON metadata",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create report apply",
+      "summary": "Plan and execute the create report reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_report",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets create report apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/reports"
+        }
+      ],
+      "risk": "creates a report",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create row discussion apply",
+      "summary": "Plan and execute the create row discussion reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_row_discussion",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets create row discussion apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/sheets/{sheetId}/rows/{rowId}/discussions"
+        }
+      ],
+      "risk": "creates a row discussion",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create sheet apply",
+      "summary": "Plan and execute the create sheet reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_sheet",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets create sheet apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/sheets"
+        }
+      ],
+      "risk": "creates a sheet in the Sheets folder",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create sheet discussion apply",
+      "summary": "Plan and execute the create sheet discussion reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_sheet_discussion",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets create sheet discussion apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/sheets/{sheetId}/discussions"
+        }
+      ],
+      "risk": "creates a sheet discussion",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create sheet in folder apply",
+      "summary": "Plan and execute the create sheet in folder reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_sheet_in_folder",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets create sheet in folder apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/folders/{folderId}/sheets"
+        }
+      ],
+      "risk": "creates a sheet in a folder",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create sheet in workspace apply",
+      "summary": "Plan and execute the create sheet in workspace reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_sheet_in_workspace",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets create sheet in workspace apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/workspaces/{workspaceId}/sheets"
+        }
+      ],
+      "risk": "creates a sheet in a workspace",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create update request apply",
+      "summary": "Plan and execute the create update request reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_update_request",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets create update request apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/sheets/{sheetId}/updaterequests"
+        }
+      ],
+      "risk": "creates an update request",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create webhook apply",
+      "summary": "Plan and execute the create webhook reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_webhook",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets create webhook apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/webhooks"
+        }
+      ],
+      "risk": "creates a webhook",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create workspace apply",
+      "summary": "Plan and execute the create workspace reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_workspace",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets create workspace apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/workspaces"
+        }
+      ],
+      "risk": "creates a workspace",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create workspace folder apply",
+      "summary": "Plan and execute the create workspace folder reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_workspace_folder",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets create workspace folder apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/workspaces/{workspaceId}/folders"
+        }
+      ],
+      "risk": "creates a folder in a workspace",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "current user list",
+      "summary": "Run the current user ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "current_user",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets current user list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users/me"
+        }
+      ]
+    },
+    {
+      "path": "dashboard list",
+      "summary": "Run the dashboard ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "dashboard",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets dashboard list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/sights/{sightId}"
+        }
+      ]
+    },
+    {
+      "path": "dashboard path list",
+      "summary": "Run the dashboard path ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "dashboard_path",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets dashboard path list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/sights/{sightId}/path"
+        }
+      ]
+    },
+    {
+      "path": "dashboard publish list",
+      "summary": "Run the dashboard publish ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "dashboard_publish",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets dashboard publish list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/sights/{sightId}/publish"
+        }
+      ]
+    },
+    {
+      "path": "dashboards list",
+      "summary": "Run the dashboards ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "dashboards",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets dashboards list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/sights"
+        }
+      ]
+    },
+    {
+      "path": "delete alternate email apply",
+      "summary": "Plan and execute the delete alternate email reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_alternate_email",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets delete alternate email apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/users/{userId}/alternateemails/{alternateEmailId}"
+        }
+      ],
+      "risk": "deletes an alternate email address",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete automation rule apply",
+      "summary": "Plan and execute the delete automation rule reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_automation_rule",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets delete automation rule apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/sheets/{sheetId}/automationrules/{automationRuleId}"
+        }
+      ],
+      "risk": "deletes an automation rule",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete comment apply",
+      "summary": "Plan and execute the delete comment reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_comment",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets delete comment apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/sheets/{sheetId}/comments/{commentId}"
+        }
+      ],
+      "risk": "deletes a comment",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete favorite apply",
+      "summary": "Plan and execute the delete favorite reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_favorite",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets delete favorite apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/favorites/{favoriteType}/{favoriteId}"
+        }
+      ],
+      "risk": "removes one favorite",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete group member apply",
+      "summary": "Plan and execute the delete group member reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_group_member",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets delete group member apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/groups/{groupId}/members/{userId}"
+        }
+      ],
+      "risk": "removes a member from a group",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete proof apply",
+      "summary": "Plan and execute the delete proof reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_proof",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets delete proof apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/sheets/{sheetId}/proofs/{proofId}"
+        }
+      ],
+      "risk": "deletes a proof",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete proof requests apply",
+      "summary": "Plan and execute the delete proof requests reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_proof_requests",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets delete proof requests apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/sheets/{sheetId}/proofs/{proofId}/requests"
+        }
+      ],
+      "risk": "deletes proof requests",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete proof version apply",
+      "summary": "Plan and execute the delete proof version reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_proof_version",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets delete proof version apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/sheets/{sheetId}/proofs/{proofId}/versions"
+        }
+      ],
+      "risk": "deletes a proof version",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete sent update request apply",
+      "summary": "Plan and execute the delete sent update request reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_sent_update_request",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets delete sent update request apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/sheets/{sheetId}/sentupdaterequests/{sentUpdateRequestId}"
+        }
+      ],
+      "risk": "deletes a sent update request",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete sheet attachment apply",
+      "summary": "Plan and execute the delete sheet attachment reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_sheet_attachment",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets delete sheet attachment apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/sheets/{sheetId}/attachments/{attachmentId}"
+        }
+      ],
+      "risk": "deletes a sheet attachment",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete sheet attachment versions apply",
+      "summary": "Plan and execute the delete sheet attachment versions reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_sheet_attachment_versions",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets delete sheet attachment versions apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/sheets/{sheetId}/attachments/{attachmentId}/versions"
+        }
+      ],
+      "risk": "deletes all versions of a sheet attachment",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete sheet column apply",
+      "summary": "Plan and execute the delete sheet column reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_sheet_column",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets delete sheet column apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/sheets/{sheetId}/columns/{columnId}"
+        }
+      ],
+      "risk": "deletes a sheet column",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete sheet discussion apply",
+      "summary": "Plan and execute the delete sheet discussion reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_sheet_discussion",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets delete sheet discussion apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/sheets/{sheetId}/discussions/{discussionId}"
+        }
+      ],
+      "risk": "deletes a sheet discussion",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete update request apply",
+      "summary": "Plan and execute the delete update request reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_update_request",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets delete update request apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/sheets/{sheetId}/updaterequests/{updateRequestId}"
+        }
+      ],
+      "risk": "deletes an update request",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete webhook apply",
+      "summary": "Plan and execute the delete webhook reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_webhook",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets delete webhook apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/webhooks/{webhookId}"
+        }
+      ],
+      "risk": "deletes a webhook",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "events list",
+      "summary": "Run the events ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "events",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets events list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/events"
+        }
+      ]
+    },
+    {
+      "path": "favorite list",
+      "summary": "Run the favorite ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "favorite",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets favorite list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/favorites/{favoriteType}/{favoriteId}"
+        }
+      ]
+    },
+    {
+      "path": "favorites list",
+      "summary": "Run the favorites ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "favorites",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets favorites list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/favorites"
+        }
+      ]
+    },
+    {
+      "path": "folder children list",
+      "summary": "Run the folder children ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "folder_children",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets folder children list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/folders/{folderId}/children"
+        }
+      ]
+    },
+    {
+      "path": "folder metadata list",
+      "summary": "Run the folder metadata ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "folder_metadata",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets folder metadata list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/folders/{folderId}/metadata"
+        }
+      ]
+    },
+    {
+      "path": "folder path list",
+      "summary": "Run the folder path ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "folder_path",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets folder path list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/folders/{folderId}/path"
+        }
+      ]
+    },
+    {
+      "path": "group list",
+      "summary": "Run the group ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "group",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets group list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/groups/{groupId}"
+        }
+      ]
+    },
+    {
+      "path": "groups list",
+      "summary": "Run the groups ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "groups",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets groups list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/groups"
+        }
+      ]
+    },
+    {
+      "path": "home contents list",
+      "summary": "Run the home contents ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "home_contents",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets home contents list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/folders/personal"
+        }
+      ]
+    },
+    {
+      "path": "home folders list",
+      "summary": "Run the home folders ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "home_folders",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets home folders list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/home/folders"
+        }
+      ]
+    },
+    {
+      "path": "make alternate email primary apply",
+      "summary": "Plan and execute the make alternate email primary reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "make_alternate_email_primary",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets make alternate email primary apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/users/{userId}/alternateemails/{alternateEmailId}/makeprimary"
+        }
+      ],
+      "risk": "makes an alternate email primary",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "move dashboard apply",
+      "summary": "Plan and execute the move dashboard reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "move_dashboard",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets move dashboard apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/sights/{sightId}/move"
+        }
+      ],
+      "risk": "moves a dashboard",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "move folder apply",
+      "summary": "Plan and execute the move folder reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "move_folder",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets move folder apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/folders/{folderId}/move"
+        }
+      ],
+      "risk": "moves a folder to a destination",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "move rows apply",
+      "summary": "Plan and execute the move rows reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "move_rows",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets move rows apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/sheets/{sheetId}/rows/move"
+        }
+      ],
+      "risk": "moves rows to another sheet",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "move sheet apply",
+      "summary": "Plan and execute the move sheet reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "move_sheet",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets move sheet apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/sheets/{sheetId}/move"
+        }
+      ],
+      "risk": "moves a sheet",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "org sheets list",
+      "summary": "Run the org sheets ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "org_sheets",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets org sheets list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users/sheets"
+        }
+      ]
+    },
+    {
+      "path": "remove report scope apply",
+      "summary": "Plan and execute the remove report scope reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "remove_report_scope",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets remove report scope apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/reports/{reportId}/scope"
+        }
+      ],
+      "risk": "removes sheets from a report scope",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "report list",
+      "summary": "Run the report ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "report",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets report list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/reports/{reportId}"
+        }
+      ]
+    },
+    {
+      "path": "report path list",
+      "summary": "Run the report path ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "report_path",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets report path list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/reports/{reportId}/path"
+        }
+      ]
+    },
+    {
+      "path": "report publish list",
+      "summary": "Run the report publish ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "report_publish",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets report publish list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/reports/{reportId}/publish"
+        }
+      ]
+    },
+    {
+      "path": "reports list",
+      "summary": "Run the reports ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "reports",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets reports list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/reports"
+        }
+      ]
+    },
+    {
+      "path": "set dashboard publish apply",
+      "summary": "Plan and execute the set dashboard publish reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "set_dashboard_publish",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets set dashboard publish apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/sights/{sightId}/publish"
+        }
+      ],
+      "risk": "updates dashboard publish settings",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "set report publish apply",
+      "summary": "Plan and execute the set report publish reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "set_report_publish",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets set report publish apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/reports/{reportId}/publish"
+        }
+      ],
+      "risk": "updates report publish settings",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "set sheet publish apply",
+      "summary": "Plan and execute the set sheet publish reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "set_sheet_publish",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets set sheet publish apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/sheets/{sheetId}/publish"
+        }
+      ],
+      "risk": "updates sheet publish settings",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "sheet attachment list",
+      "summary": "Run the sheet attachment ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "sheet_attachment",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets sheet attachment list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/sheets/{sheetId}/attachments/{attachmentId}"
+        }
+      ]
+    },
+    {
+      "path": "sheet attachment versions list",
+      "summary": "Run the sheet attachment versions ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "sheet_attachment_versions",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets sheet attachment versions list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/sheets/{sheetId}/attachments/{attachmentId}/versions"
+        }
+      ]
+    },
+    {
+      "path": "sheet attachments list",
+      "summary": "Run the sheet attachments ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "sheet_attachments",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets sheet attachments list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/sheets/{sheetId}/attachments"
+        }
+      ]
+    },
+    {
+      "path": "sheet automation rule list",
+      "summary": "Run the sheet automation rule ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "sheet_automation_rule",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets sheet automation rule list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/sheets/{sheetId}/automationrules/{automationRuleId}"
+        }
+      ]
+    },
+    {
+      "path": "sheet automation rules list",
+      "summary": "Run the sheet automation rules ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "sheet_automation_rules",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets sheet automation rules list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/sheets/{sheetId}/automationrules"
+        }
+      ]
+    },
+    {
+      "path": "sheet cell history list",
+      "summary": "Run the sheet cell history ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "sheet_cell_history",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets sheet cell history list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/sheets/{sheetId}/rows/{rowId}/columns/{columnId}/history"
+        }
+      ]
+    },
+    {
+      "path": "sheet column list",
+      "summary": "Run the sheet column ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "sheet_column",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets sheet column list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/sheets/{sheetId}/columns/{columnId}"
+        }
+      ]
+    },
+    {
+      "path": "sheet columns list",
+      "summary": "Run the sheet columns ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "sheet_columns",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets sheet columns list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/sheets/{sheetId}/columns"
+        }
+      ]
+    },
+    {
+      "path": "sheet comment list",
+      "summary": "Run the sheet comment ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "sheet_comment",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets sheet comment list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/sheets/{sheetId}/comments/{commentId}"
+        }
+      ]
+    },
+    {
+      "path": "sheet cross sheet reference list",
+      "summary": "Run the sheet cross sheet reference ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "sheet_cross_sheet_reference",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets sheet cross sheet reference list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/sheets/{sheetId}/crosssheetreferences/{crossSheetReferenceId}"
+        }
+      ]
+    },
+    {
+      "path": "sheet cross sheet references list",
+      "summary": "Run the sheet cross sheet references ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "sheet_cross_sheet_references",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets sheet cross sheet references list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/sheets/{sheetId}/crosssheetreferences"
+        }
+      ]
+    },
+    {
+      "path": "sheet discussion attachments list",
+      "summary": "Run the sheet discussion attachments ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "sheet_discussion_attachments",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets sheet discussion attachments list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/sheets/{sheetId}/discussions/{discussionId}/attachments"
+        }
+      ]
+    },
+    {
+      "path": "sheet discussion list",
+      "summary": "Run the sheet discussion ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "sheet_discussion",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets sheet discussion list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/sheets/{sheetId}/discussions/{discussionId}"
+        }
+      ]
+    },
+    {
+      "path": "sheet discussions list",
+      "summary": "Run the sheet discussions ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "sheet_discussions",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets sheet discussions list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/sheets/{sheetId}/discussions"
+        }
+      ]
+    },
+    {
+      "path": "sheet list",
+      "summary": "Run the sheet ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "sheet",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets sheet list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/sheets/{sheetId}"
+        }
+      ]
+    },
+    {
+      "path": "sheet path list",
+      "summary": "Run the sheet path ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "sheet_path",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets sheet path list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/sheets/{sheetId}/path"
+        }
+      ]
+    },
+    {
+      "path": "sheet proof attachments list",
+      "summary": "Run the sheet proof attachments ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "sheet_proof_attachments",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets sheet proof attachments list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/sheets/{sheetId}/proofs/{proofId}/attachments"
+        }
+      ]
+    },
+    {
+      "path": "sheet proof discussions list",
+      "summary": "Run the sheet proof discussions ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "sheet_proof_discussions",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets sheet proof discussions list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/sheets/{sheetId}/proofs/{proofId}/discussions"
+        }
+      ]
+    },
+    {
+      "path": "sheet proof list",
+      "summary": "Run the sheet proof ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "sheet_proof",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets sheet proof list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/sheets/{sheetId}/proofs/{proofId}"
+        }
+      ]
+    },
+    {
+      "path": "sheet proof request actions list",
+      "summary": "Run the sheet proof request actions ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "sheet_proof_request_actions",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets sheet proof request actions list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/sheets/{sheetId}/proofs/{proofId}/requestactions"
+        }
+      ]
+    },
+    {
+      "path": "sheet proof versions list",
+      "summary": "Run the sheet proof versions ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "sheet_proof_versions",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets sheet proof versions list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/sheets/{sheetId}/proofs/{proofId}/versions"
+        }
+      ]
+    },
+    {
+      "path": "sheet proofs list",
+      "summary": "Run the sheet proofs ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "sheet_proofs",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets sheet proofs list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/sheets/{sheetId}/proofs"
+        }
+      ]
+    },
+    {
+      "path": "sheet publish list",
+      "summary": "Run the sheet publish ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "sheet_publish",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets sheet publish list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/sheets/{sheetId}/publish"
+        }
+      ]
+    },
+    {
+      "path": "sheet row attachments list",
+      "summary": "Run the sheet row attachments ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "sheet_row_attachments",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets sheet row attachments list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/sheets/{sheetId}/rows/{rowId}/attachments"
+        }
+      ]
+    },
+    {
+      "path": "sheet row discussions list",
+      "summary": "Run the sheet row discussions ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "sheet_row_discussions",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets sheet row discussions list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/sheets/{sheetId}/rows/{rowId}/discussions"
+        }
+      ]
+    },
+    {
+      "path": "sheet row list",
+      "summary": "Run the sheet row ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "sheet_row",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets sheet row list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/sheets/{sheetId}/rows/{rowId}"
+        }
+      ]
+    },
+    {
+      "path": "sheet rows list",
+      "summary": "Run the sheet rows ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "sheet_rows",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets sheet rows list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/sheets/{sheetId}?include=rows"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "sheet sent update request list",
+      "summary": "Run the sheet sent update request ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "sheet_sent_update_request",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets sheet sent update request list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/sheets/{sheetId}/sentupdaterequests/{sentUpdateRequestId}"
+        }
+      ]
+    },
+    {
+      "path": "sheet sent update requests list",
+      "summary": "Run the sheet sent update requests ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "sheet_sent_update_requests",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets sheet sent update requests list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/sheets/{sheetId}/sentupdaterequests"
+        }
+      ]
+    },
+    {
+      "path": "sheet summary fields list",
+      "summary": "Run the sheet summary fields ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "sheet_summary_fields",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets sheet summary fields list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/sheets/{sheetId}/summary/fields"
+        }
+      ]
+    },
+    {
+      "path": "sheet summary list",
+      "summary": "Run the sheet summary ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "sheet_summary",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets sheet summary list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/sheets/{sheetId}/summary"
+        }
+      ]
+    },
+    {
+      "path": "sheet update request list",
+      "summary": "Run the sheet update request ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "sheet_update_request",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets sheet update request list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/sheets/{sheetId}/updaterequests/{updateRequestId}"
+        }
+      ]
+    },
+    {
+      "path": "sheet update requests list",
+      "summary": "Run the sheet update requests ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "sheet_update_requests",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets sheet update requests list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/sheets/{sheetId}/updaterequests"
+        }
+      ]
+    },
+    {
+      "path": "sheet version list",
+      "summary": "Run the sheet version ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "sheet_version",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets sheet version list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/sheets/{sheetId}/version"
+        }
+      ]
+    },
+    {
+      "path": "sheets list",
+      "summary": "Run the sheets ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "sheets",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets sheets list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/sheets"
+        }
+      ]
+    },
+    {
+      "path": "sort sheet rows apply",
+      "summary": "Plan and execute the sort sheet rows reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "sort_sheet_rows",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets sort sheet rows apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/sheets/{sheetId}/sort"
+        }
+      ],
+      "risk": "sorts rows in a sheet",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update automation rule apply",
+      "summary": "Plan and execute the update automation rule reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_automation_rule",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets update automation rule apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/sheets/{sheetId}/automationrules/{automationRuleId}"
+        }
+      ],
+      "risk": "updates an automation rule",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update comment apply",
+      "summary": "Plan and execute the update comment reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_comment",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets update comment apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/sheets/{sheetId}/comments/{commentId}"
+        }
+      ],
+      "risk": "edits a comment",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update dashboard apply",
+      "summary": "Plan and execute the update dashboard reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_dashboard",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets update dashboard apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/sights/{sightId}"
+        }
+      ],
+      "risk": "updates dashboard metadata",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update folder apply",
+      "summary": "Plan and execute the update folder reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_folder",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets update folder apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/folders/{folderId}"
+        }
+      ],
+      "risk": "updates folder metadata",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update group apply",
+      "summary": "Plan and execute the update group reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_group",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets update group apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/groups/{groupId}"
+        }
+      ],
+      "risk": "updates an organization group",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update proof apply",
+      "summary": "Plan and execute the update proof reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_proof",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets update proof apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/sheets/{sheetId}/proofs/{proofId}"
+        }
+      ],
+      "risk": "updates proof status",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update report definition apply",
+      "summary": "Plan and execute the update report definition reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_report_definition",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets update report definition apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/reports/{reportId}/definition"
+        }
+      ],
+      "risk": "updates a report definition",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update sheet apply",
+      "summary": "Plan and execute the update sheet reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_sheet",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets update sheet apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/sheets/{sheetId}"
+        }
+      ],
+      "risk": "updates sheet metadata",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update sheet column apply",
+      "summary": "Plan and execute the update sheet column reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_sheet_column",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets update sheet column apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/sheets/{sheetId}/columns/{columnId}"
+        }
+      ],
+      "risk": "updates a sheet column",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update sheet rows apply",
+      "summary": "Plan and execute the update sheet rows reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_sheet_rows",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets update sheet rows apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/sheets/{sheetId}/rows"
+        }
+      ],
+      "risk": "updates rows in a sheet",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update summary fields apply",
+      "summary": "Plan and execute the update summary fields reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_summary_fields",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets update summary fields apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/sheets/{sheetId}/summary/fields"
+        }
+      ],
+      "risk": "updates sheet summary fields",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update webhook apply",
+      "summary": "Plan and execute the update webhook reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_webhook",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets update webhook apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/webhooks/{webhookId}"
+        }
+      ],
+      "risk": "updates a webhook",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update workspace apply",
+      "summary": "Plan and execute the update workspace reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_workspace",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets update workspace apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/workspaces/{workspaceId}"
+        }
+      ],
+      "risk": "updates a workspace",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "user alternate email list",
+      "summary": "Run the user alternate email ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "user_alternate_email",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets user alternate email list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users/{userId}/alternateemails/{alternateEmailId}"
+        }
+      ]
+    },
+    {
+      "path": "user alternate emails list",
+      "summary": "Run the user alternate emails ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "user_alternate_emails",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets user alternate emails list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users/{userId}/alternateemails"
+        }
+      ]
+    },
+    {
+      "path": "user list",
+      "summary": "Run the user ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "user",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets user list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users/{userId}"
+        }
+      ]
+    },
+    {
+      "path": "user plans list",
+      "summary": "Run the user plans ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "user_plans",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets user plans list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users/{userId}/plans"
+        }
+      ]
+    },
+    {
+      "path": "users list",
+      "summary": "Run the users ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "users",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets users list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users"
+        }
+      ]
+    },
+    {
+      "path": "webhook list",
+      "summary": "Run the webhook ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "webhook",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets webhook list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/webhooks/{webhookId}"
+        }
+      ]
+    },
+    {
+      "path": "webhooks list",
+      "summary": "Run the webhooks ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "webhooks",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets webhooks list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/webhooks"
+        }
+      ]
+    },
+    {
+      "path": "workspace children list",
+      "summary": "Run the workspace children ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "workspace_children",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets workspace children list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/workspaces/{workspaceId}/children"
+        }
+      ]
+    },
+    {
+      "path": "workspace metadata list",
+      "summary": "Run the workspace metadata ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "workspace_metadata",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets workspace metadata list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/workspaces/{workspaceId}/metadata"
+        }
+      ]
+    },
+    {
+      "path": "workspaces list",
+      "summary": "Run the workspaces ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "workspaces",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "examples": [
+        "pm smartsheets workspaces list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/workspaces"
+        }
+      ]
+    }
+  ]
+}

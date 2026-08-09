@@ -1,0 +1,814 @@
+{
+  "tagline": "Run SurveyCTO's declared streams and reverse-ETL actions.",
+  "usage": "pm surveycto \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "api get api v2 datasets data csv datasetid",
+        "api get api v2 datasets datasetid",
+        "api get api v2 datasets datasetid record",
+        "api get api v2 forms ids",
+        "api get api v2 roles roleid",
+        "api get api v2 teams ids",
+        "api get api v2 users username",
+        "dataset records list",
+        "datasets list",
+        "groups list",
+        "roles list",
+        "submissions list",
+        "users list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "api delete api v2 datasets datasetid record",
+        "api delete api v2 users bulk",
+        "api patch api v2 datasets datasetid record",
+        "api post api v2 datasets datasetid purge",
+        "api post api v2 datasets datasetid records search",
+        "api post api v2 datasets datasetid records upload",
+        "api post api v2 forms data wide json formid",
+        "api post api v2 forms formid submissions",
+        "api post api v2 forms formid submissions instanceid attachments filename",
+        "api post api v2 forms formid submissions search",
+        "api post api v2 users bulk file",
+        "api post api v2 users bulk json",
+        "api put api v2 datasets datasetid record",
+        "api put api v2 users bulk file",
+        "api put api v2 users bulk json",
+        "create dataset apply",
+        "create dataset record apply",
+        "create user apply",
+        "delete dataset apply",
+        "delete user apply",
+        "update dataset apply",
+        "update user apply"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "api delete api v2 datasets datasetid record",
+      "summary": "Documented DELETE /api/v2/datasets/{datasetId}/record (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.surveycto.com/specs/api-v2.json",
+      "examples": [
+        "pm surveycto api delete api v2 datasets datasetid record --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/v2/datasets/{datasetId}/record"
+        }
+      ],
+      "operation": "surveycto.delete.api-v2-datasets-datasetid-record",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete api v2 users bulk",
+      "summary": "Documented DELETE /api/v2/users/bulk (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.surveycto.com/specs/api-v2.json",
+      "examples": [
+        "pm surveycto api delete api v2 users bulk --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/v2/users/bulk"
+        }
+      ],
+      "operation": "surveycto.delete.api-v2-users-bulk",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api get api v2 datasets data csv datasetid",
+      "summary": "Documented GET /api/v2/datasets/data/csv/{datasetID:.+} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.surveycto.com/specs/api-v2.json",
+      "examples": [
+        "pm surveycto api get api v2 datasets data csv datasetid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/datasets/data/csv/{datasetID:.+}"
+        }
+      ],
+      "operation": "surveycto.get.api-v2-datasets-data-csv-datasetid",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 datasets datasetid",
+      "summary": "Documented GET /api/v2/datasets/{datasetId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.surveycto.com/specs/api-v2.json",
+      "examples": [
+        "pm surveycto api get api v2 datasets datasetid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/datasets/{datasetId}"
+        }
+      ],
+      "operation": "surveycto.get.api-v2-datasets-datasetid",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 datasets datasetid record",
+      "summary": "Documented GET /api/v2/datasets/{datasetId}/record (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.surveycto.com/specs/api-v2.json",
+      "examples": [
+        "pm surveycto api get api v2 datasets datasetid record --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/datasets/{datasetId}/record"
+        }
+      ],
+      "operation": "surveycto.get.api-v2-datasets-datasetid-record",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 forms ids",
+      "summary": "Documented GET /api/v2/forms/ids (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.surveycto.com/specs/api-v2.json",
+      "examples": [
+        "pm surveycto api get api v2 forms ids --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/forms/ids"
+        }
+      ],
+      "operation": "surveycto.get.api-v2-forms-ids",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 roles roleid",
+      "summary": "Documented GET /api/v2/roles/{roleId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.surveycto.com/specs/api-v2.json",
+      "examples": [
+        "pm surveycto api get api v2 roles roleid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/roles/{roleId}"
+        }
+      ],
+      "operation": "surveycto.get.api-v2-roles-roleid",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 teams ids",
+      "summary": "Documented GET /api/v2/teams/ids (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.surveycto.com/specs/api-v2.json",
+      "examples": [
+        "pm surveycto api get api v2 teams ids --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/teams/ids"
+        }
+      ],
+      "operation": "surveycto.get.api-v2-teams-ids",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 users username",
+      "summary": "Documented GET /api/v2/users/{username} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.surveycto.com/specs/api-v2.json",
+      "examples": [
+        "pm surveycto api get api v2 users username --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/users/{username}"
+        }
+      ],
+      "operation": "surveycto.get.api-v2-users-username",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api patch api v2 datasets datasetid record",
+      "summary": "Documented PATCH /api/v2/datasets/{datasetId}/record (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.surveycto.com/specs/api-v2.json",
+      "examples": [
+        "pm surveycto api patch api v2 datasets datasetid record --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/api/v2/datasets/{datasetId}/record"
+        }
+      ],
+      "operation": "surveycto.patch.api-v2-datasets-datasetid-record",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api v2 datasets datasetid purge",
+      "summary": "Documented POST /api/v2/datasets/{datasetId}/purge (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.surveycto.com/specs/api-v2.json",
+      "examples": [
+        "pm surveycto api post api v2 datasets datasetid purge --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v2/datasets/{datasetId}/purge"
+        }
+      ],
+      "operation": "surveycto.post.api-v2-datasets-datasetid-purge",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api v2 datasets datasetid records search",
+      "summary": "Documented POST /api/v2/datasets/{datasetId}/records/search (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.surveycto.com/specs/api-v2.json",
+      "examples": [
+        "pm surveycto api post api v2 datasets datasetid records search --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v2/datasets/{datasetId}/records/search"
+        }
+      ],
+      "operation": "surveycto.post.api-v2-datasets-datasetid-records-search",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api v2 datasets datasetid records upload",
+      "summary": "Documented POST /api/v2/datasets/{datasetId}/records/upload (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.surveycto.com/specs/api-v2.json",
+      "examples": [
+        "pm surveycto api post api v2 datasets datasetid records upload --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v2/datasets/{datasetId}/records/upload"
+        }
+      ],
+      "operation": "surveycto.post.api-v2-datasets-datasetid-records-upload",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api v2 forms data wide json formid",
+      "summary": "Documented POST /api/v2/forms/data/wide/json/{formID:.+} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.surveycto.com/specs/api-v2.json",
+      "examples": [
+        "pm surveycto api post api v2 forms data wide json formid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v2/forms/data/wide/json/{formID:.+}"
+        }
+      ],
+      "operation": "surveycto.post.api-v2-forms-data-wide-json-formid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api v2 forms formid submissions",
+      "summary": "Documented POST /api/v2/forms/{formID:.+}/submissions (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.surveycto.com/specs/api-v2.json",
+      "examples": [
+        "pm surveycto api post api v2 forms formid submissions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v2/forms/{formID:.+}/submissions"
+        }
+      ],
+      "operation": "surveycto.post.api-v2-forms-formid-submissions",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api v2 forms formid submissions instanceid attachments filename",
+      "summary": "Documented POST /api/v2/forms/{formID:.+}/submissions/{instanceID:.+}/attachments/{filename:.+} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.surveycto.com/specs/api-v2.json",
+      "examples": [
+        "pm surveycto api post api v2 forms formid submissions instanceid attachments filename --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v2/forms/{formID:.+}/submissions/{instanceID:.+}/attachments/{filename:.+}"
+        }
+      ],
+      "operation": "surveycto.post.api-v2-forms-formid-submissions-instanceid-attachments-filename",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api v2 forms formid submissions search",
+      "summary": "Documented POST /api/v2/forms/{formID:.+}/submissions/search (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.surveycto.com/specs/api-v2.json",
+      "examples": [
+        "pm surveycto api post api v2 forms formid submissions search --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v2/forms/{formID:.+}/submissions/search"
+        }
+      ],
+      "operation": "surveycto.post.api-v2-forms-formid-submissions-search",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api v2 users bulk file",
+      "summary": "Documented POST /api/v2/users/bulk/file (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.surveycto.com/specs/api-v2.json",
+      "examples": [
+        "pm surveycto api post api v2 users bulk file --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v2/users/bulk/file"
+        }
+      ],
+      "operation": "surveycto.post.api-v2-users-bulk-file",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api v2 users bulk json",
+      "summary": "Documented POST /api/v2/users/bulk/json (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.surveycto.com/specs/api-v2.json",
+      "examples": [
+        "pm surveycto api post api v2 users bulk json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v2/users/bulk/json"
+        }
+      ],
+      "operation": "surveycto.post.api-v2-users-bulk-json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put api v2 datasets datasetid record",
+      "summary": "Documented PUT /api/v2/datasets/{datasetId}/record (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.surveycto.com/specs/api-v2.json",
+      "examples": [
+        "pm surveycto api put api v2 datasets datasetid record --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/v2/datasets/{datasetId}/record"
+        }
+      ],
+      "operation": "surveycto.put.api-v2-datasets-datasetid-record",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put api v2 users bulk file",
+      "summary": "Documented PUT /api/v2/users/bulk/file (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.surveycto.com/specs/api-v2.json",
+      "examples": [
+        "pm surveycto api put api v2 users bulk file --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/v2/users/bulk/file"
+        }
+      ],
+      "operation": "surveycto.put.api-v2-users-bulk-file",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put api v2 users bulk json",
+      "summary": "Documented PUT /api/v2/users/bulk/json (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.surveycto.com/specs/api-v2.json",
+      "examples": [
+        "pm surveycto api put api v2 users bulk json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/v2/users/bulk/json"
+        }
+      ],
+      "operation": "surveycto.put.api-v2-users-bulk-json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "create dataset apply",
+      "summary": "Plan and execute the create dataset reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_dataset",
+      "source_url": "https://developer.surveycto.com/specs/api-v2.json",
+      "flags": [
+        {
+          "name": "discriminator",
+          "type": "string",
+          "summary": "Required discriminator record field.",
+          "maps_to": "record.discriminator",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm surveycto create dataset apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v2/datasets"
+        }
+      ],
+      "risk": "creates a new server dataset (a general-purpose, enumerator, or case-management dataset); low-risk external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create dataset record apply",
+      "summary": "Plan and execute the create dataset record reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_dataset_record",
+      "source_url": "https://developer.surveycto.com/specs/api-v2.json",
+      "flags": [
+        {
+          "name": "dataset_id",
+          "type": "string",
+          "summary": "Required dataset id record field.",
+          "maps_to": "record.dataset_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm surveycto create dataset record apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v2/datasets/{datasetId}/records"
+        }
+      ],
+      "risk": "adds a new record to a dataset; the field name set is dataset-defined (SurveyCTO's own DatasetRecordFieldMap has no fixed schema), so record_schema only requires the routing field dataset_id -- every other record property is sent verbatim as the record's field-name/value map; low-risk external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create user apply",
+      "summary": "Plan and execute the create user reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_user",
+      "source_url": "https://developer.surveycto.com/specs/api-v2.json",
+      "flags": [
+        {
+          "name": "password",
+          "type": "string",
+          "summary": "Required password record field.",
+          "maps_to": "record.password",
+          "required": true
+        },
+        {
+          "name": "roleId",
+          "type": "string",
+          "summary": "Required roleId record field.",
+          "maps_to": "record.roleId",
+          "required": true
+        },
+        {
+          "name": "username",
+          "type": "string",
+          "summary": "Required username record field.",
+          "maps_to": "record.username",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm surveycto create user apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v2/users"
+        }
+      ],
+      "risk": "creates a new SurveyCTO server user AND sets their initial password in the same call; a credential-provisioning action, not an ordinary data mutation -- approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "dataset records list",
+      "summary": "Run the dataset records ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "dataset_records",
+      "source_url": "https://developer.surveycto.com/specs/api-v2.json",
+      "examples": [
+        "pm surveycto dataset records list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/datasets/{datasetId}/records"
+        }
+      ]
+    },
+    {
+      "path": "datasets list",
+      "summary": "Run the datasets ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "datasets",
+      "source_url": "https://developer.surveycto.com/specs/api-v2.json",
+      "examples": [
+        "pm surveycto datasets list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/datasets"
+        }
+      ]
+    },
+    {
+      "path": "delete dataset apply",
+      "summary": "Plan and execute the delete dataset reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_dataset",
+      "source_url": "https://developer.surveycto.com/specs/api-v2.json",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm surveycto delete dataset apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/v2/datasets/{datasetId}"
+        }
+      ],
+      "risk": "irreversibly deletes a dataset and its records; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete user apply",
+      "summary": "Plan and execute the delete user reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_user",
+      "source_url": "https://developer.surveycto.com/specs/api-v2.json",
+      "flags": [
+        {
+          "name": "username",
+          "type": "string",
+          "summary": "Required username record field.",
+          "maps_to": "record.username",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm surveycto delete user apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/v2/users/{username}"
+        }
+      ],
+      "risk": "irreversibly deletes a server user and revokes their access; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "groups list",
+      "summary": "Run the groups ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "groups",
+      "source_url": "https://developer.surveycto.com/specs/api-v2.json",
+      "examples": [
+        "pm surveycto groups list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/groups"
+        }
+      ]
+    },
+    {
+      "path": "roles list",
+      "summary": "Run the roles ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "roles",
+      "source_url": "https://developer.surveycto.com/specs/api-v2.json",
+      "examples": [
+        "pm surveycto roles list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/roles"
+        }
+      ]
+    },
+    {
+      "path": "submissions list",
+      "summary": "Run the submissions ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "submissions",
+      "source_url": "https://developer.surveycto.com/specs/api-v2.json",
+      "examples": [
+        "pm surveycto submissions list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/forms/{formID:.+}/submissions"
+        }
+      ]
+    },
+    {
+      "path": "update dataset apply",
+      "summary": "Plan and execute the update dataset reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_dataset",
+      "source_url": "https://developer.surveycto.com/specs/api-v2.json",
+      "flags": [
+        {
+          "name": "discriminator",
+          "type": "string",
+          "summary": "Required discriminator record field.",
+          "maps_to": "record.discriminator",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm surveycto update dataset apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/v2/datasets/{datasetId}"
+        }
+      ],
+      "risk": "updates an existing dataset's metadata/configuration (the dataset type/discriminator itself cannot be changed after creation, per SurveyCTO's own API); external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update user apply",
+      "summary": "Plan and execute the update user reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_user",
+      "source_url": "https://developer.surveycto.com/specs/api-v2.json",
+      "flags": [
+        {
+          "name": "username",
+          "type": "string",
+          "summary": "Required username record field.",
+          "maps_to": "record.username",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm surveycto update user apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/v2/users/{username}"
+        }
+      ],
+      "risk": "updates an existing user's password and/or role; a credential-provisioning action when password is set -- approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "users list",
+      "summary": "Run the users ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "users",
+      "source_url": "https://developer.surveycto.com/specs/api-v2.json",
+      "examples": [
+        "pm surveycto users list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/users"
+        }
+      ]
+    }
+  ]
+}

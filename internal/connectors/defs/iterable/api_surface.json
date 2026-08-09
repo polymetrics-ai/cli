@@ -1,36 +1,3199 @@
 {
-  "api": "Iterable REST API (https://api.iterable.com/api)",
+  "api": "Iterable REST API (https://api.iterable.com/api); provider artifact version: Iterable API v1.8; Swagger 2.0",
   "docs": "https://api.iterable.com/api/docs",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave migration: the 3 legacy-parity read streams only (lists, campaigns, templates); legacy iterable connector is read-only, so there are no write endpoints in or out of scope",
+  "reviewed_at": "2026-08-09",
+  "operation_ledger_version": 2,
+  "scope": "Provider-artifact inventory generated from the cited swagger artifact (148 documented operations across 1 provider-owned source document(s)). Every documented operation is represented; existing source-surface bindings absent from the artifact are retained and flagged with present-in-surface-absent-from-artifact.",
+  "artifacts": [
+    {
+      "id": "iterable-artifact-2026-08-09",
+      "url": "https://api.iterable.com/api-docs",
+      "kind": "swagger",
+      "version": "2.0",
+      "retrieved_at": "2026-08-09",
+      "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9"
+    }
+  ],
   "endpoints": [
     {
+      "method": "*",
+      "path": "/*",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "Iterable API v1.8; Swagger 2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "existing-surface[* /*]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Legacy iterable connector only implements lists/campaigns/templates reads",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/jwts/invalidate",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/auth/jwts/invalidate\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
       "method": "GET",
-      "path": "/lists",
-      "covered_by": {
-        "stream": "lists"
+      "path": "/api/campaigns",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/campaigns\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/campaigns/abort",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/campaigns/abort\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/campaigns/activateTriggered",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/campaigns/activateTriggered\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/campaigns/archive",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/campaigns/archive\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/campaigns/cancel",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/campaigns/cancel\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/campaigns/create",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/campaigns/create\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/campaigns/deactivateTriggered",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/campaigns/deactivateTriggered\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/campaigns/metrics",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/campaigns/metrics\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/campaigns/recurring/{id}/childCampaigns",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/campaigns/recurring/{id}/childCampaigns\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/campaigns/trigger",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/campaigns/trigger\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/campaigns/{campaignId}/schedule",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/campaigns/{campaignId}/schedule\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/campaigns/{campaignId}/send",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/campaigns/{campaignId}/send\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/campaigns/{id}",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/campaigns/{id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/catalogs",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/catalogs\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/catalogs/{catalogName}",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/catalogs/{catalogName}\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/catalogs/{catalogName}",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/catalogs/{catalogName}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/catalogs/{catalogName}/fieldMappings",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/catalogs/{catalogName}/fieldMappings\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/catalogs/{catalogName}/fieldMappings",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/catalogs/{catalogName}/fieldMappings\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/catalogs/{catalogName}/items",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/catalogs/{catalogName}/items\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/catalogs/{catalogName}/items",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/catalogs/{catalogName}/items\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/catalogs/{catalogName}/items",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/catalogs/{catalogName}/items\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/catalogs/{catalogName}/items/{itemId}",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/catalogs/{catalogName}/items/{itemId}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/catalogs/{catalogName}/items/{itemId}",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/catalogs/{catalogName}/items/{itemId}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/catalogs/{catalogName}/items/{itemId}",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/catalogs/{catalogName}/items/{itemId}\"].patch"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/catalogs/{catalogName}/items/{itemId}",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/catalogs/{catalogName}/items/{itemId}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/channels",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/channels\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/commerce/trackPurchase",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/commerce/trackPurchase\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/commerce/updateCart",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/commerce/updateCart\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/email/cancel",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/email/cancel\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/email/target",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/email/target\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/email/viewInBrowser",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/email/viewInBrowser\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/embedded-messaging/events/click",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/embedded-messaging/events/click\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/embedded-messaging/events/received",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/embedded-messaging/events/received\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/embedded-messaging/events/session",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/embedded-messaging/events/session\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/embedded-messaging/messages",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/embedded-messaging/messages\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/events/byUserId/{userId}",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/events/byUserId/{userId}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/events/inAppConsume",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/events/inAppConsume\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/events/track",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/events/track\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/events/trackBulk",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/events/trackBulk\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/events/trackInAppClick",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/events/trackInAppClick\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/events/trackInAppClose",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/events/trackInAppClose\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/events/trackInAppDelivery",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/events/trackInAppDelivery\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/events/trackInAppOpen",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/events/trackInAppOpen\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/events/trackPushOpen",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/events/trackPushOpen\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/events/trackWebPushClick",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/events/trackWebPushClick\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/events/{email}",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/events/{email}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/experiments",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/experiments\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/experiments/metrics",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/experiments/metrics\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/experiments/{experimentId}",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/experiments/{experimentId}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/experiments/{experimentId}/variants",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/experiments/{experimentId}/variants\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/export/data.csv",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/export/data.csv\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/export/data.json",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/export/data.json\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/export/jobs",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/export/jobs\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/export/start",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/export/start\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/export/userEvents",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/export/userEvents\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/export/{jobId}",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/export/{jobId}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/export/{jobId}/files",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/export/{jobId}/files\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/inApp/cancel",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/inApp/cancel\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/inApp/getMessages",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/inApp/getMessages\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/inApp/getPriorityMessage",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/inApp/getPriorityMessage\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/inApp/target",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/inApp/target\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/inApp/web/getMessages",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/inApp/web/getMessages\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/journeys",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/journeys\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/lists",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/lists\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/lists",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/lists\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/lists/getUsers",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/lists/getUsers\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/lists/previewUsers",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/lists/previewUsers\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/lists/subscribe",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/lists/subscribe\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/lists/unsubscribe",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/lists/unsubscribe\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/lists/{listId}",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/lists/{listId}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/lists/{listId}/size",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/lists/{listId}/size\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/messageTypes",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/messageTypes\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/metadata",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/metadata\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/metadata/{table}",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/metadata/{table}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/metadata/{table}",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/metadata/{table}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/metadata/{table}/{key}",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/metadata/{table}/{key}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/metadata/{table}/{key}",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/metadata/{table}/{key}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/metadata/{table}/{key}",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/metadata/{table}/{key}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/push/cancel",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/push/cancel\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/push/target",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/push/target\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/sms/cancel",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/sms/cancel\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/sms/target",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/sms/target\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/snippets",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/snippets\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/snippets",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/snippets\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/snippets/{identifier}",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/snippets/{identifier}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/snippets/{identifier}",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/snippets/{identifier}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/snippets/{identifier}",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/snippets/{identifier}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/subscriptions/subscribeToDoubleOptIn",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/subscriptions/subscribeToDoubleOptIn\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/subscriptions/{subscriptionGroup}/{subscriptionGroupId}",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/subscriptions/{subscriptionGroup}/{subscriptionGroupId}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/subscriptions/{subscriptionGroup}/{subscriptionGroupId}/byUserId/{userId}",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/subscriptions/{subscriptionGroup}/{subscriptionGroupId}/byUserId/{userId}\"].patch"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/subscriptions/{subscriptionGroup}/{subscriptionGroupId}/byUserId/{userId}",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/subscriptions/{subscriptionGroup}/{subscriptionGroupId}/byUserId/{userId}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/subscriptions/{subscriptionGroup}/{subscriptionGroupId}/user/{userEmail}",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/subscriptions/{subscriptionGroup}/{subscriptionGroupId}/user/{userEmail}\"].patch"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/subscriptions/{subscriptionGroup}/{subscriptionGroupId}/user/{userEmail}",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/subscriptions/{subscriptionGroup}/{subscriptionGroupId}/user/{userEmail}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/templates",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/templates\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/templates/bulkDelete",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/templates/bulkDelete\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/templates/email/get",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/templates/email/get\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/templates/email/preview",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/templates/email/preview\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/templates/email/proof",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/templates/email/proof\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/templates/email/update",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/templates/email/update\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/templates/email/upsert",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/templates/email/upsert\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/templates/embedded/get",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/templates/embedded/get\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/templates/embedded/update",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/templates/embedded/update\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/templates/embedded/upsert",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/templates/embedded/upsert\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/templates/getByClientTemplateId",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/templates/getByClientTemplateId\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/templates/inapp/get",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/templates/inapp/get\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/templates/inapp/preview",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/templates/inapp/preview\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/templates/inapp/proof",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/templates/inapp/proof\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/templates/inapp/update",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/templates/inapp/update\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/templates/inapp/upsert",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/templates/inapp/upsert\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/templates/push/get",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/templates/push/get\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/templates/push/proof",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/templates/push/proof\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/templates/push/update",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/templates/push/update\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/templates/push/upsert",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/templates/push/upsert\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/templates/sms/get",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/templates/sms/get\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/templates/sms/proof",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/templates/sms/proof\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/templates/sms/update",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/templates/sms/update\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/templates/sms/upsert",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/templates/sms/upsert\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/users/bulkUpdate",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/users/bulkUpdate\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/users/bulkUpdateSubscriptions",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/users/bulkUpdateSubscriptions\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/users/byUserId",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/users/byUserId\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/users/byUserId/{userId}",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/users/byUserId/{userId}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/users/byUserId/{userId}",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/users/byUserId/{userId}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/users/disableDevice",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/users/disableDevice\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/users/forget",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/users/forget\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/users/forgotten",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/users/forgotten\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/users/forgottenUserIds",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/users/forgottenUserIds\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/users/getByEmail",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/users/getByEmail\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/users/getFields",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/users/getFields\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/users/getSentMessages",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/users/getSentMessages\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/users/merge",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/users/merge\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/users/registerBrowserToken",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/users/registerBrowserToken\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/users/registerDeviceToken",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/users/registerDeviceToken\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/users/unforget",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/users/unforget\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/users/update",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/users/update\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/users/updateEmail",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/users/updateEmail\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/users/updateSubscriptions",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/users/updateSubscriptions\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/users/{email}",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/users/{email}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/users/{email}",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/users/{email}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/verify/sms/begin",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/verify/sms/begin\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/verify/sms/check",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/verify/sms/check\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/webPush/cancel",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/webPush/cancel\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/webPush/target",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/webPush/target\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/webhooks",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/webhooks\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/webhooks",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/webhooks\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/whatsApp/cancel",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/whatsApp/cancel\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/whatsApp/target",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/whatsApp/target\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/workflows/triggerWorkflow",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "paths[\"/api/workflows/triggerWorkflow\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     },
     {
       "method": "GET",
       "path": "/campaigns",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "Iterable API v1.8; Swagger 2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "existing-surface[GET /campaigns]"
+      },
       "covered_by": {
         "stream": "campaigns"
       }
     },
     {
       "method": "GET",
-      "path": "/templates",
+      "path": "/lists",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "Iterable API v1.8; Swagger 2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "existing-surface[GET /lists]"
+      },
       "covered_by": {
-        "stream": "templates"
+        "stream": "lists"
       }
     },
     {
-      "method": "*",
-      "path": "/*",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Legacy iterable connector only implements lists/campaigns/templates reads"
+      "method": "GET",
+      "path": "/templates",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "iterable-artifact-2026-08-09",
+        "source_url": "https://api.iterable.com/api-docs",
+        "source_kind": "swagger",
+        "version": "Iterable API v1.8; Swagger 2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9",
+        "coordinate": "existing-surface[GET /templates]"
+      },
+      "covered_by": {
+        "stream": "templates"
       }
     }
   ]

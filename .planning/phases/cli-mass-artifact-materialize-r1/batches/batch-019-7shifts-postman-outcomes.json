@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "batch": "batch-019-7shifts-postman",
+  "manifest": "batches/batch-019-7shifts-postman-manifest.json",
+  "outcomes": [
+    {
+      "connector": "7shifts",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-019-7shifts-postman-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "provider-linked Postman collection enumerated 128 requests below the 147-operation authoritative ledger count; complete official reference and SDK routes remain queued"
+    }
+  ]
+}

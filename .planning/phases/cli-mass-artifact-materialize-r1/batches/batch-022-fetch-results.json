@@ -1,0 +1,206 @@
+{
+  "schema_version": 1,
+  "batch": "batch-022",
+  "results": [
+    {
+      "connector": "emailoctopus",
+      "status": "fetched",
+      "detail": "25995"
+    },
+    {
+      "connector": "formbricks",
+      "status": "fetched",
+      "detail": "252344"
+    },
+    {
+      "connector": "convertkit",
+      "status": "fetched",
+      "detail": "218309"
+    },
+    {
+      "connector": "tvmaze-schedule",
+      "status": "fetched",
+      "detail": "48593"
+    },
+    {
+      "connector": "openaq",
+      "status": "fetched",
+      "detail": "7422"
+    },
+    {
+      "connector": "intruder",
+      "status": "fetched",
+      "detail": "216072"
+    },
+    {
+      "connector": "sharetribe",
+      "status": "fetched",
+      "detail": "529094"
+    },
+    {
+      "connector": "chargedesk",
+      "status": "fetched",
+      "detail": "120540"
+    },
+    {
+      "connector": "appfollow",
+      "status": "fetched",
+      "detail": "9066"
+    },
+    {
+      "connector": "drift",
+      "status": "fetched",
+      "detail": "10567"
+    },
+    {
+      "connector": "feishu",
+      "status": "fetched",
+      "detail": "7563"
+    },
+    {
+      "connector": "missive",
+      "status": "failed",
+      "detail": "63"
+    },
+    {
+      "connector": "imagga",
+      "status": "fetched",
+      "detail": "2472"
+    },
+    {
+      "connector": "beamer",
+      "status": "fetched",
+      "detail": "976591"
+    },
+    {
+      "connector": "mention",
+      "status": "fetched",
+      "detail": "1128613"
+    },
+    {
+      "connector": "shipstation",
+      "status": "fetched",
+      "detail": "25299"
+    },
+    {
+      "connector": "onesignal",
+      "status": "fetched",
+      "detail": "546774"
+    },
+    {
+      "connector": "typeform",
+      "status": "fetched",
+      "detail": "110079"
+    },
+    {
+      "connector": "scryfall",
+      "status": "fetched",
+      "detail": "68240"
+    },
+    {
+      "connector": "stigg",
+      "status": "fetched",
+      "detail": "369731"
+    },
+    {
+      "connector": "strava",
+      "status": "fetched",
+      "detail": "595418"
+    },
+    {
+      "connector": "statuspage",
+      "status": "fetched",
+      "detail": "2703412"
+    },
+    {
+      "connector": "smartwaiver",
+      "status": "fetched",
+      "detail": "492791"
+    },
+    {
+      "connector": "jotform",
+      "status": "fetched",
+      "detail": "590728"
+    },
+    {
+      "connector": "dixa",
+      "status": "fetched",
+      "detail": "478736"
+    },
+    {
+      "connector": "canny",
+      "status": "fetched",
+      "detail": "263047"
+    },
+    {
+      "connector": "appfigures",
+      "status": "fetched",
+      "detail": "16135"
+    },
+    {
+      "connector": "secoda",
+      "status": "fetched",
+      "detail": "3059"
+    },
+    {
+      "connector": "7shifts",
+      "status": "fetched",
+      "detail": "18060"
+    },
+    {
+      "connector": "finnhub",
+      "status": "fetched",
+      "detail": "588805"
+    },
+    {
+      "connector": "polygon-stock-api",
+      "status": "fetched",
+      "detail": "2167345"
+    },
+    {
+      "connector": "lokalise",
+      "status": "fetched",
+      "detail": "546267"
+    },
+    {
+      "connector": "castor-edc",
+      "status": "fetched",
+      "detail": "335118"
+    },
+    {
+      "connector": "recurly",
+      "status": "failed",
+      "detail": "22"
+    },
+    {
+      "connector": "confluence",
+      "status": "failed",
+      "detail": "22"
+    },
+    {
+      "connector": "clockify",
+      "status": "fetched",
+      "detail": "4006201"
+    },
+    {
+      "connector": "freshbooks",
+      "status": "fetched",
+      "detail": "55384"
+    },
+    {
+      "connector": "kisi",
+      "status": "fetched",
+      "detail": "1877406"
+    },
+    {
+      "connector": "teamtailor",
+      "status": "fetched",
+      "detail": "895253"
+    },
+    {
+      "connector": "insightful",
+      "status": "fetched",
+      "detail": "3752660"
+    }
+  ]
+}

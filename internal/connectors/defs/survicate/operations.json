@@ -1,0 +1,95 @@
+{
+  "operations": [
+    {
+      "id": "survicate.get.v2-personal-data",
+      "kind": "rest_read",
+      "summary": "GET /v2/personal-data",
+      "description": "GDPR personal-data counters lookup keyed by a single email address supplied by the caller; not a list-shaped/discoverable resource and has no natural incremental or full-refresh catalog semantics",
+      "source_url": "https://developers.survicate.com/data-export/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/personal-data",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "survicate.delete.v2-personal-data",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/personal-data",
+      "description": "irreversibly deletes all survey responses, respondent records, and connected-service (Insights Hub) data for the given email address; a GDPR-erasure action, never a reverse-ETL-safe mutation",
+      "source_url": "https://developers.survicate.com/data-export/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/personal-data",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "survicate.get.v2-respondents-respondent-uuid-attributes",
+      "kind": "rest_read",
+      "summary": "GET /v2/respondents/{respondent_uuid}/attributes",
+      "description": "no endpoint exists to enumerate respondent_uuid values across a workspace; a lone attributes-by-id GET with no discovery path is not a syncable stream without a respondent_uuid already in hand from an external source (e.g. one embedded in a responses-stream record)",
+      "source_url": "https://developers.survicate.com/data-export/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/respondents/{respondent_uuid}/attributes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "survicate.get.v2-respondents-respondent-uuid-responses",
+      "kind": "rest_read",
+      "summary": "GET /v2/respondents/{respondent_uuid}/responses",
+      "description": "same respondent_uuid discovery gap as the attributes endpoint above; also a duplicate record shape of the survey-scoped responses stream, which already yields every response for every discoverable survey",
+      "source_url": "https://developers.survicate.com/data-export/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/respondents/{respondent_uuid}/responses",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "survicate.get.v2-surveys-survey-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/surveys/{survey_id}",
+      "description": "single-survey detail; every field this endpoint returns (id, type, name, created_at, enabled, responses, launch, plus author/folder/first_response_at/last_response_at) is a superset of the surveys list stream's per-item object already covered by that stream, keyed by the same id",
+      "source_url": "https://developers.survicate.com/data-export/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/surveys/{survey_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "survicate.get.v2-surveys-survey-id-responses-response-uuid",
+      "kind": "rest_read",
+      "summary": "GET /v2/surveys/{survey_id}/responses/{response_uuid}",
+      "description": "single-response detail; identical record shape to the responses stream's per-item object, already covered by that stream",
+      "source_url": "https://developers.survicate.com/data-export/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/surveys/{survey_id}/responses/{response_uuid}",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

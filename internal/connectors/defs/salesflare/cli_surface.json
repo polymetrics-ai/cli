@@ -1,0 +1,1680 @@
+{
+  "tagline": "Run Salesflare's declared streams and reverse-ETL actions.",
+  "usage": "pm salesflare \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "accounts list",
+        "api get accounts account-id",
+        "api get accounts account-id feed",
+        "api get accounts account-id messages",
+        "api get campaigns mergefields",
+        "api get conferences conference-id",
+        "api get contacts contact-id",
+        "api get customfields itemclass",
+        "api get customfields itemclass customfieldapifield options",
+        "api get customfields itemclass id",
+        "api get filterfields entity",
+        "api get groups id",
+        "api get me",
+        "api get me contacts",
+        "api get meetings meeting-id",
+        "api get opportunities id",
+        "api get settings ai",
+        "api get stages stage-id",
+        "api get tags tag-id",
+        "api get tags tag-id usage",
+        "api get users id",
+        "api get workflows id",
+        "contacts list",
+        "currencies list",
+        "custom field types list",
+        "email data sources list",
+        "groups list",
+        "opportunities list",
+        "persons list",
+        "pipelines list",
+        "stages list",
+        "tags list",
+        "tasks list",
+        "users list",
+        "workflows list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "api delete customfields itemclass id",
+        "api post accounts account-id contacts",
+        "api post accounts account-id users",
+        "api post customfields itemclass",
+        "api post message message-id feedback",
+        "api post messages message-id feedback",
+        "api post workflows",
+        "api put accounts account-id contacts",
+        "api put accounts account-id users",
+        "api put calls meeting-id",
+        "api put customfields itemclass id",
+        "api put datasources email id",
+        "api put settings ai",
+        "api put workflows id",
+        "api put workflows id audience record-id",
+        "create account apply",
+        "create call apply",
+        "create contact apply",
+        "create internal note apply",
+        "create meeting apply",
+        "create opportunity apply",
+        "create tag apply",
+        "create task apply",
+        "delete account apply",
+        "delete contact apply",
+        "delete internal note apply",
+        "delete meeting apply",
+        "delete opportunity apply",
+        "delete tag apply",
+        "delete task apply",
+        "update account apply",
+        "update contact apply",
+        "update internal note apply",
+        "update meeting apply",
+        "update opportunity apply",
+        "update tag apply",
+        "update task apply"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "accounts list",
+      "summary": "Run the accounts ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "accounts",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "examples": [
+        "pm salesflare accounts list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/accounts"
+        }
+      ]
+    },
+    {
+      "path": "api delete customfields itemclass id",
+      "summary": "Documented DELETE /customfields/{itemClass}/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "examples": [
+        "pm salesflare api delete customfields itemclass id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/customfields/{itemClass}/{id}"
+        }
+      ],
+      "operation": "salesflare.delete.customfields-itemclass-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api get accounts account-id",
+      "summary": "Documented GET /accounts/{account_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "examples": [
+        "pm salesflare api get accounts account-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/accounts/{account_id}"
+        }
+      ],
+      "operation": "salesflare.get.accounts-account-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get accounts account-id feed",
+      "summary": "Documented GET /accounts/{account_id}/feed (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "examples": [
+        "pm salesflare api get accounts account-id feed --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/accounts/{account_id}/feed"
+        }
+      ],
+      "operation": "salesflare.get.accounts-account-id-feed",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get accounts account-id messages",
+      "summary": "Documented GET /accounts/{account_id}/messages (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "examples": [
+        "pm salesflare api get accounts account-id messages --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/accounts/{account_id}/messages"
+        }
+      ],
+      "operation": "salesflare.get.accounts-account-id-messages",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get campaigns mergefields",
+      "summary": "Documented GET /campaigns/mergefields (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "examples": [
+        "pm salesflare api get campaigns mergefields --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/campaigns/mergefields"
+        }
+      ],
+      "operation": "salesflare.get.campaigns-mergefields",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get conferences conference-id",
+      "summary": "Documented GET /conferences/{conference_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "examples": [
+        "pm salesflare api get conferences conference-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/conferences/{conference_id}"
+        }
+      ],
+      "operation": "salesflare.get.conferences-conference-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get contacts contact-id",
+      "summary": "Documented GET /contacts/{contact_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "examples": [
+        "pm salesflare api get contacts contact-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/contacts/{contact_id}"
+        }
+      ],
+      "operation": "salesflare.get.contacts-contact-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get customfields itemclass",
+      "summary": "Documented GET /customfields/{itemClass} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "examples": [
+        "pm salesflare api get customfields itemclass --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customfields/{itemClass}"
+        }
+      ],
+      "operation": "salesflare.get.customfields-itemclass",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get customfields itemclass customfieldapifield options",
+      "summary": "Documented GET /customfields/{itemClass}/{customFieldApiField}/options (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "examples": [
+        "pm salesflare api get customfields itemclass customfieldapifield options --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customfields/{itemClass}/{customFieldApiField}/options"
+        }
+      ],
+      "operation": "salesflare.get.customfields-itemclass-customfieldapifield-options",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get customfields itemclass id",
+      "summary": "Documented GET /customfields/{itemClass}/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "examples": [
+        "pm salesflare api get customfields itemclass id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customfields/{itemClass}/{id}"
+        }
+      ],
+      "operation": "salesflare.get.customfields-itemclass-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get filterfields entity",
+      "summary": "Documented GET /filterfields/{entity} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "examples": [
+        "pm salesflare api get filterfields entity --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/filterfields/{entity}"
+        }
+      ],
+      "operation": "salesflare.get.filterfields-entity",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get groups id",
+      "summary": "Documented GET /groups/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "examples": [
+        "pm salesflare api get groups id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/groups/{id}"
+        }
+      ],
+      "operation": "salesflare.get.groups-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get me",
+      "summary": "Documented GET /me (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "examples": [
+        "pm salesflare api get me --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/me"
+        }
+      ],
+      "operation": "salesflare.get.me",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get me contacts",
+      "summary": "Documented GET /me/contacts (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "examples": [
+        "pm salesflare api get me contacts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/me/contacts"
+        }
+      ],
+      "operation": "salesflare.get.me-contacts",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get meetings meeting-id",
+      "summary": "Documented GET /meetings/{meeting_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "examples": [
+        "pm salesflare api get meetings meeting-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/meetings/{meeting_id}"
+        }
+      ],
+      "operation": "salesflare.get.meetings-meeting-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get opportunities id",
+      "summary": "Documented GET /opportunities/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "examples": [
+        "pm salesflare api get opportunities id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/opportunities/{id}"
+        }
+      ],
+      "operation": "salesflare.get.opportunities-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get settings ai",
+      "summary": "Documented GET /settings/ai (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "examples": [
+        "pm salesflare api get settings ai --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/settings/ai"
+        }
+      ],
+      "operation": "salesflare.get.settings-ai",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get stages stage-id",
+      "summary": "Documented GET /stages/{stage_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "examples": [
+        "pm salesflare api get stages stage-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/stages/{stage_id}"
+        }
+      ],
+      "operation": "salesflare.get.stages-stage-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get tags tag-id",
+      "summary": "Documented GET /tags/{tag_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "examples": [
+        "pm salesflare api get tags tag-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tags/{tag_id}"
+        }
+      ],
+      "operation": "salesflare.get.tags-tag-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get tags tag-id usage",
+      "summary": "Documented GET /tags/{tag_id}/usage (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "examples": [
+        "pm salesflare api get tags tag-id usage --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tags/{tag_id}/usage"
+        }
+      ],
+      "operation": "salesflare.get.tags-tag-id-usage",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get users id",
+      "summary": "Documented GET /users/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "examples": [
+        "pm salesflare api get users id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users/{id}"
+        }
+      ],
+      "operation": "salesflare.get.users-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get workflows id",
+      "summary": "Documented GET /workflows/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "examples": [
+        "pm salesflare api get workflows id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/workflows/{id}"
+        }
+      ],
+      "operation": "salesflare.get.workflows-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api post accounts account-id contacts",
+      "summary": "Documented POST /accounts/{account_id}/contacts (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "examples": [
+        "pm salesflare api post accounts account-id contacts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/accounts/{account_id}/contacts"
+        }
+      ],
+      "operation": "salesflare.post.accounts-account-id-contacts",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post accounts account-id users",
+      "summary": "Documented POST /accounts/{account_id}/users (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "examples": [
+        "pm salesflare api post accounts account-id users --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/accounts/{account_id}/users"
+        }
+      ],
+      "operation": "salesflare.post.accounts-account-id-users",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post customfields itemclass",
+      "summary": "Documented POST /customfields/{itemClass} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "examples": [
+        "pm salesflare api post customfields itemclass --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/customfields/{itemClass}"
+        }
+      ],
+      "operation": "salesflare.post.customfields-itemclass",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post message message-id feedback",
+      "summary": "Documented POST /message/{message_id}/feedback (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "examples": [
+        "pm salesflare api post message message-id feedback --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/message/{message_id}/feedback"
+        }
+      ],
+      "operation": "salesflare.post.message-message-id-feedback",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post messages message-id feedback",
+      "summary": "Documented POST /messages/{message_id}/feedback (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "examples": [
+        "pm salesflare api post messages message-id feedback --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/messages/{message_id}/feedback"
+        }
+      ],
+      "operation": "salesflare.post.messages-message-id-feedback",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post workflows",
+      "summary": "Documented POST /workflows (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "examples": [
+        "pm salesflare api post workflows --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/workflows"
+        }
+      ],
+      "operation": "salesflare.post.workflows",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put accounts account-id contacts",
+      "summary": "Documented PUT /accounts/{account_id}/contacts (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "examples": [
+        "pm salesflare api put accounts account-id contacts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/accounts/{account_id}/contacts"
+        }
+      ],
+      "operation": "salesflare.put.accounts-account-id-contacts",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put accounts account-id users",
+      "summary": "Documented PUT /accounts/{account_id}/users (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "examples": [
+        "pm salesflare api put accounts account-id users --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/accounts/{account_id}/users"
+        }
+      ],
+      "operation": "salesflare.put.accounts-account-id-users",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put calls meeting-id",
+      "summary": "Documented PUT /calls/{meeting_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "examples": [
+        "pm salesflare api put calls meeting-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/calls/{meeting_id}"
+        }
+      ],
+      "operation": "salesflare.put.calls-meeting-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put customfields itemclass id",
+      "summary": "Documented PUT /customfields/{itemClass}/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "examples": [
+        "pm salesflare api put customfields itemclass id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/customfields/{itemClass}/{id}"
+        }
+      ],
+      "operation": "salesflare.put.customfields-itemclass-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put datasources email id",
+      "summary": "Documented PUT /datasources/email/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "examples": [
+        "pm salesflare api put datasources email id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/datasources/email/{id}"
+        }
+      ],
+      "operation": "salesflare.put.datasources-email-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put settings ai",
+      "summary": "Documented PUT /settings/ai (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "examples": [
+        "pm salesflare api put settings ai --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/settings/ai"
+        }
+      ],
+      "operation": "salesflare.put.settings-ai",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put workflows id",
+      "summary": "Documented PUT /workflows/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "examples": [
+        "pm salesflare api put workflows id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/workflows/{id}"
+        }
+      ],
+      "operation": "salesflare.put.workflows-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put workflows id audience record-id",
+      "summary": "Documented PUT /workflows/{id}/audience/{record_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "examples": [
+        "pm salesflare api put workflows id audience record-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/workflows/{id}/audience/{record_id}"
+        }
+      ],
+      "operation": "salesflare.put.workflows-id-audience-record-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "contacts list",
+      "summary": "Run the contacts ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "contacts",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "examples": [
+        "pm salesflare contacts list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/contacts"
+        }
+      ]
+    },
+    {
+      "path": "create account apply",
+      "summary": "Plan and execute the create account reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_account",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm salesflare create account apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/accounts"
+        }
+      ],
+      "risk": "creates a new CRM account; low-risk external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create call apply",
+      "summary": "Plan and execute the create call reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_call",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "flags": [
+        {
+          "name": "account_id",
+          "type": "integer",
+          "summary": "Required account id record field.",
+          "maps_to": "record.account_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm salesflare create call apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/calls"
+        }
+      ],
+      "risk": "logs a new call activity against a CRM account; low-risk external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create contact apply",
+      "summary": "Plan and execute the create contact reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_contact",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm salesflare create contact apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/contacts"
+        }
+      ],
+      "risk": "creates a new CRM contact; low-risk external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create internal note apply",
+      "summary": "Plan and execute the create internal note reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_internal_note",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "flags": [
+        {
+          "name": "content",
+          "type": "string",
+          "summary": "Required content record field.",
+          "maps_to": "record.content",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm salesflare create internal note apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/messages"
+        }
+      ],
+      "risk": "creates a new internal note on a CRM record; low-risk external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create meeting apply",
+      "summary": "Plan and execute the create meeting reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_meeting",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "flags": [
+        {
+          "name": "end_date",
+          "type": "string",
+          "summary": "Required end date record field.",
+          "maps_to": "record.end_date",
+          "required": true
+        },
+        {
+          "name": "start_date",
+          "type": "string",
+          "summary": "Required start date record field.",
+          "maps_to": "record.start_date",
+          "required": true
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "summary": "Required title record field.",
+          "maps_to": "record.title",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm salesflare create meeting apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/meetings"
+        }
+      ],
+      "risk": "creates a new CRM meeting/calendar entry; low-risk external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create opportunity apply",
+      "summary": "Plan and execute the create opportunity reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_opportunity",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm salesflare create opportunity apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/opportunities"
+        }
+      ],
+      "risk": "creates a new CRM opportunity/deal; low-risk external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create tag apply",
+      "summary": "Plan and execute the create tag reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_tag",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm salesflare create tag apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/tags"
+        }
+      ],
+      "risk": "creates a new CRM tag; low-risk external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create task apply",
+      "summary": "Plan and execute the create task reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_task",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm salesflare create task apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/tasks"
+        }
+      ],
+      "risk": "creates a new CRM task; low-risk external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "currencies list",
+      "summary": "Run the currencies ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "currencies",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "examples": [
+        "pm salesflare currencies list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/currencies"
+        }
+      ]
+    },
+    {
+      "path": "custom field types list",
+      "summary": "Run the custom field types ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "custom_field_types",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "examples": [
+        "pm salesflare custom field types list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customfields/types"
+        }
+      ]
+    },
+    {
+      "path": "delete account apply",
+      "summary": "Plan and execute the delete account reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_account",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm salesflare delete account apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/accounts/{account_id}"
+        }
+      ],
+      "risk": "destructive/irreversible: permanently deletes a CRM account; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete contact apply",
+      "summary": "Plan and execute the delete contact reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_contact",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm salesflare delete contact apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/contacts/{contact_id}"
+        }
+      ],
+      "risk": "destructive/irreversible: permanently deletes a CRM contact; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete internal note apply",
+      "summary": "Plan and execute the delete internal note reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_internal_note",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "flags": [
+        {
+          "name": "message_id",
+          "type": "string",
+          "summary": "Required message id record field.",
+          "maps_to": "record.message_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm salesflare delete internal note apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/messages/{message_id}"
+        }
+      ],
+      "risk": "destructive/irreversible: permanently deletes a CRM internal note; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete meeting apply",
+      "summary": "Plan and execute the delete meeting reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_meeting",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "flags": [
+        {
+          "name": "meeting_id",
+          "type": "string",
+          "summary": "Required meeting id record field.",
+          "maps_to": "record.meeting_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm salesflare delete meeting apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/meetings/{meeting_id}"
+        }
+      ],
+      "risk": "destructive/irreversible: permanently deletes a CRM meeting/calendar entry; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete opportunity apply",
+      "summary": "Plan and execute the delete opportunity reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_opportunity",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm salesflare delete opportunity apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/opportunities/{id}"
+        }
+      ],
+      "risk": "destructive/irreversible: permanently deletes a CRM opportunity/deal; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete tag apply",
+      "summary": "Plan and execute the delete tag reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_tag",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm salesflare delete tag apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/tags/{tag_id}"
+        }
+      ],
+      "risk": "destructive/irreversible: permanently deletes a CRM tag from every record it's applied to; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete task apply",
+      "summary": "Plan and execute the delete task reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_task",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm salesflare delete task apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/tasks/{id}"
+        }
+      ],
+      "risk": "destructive/irreversible: permanently deletes a CRM task; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "email data sources list",
+      "summary": "Run the email data sources ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "email_data_sources",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "examples": [
+        "pm salesflare email data sources list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/datasources/email"
+        }
+      ]
+    },
+    {
+      "path": "groups list",
+      "summary": "Run the groups ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "groups",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "examples": [
+        "pm salesflare groups list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/groups"
+        }
+      ]
+    },
+    {
+      "path": "opportunities list",
+      "summary": "Run the opportunities ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "opportunities",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "examples": [
+        "pm salesflare opportunities list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/opportunities"
+        }
+      ]
+    },
+    {
+      "path": "persons list",
+      "summary": "Run the persons ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "persons",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "examples": [
+        "pm salesflare persons list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/persons"
+        }
+      ]
+    },
+    {
+      "path": "pipelines list",
+      "summary": "Run the pipelines ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "pipelines",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "examples": [
+        "pm salesflare pipelines list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/pipelines"
+        }
+      ]
+    },
+    {
+      "path": "stages list",
+      "summary": "Run the stages ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "stages",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "examples": [
+        "pm salesflare stages list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/stages"
+        }
+      ]
+    },
+    {
+      "path": "tags list",
+      "summary": "Run the tags ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tags",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "examples": [
+        "pm salesflare tags list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tags"
+        }
+      ]
+    },
+    {
+      "path": "tasks list",
+      "summary": "Run the tasks ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tasks",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "examples": [
+        "pm salesflare tasks list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tasks"
+        }
+      ]
+    },
+    {
+      "path": "update account apply",
+      "summary": "Plan and execute the update account reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_account",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm salesflare update account apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/accounts/{account_id}"
+        }
+      ],
+      "risk": "external mutation updating a CRM account; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update contact apply",
+      "summary": "Plan and execute the update contact reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_contact",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm salesflare update contact apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/contacts/{contact_id}"
+        }
+      ],
+      "risk": "external mutation updating a CRM contact; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update internal note apply",
+      "summary": "Plan and execute the update internal note reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_internal_note",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "flags": [
+        {
+          "name": "message_id",
+          "type": "string",
+          "summary": "Required message id record field.",
+          "maps_to": "record.message_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm salesflare update internal note apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/messages/{message_id}"
+        }
+      ],
+      "risk": "external mutation editing a CRM internal note; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update meeting apply",
+      "summary": "Plan and execute the update meeting reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_meeting",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "flags": [
+        {
+          "name": "meeting_id",
+          "type": "string",
+          "summary": "Required meeting id record field.",
+          "maps_to": "record.meeting_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm salesflare update meeting apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/meetings/{meeting_id}"
+        }
+      ],
+      "risk": "external mutation updating a CRM meeting/calendar entry; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update opportunity apply",
+      "summary": "Plan and execute the update opportunity reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_opportunity",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm salesflare update opportunity apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/opportunities/{id}"
+        }
+      ],
+      "risk": "external mutation updating a CRM opportunity/deal (may change stage/close state); approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update tag apply",
+      "summary": "Plan and execute the update tag reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_tag",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm salesflare update tag apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/tags/{tag_id}"
+        }
+      ],
+      "risk": "external mutation renaming a CRM tag; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update task apply",
+      "summary": "Plan and execute the update task reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_task",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm salesflare update task apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/tasks/{id}"
+        }
+      ],
+      "risk": "external mutation updating a CRM task (may mark complete); approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "users list",
+      "summary": "Run the users ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "users",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "examples": [
+        "pm salesflare users list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users"
+        }
+      ]
+    },
+    {
+      "path": "workflows list",
+      "summary": "Run the workflows ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "workflows",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "examples": [
+        "pm salesflare workflows list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/workflows"
+        }
+      ]
+    }
+  ]
+}

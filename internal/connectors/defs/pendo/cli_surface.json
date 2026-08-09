@@ -1,0 +1,2873 @@
+{
+  "tagline": "Run Pendo's declared streams and reverse-ETL actions.",
+  "usage": "pm pendo \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "account by id list",
+        "accounts list",
+        "api get account b64-id",
+        "api get api v1 account accountid",
+        "api get api v1 account b64-id",
+        "api get api v1 blacklist",
+        "api get api v1 blacklist type type",
+        "api get api v1 bulkdelete",
+        "api get api v1 bulkdelete id",
+        "api get api v1 feature",
+        "api get api v1 feedback options",
+        "api get api v1 guide",
+        "api get api v1 guide guideid history",
+        "api get api v1 guide localization export",
+        "api get api v1 guide order",
+        "api get api v1 metadata dependencies",
+        "api get api v1 metadata dependencies kind group fieldname",
+        "api get api v1 metadata kind group value id fieldname",
+        "api get api v1 metadata schema kind",
+        "api get api v1 page",
+        "api get api v1 report",
+        "api get api v1 report reportid results-csv",
+        "api get api v1 report reportid results-json",
+        "api get api v1 segment",
+        "api get api v1 segment id",
+        "api get api v1 segment segmentid status",
+        "api get api v1 segment segmentid visitors jobid results contenttype",
+        "api get api v1 segment segmentid visitors jobid status",
+        "api get api v1 servername",
+        "api get api v1 servername flag flagname",
+        "api get api v1 servername name",
+        "api get api v1 token verify",
+        "api get api v1 tracktype",
+        "api get api v1 visitor b64-id",
+        "api get api v1 visitor visitorid",
+        "api get api v1 visitor visitorid history",
+        "api get guide localization export-guideids guide-ids",
+        "api get metadata kind group value id fieldname",
+        "api get report reportid results-csv",
+        "api get segment segmentid visitors jobid results contenttype",
+        "api get segment segmentid visitors jobid status",
+        "api get token verify",
+        "api get visitor b64-id",
+        "blacklist by type list",
+        "blacklist list",
+        "bulkdelete request list",
+        "bulkdelete requests list",
+        "feature by id list",
+        "features by ids list",
+        "features list",
+        "feedback options list",
+        "guide by id list",
+        "guide history list",
+        "guide order list",
+        "guides list",
+        "metadata dependencies list",
+        "metadata field dependencies list",
+        "metadata schema list",
+        "page by id list",
+        "pages by ids list",
+        "pages list",
+        "report results json list",
+        "reports list",
+        "segment by id list",
+        "segment status list",
+        "segments list",
+        "server by name list",
+        "servers by flag list",
+        "servers list",
+        "tracktype by id list",
+        "tracktypes list",
+        "visitor by id list",
+        "visitor history list",
+        "visitors list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "add segment visitor apply",
+        "api delete api v1 feedback",
+        "api delete api v1 metadata schema kind group field",
+        "api delete api v1 segment segmentid",
+        "api delete api v1 segment segmentid visitor visitorid",
+        "api delete metadata schema kind group field",
+        "api patch api v1 feedback id",
+        "api patch api v1 segment segmentid visitor",
+        "api post aggregation",
+        "api post api v1 aggregation",
+        "api post api v1 bulkdelete account",
+        "api post api v1 bulkdelete visitor",
+        "api post api v1 feedback",
+        "api post api v1 guide all visitor visitorid reset",
+        "api post api v1 guide guideid experiment export",
+        "api post api v1 guide guideid reset",
+        "api post api v1 guide guideid visitor visitorid reset",
+        "api post api v1 guide localization import",
+        "api post api v1 guide staged reset",
+        "api post api v1 metadata kind group value",
+        "api post api v1 metadata schema kind group",
+        "api post api v1 segment segmentid visitors",
+        "api post api v1 segment upload",
+        "api post bulkdelete account",
+        "api post bulkdelete visitor",
+        "api post data agentic",
+        "api post data track",
+        "api post guide guideid experiment export",
+        "api post guide localization import",
+        "api post https data-pendo-io data agentic",
+        "api post https data-pendo-io data track",
+        "api post metadata kind group value",
+        "api post metadata schema kind group",
+        "api put api v1 datasync storagetypes azure destinations default credentials",
+        "api put api v1 datasync storagetypes gcs destinations default credentials",
+        "api put api v1 datasync storagetypes s3 destinations default credentials",
+        "api put api v1 guide guideid segment",
+        "api put api v1 guide guideid state",
+        "api put api v1 metadata kind group value id fieldname",
+        "api put api v1 metadata kind pendo value id blacklistguides",
+        "api put api v1 metadata kind pendo value id donotprocess",
+        "api put api v1 segment segmentid",
+        "api put api v1 segment segmentid visitor visitorid",
+        "api put datasync storagetypes azure destinations default credentials",
+        "api put datasync storagetypes gcs destinations default credentials",
+        "api put datasync storagetypes s3 destinations default credentials",
+        "api put metadata kind group value id fieldname",
+        "api put metadata kind pendo value id blacklistguides",
+        "api put metadata kind pendo value id donotprocess",
+        "change guide segment apply",
+        "change guide state apply",
+        "create feedback apply",
+        "create segment apply",
+        "delete feedback apply",
+        "delete segment apply",
+        "patch segment visitors apply",
+        "remove segment visitor apply",
+        "reset all guides for visitor apply",
+        "reset all staged guides apply",
+        "reset guide for visitor apply",
+        "reset staged guide apply",
+        "start segment visitor export apply",
+        "update feedback apply",
+        "update segment apply"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "account by id list",
+      "summary": "Run the account by id ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "account_by_id",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo account by id list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/account/{accountId}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "accounts list",
+      "summary": "Run the accounts ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "accounts",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo accounts list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/account"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "add segment visitor apply",
+      "summary": "Plan and execute the add segment visitor reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "add_segment_visitor",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo add segment visitor apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/segment/{segmentId}/visitor/{visitorId}"
+        }
+      ],
+      "risk": "adds a visitor to a Pendo segment; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "api delete api v1 feedback",
+      "summary": "Documented DELETE /api/v1/feedback (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo api delete api v1 feedback --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/v1/feedback"
+        }
+      ],
+      "operation": "pendo.delete.api-v1-feedback",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete api v1 metadata schema kind group field",
+      "summary": "Documented DELETE /api/v1/metadata/schema/{kind}/{group}/{field} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo api delete api v1 metadata schema kind group field --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/v1/metadata/schema/{kind}/{group}/{field}"
+        }
+      ],
+      "operation": "pendo.delete.api-v1-metadata-schema-kind-group-field",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete api v1 segment segmentid",
+      "summary": "Documented DELETE /api/v1/segment/{segmentId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo api delete api v1 segment segmentid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/v1/segment/{segmentId}"
+        }
+      ],
+      "operation": "pendo.delete.api-v1-segment-segmentid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete api v1 segment segmentid visitor visitorid",
+      "summary": "Documented DELETE /api/v1/segment/{segmentId}/visitor/{visitorId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo api delete api v1 segment segmentid visitor visitorid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/v1/segment/{segmentId}/visitor/{visitorId}"
+        }
+      ],
+      "operation": "pendo.delete.api-v1-segment-segmentid-visitor-visitorid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete metadata schema kind group field",
+      "summary": "Documented DELETE /metadata/schema/{kind}/{group}/{field} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo api delete metadata schema kind group field --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/metadata/schema/{kind}/{group}/{field}"
+        }
+      ],
+      "operation": "pendo.delete.metadata-schema-kind-group-field",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api get account b64-id",
+      "summary": "Documented GET /account/{b64_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo api get account b64-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/account/{b64_id}"
+        }
+      ],
+      "operation": "pendo.get.account-b64-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v1 account accountid",
+      "summary": "Documented GET /api/v1/account/{accountId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo api get api v1 account accountid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/account/{accountId}"
+        }
+      ],
+      "operation": "pendo.get.api-v1-account-accountid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v1 account b64-id",
+      "summary": "Documented GET /api/v1/account/{b64_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo api get api v1 account b64-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/account/{b64_id}"
+        }
+      ],
+      "operation": "pendo.get.api-v1-account-b64-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v1 blacklist",
+      "summary": "Documented GET /api/v1/blacklist (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo api get api v1 blacklist --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/blacklist"
+        }
+      ],
+      "operation": "pendo.get.api-v1-blacklist",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v1 blacklist type type",
+      "summary": "Documented GET /api/v1/blacklist/type/{type} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo api get api v1 blacklist type type --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/blacklist/type/{type}"
+        }
+      ],
+      "operation": "pendo.get.api-v1-blacklist-type-type",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v1 bulkdelete",
+      "summary": "Documented GET /api/v1/bulkdelete (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo api get api v1 bulkdelete --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/bulkdelete"
+        }
+      ],
+      "operation": "pendo.get.api-v1-bulkdelete",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v1 bulkdelete id",
+      "summary": "Documented GET /api/v1/bulkdelete/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo api get api v1 bulkdelete id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/bulkdelete/{id}"
+        }
+      ],
+      "operation": "pendo.get.api-v1-bulkdelete-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v1 feature",
+      "summary": "Documented GET /api/v1/feature (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo api get api v1 feature --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/feature"
+        }
+      ],
+      "operation": "pendo.get.api-v1-feature",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v1 feedback options",
+      "summary": "Documented GET /api/v1/feedback/options (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo api get api v1 feedback options --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/feedback/options"
+        }
+      ],
+      "operation": "pendo.get.api-v1-feedback-options",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v1 guide",
+      "summary": "Documented GET /api/v1/guide (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo api get api v1 guide --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/guide"
+        }
+      ],
+      "operation": "pendo.get.api-v1-guide",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v1 guide guideid history",
+      "summary": "Documented GET /api/v1/guide/{guideId}/history (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo api get api v1 guide guideid history --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/guide/{guideId}/history"
+        }
+      ],
+      "operation": "pendo.get.api-v1-guide-guideid-history",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v1 guide localization export",
+      "summary": "Documented GET /api/v1/guide/localization/export (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo api get api v1 guide localization export --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/guide/localization/export"
+        }
+      ],
+      "operation": "pendo.get.api-v1-guide-localization-export",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v1 guide order",
+      "summary": "Documented GET /api/v1/guide/order (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo api get api v1 guide order --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/guide/order"
+        }
+      ],
+      "operation": "pendo.get.api-v1-guide-order",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v1 metadata dependencies",
+      "summary": "Documented GET /api/v1/metadata/dependencies (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo api get api v1 metadata dependencies --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/metadata/dependencies"
+        }
+      ],
+      "operation": "pendo.get.api-v1-metadata-dependencies",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v1 metadata dependencies kind group fieldname",
+      "summary": "Documented GET /api/v1/metadata/dependencies/{kind}/{group}/{fieldName} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo api get api v1 metadata dependencies kind group fieldname --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/metadata/dependencies/{kind}/{group}/{fieldName}"
+        }
+      ],
+      "operation": "pendo.get.api-v1-metadata-dependencies-kind-group-fieldname",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v1 metadata kind group value id fieldname",
+      "summary": "Documented GET /api/v1/metadata/{kind}/{group}/value/{id}/{fieldName} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo api get api v1 metadata kind group value id fieldname --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/metadata/{kind}/{group}/value/{id}/{fieldName}"
+        }
+      ],
+      "operation": "pendo.get.api-v1-metadata-kind-group-value-id-fieldname",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v1 metadata schema kind",
+      "summary": "Documented GET /api/v1/metadata/schema/{kind} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo api get api v1 metadata schema kind --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/metadata/schema/{kind}"
+        }
+      ],
+      "operation": "pendo.get.api-v1-metadata-schema-kind",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v1 page",
+      "summary": "Documented GET /api/v1/page (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo api get api v1 page --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/page"
+        }
+      ],
+      "operation": "pendo.get.api-v1-page",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v1 report",
+      "summary": "Documented GET /api/v1/report (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo api get api v1 report --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/report"
+        }
+      ],
+      "operation": "pendo.get.api-v1-report",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v1 report reportid results-csv",
+      "summary": "Documented GET /api/v1/report/{reportId}/results.csv (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo api get api v1 report reportid results-csv --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/report/{reportId}/results.csv"
+        }
+      ],
+      "operation": "pendo.get.api-v1-report-reportid-results-csv",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v1 report reportid results-json",
+      "summary": "Documented GET /api/v1/report/{reportId}/results.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo api get api v1 report reportid results-json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/report/{reportId}/results.json"
+        }
+      ],
+      "operation": "pendo.get.api-v1-report-reportid-results-json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v1 segment",
+      "summary": "Documented GET /api/v1/segment (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo api get api v1 segment --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/segment"
+        }
+      ],
+      "operation": "pendo.get.api-v1-segment",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v1 segment id",
+      "summary": "Documented GET /api/v1/segment/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo api get api v1 segment id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/segment/{id}"
+        }
+      ],
+      "operation": "pendo.get.api-v1-segment-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v1 segment segmentid status",
+      "summary": "Documented GET /api/v1/segment/{segmentId}/status (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo api get api v1 segment segmentid status --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/segment/{segmentId}/status"
+        }
+      ],
+      "operation": "pendo.get.api-v1-segment-segmentid-status",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v1 segment segmentid visitors jobid results contenttype",
+      "summary": "Documented GET /api/v1/segment/{segmentId}/visitors/{jobId}/results/{contentType} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo api get api v1 segment segmentid visitors jobid results contenttype --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/segment/{segmentId}/visitors/{jobId}/results/{contentType}"
+        }
+      ],
+      "operation": "pendo.get.api-v1-segment-segmentid-visitors-jobid-results-contenttype",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v1 segment segmentid visitors jobid status",
+      "summary": "Documented GET /api/v1/segment/{segmentId}/visitors/{jobId}/status (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo api get api v1 segment segmentid visitors jobid status --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/segment/{segmentId}/visitors/{jobId}/status"
+        }
+      ],
+      "operation": "pendo.get.api-v1-segment-segmentid-visitors-jobid-status",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v1 servername",
+      "summary": "Documented GET /api/v1/servername (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo api get api v1 servername --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/servername"
+        }
+      ],
+      "operation": "pendo.get.api-v1-servername",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v1 servername flag flagname",
+      "summary": "Documented GET /api/v1/servername/flag/{flagname} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo api get api v1 servername flag flagname --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/servername/flag/{flagname}"
+        }
+      ],
+      "operation": "pendo.get.api-v1-servername-flag-flagname",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v1 servername name",
+      "summary": "Documented GET /api/v1/servername/{name} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo api get api v1 servername name --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/servername/{name}"
+        }
+      ],
+      "operation": "pendo.get.api-v1-servername-name",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v1 token verify",
+      "summary": "Documented GET /api/v1/token/verify (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo api get api v1 token verify --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/token/verify"
+        }
+      ],
+      "operation": "pendo.get.api-v1-token-verify",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v1 tracktype",
+      "summary": "Documented GET /api/v1/tracktype (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo api get api v1 tracktype --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/tracktype"
+        }
+      ],
+      "operation": "pendo.get.api-v1-tracktype",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v1 visitor b64-id",
+      "summary": "Documented GET /api/v1/visitor/{b64_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo api get api v1 visitor b64-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/visitor/{b64_id}"
+        }
+      ],
+      "operation": "pendo.get.api-v1-visitor-b64-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v1 visitor visitorid",
+      "summary": "Documented GET /api/v1/visitor/{visitorId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo api get api v1 visitor visitorid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/visitor/{visitorId}"
+        }
+      ],
+      "operation": "pendo.get.api-v1-visitor-visitorid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v1 visitor visitorid history",
+      "summary": "Documented GET /api/v1/visitor/{visitorId}/history (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo api get api v1 visitor visitorid history --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/visitor/{visitorId}/history"
+        }
+      ],
+      "operation": "pendo.get.api-v1-visitor-visitorid-history",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get guide localization export-guideids guide-ids",
+      "summary": "Documented GET /guide/localization/export?guideids={guide_ids} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo api get guide localization export-guideids guide-ids --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/guide/localization/export?guideids={guide_ids}"
+        }
+      ],
+      "operation": "pendo.get.guide-localization-export-guideids-guide-ids",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get metadata kind group value id fieldname",
+      "summary": "Documented GET /metadata/{kind}/{group}/value/{id}/{fieldName} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo api get metadata kind group value id fieldname --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/metadata/{kind}/{group}/value/{id}/{fieldName}"
+        }
+      ],
+      "operation": "pendo.get.metadata-kind-group-value-id-fieldname",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get report reportid results-csv",
+      "summary": "Documented GET /report/{reportId}/results.csv (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo api get report reportid results-csv --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/report/{reportId}/results.csv"
+        }
+      ],
+      "operation": "pendo.get.report-reportid-results-csv",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get segment segmentid visitors jobid results contenttype",
+      "summary": "Documented GET /segment/{segmentId}/visitors/{jobId}/results/{contentType} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo api get segment segmentid visitors jobid results contenttype --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/segment/{segmentId}/visitors/{jobId}/results/{contentType}"
+        }
+      ],
+      "operation": "pendo.get.segment-segmentid-visitors-jobid-results-contenttype",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get segment segmentid visitors jobid status",
+      "summary": "Documented GET /segment/{segmentId}/visitors/{jobId}/status (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo api get segment segmentid visitors jobid status --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/segment/{segmentId}/visitors/{jobId}/status"
+        }
+      ],
+      "operation": "pendo.get.segment-segmentid-visitors-jobid-status",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get token verify",
+      "summary": "Documented GET /token/verify (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo api get token verify --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/token/verify"
+        }
+      ],
+      "operation": "pendo.get.token-verify",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get visitor b64-id",
+      "summary": "Documented GET /visitor/{b64_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo api get visitor b64-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/visitor/{b64_id}"
+        }
+      ],
+      "operation": "pendo.get.visitor-b64-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api patch api v1 feedback id",
+      "summary": "Documented PATCH /api/v1/feedback/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo api patch api v1 feedback id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/api/v1/feedback/{id}"
+        }
+      ],
+      "operation": "pendo.patch.api-v1-feedback-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch api v1 segment segmentid visitor",
+      "summary": "Documented PATCH /api/v1/segment/{segmentId}/visitor (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo api patch api v1 segment segmentid visitor --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/api/v1/segment/{segmentId}/visitor"
+        }
+      ],
+      "operation": "pendo.patch.api-v1-segment-segmentid-visitor",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post aggregation",
+      "summary": "Documented POST /aggregation (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo api post aggregation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/aggregation"
+        }
+      ],
+      "operation": "pendo.post.aggregation",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api v1 aggregation",
+      "summary": "Documented POST /api/v1/aggregation (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo api post api v1 aggregation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/aggregation"
+        }
+      ],
+      "operation": "pendo.post.api-v1-aggregation",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api v1 bulkdelete account",
+      "summary": "Documented POST /api/v1/bulkdelete/account (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo api post api v1 bulkdelete account --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/bulkdelete/account"
+        }
+      ],
+      "operation": "pendo.post.api-v1-bulkdelete-account",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api v1 bulkdelete visitor",
+      "summary": "Documented POST /api/v1/bulkdelete/visitor (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo api post api v1 bulkdelete visitor --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/bulkdelete/visitor"
+        }
+      ],
+      "operation": "pendo.post.api-v1-bulkdelete-visitor",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api v1 feedback",
+      "summary": "Documented POST /api/v1/feedback (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo api post api v1 feedback --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/feedback"
+        }
+      ],
+      "operation": "pendo.post.api-v1-feedback",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api v1 guide all visitor visitorid reset",
+      "summary": "Documented POST /api/v1/guide/all/visitor/{visitorId}/reset (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo api post api v1 guide all visitor visitorid reset --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/guide/all/visitor/{visitorId}/reset"
+        }
+      ],
+      "operation": "pendo.post.api-v1-guide-all-visitor-visitorid-reset",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api v1 guide guideid experiment export",
+      "summary": "Documented POST /api/v1/guide/{guideId}/experiment/export (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo api post api v1 guide guideid experiment export --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/guide/{guideId}/experiment/export"
+        }
+      ],
+      "operation": "pendo.post.api-v1-guide-guideid-experiment-export",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api v1 guide guideid reset",
+      "summary": "Documented POST /api/v1/guide/{guideId}/reset (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo api post api v1 guide guideid reset --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/guide/{guideId}/reset"
+        }
+      ],
+      "operation": "pendo.post.api-v1-guide-guideid-reset",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api v1 guide guideid visitor visitorid reset",
+      "summary": "Documented POST /api/v1/guide/{guideId}/visitor/{visitorId}/reset (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo api post api v1 guide guideid visitor visitorid reset --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/guide/{guideId}/visitor/{visitorId}/reset"
+        }
+      ],
+      "operation": "pendo.post.api-v1-guide-guideid-visitor-visitorid-reset",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api v1 guide localization import",
+      "summary": "Documented POST /api/v1/guide/localization/import (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo api post api v1 guide localization import --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/guide/localization/import"
+        }
+      ],
+      "operation": "pendo.post.api-v1-guide-localization-import",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api v1 guide staged reset",
+      "summary": "Documented POST /api/v1/guide/staged/reset (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo api post api v1 guide staged reset --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/guide/staged/reset"
+        }
+      ],
+      "operation": "pendo.post.api-v1-guide-staged-reset",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api v1 metadata kind group value",
+      "summary": "Documented POST /api/v1/metadata/{kind}/{group}/value (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo api post api v1 metadata kind group value --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/metadata/{kind}/{group}/value"
+        }
+      ],
+      "operation": "pendo.post.api-v1-metadata-kind-group-value",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api v1 metadata schema kind group",
+      "summary": "Documented POST /api/v1/metadata/schema/{kind}/{group} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo api post api v1 metadata schema kind group --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/metadata/schema/{kind}/{group}"
+        }
+      ],
+      "operation": "pendo.post.api-v1-metadata-schema-kind-group",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api v1 segment segmentid visitors",
+      "summary": "Documented POST /api/v1/segment/{segmentId}/visitors (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo api post api v1 segment segmentid visitors --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/segment/{segmentId}/visitors"
+        }
+      ],
+      "operation": "pendo.post.api-v1-segment-segmentid-visitors",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api v1 segment upload",
+      "summary": "Documented POST /api/v1/segment/upload (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo api post api v1 segment upload --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/segment/upload"
+        }
+      ],
+      "operation": "pendo.post.api-v1-segment-upload",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post bulkdelete account",
+      "summary": "Documented POST /bulkdelete/account (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo api post bulkdelete account --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/bulkdelete/account"
+        }
+      ],
+      "operation": "pendo.post.bulkdelete-account",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post bulkdelete visitor",
+      "summary": "Documented POST /bulkdelete/visitor (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo api post bulkdelete visitor --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/bulkdelete/visitor"
+        }
+      ],
+      "operation": "pendo.post.bulkdelete-visitor",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post data agentic",
+      "summary": "Documented POST /data/agentic (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo api post data agentic --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/data/agentic"
+        }
+      ],
+      "operation": "pendo.post.data-agentic",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post data track",
+      "summary": "Documented POST /data/track (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo api post data track --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/data/track"
+        }
+      ],
+      "operation": "pendo.post.data-track",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post guide guideid experiment export",
+      "summary": "Documented POST /guide/{guideId}/experiment/export (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo api post guide guideid experiment export --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/guide/{guideId}/experiment/export"
+        }
+      ],
+      "operation": "pendo.post.guide-guideid-experiment-export",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post guide localization import",
+      "summary": "Documented POST /guide/localization/import (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo api post guide localization import --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/guide/localization/import"
+        }
+      ],
+      "operation": "pendo.post.guide-localization-import",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post https data-pendo-io data agentic",
+      "summary": "Documented POST https://data.pendo.io/data/agentic (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo api post https data-pendo-io data agentic --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "https://data.pendo.io/data/agentic"
+        }
+      ],
+      "operation": "pendo.post.https-data-pendo-io-data-agentic",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post https data-pendo-io data track",
+      "summary": "Documented POST https://data.pendo.io/data/track (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo api post https data-pendo-io data track --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "https://data.pendo.io/data/track"
+        }
+      ],
+      "operation": "pendo.post.https-data-pendo-io-data-track",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post metadata kind group value",
+      "summary": "Documented POST /metadata/{kind}/{group}/value (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo api post metadata kind group value --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/metadata/{kind}/{group}/value"
+        }
+      ],
+      "operation": "pendo.post.metadata-kind-group-value",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post metadata schema kind group",
+      "summary": "Documented POST /metadata/schema/{kind}/{group} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo api post metadata schema kind group --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/metadata/schema/{kind}/{group}"
+        }
+      ],
+      "operation": "pendo.post.metadata-schema-kind-group",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put api v1 datasync storagetypes azure destinations default credentials",
+      "summary": "Documented PUT /api/v1/datasync/storageTypes/azure/destinations/Default/credentials (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo api put api v1 datasync storagetypes azure destinations default credentials --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/v1/datasync/storageTypes/azure/destinations/Default/credentials"
+        }
+      ],
+      "operation": "pendo.put.api-v1-datasync-storagetypes-azure-destinations-default-credentials",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put api v1 datasync storagetypes gcs destinations default credentials",
+      "summary": "Documented PUT /api/v1/datasync/storageTypes/gcs/destinations/Default/credentials (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo api put api v1 datasync storagetypes gcs destinations default credentials --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/v1/datasync/storageTypes/gcs/destinations/Default/credentials"
+        }
+      ],
+      "operation": "pendo.put.api-v1-datasync-storagetypes-gcs-destinations-default-credentials",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put api v1 datasync storagetypes s3 destinations default credentials",
+      "summary": "Documented PUT /api/v1/datasync/storageTypes/s3/destinations/Default/credentials (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo api put api v1 datasync storagetypes s3 destinations default credentials --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/v1/datasync/storageTypes/s3/destinations/Default/credentials"
+        }
+      ],
+      "operation": "pendo.put.api-v1-datasync-storagetypes-s3-destinations-default-credentials",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put api v1 guide guideid segment",
+      "summary": "Documented PUT /api/v1/guide/{guideId}/segment (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo api put api v1 guide guideid segment --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/v1/guide/{guideId}/segment"
+        }
+      ],
+      "operation": "pendo.put.api-v1-guide-guideid-segment",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put api v1 guide guideid state",
+      "summary": "Documented PUT /api/v1/guide/{guideId}/state (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo api put api v1 guide guideid state --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/v1/guide/{guideId}/state"
+        }
+      ],
+      "operation": "pendo.put.api-v1-guide-guideid-state",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put api v1 metadata kind group value id fieldname",
+      "summary": "Documented PUT /api/v1/metadata/{kind}/{group}/value/{id}/{fieldName} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo api put api v1 metadata kind group value id fieldname --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/v1/metadata/{kind}/{group}/value/{id}/{fieldName}"
+        }
+      ],
+      "operation": "pendo.put.api-v1-metadata-kind-group-value-id-fieldname",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put api v1 metadata kind pendo value id blacklistguides",
+      "summary": "Documented PUT /api/v1/metadata/{kind}/pendo/value/{id}/blacklistguides (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo api put api v1 metadata kind pendo value id blacklistguides --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/v1/metadata/{kind}/pendo/value/{id}/blacklistguides"
+        }
+      ],
+      "operation": "pendo.put.api-v1-metadata-kind-pendo-value-id-blacklistguides",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put api v1 metadata kind pendo value id donotprocess",
+      "summary": "Documented PUT /api/v1/metadata/{kind}/pendo/value/{id}/donotprocess (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo api put api v1 metadata kind pendo value id donotprocess --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/v1/metadata/{kind}/pendo/value/{id}/donotprocess"
+        }
+      ],
+      "operation": "pendo.put.api-v1-metadata-kind-pendo-value-id-donotprocess",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put api v1 segment segmentid",
+      "summary": "Documented PUT /api/v1/segment/{segmentId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo api put api v1 segment segmentid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/v1/segment/{segmentId}"
+        }
+      ],
+      "operation": "pendo.put.api-v1-segment-segmentid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put api v1 segment segmentid visitor visitorid",
+      "summary": "Documented PUT /api/v1/segment/{segmentId}/visitor/{visitorId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo api put api v1 segment segmentid visitor visitorid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/v1/segment/{segmentId}/visitor/{visitorId}"
+        }
+      ],
+      "operation": "pendo.put.api-v1-segment-segmentid-visitor-visitorid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put datasync storagetypes azure destinations default credentials",
+      "summary": "Documented PUT /datasync/storageTypes/azure/destinations/Default/credentials (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo api put datasync storagetypes azure destinations default credentials --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/datasync/storageTypes/azure/destinations/Default/credentials"
+        }
+      ],
+      "operation": "pendo.put.datasync-storagetypes-azure-destinations-default-credentials",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put datasync storagetypes gcs destinations default credentials",
+      "summary": "Documented PUT /datasync/storageTypes/gcs/destinations/Default/credentials (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo api put datasync storagetypes gcs destinations default credentials --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/datasync/storageTypes/gcs/destinations/Default/credentials"
+        }
+      ],
+      "operation": "pendo.put.datasync-storagetypes-gcs-destinations-default-credentials",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put datasync storagetypes s3 destinations default credentials",
+      "summary": "Documented PUT /datasync/storageTypes/s3/destinations/Default/credentials (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo api put datasync storagetypes s3 destinations default credentials --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/datasync/storageTypes/s3/destinations/Default/credentials"
+        }
+      ],
+      "operation": "pendo.put.datasync-storagetypes-s3-destinations-default-credentials",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put metadata kind group value id fieldname",
+      "summary": "Documented PUT /metadata/{kind}/{group}/value/{id}/{fieldName} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo api put metadata kind group value id fieldname --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/metadata/{kind}/{group}/value/{id}/{fieldName}"
+        }
+      ],
+      "operation": "pendo.put.metadata-kind-group-value-id-fieldname",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put metadata kind pendo value id blacklistguides",
+      "summary": "Documented PUT /metadata/{kind}/pendo/value/{id}/blacklistguides (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo api put metadata kind pendo value id blacklistguides --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/metadata/{kind}/pendo/value/{id}/blacklistguides"
+        }
+      ],
+      "operation": "pendo.put.metadata-kind-pendo-value-id-blacklistguides",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put metadata kind pendo value id donotprocess",
+      "summary": "Documented PUT /metadata/{kind}/pendo/value/{id}/donotprocess (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo api put metadata kind pendo value id donotprocess --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/metadata/{kind}/pendo/value/{id}/donotprocess"
+        }
+      ],
+      "operation": "pendo.put.metadata-kind-pendo-value-id-donotprocess",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "blacklist by type list",
+      "summary": "Run the blacklist by type ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "blacklist_by_type",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo blacklist by type list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/blacklist/type/{type}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "blacklist list",
+      "summary": "Run the blacklist ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "blacklist",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo blacklist list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/blacklist"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "bulkdelete request list",
+      "summary": "Run the bulkdelete request ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "bulkdelete_request",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo bulkdelete request list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/bulkdelete/{id}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "bulkdelete requests list",
+      "summary": "Run the bulkdelete requests ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "bulkdelete_requests",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo bulkdelete requests list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/bulkdelete"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "change guide segment apply",
+      "summary": "Plan and execute the change guide segment reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "change_guide_segment",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo change guide segment apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/guide/{guideId}/segment"
+        }
+      ],
+      "risk": "changes the segment assigned to a Pendo guide; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "change guide state apply",
+      "summary": "Plan and execute the change guide state reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "change_guide_state",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo change guide state apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/guide/{guideId}/state"
+        }
+      ],
+      "risk": "changes a Pendo guide state such as public, staged, disabled, or draft; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create feedback apply",
+      "summary": "Plan and execute the create feedback reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_feedback",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "flags": [
+        {
+          "name": "accountId",
+          "type": "string",
+          "summary": "Required accountId record field.",
+          "maps_to": "record.accountId",
+          "required": true
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "summary": "Required title record field.",
+          "maps_to": "record.title",
+          "required": true
+        },
+        {
+          "name": "visitorId",
+          "type": "string",
+          "summary": "Required visitorId record field.",
+          "maps_to": "record.visitorId",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pendo create feedback apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/feedback"
+        }
+      ],
+      "risk": "creates a Pendo Listen feedback item; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create segment apply",
+      "summary": "Plan and execute the create segment reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_segment",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo create segment apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/segment/upload"
+        }
+      ],
+      "risk": "creates a shared Pendo segment from visitor ids; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete feedback apply",
+      "summary": "Plan and execute the delete feedback reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_feedback",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo delete feedback apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/feedback"
+        }
+      ],
+      "risk": "deletes Pendo Listen feedback items by id; destructive external mutation",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete segment apply",
+      "summary": "Plan and execute the delete segment reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_segment",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo delete segment apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/segment/{segmentId}"
+        }
+      ],
+      "risk": "deletes a Pendo segment; destructive external mutation",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "feature by id list",
+      "summary": "Run the feature by id ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "feature_by_id",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo feature by id list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/feature?id={feature_id}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "features by ids list",
+      "summary": "Run the features by ids ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "features_by_ids",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo features by ids list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/feature?id={feature_ids}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "features list",
+      "summary": "Run the features ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "features",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo features list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/feature"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "feedback options list",
+      "summary": "Run the feedback options ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "feedback_options",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo feedback options list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/feedback/options"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "guide by id list",
+      "summary": "Run the guide by id ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "guide_by_id",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo guide by id list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/guide?id={guide_id}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "guide history list",
+      "summary": "Run the guide history ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "guide_history",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo guide history list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/guide/{guideId}/history"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "guide order list",
+      "summary": "Run the guide order ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "guide_order",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo guide order list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/guide/order"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "guides list",
+      "summary": "Run the guides ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "guides",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo guides list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/guide"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "metadata dependencies list",
+      "summary": "Run the metadata dependencies ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "metadata_dependencies",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo metadata dependencies list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/metadata/dependencies"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "metadata field dependencies list",
+      "summary": "Run the metadata field dependencies ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "metadata_field_dependencies",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo metadata field dependencies list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/metadata/dependencies/{kind}/{group}/{fieldName}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "metadata schema list",
+      "summary": "Run the metadata schema ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "metadata_schema",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo metadata schema list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/metadata/schema/{kind}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "page by id list",
+      "summary": "Run the page by id ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "page_by_id",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo page by id list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/page?id={page_id}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "pages by ids list",
+      "summary": "Run the pages by ids ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "pages_by_ids",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo pages by ids list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/page?id={page_ids}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "pages list",
+      "summary": "Run the pages ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "pages",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo pages list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/page"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "patch segment visitors apply",
+      "summary": "Plan and execute the patch segment visitors reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "patch_segment_visitors",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo patch segment visitors apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/segment/{segmentId}/visitor"
+        }
+      ],
+      "risk": "adds/removes a small batch of visitors for a Pendo segment; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "remove segment visitor apply",
+      "summary": "Plan and execute the remove segment visitor reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "remove_segment_visitor",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo remove segment visitor apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/segment/{segmentId}/visitor/{visitorId}"
+        }
+      ],
+      "risk": "removes a visitor from a Pendo segment; destructive membership mutation",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "report results json list",
+      "summary": "Run the report results json ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "report_results_json",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo report results json list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/report/{reportId}/results.json"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "reports list",
+      "summary": "Run the reports ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "reports",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo reports list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/report"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "reset all guides for visitor apply",
+      "summary": "Plan and execute the reset all guides for visitor reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "reset_all_guides_for_visitor",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo reset all guides for visitor apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/guide/all/visitor/{visitorId}/reset"
+        }
+      ],
+      "risk": "resets guide-seen state for one visitor across all guides; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "reset all staged guides apply",
+      "summary": "Plan and execute the reset all staged guides reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "reset_all_staged_guides",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo reset all staged guides apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/guide/staged/reset"
+        }
+      ],
+      "risk": "resets all staged guides in the subscription; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "reset guide for visitor apply",
+      "summary": "Plan and execute the reset guide for visitor reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "reset_guide_for_visitor",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo reset guide for visitor apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/guide/{guideId}/visitor/{visitorId}/reset"
+        }
+      ],
+      "risk": "resets guide-seen state for one visitor; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "reset staged guide apply",
+      "summary": "Plan and execute the reset staged guide reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "reset_staged_guide",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo reset staged guide apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/guide/{guideId}/reset"
+        }
+      ],
+      "risk": "resets one staged guide; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "segment by id list",
+      "summary": "Run the segment by id ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "segment_by_id",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo segment by id list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/segment/{id}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "segment status list",
+      "summary": "Run the segment status ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "segment_status",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo segment status list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/segment/{segmentId}/status"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "segments list",
+      "summary": "Run the segments ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "segments",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo segments list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/segment"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "server by name list",
+      "summary": "Run the server by name ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "server_by_name",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo server by name list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/servername/{name}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "servers by flag list",
+      "summary": "Run the servers by flag ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "servers_by_flag",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo servers by flag list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/servername/flag/{flagname}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "servers list",
+      "summary": "Run the servers ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "servers",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo servers list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/servername"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "start segment visitor export apply",
+      "summary": "Plan and execute the start segment visitor export reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "start_segment_visitor_export",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo start segment visitor export apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/segment/{segmentId}/visitors"
+        }
+      ],
+      "risk": "starts an asynchronous Pendo segment visitor export job; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "tracktype by id list",
+      "summary": "Run the tracktype by id ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tracktype_by_id",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo tracktype by id list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tracktype?id={tracktype_id}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "tracktypes list",
+      "summary": "Run the tracktypes ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tracktypes",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo tracktypes list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tracktype"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "update feedback apply",
+      "summary": "Plan and execute the update feedback reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_feedback",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo update feedback apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/feedback/{id}"
+        }
+      ],
+      "risk": "updates a Pendo Listen feedback item; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update segment apply",
+      "summary": "Plan and execute the update segment reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_segment",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo update segment apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/segment/{segmentId}"
+        }
+      ],
+      "risk": "replaces the visitor membership for a Pendo segment; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "visitor by id list",
+      "summary": "Run the visitor by id ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "visitor_by_id",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo visitor by id list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/visitor/{visitorId}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "visitor history list",
+      "summary": "Run the visitor history ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "visitor_history",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo visitor history list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/visitor/{visitorId}/history?starttime={epochTimestamp}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "visitors list",
+      "summary": "Run the visitors ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "visitors",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "examples": [
+        "pm pendo visitors list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/visitor"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    }
+  ]
+}

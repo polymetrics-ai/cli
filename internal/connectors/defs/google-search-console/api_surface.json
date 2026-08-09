@@ -1,104 +1,32 @@
 {
-  "api": "Google Search Console API (Search Console v3 + searchconsole v1)",
+  "api": "Google Search Console API (Search Console v3 + searchconsole v1); provider artifact version: v1",
   "docs": "https://developers.google.com/webmaster-tools/v1/api_reference_index",
-  "reviewed_at": "2026-08-05",
-  "operation_ledger_version": 1,
-  "scope": "Google's current Discovery document has 11 unique published operations: five read operations reach ETL streams, four record-shaped mutations reach typed reverse-ETL writes, and URL Inspection plus Mobile-Friendly Test reach typed bounded direct reads. Search Analytics reaches five ETL stream conveniences over its single documented POST: by-date groups on date, while country/device/page/query group on date plus the named dimension and preserve date as the cursor. There are no binary, CDC, generic raw HTTP/body/query, excluded, or planned operations.",
+  "reviewed_at": "2026-08-09",
+  "operation_ledger_version": 2,
+  "scope": "Provider-artifact inventory generated from the cited openapi artifact (11 documented operations across 1 provider-owned source document(s)). Every documented operation is represented; existing source-surface bindings absent from the artifact are retained and flagged with present-in-surface-absent-from-artifact.",
+  "artifacts": [
+    {
+      "id": "google-search-console-artifact-2026-08-09",
+      "url": "https://searchconsole.googleapis.com/$discovery/rest?version=v1",
+      "kind": "openapi",
+      "version": "v1",
+      "retrieved_at": "2026-08-09",
+      "sha256": "7bf19eba4d9f54ce59205442c8cbdeacdae362ba3c26454cbfd7686ea387e197"
+    }
+  ],
   "endpoints": [
-    {
-      "method": "GET",
-      "path": "/webmasters/v3/sites",
-      "covered_by": {
-        "stream": "sites"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/webmasters/v3/sites/{siteUrl}",
-      "covered_by": {
-        "stream": "site_details"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/webmasters/v3/sites/{siteUrl}/sitemaps",
-      "covered_by": {
-        "stream": "sitemaps"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/webmasters/v3/sites/{siteUrl}/sitemaps/{feedpath}",
-      "covered_by": {
-        "stream": "sitemap_details"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/webmasters/v3/sites/{siteUrl}/searchAnalytics/query",
-      "covered_by": {
-        "stream": "search_analytics_by_date"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/webmasters/v3/sites/{siteUrl}/searchAnalytics/query",
-      "covered_by": {
-        "stream": "search_analytics_by_country"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/webmasters/v3/sites/{siteUrl}/searchAnalytics/query",
-      "covered_by": {
-        "stream": "search_analytics_by_device"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/webmasters/v3/sites/{siteUrl}/searchAnalytics/query",
-      "covered_by": {
-        "stream": "search_analytics_by_page"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/webmasters/v3/sites/{siteUrl}/searchAnalytics/query",
-      "covered_by": {
-        "stream": "search_analytics_by_query"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/webmasters/v3/sites/{siteUrl}",
-      "covered_by": {
-        "write": "add_site"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/webmasters/v3/sites/{siteUrl}",
-      "covered_by": {
-        "write": "delete_site"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/webmasters/v3/sites/{siteUrl}/sitemaps/{feedpath}",
-      "covered_by": {
-        "write": "submit_sitemap"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/webmasters/v3/sites/{siteUrl}/sitemaps/{feedpath}",
-      "covered_by": {
-        "write": "delete_sitemap"
-      }
-    },
     {
       "method": "POST",
       "path": "/v1/urlInspection/index:inspect",
+      "provenance": {
+        "artifact": "google-search-console-artifact-2026-08-09",
+        "source_url": "https://searchconsole.googleapis.com/$discovery/rest?version=v1",
+        "source_kind": "openapi",
+        "version": "v1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7bf19eba4d9f54ce59205442c8cbdeacdae362ba3c26454cbfd7686ea387e197",
+        "coordinate": "resources[\"urlInspection\"].resources[\"index\"].methods[\"inspect\"]"
+      },
       "covered_by": {
         "direct_read": "direct url-inspection inspect"
       }
@@ -106,8 +34,167 @@
     {
       "method": "POST",
       "path": "/v1/urlTestingTools/mobileFriendlyTest:run",
+      "provenance": {
+        "artifact": "google-search-console-artifact-2026-08-09",
+        "source_url": "https://searchconsole.googleapis.com/$discovery/rest?version=v1",
+        "source_kind": "openapi",
+        "version": "v1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7bf19eba4d9f54ce59205442c8cbdeacdae362ba3c26454cbfd7686ea387e197",
+        "coordinate": "resources[\"urlTestingTools\"].resources[\"mobileFriendlyTest\"].methods[\"run\"]"
+      },
       "covered_by": {
         "direct_read": "direct mobile-friendly-test run"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/webmasters/v3/sites",
+      "provenance": {
+        "artifact": "google-search-console-artifact-2026-08-09",
+        "source_url": "https://searchconsole.googleapis.com/$discovery/rest?version=v1",
+        "source_kind": "openapi",
+        "version": "v1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7bf19eba4d9f54ce59205442c8cbdeacdae362ba3c26454cbfd7686ea387e197",
+        "coordinate": "resources[\"sites\"].methods[\"list\"]"
+      },
+      "covered_by": {
+        "stream": "sites"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/webmasters/v3/sites/{siteUrl}",
+      "provenance": {
+        "artifact": "google-search-console-artifact-2026-08-09",
+        "source_url": "https://searchconsole.googleapis.com/$discovery/rest?version=v1",
+        "source_kind": "openapi",
+        "version": "v1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7bf19eba4d9f54ce59205442c8cbdeacdae362ba3c26454cbfd7686ea387e197",
+        "coordinate": "resources[\"sites\"].methods[\"get\"]"
+      },
+      "covered_by": {
+        "stream": "site_details"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/webmasters/v3/sites/{siteUrl}",
+      "provenance": {
+        "artifact": "google-search-console-artifact-2026-08-09",
+        "source_url": "https://searchconsole.googleapis.com/$discovery/rest?version=v1",
+        "source_kind": "openapi",
+        "version": "v1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7bf19eba4d9f54ce59205442c8cbdeacdae362ba3c26454cbfd7686ea387e197",
+        "coordinate": "resources[\"sites\"].methods[\"add\"]"
+      },
+      "covered_by": {
+        "write": "add_site"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/webmasters/v3/sites/{siteUrl}",
+      "provenance": {
+        "artifact": "google-search-console-artifact-2026-08-09",
+        "source_url": "https://searchconsole.googleapis.com/$discovery/rest?version=v1",
+        "source_kind": "openapi",
+        "version": "v1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7bf19eba4d9f54ce59205442c8cbdeacdae362ba3c26454cbfd7686ea387e197",
+        "coordinate": "resources[\"sites\"].methods[\"delete\"]"
+      },
+      "covered_by": {
+        "write": "delete_site"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/webmasters/v3/sites/{siteUrl}/searchAnalytics/query",
+      "provenance": {
+        "artifact": "google-search-console-artifact-2026-08-09",
+        "source_url": "https://searchconsole.googleapis.com/$discovery/rest?version=v1",
+        "source_kind": "openapi",
+        "version": "v1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7bf19eba4d9f54ce59205442c8cbdeacdae362ba3c26454cbfd7686ea387e197",
+        "coordinate": "resources[\"searchanalytics\"].methods[\"query\"]"
+      },
+      "covered_by": {
+        "streams": [
+          "search_analytics_by_country",
+          "search_analytics_by_date",
+          "search_analytics_by_device",
+          "search_analytics_by_page",
+          "search_analytics_by_query"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/webmasters/v3/sites/{siteUrl}/sitemaps",
+      "provenance": {
+        "artifact": "google-search-console-artifact-2026-08-09",
+        "source_url": "https://searchconsole.googleapis.com/$discovery/rest?version=v1",
+        "source_kind": "openapi",
+        "version": "v1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7bf19eba4d9f54ce59205442c8cbdeacdae362ba3c26454cbfd7686ea387e197",
+        "coordinate": "resources[\"sitemaps\"].methods[\"list\"]"
+      },
+      "covered_by": {
+        "stream": "sitemaps"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/webmasters/v3/sites/{siteUrl}/sitemaps/{feedpath}",
+      "provenance": {
+        "artifact": "google-search-console-artifact-2026-08-09",
+        "source_url": "https://searchconsole.googleapis.com/$discovery/rest?version=v1",
+        "source_kind": "openapi",
+        "version": "v1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7bf19eba4d9f54ce59205442c8cbdeacdae362ba3c26454cbfd7686ea387e197",
+        "coordinate": "resources[\"sitemaps\"].methods[\"get\"]"
+      },
+      "covered_by": {
+        "stream": "sitemap_details"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/webmasters/v3/sites/{siteUrl}/sitemaps/{feedpath}",
+      "provenance": {
+        "artifact": "google-search-console-artifact-2026-08-09",
+        "source_url": "https://searchconsole.googleapis.com/$discovery/rest?version=v1",
+        "source_kind": "openapi",
+        "version": "v1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7bf19eba4d9f54ce59205442c8cbdeacdae362ba3c26454cbfd7686ea387e197",
+        "coordinate": "resources[\"sitemaps\"].methods[\"submit\"]"
+      },
+      "covered_by": {
+        "write": "submit_sitemap"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/webmasters/v3/sites/{siteUrl}/sitemaps/{feedpath}",
+      "provenance": {
+        "artifact": "google-search-console-artifact-2026-08-09",
+        "source_url": "https://searchconsole.googleapis.com/$discovery/rest?version=v1",
+        "source_kind": "openapi",
+        "version": "v1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7bf19eba4d9f54ce59205442c8cbdeacdae362ba3c26454cbfd7686ea387e197",
+        "coordinate": "resources[\"sitemaps\"].methods[\"delete\"]"
+      },
+      "covered_by": {
+        "write": "delete_sitemap"
       }
     }
   ]

@@ -1,0 +1,901 @@
+{
+  "operations": [
+    {
+      "id": "survey-sparrow.get.v3-audit-logs",
+      "kind": "rest_read",
+      "summary": "GET /v3/audit_logs",
+      "description": "the real GET /audit_logs response schema documents its records array (list/data) as a bare string[] rather than a structured object type in developers.surveysparrow.com's own OpenAPI reference (a documentation gap on SurveySparrow's side, confirmed by inspecting both the list and single-record GET pages) -- fabricating a structured schema for genuinely unconfirmed fields risks a SCHEMA_AMBIGUOUS-shaped defect; audit log event subscription management is likewise unconfirmed-shape and excluded alongside it",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/audit_logs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "survey-sparrow.get.v3-audit-logs-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/audit_logs/:id",
+      "description": "the real GET /audit_logs response schema documents its records array (list/data) as a bare string[] rather than a structured object type in developers.surveysparrow.com's own OpenAPI reference (a documentation gap on SurveySparrow's side, confirmed by inspecting both the list and single-record GET pages) -- fabricating a structured schema for genuinely unconfirmed fields risks a SCHEMA_AMBIGUOUS-shaped defect; audit log event subscription management is likewise unconfirmed-shape and excluded alongside it",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/audit_logs/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "survey-sparrow.get.v3-audit-logs-events",
+      "kind": "rest_read",
+      "summary": "GET /v3/audit_logs/events",
+      "description": "the real GET /audit_logs response schema documents its records array (list/data) as a bare string[] rather than a structured object type in developers.surveysparrow.com's own OpenAPI reference (a documentation gap on SurveySparrow's side, confirmed by inspecting both the list and single-record GET pages) -- fabricating a structured schema for genuinely unconfirmed fields risks a SCHEMA_AMBIGUOUS-shaped defect; audit log event subscription management is likewise unconfirmed-shape and excluded alongside it",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/audit_logs/events",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "survey-sparrow.post.v3-audit-logs-events",
+      "kind": "rest_write",
+      "summary": "POST /v3/audit_logs/events",
+      "description": "the real GET /audit_logs response schema documents its records array (list/data) as a bare string[] rather than a structured object type in developers.surveysparrow.com's own OpenAPI reference (a documentation gap on SurveySparrow's side, confirmed by inspecting both the list and single-record GET pages) -- fabricating a structured schema for genuinely unconfirmed fields risks a SCHEMA_AMBIGUOUS-shaped defect; audit log event subscription management is likewise unconfirmed-shape and excluded alongside it",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/audit_logs/events",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "survey-sparrow.delete.v3-audit-logs-events-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v3/audit_logs/events/:id",
+      "description": "the real GET /audit_logs response schema documents its records array (list/data) as a bare string[] rather than a structured object type in developers.surveysparrow.com's own OpenAPI reference (a documentation gap on SurveySparrow's side, confirmed by inspecting both the list and single-record GET pages) -- fabricating a structured schema for genuinely unconfirmed fields risks a SCHEMA_AMBIGUOUS-shaped defect; audit log event subscription management is likewise unconfirmed-shape and excluded alongside it",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v3/audit_logs/events/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "survey-sparrow.get.v3-channels-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/channels/:id",
+      "description": "single-record GET returning the same fields the channels list stream already reads",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/channels/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "survey-sparrow.put.v3-channels-id",
+      "kind": "rest_write",
+      "summary": "PUT /v3/channels/:id",
+      "description": "associates/re-associates a channel with a different survey_id (its only documented body field) -- a re-parenting action with broad blast-radius on already-collected response data's channel attribution, not modeled as update_channel this pass",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v3/channels/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "survey-sparrow.post.v3-channels-id-clone",
+      "kind": "rest_write",
+      "summary": "POST /v3/channels/:id/clone",
+      "description": "clones an existing channel (a compound duplicate-and-create action), a workflow convenience beyond plain single-record create/update/delete",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/channels/:id/clone",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "survey-sparrow.post.v3-channels-id-summary",
+      "kind": "rest_write",
+      "summary": "POST /v3/channels/:id/summary",
+      "description": "channel-analytics retrieval (a POST-verbed read, not a mutation) or a clone/bulk-link-creation compound action beyond plain single-record channel CRUD",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/channels/:id/summary",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "survey-sparrow.post.v3-channels-create-unique-links",
+      "kind": "rest_write",
+      "summary": "POST /v3/channels/create_unique_links",
+      "description": "channel-analytics retrieval (a POST-verbed read, not a mutation) or a clone/bulk-link-creation compound action beyond plain single-record channel CRUD",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/channels/create_unique_links",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "survey-sparrow.get.v3-contact-lists-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/contact_lists/:id",
+      "description": "single-record GET returning the same fields the contact_lists list stream already reads",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/contact_lists/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "survey-sparrow.get.v3-contacts-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/contacts/:id",
+      "description": "single-record GET returning the same fields the contacts list stream already reads",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/contacts/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "survey-sparrow.post.v3-contacts-batch",
+      "kind": "rest_write",
+      "summary": "POST /v3/contacts/batch",
+      "description": "asynchronous batch-contact-creation job submission and its status-polling companion endpoint -- a bulk-import workflow (submit many contacts, poll a job token) distinct from the single-record create_contact this bundle models",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/contacts/batch",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "survey-sparrow.get.v3-contacts-status-token",
+      "kind": "rest_read",
+      "summary": "GET /v3/contacts/status/:token",
+      "description": "asynchronous batch-contact-creation job submission and its status-polling companion endpoint -- a bulk-import workflow (submit many contacts, poll a job token) distinct from the single-record create_contact this bundle models",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/contacts/status/:token",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "survey-sparrow.post.v3-language",
+      "kind": "rest_write",
+      "summary": "POST /v3/language",
+      "description": "per-survey/per-language translation content CRUD (import/export/update translated survey text), a specialized localization workflow with its own large body-shape (translation key/value maps) distinct from the general catalog resources this connector targets",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/language",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "survey-sparrow.get.v3-languages",
+      "kind": "rest_read",
+      "summary": "GET /v3/languages",
+      "description": "the real GET /languages response schema page renders no field list at all (confirmed empty on inspection) -- an unconfirmed shape, not implemented rather than guessed",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/languages",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "survey-sparrow.get.v3-metrics",
+      "kind": "rest_read",
+      "summary": "GET /v3/metrics",
+      "description": "NPS/CX metrics aggregation and metric-filtered response listing -- an analytics read model derived from the already-covered responses stream, not distinct catalog data",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/metrics",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "survey-sparrow.get.v3-metrics-responses",
+      "kind": "rest_read",
+      "summary": "GET /v3/metrics/responses",
+      "description": "NPS/CX metrics aggregation and metric-filtered response listing -- an analytics read model derived from the already-covered responses stream, not distinct catalog data",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/metrics/responses",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "survey-sparrow.get.v3-reminders-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/reminders/:id",
+      "description": "single-record GET returning the same fields the reminders list stream already reads",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/reminders/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "survey-sparrow.get.v3-reports",
+      "kind": "rest_read",
+      "summary": "GET /v3/reports",
+      "description": "generates a public shareable report link (a side-effecting action producing a URL), not catalog/config data or a plain record mutation",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/reports",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "survey-sparrow.get.v3-reputation-app-platforms-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/reputation/app_platforms/:id",
+      "description": "single-record GET returning the same fields the reputation_app_platforms list stream already reads",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/reputation/app_platforms/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "survey-sparrow.get.v3-reputation-platforms-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/reputation/platforms/:id",
+      "description": "single-record GET returning the same fields the reputation_platforms list stream already reads",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/reputation/platforms/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "survey-sparrow.get.v3-reputation-reviews-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/reputation/reviews/:id",
+      "description": "single-record GET returning the same fields the reputation_reviews list stream already reads",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/reputation/reviews/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "survey-sparrow.get.v3-response-properties",
+      "kind": "rest_read",
+      "summary": "GET /v3/response_properties",
+      "description": "lists the available response-property metadata fields (schema/config describing what property keys a response MAY carry), a metadata-about-metadata endpoint rather than catalog record data itself; the responses stream already reads the actual per-response data",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/response_properties",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "survey-sparrow.post.v3-responses",
+      "kind": "rest_write",
+      "summary": "POST /v3/responses",
+      "description": "creates a NEW response record directly by survey_id (distinct from the /responses/new + /update + /complete multi-step flow), but its documented body (survey_id, contact_id, channel_id, variables, trigger_workflow, tags) creates only a response SHELL with no answers attached -- a real response is only meaningfully created by following up with per-question answers via the multi-step flow this bundle excludes as out_of_scope above; modeling create_response alone without the required follow-up answers would produce empty, not-genuinely-complete response records, an accepted-input behavior gap worse than not modeling it",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/responses",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "survey-sparrow.get.v3-responses-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/responses/:id",
+      "description": "single-record GET returning the same fields the responses list stream already reads",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/responses/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "survey-sparrow.put.v3-responses-id",
+      "kind": "rest_write",
+      "summary": "PUT /v3/responses/:id",
+      "description": "a multi-step stateful response-building workflow (start a partial response, add answers one at a time via question_id/answer pairs, then mark complete) rather than a single-record CRUD shape -- modeling this correctly needs a compound multi-request WriteHook (Tier-2), which this connector does not have and this pass may not add a new hook package for; excluded rather than mis-modeled as plain single-record create/update",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v3/responses/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "survey-sparrow.delete.v3-responses-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v3/responses/:id",
+      "description": "a multi-step stateful response-building workflow (start a partial response, add answers one at a time via question_id/answer pairs, then mark complete) rather than a single-record CRUD shape -- modeling this correctly needs a compound multi-request WriteHook (Tier-2), which this connector does not have and this pass may not add a new hook package for; excluded rather than mis-modeled as plain single-record create/update",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v3/responses/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "survey-sparrow.put.v3-responses-response-id-complete",
+      "kind": "rest_write",
+      "summary": "PUT /v3/responses/:response_id/complete",
+      "description": "a multi-step stateful response-building workflow (start a partial response, add answers one at a time via question_id/answer pairs, then mark complete) rather than a single-record CRUD shape -- modeling this correctly needs a compound multi-request WriteHook (Tier-2), which this connector does not have and this pass may not add a new hook package for; excluded rather than mis-modeled as plain single-record create/update",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v3/responses/:response_id/complete",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "survey-sparrow.put.v3-responses-response-id-update",
+      "kind": "rest_write",
+      "summary": "PUT /v3/responses/:response_id/update",
+      "description": "a multi-step stateful response-building workflow (start a partial response, add answers one at a time via question_id/answer pairs, then mark complete) rather than a single-record CRUD shape -- modeling this correctly needs a compound multi-request WriteHook (Tier-2), which this connector does not have and this pass may not add a new hook package for; excluded rather than mis-modeled as plain single-record create/update",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v3/responses/:response_id/update",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "survey-sparrow.post.v3-responses-batch",
+      "kind": "rest_write",
+      "summary": "POST /v3/responses/batch",
+      "description": "asynchronous batch-response-creation job submission and its status-polling companion endpoint -- a bulk-import workflow distinct from single-record response mutation",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/responses/batch",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "survey-sparrow.post.v3-responses-new",
+      "kind": "rest_write",
+      "summary": "POST /v3/responses/new",
+      "description": "a multi-step stateful response-building workflow (start a partial response, add answers one at a time via question_id/answer pairs, then mark complete) rather than a single-record CRUD shape -- modeling this correctly needs a compound multi-request WriteHook (Tier-2), which this connector does not have and this pass may not add a new hook package for; excluded rather than mis-modeled as plain single-record create/update",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/responses/new",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "survey-sparrow.get.v3-responses-status-token",
+      "kind": "rest_read",
+      "summary": "GET /v3/responses/status/:token",
+      "description": "asynchronous batch-response-creation job submission and its status-polling companion endpoint -- a bulk-import workflow distinct from single-record response mutation",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/responses/status/:token",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "survey-sparrow.post.v3-sections",
+      "kind": "rest_write",
+      "summary": "POST /v3/sections",
+      "description": "a survey SECTION is a sub-resource of a single survey's structure (grouping of questions), created/updated/deleted only in the context of one survey's question layout; no standalone list-all-sections endpoint exists to back a catalog stream, and section CRUD is bundled into survey-authoring workflows the create_survey/update_survey actions do not attempt to model in full",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/sections",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "survey-sparrow.put.v3-sections-section-id",
+      "kind": "rest_write",
+      "summary": "PUT /v3/sections/:section_id",
+      "description": "a survey SECTION is a sub-resource of a single survey's structure (grouping of questions), created/updated/deleted only in the context of one survey's question layout; no standalone list-all-sections endpoint exists to back a catalog stream, and section CRUD is bundled into survey-authoring workflows the create_survey/update_survey actions do not attempt to model in full",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v3/sections/:section_id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "survey-sparrow.delete.v3-sections-section-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v3/sections/:section_id",
+      "description": "a survey SECTION is a sub-resource of a single survey's structure (grouping of questions), created/updated/deleted only in the context of one survey's question layout; no standalone list-all-sections endpoint exists to back a catalog stream, and section CRUD is bundled into survey-authoring workflows the create_survey/update_survey actions do not attempt to model in full",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v3/sections/:section_id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "survey-sparrow.get.v3-survey-approvers",
+      "kind": "rest_read",
+      "summary": "GET /v3/survey/approvers",
+      "description": "Employee 360 (360-degree performance review) feature-specific approver/subject/evaluator/invite management, a specialized survey-type workflow distinct from the general survey/contact/response/question catalog this connector targets",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/survey/approvers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "survey-sparrow.post.v3-survey-invite",
+      "kind": "rest_write",
+      "summary": "POST /v3/survey/invite",
+      "description": "Employee 360 (360-degree performance review) feature-specific approver/subject/evaluator/invite management, a specialized survey-type workflow distinct from the general survey/contact/response/question catalog this connector targets",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/survey/invite",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "survey-sparrow.get.v3-survey-subject-evaluators",
+      "kind": "rest_read",
+      "summary": "GET /v3/survey/subject/evaluators",
+      "description": "Employee 360 (360-degree performance review) feature-specific approver/subject/evaluator/invite management, a specialized survey-type workflow distinct from the general survey/contact/response/question catalog this connector targets",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/survey/subject/evaluators",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "survey-sparrow.get.v3-survey-subject-report",
+      "kind": "rest_read",
+      "summary": "GET /v3/survey/subject/report",
+      "description": "Employee 360 (360-degree performance review) feature-specific approver/subject/evaluator/invite management, a specialized survey-type workflow distinct from the general survey/contact/response/question catalog this connector targets",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/survey/subject/report",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "survey-sparrow.put.v3-survey-subject-updateinvite",
+      "kind": "rest_write",
+      "summary": "PUT /v3/survey/subject/updateinvite",
+      "description": "Employee 360 (360-degree performance review) feature-specific approver/subject/evaluator/invite management, a specialized survey-type workflow distinct from the general survey/contact/response/question catalog this connector targets",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v3/survey/subject/updateinvite",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "survey-sparrow.get.v3-survey-subjects",
+      "kind": "rest_read",
+      "summary": "GET /v3/survey/subjects",
+      "description": "Employee 360 (360-degree performance review) feature-specific approver/subject/evaluator/invite management, a specialized survey-type workflow distinct from the general survey/contact/response/question catalog this connector targets",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/survey/subjects",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "survey-sparrow.get.v3-survey-folders-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/survey_folders/:id",
+      "description": "single-record GET returning the same fields the survey_folders list stream already reads",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/survey_folders/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "survey-sparrow.get.v3-surveys-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/surveys/:id",
+      "description": "single-record GET returning the same fields the surveys list stream already reads",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/surveys/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "survey-sparrow.post.v3-surveys-id-clone",
+      "kind": "rest_write",
+      "summary": "POST /v3/surveys/:id/clone",
+      "description": "clones an entire survey (structure + questions + settings) as a compound multi-resource copy action, beyond the plain single-record create_survey/update_survey CRUD this bundle models",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/surveys/:id/clone",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "survey-sparrow.get.v3-targets",
+      "kind": "rest_read",
+      "summary": "GET /v3/targets",
+      "description": "the response schema nests a plain string[] of target labels at data.targets (confirmed from the real response schema), not structured per-record catalog data suited to a stream declaration",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/targets",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "survey-sparrow.get.v3-ticket-fields-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/ticket_fields/:id",
+      "description": "single-record GET returning the same fields the ticket_fields list stream already reads",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/ticket_fields/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "survey-sparrow.get.v3-tickets-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/tickets/:id",
+      "description": "single-record GET returning the same fields the tickets list stream already reads",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/tickets/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "survey-sparrow.get.v3-tickets-id-comments",
+      "kind": "rest_read",
+      "summary": "GET /v3/tickets/:id/comments",
+      "description": "ticket comment sub-resource (a nested thread on a single ticket), a distinct sub-collection this pass does not model as its own stream/write pair; the tickets stream/writes cover the ticket record itself",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/tickets/:id/comments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "survey-sparrow.post.v3-tickets-id-comments",
+      "kind": "rest_write",
+      "summary": "POST /v3/tickets/:id/comments",
+      "description": "ticket comment sub-resource (a nested thread on a single ticket), a distinct sub-collection this pass does not model as its own stream/write pair; the tickets stream/writes cover the ticket record itself",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/tickets/:id/comments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "survey-sparrow.post.v3-tickets-batch",
+      "kind": "rest_write",
+      "summary": "POST /v3/tickets/batch",
+      "description": "asynchronous batch-ticket-creation job submission and its status-polling companion endpoint -- a bulk-import workflow distinct from the single-record create_ticket this bundle models",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/tickets/batch",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "survey-sparrow.get.v3-tickets-batch-status-token",
+      "kind": "rest_read",
+      "summary": "GET /v3/tickets/batch/status/:token",
+      "description": "asynchronous batch-ticket-creation job submission and its status-polling companion endpoint -- a bulk-import workflow distinct from the single-record create_ticket this bundle models",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/tickets/batch/status/:token",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "survey-sparrow.post.v3-translation",
+      "kind": "rest_write",
+      "summary": "POST /v3/translation",
+      "description": "per-survey/per-language translation content CRUD (import/export/update translated survey text), a specialized localization workflow with its own large body-shape (translation key/value maps) distinct from the general catalog resources this connector targets",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/translation",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "survey-sparrow.put.v3-translation",
+      "kind": "rest_write",
+      "summary": "PUT /v3/translation",
+      "description": "per-survey/per-language translation content CRUD (import/export/update translated survey text), a specialized localization workflow with its own large body-shape (translation key/value maps) distinct from the general catalog resources this connector targets",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v3/translation",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "survey-sparrow.delete.v3-translation",
+      "kind": "rest_write",
+      "summary": "DELETE /v3/translation",
+      "description": "per-survey/per-language translation content CRUD (import/export/update translated survey text), a specialized localization workflow with its own large body-shape (translation key/value maps) distinct from the general catalog resources this connector targets",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v3/translation",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "survey-sparrow.get.v3-translation-export",
+      "kind": "rest_read",
+      "summary": "GET /v3/translation/export",
+      "description": "per-survey/per-language translation content CRUD (import/export/update translated survey text), a specialized localization workflow with its own large body-shape (translation key/value maps) distinct from the general catalog resources this connector targets",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/translation/export",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "survey-sparrow.get.v3-users-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/users/:id",
+      "description": "single-record GET returning the same fields the users list stream already reads",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/users/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "survey-sparrow.post.v3-variables-batch",
+      "kind": "rest_write",
+      "summary": "POST /v3/variables/batch",
+      "description": "bulk multi-record variable creation in one request (an array-of-variables body), a batch-import shape distinct from the single-record create_variable this bundle models",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/variables/batch",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

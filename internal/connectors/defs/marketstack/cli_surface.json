@@ -1,0 +1,167 @@
+{
+  "tagline": "Run Marketstack's declared streams and reverse-ETL actions.",
+  "usage": "pm marketstack \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "api get v1 currencies",
+        "api get v1 intraday",
+        "api get v1 timezones",
+        "dividends list",
+        "eod list",
+        "exchanges list",
+        "splits list",
+        "tickers list"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "api get v1 currencies",
+      "summary": "Documented GET /v1/currencies (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.apilayer.com/marketstack/docs/api-endpoints-v1",
+      "examples": [
+        "pm marketstack api get v1 currencies --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/currencies"
+        }
+      ],
+      "operation": "marketstack.get.v1-currencies",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 intraday",
+      "summary": "Documented GET /v1/intraday (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.apilayer.com/marketstack/docs/api-endpoints-v1",
+      "examples": [
+        "pm marketstack api get v1 intraday --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/intraday"
+        }
+      ],
+      "operation": "marketstack.get.v1-intraday",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 timezones",
+      "summary": "Documented GET /v1/timezones (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.apilayer.com/marketstack/docs/api-endpoints-v1",
+      "examples": [
+        "pm marketstack api get v1 timezones --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/timezones"
+        }
+      ],
+      "operation": "marketstack.get.v1-timezones",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "dividends list",
+      "summary": "Run the dividends ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "dividends",
+      "source_url": "https://docs.apilayer.com/marketstack/docs/api-endpoints-v1",
+      "examples": [
+        "pm marketstack dividends list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/dividends"
+        }
+      ]
+    },
+    {
+      "path": "eod list",
+      "summary": "Run the eod ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "eod",
+      "source_url": "https://docs.apilayer.com/marketstack/docs/api-endpoints-v1",
+      "examples": [
+        "pm marketstack eod list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/eod"
+        }
+      ]
+    },
+    {
+      "path": "exchanges list",
+      "summary": "Run the exchanges ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "exchanges",
+      "source_url": "https://docs.apilayer.com/marketstack/docs/api-endpoints-v1",
+      "examples": [
+        "pm marketstack exchanges list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/exchanges"
+        }
+      ]
+    },
+    {
+      "path": "splits list",
+      "summary": "Run the splits ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "splits",
+      "source_url": "https://docs.apilayer.com/marketstack/docs/api-endpoints-v1",
+      "examples": [
+        "pm marketstack splits list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/splits"
+        }
+      ]
+    },
+    {
+      "path": "tickers list",
+      "summary": "Run the tickers ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tickers",
+      "source_url": "https://docs.apilayer.com/marketstack/docs/api-endpoints-v1",
+      "examples": [
+        "pm marketstack tickers list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/tickers"
+        }
+      ]
+    }
+  ]
+}

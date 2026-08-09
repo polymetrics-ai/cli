@@ -1,0 +1,3440 @@
+{
+  "operations": [
+    {
+      "id": "svix.get.api-v1-app-stats-count-active",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/app/stats/count-active",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/app/stats/count-active",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.get.api-v1-app-app-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/app/{app_id}",
+      "description": "single-application detail; identical record shape to the applications list stream's per-item object, already covered by that stream",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/app/{app_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.patch.api-v1-app-app-id",
+      "kind": "rest_write",
+      "summary": "PATCH /api/v1/app/{app_id}",
+      "description": "partial-update variant of the same application resource update_application (PUT) already covers; this dialect's write actions send a full-body replace, which is a strict superset of what a PATCH caller needs",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/v1/app/{app_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.patch.api-v1-app-app-id-alert-email",
+      "kind": "rest_write",
+      "summary": "PATCH /api/v1/app/{app_id}/alert-email",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/v1/app/{app_id}/alert-email",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.get.api-v1-app-app-id-attempt-endpoint-endpoint-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/app/{app_id}/attempt/endpoint/{endpoint_id}",
+      "description": "message-attempt log for one endpoint, nested two levels deep (app_id then endpoint_id) -- the engine's fan_out dialect resolves exactly one level of parent ids per stream; a second nested fan-out level is not expressible in Tier 1",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/app/{app_id}/attempt/endpoint/{endpoint_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.get.api-v1-app-app-id-attempt-endpoint-endpoint-id-count",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/app/{app_id}/attempt/endpoint/{endpoint_id}/count",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/app/{app_id}/attempt/endpoint/{endpoint_id}/count",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.get.api-v1-app-app-id-attempt-msg-msg-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/app/{app_id}/attempt/msg/{msg_id}",
+      "description": "message-attempt log for one message, reachable via the endpoint-nested attempt listing above; same nested-fan-out gap, and the underlying attempt records are the same shape either way",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/app/{app_id}/attempt/msg/{msg_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.post.api-v1-app-app-id-auto-config",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/app/{app_id}/auto-config",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/app/{app_id}/auto-config",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.get.api-v1-app-app-id-endpoint-endpoint-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/app/{app_id}/endpoint/{endpoint_id}",
+      "description": "single-endpoint detail; identical record shape to the endpoints list stream's per-item object, already covered by that stream",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/app/{app_id}/endpoint/{endpoint_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.patch.api-v1-app-app-id-endpoint-endpoint-id",
+      "kind": "rest_write",
+      "summary": "PATCH /api/v1/app/{app_id}/endpoint/{endpoint_id}",
+      "description": "partial-update variant of the same endpoint resource update_endpoint (PUT) already covers",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/v1/app/{app_id}/endpoint/{endpoint_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.get.api-v1-app-app-id-endpoint-endpoint-id-auto-config",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/app/{app_id}/endpoint/{endpoint_id}/auto-config",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/app/{app_id}/endpoint/{endpoint_id}/auto-config",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.put.api-v1-app-app-id-endpoint-endpoint-id-auto-config",
+      "kind": "rest_write",
+      "summary": "PUT /api/v1/app/{app_id}/endpoint/{endpoint_id}/auto-config",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v1/app/{app_id}/endpoint/{endpoint_id}/auto-config",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.post.api-v1-app-app-id-endpoint-endpoint-id-auto-config-rotate",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/app/{app_id}/endpoint/{endpoint_id}/auto-config/rotate",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/app/{app_id}/endpoint/{endpoint_id}/auto-config/rotate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.post.api-v1-app-app-id-endpoint-endpoint-id-bulk-replay",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/app/{app_id}/endpoint/{endpoint_id}/bulk-replay",
+      "description": "asynchronous bulk message-redelivery job kickoff for a date range, not a synchronous single-record create/update/delete this dialect's write model expresses",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/app/{app_id}/endpoint/{endpoint_id}/bulk-replay",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.get.api-v1-app-app-id-endpoint-endpoint-id-ca",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/app/{app_id}/endpoint/{endpoint_id}/ca",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/app/{app_id}/endpoint/{endpoint_id}/ca",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.put.api-v1-app-app-id-endpoint-endpoint-id-ca",
+      "kind": "rest_write",
+      "summary": "PUT /api/v1/app/{app_id}/endpoint/{endpoint_id}/ca",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v1/app/{app_id}/endpoint/{endpoint_id}/ca",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.post.api-v1-app-app-id-endpoint-endpoint-id-cancel-msgs",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/app/{app_id}/endpoint/{endpoint_id}/cancel-msgs",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/app/{app_id}/endpoint/{endpoint_id}/cancel-msgs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.get.api-v1-app-app-id-endpoint-endpoint-id-connector",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/app/{app_id}/endpoint/{endpoint_id}/connector",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/app/{app_id}/endpoint/{endpoint_id}/connector",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.put.api-v1-app-app-id-endpoint-endpoint-id-connector-oauth-hubspot",
+      "kind": "rest_write",
+      "summary": "PUT /api/v1/app/{app_id}/endpoint/{endpoint_id}/connector/oauth/hubspot",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v1/app/{app_id}/endpoint/{endpoint_id}/connector/oauth/hubspot",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.get.api-v1-app-app-id-endpoint-endpoint-id-headers",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/app/{app_id}/endpoint/{endpoint_id}/headers",
+      "description": "custom HTTP header sub-object of the endpoint resource, embedded in/updatable alongside the endpoint itself; not modeled as a separate list-shaped read stream",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/app/{app_id}/endpoint/{endpoint_id}/headers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.put.api-v1-app-app-id-endpoint-endpoint-id-headers",
+      "kind": "rest_write",
+      "summary": "PUT /api/v1/app/{app_id}/endpoint/{endpoint_id}/headers",
+      "description": "sets custom outgoing HTTP headers (may include sensitive values, e.g. downstream auth tokens) on an endpoint; a narrow sub-resource mutation better scoped to a dedicated future action than folded into update_endpoint's general-purpose body",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v1/app/{app_id}/endpoint/{endpoint_id}/headers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.patch.api-v1-app-app-id-endpoint-endpoint-id-headers",
+      "kind": "rest_write",
+      "summary": "PATCH /api/v1/app/{app_id}/endpoint/{endpoint_id}/headers",
+      "description": "same custom-header sub-resource as the PUT variant above",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/v1/app/{app_id}/endpoint/{endpoint_id}/headers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.get.api-v1-app-app-id-endpoint-endpoint-id-msg",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/app/{app_id}/endpoint/{endpoint_id}/msg",
+      "description": "attempted-messages-for-one-endpoint list, nested two levels deep (app_id then endpoint_id) -- the same nested-fan-out gap as the attempt log above",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/app/{app_id}/endpoint/{endpoint_id}/msg",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.post.api-v1-app-app-id-endpoint-endpoint-id-msg-test-attempt",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/app/{app_id}/endpoint/{endpoint_id}/msg/test-attempt",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/app/{app_id}/endpoint/{endpoint_id}/msg/test-attempt",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.get.api-v1-app-app-id-endpoint-endpoint-id-mtls",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/app/{app_id}/endpoint/{endpoint_id}/mtls",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/app/{app_id}/endpoint/{endpoint_id}/mtls",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.put.api-v1-app-app-id-endpoint-endpoint-id-mtls",
+      "kind": "rest_write",
+      "summary": "PUT /api/v1/app/{app_id}/endpoint/{endpoint_id}/mtls",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v1/app/{app_id}/endpoint/{endpoint_id}/mtls",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.delete.api-v1-app-app-id-endpoint-endpoint-id-mtls",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v1/app/{app_id}/endpoint/{endpoint_id}/mtls",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v1/app/{app_id}/endpoint/{endpoint_id}/mtls",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.get.api-v1-app-app-id-endpoint-endpoint-id-mtls-config",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/app/{app_id}/endpoint/{endpoint_id}/mtls-config",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/app/{app_id}/endpoint/{endpoint_id}/mtls-config",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.get.api-v1-app-app-id-endpoint-endpoint-id-oauth",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/app/{app_id}/endpoint/{endpoint_id}/oauth",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/app/{app_id}/endpoint/{endpoint_id}/oauth",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.put.api-v1-app-app-id-endpoint-endpoint-id-oauth",
+      "kind": "rest_write",
+      "summary": "PUT /api/v1/app/{app_id}/endpoint/{endpoint_id}/oauth",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v1/app/{app_id}/endpoint/{endpoint_id}/oauth",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.delete.api-v1-app-app-id-endpoint-endpoint-id-oauth",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v1/app/{app_id}/endpoint/{endpoint_id}/oauth",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v1/app/{app_id}/endpoint/{endpoint_id}/oauth",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.get.api-v1-app-app-id-endpoint-endpoint-id-oauth-config",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/app/{app_id}/endpoint/{endpoint_id}/oauth-config",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/app/{app_id}/endpoint/{endpoint_id}/oauth-config",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.get.api-v1-app-app-id-endpoint-endpoint-id-rate-limit-status",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/app/{app_id}/endpoint/{endpoint_id}/rate-limit-status",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/app/{app_id}/endpoint/{endpoint_id}/rate-limit-status",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.post.api-v1-app-app-id-endpoint-endpoint-id-recover",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/app/{app_id}/endpoint/{endpoint_id}/recover",
+      "description": "asynchronous bulk redelivery-of-failed-messages job kickoff, not a synchronous record mutation",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/app/{app_id}/endpoint/{endpoint_id}/recover",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.post.api-v1-app-app-id-endpoint-endpoint-id-replay-missing",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/app/{app_id}/endpoint/{endpoint_id}/replay-missing",
+      "description": "asynchronous bulk gap-fill redelivery job kickoff, not a synchronous record mutation",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/app/{app_id}/endpoint/{endpoint_id}/replay-missing",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.get.api-v1-app-app-id-endpoint-endpoint-id-secret",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/app/{app_id}/endpoint/{endpoint_id}/secret",
+      "description": "returns the endpoint's HMAC signing secret; a credential-shaped value that should never flow through an ordinary read stream into destination-warehouse record data",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/app/{app_id}/endpoint/{endpoint_id}/secret",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.post.api-v1-app-app-id-endpoint-endpoint-id-secret-rotate",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/app/{app_id}/endpoint/{endpoint_id}/secret/rotate",
+      "description": "rotates the endpoint's HMAC signing secret; a credential-lifecycle action, not an ordinary data mutation, and immediately invalidates the previous secret for every downstream signature verifier",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/app/{app_id}/endpoint/{endpoint_id}/secret/rotate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.post.api-v1-app-app-id-endpoint-endpoint-id-send-example",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/app/{app_id}/endpoint/{endpoint_id}/send-example",
+      "description": "sends a synthetic test webhook event for a chosen event type, not a real business message; a debugging aid, not a data mutation",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the provider webhook-URL mutation has no dedicated security-reviewed execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/app/{app_id}/endpoint/{endpoint_id}/send-example",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.get.api-v1-app-app-id-endpoint-endpoint-id-stats",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/app/{app_id}/endpoint/{endpoint_id}/stats",
+      "description": "delivery-success/failure count aggregate over a time window, not a syncable object list",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/app/{app_id}/endpoint/{endpoint_id}/stats",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.get.api-v1-app-app-id-endpoint-endpoint-id-transformation",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/app/{app_id}/endpoint/{endpoint_id}/transformation",
+      "description": "per-endpoint inline payload-transformation JS sub-object, embedded in/updatable via the endpoint resource; not modeled as a separate read stream",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/app/{app_id}/endpoint/{endpoint_id}/transformation",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.patch.api-v1-app-app-id-endpoint-endpoint-id-transformation",
+      "kind": "rest_write",
+      "summary": "PATCH /api/v1/app/{app_id}/endpoint/{endpoint_id}/transformation",
+      "description": "sets the per-endpoint inline transformation JS; a narrow sub-resource mutation better scoped to a dedicated future action",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/v1/app/{app_id}/endpoint/{endpoint_id}/transformation",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.post.api-v1-app-app-id-endpoint-endpoint-id-transformation-simulate",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/app/{app_id}/endpoint/{endpoint_id}/transformation/simulate",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/app/{app_id}/endpoint/{endpoint_id}/transformation/simulate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.get.api-v1-app-app-id-events",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/app/{app_id}/events",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/app/{app_id}/events",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.post.api-v1-app-app-id-inbound-rotate-url",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/app/{app_id}/inbound/rotate-url",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/app/{app_id}/inbound/rotate-url",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.get.api-v1-app-app-id-integration",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/app/{app_id}/integration",
+      "description": "app-portal-access integration key management; a portal/auth-adjacent feature, not core webhook-sending data, out of scope for this pass",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/app/{app_id}/integration",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.post.api-v1-app-app-id-integration",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/app/{app_id}/integration",
+      "description": "same app-portal integration feature as the list endpoint above",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/app/{app_id}/integration",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.get.api-v1-app-app-id-integration-integ-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/app/{app_id}/integration/{integ_id}",
+      "description": "same app-portal integration feature",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/app/{app_id}/integration/{integ_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.put.api-v1-app-app-id-integration-integ-id",
+      "kind": "rest_write",
+      "summary": "PUT /api/v1/app/{app_id}/integration/{integ_id}",
+      "description": "same app-portal integration feature",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v1/app/{app_id}/integration/{integ_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.delete.api-v1-app-app-id-integration-integ-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v1/app/{app_id}/integration/{integ_id}",
+      "description": "same app-portal integration feature",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v1/app/{app_id}/integration/{integ_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.get.api-v1-app-app-id-integration-integ-id-key",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/app/{app_id}/integration/{integ_id}/key",
+      "description": "returns an app-portal integration's secret key; credential-shaped value",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/app/{app_id}/integration/{integ_id}/key",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.post.api-v1-app-app-id-integration-integ-id-key-rotate",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/app/{app_id}/integration/{integ_id}/key/rotate",
+      "description": "rotates an app-portal integration's secret key; credential-lifecycle action",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/app/{app_id}/integration/{integ_id}/key/rotate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.post.api-v1-app-app-id-msg-expunge-all-contents",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/app/{app_id}/msg/expunge-all-contents",
+      "description": "irreversibly scrubs the persisted payload content of every message on the application (GDPR-style erasure), never a reverse-ETL-safe mutation",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/app/{app_id}/msg/expunge-all-contents",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.post.api-v1-app-app-id-msg-precheck-active",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/app/{app_id}/msg/precheck/active",
+      "description": "dry-run check of whether a payload would match any active endpoint filter, not a data read or mutation",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/app/{app_id}/msg/precheck/active",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.post.api-v1-app-app-id-msg-search",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/app/{app_id}/msg/search",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/app/{app_id}/msg/search",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.get.api-v1-app-app-id-msg-msg-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/app/{app_id}/msg/{msg_id}",
+      "description": "single-message detail; identical record shape to the messages list stream's per-item object, already covered by that stream",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/app/{app_id}/msg/{msg_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.get.api-v1-app-app-id-msg-msg-id-attempt-attempt-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/app/{app_id}/msg/{msg_id}/attempt/{attempt_id}",
+      "description": "single delivery-attempt detail, nested three levels deep (app_id, msg_id, attempt_id); same nested-fan-out gap as the attempt log endpoints above",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/app/{app_id}/msg/{msg_id}/attempt/{attempt_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.delete.api-v1-app-app-id-msg-msg-id-attempt-attempt-id-content",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v1/app/{app_id}/msg/{msg_id}/attempt/{attempt_id}/content",
+      "description": "irreversibly scrubs one delivery attempt's persisted response content; a targeted erasure action, not a reverse-ETL-safe mutation",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v1/app/{app_id}/msg/{msg_id}/attempt/{attempt_id}/content",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.get.api-v1-app-app-id-msg-msg-id-attempt-attempt-id-headers",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/app/{app_id}/msg/{msg_id}/attempt/{attempt_id}/headers",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/app/{app_id}/msg/{msg_id}/attempt/{attempt_id}/headers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.delete.api-v1-app-app-id-msg-msg-id-content",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v1/app/{app_id}/msg/{msg_id}/content",
+      "description": "irreversibly scrubs one message's persisted payload content; a targeted erasure action, not a reverse-ETL-safe mutation",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v1/app/{app_id}/msg/{msg_id}/content",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.get.api-v1-app-app-id-msg-msg-id-endpoint",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/app/{app_id}/msg/{msg_id}/endpoint",
+      "description": "per-endpoint delivery status for one message, nested two levels deep (app_id then msg_id); same nested-fan-out gap as the attempt log endpoints",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/app/{app_id}/msg/{msg_id}/endpoint",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.post.api-v1-app-app-id-msg-msg-id-endpoint-endpoint-id-resend",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/app/{app_id}/msg/{msg_id}/endpoint/{endpoint_id}/resend",
+      "description": "manually re-triggers delivery of one already-sent message to one endpoint; an operational retry action, not an ordinary data mutation",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/app/{app_id}/msg/{msg_id}/endpoint/{endpoint_id}/resend",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.get.api-v1-app-app-id-msg-msg-id-raw",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/app/{app_id}/msg/{msg_id}/raw",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/app/{app_id}/msg/{msg_id}/raw",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.get.api-v1-app-app-id-poller-sink-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/app/{app_id}/poller/{sink_id}",
+      "description": "Poller/Sink beta product surface, a distinct, separately-versioned feature line from classic outgoing webhooks; out of scope for this pass",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/app/{app_id}/poller/{sink_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.get.api-v1-app-app-id-poller-sink-id-consumer-consumer-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/app/{app_id}/poller/{sink_id}/consumer/{consumer_id}",
+      "description": "Poller/Sink beta product surface",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/app/{app_id}/poller/{sink_id}/consumer/{consumer_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.post.api-v1-app-app-id-poller-sink-id-consumer-consumer-id-seek",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/app/{app_id}/poller/{sink_id}/consumer/{consumer_id}/seek",
+      "description": "Poller/Sink beta product surface",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/app/{app_id}/poller/{sink_id}/consumer/{consumer_id}/seek",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.get.api-v1-app-app-id-polling-endpoint-sink-id-consumer-consumer-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/app/{app_id}/polling-endpoint/{sink_id}/consumer/{consumer_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/app/{app_id}/polling-endpoint/{sink_id}/consumer/{consumer_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.post.api-v1-app-app-id-polling-endpoint-sink-id-consumer-consumer-id-commit",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/app/{app_id}/polling-endpoint/{sink_id}/consumer/{consumer_id}/commit",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/app/{app_id}/polling-endpoint/{sink_id}/consumer/{consumer_id}/commit",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.get.api-v1-app-app-id-sink",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/app/{app_id}/sink",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/app/{app_id}/sink",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.post.api-v1-app-app-id-sink",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/app/{app_id}/sink",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/app/{app_id}/sink",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.get.api-v1-app-app-id-sink-sink-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/app/{app_id}/sink/{sink_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/app/{app_id}/sink/{sink_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.get.api-v1-app-app-id-stats-attempts",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/app/{app_id}/stats/attempts",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/app/{app_id}/stats/attempts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.get.api-v1-app-app-id-stream-sink",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/app/{app_id}/stream/sink",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/app/{app_id}/stream/sink",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.post.api-v1-app-app-id-stream-sink",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/app/{app_id}/stream/sink",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/app/{app_id}/stream/sink",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.get.api-v1-app-app-id-stream-sink-sink-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/app/{app_id}/stream/sink/{sink_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/app/{app_id}/stream/sink/{sink_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.put.api-v1-app-app-id-stream-sink-sink-id",
+      "kind": "rest_write",
+      "summary": "PUT /api/v1/app/{app_id}/stream/sink/{sink_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v1/app/{app_id}/stream/sink/{sink_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.patch.api-v1-app-app-id-stream-sink-sink-id",
+      "kind": "rest_write",
+      "summary": "PATCH /api/v1/app/{app_id}/stream/sink/{sink_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/v1/app/{app_id}/stream/sink/{sink_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.delete.api-v1-app-app-id-stream-sink-sink-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v1/app/{app_id}/stream/sink/{sink_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v1/app/{app_id}/stream/sink/{sink_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.post.api-v1-app-app-id-stream-sink-sink-id-force-retry",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/app/{app_id}/stream/sink/{sink_id}/force-retry",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/app/{app_id}/stream/sink/{sink_id}/force-retry",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.get.api-v1-app-app-id-stream-sink-sink-id-headers",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/app/{app_id}/stream/sink/{sink_id}/headers",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/app/{app_id}/stream/sink/{sink_id}/headers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.patch.api-v1-app-app-id-stream-sink-sink-id-headers",
+      "kind": "rest_write",
+      "summary": "PATCH /api/v1/app/{app_id}/stream/sink/{sink_id}/headers",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/v1/app/{app_id}/stream/sink/{sink_id}/headers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.get.api-v1-app-app-id-stream-sink-sink-id-last-acked-event",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/app/{app_id}/stream/sink/{sink_id}/last-acked-event",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/app/{app_id}/stream/sink/{sink_id}/last-acked-event",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.get.api-v1-app-app-id-stream-sink-sink-id-next-event",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/app/{app_id}/stream/sink/{sink_id}/next-event",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/app/{app_id}/stream/sink/{sink_id}/next-event",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.get.api-v1-app-app-id-stream-sink-sink-id-secret",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/app/{app_id}/stream/sink/{sink_id}/secret",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/app/{app_id}/stream/sink/{sink_id}/secret",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.post.api-v1-app-app-id-stream-sink-sink-id-secret-rotate",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/app/{app_id}/stream/sink/{sink_id}/secret/rotate",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/app/{app_id}/stream/sink/{sink_id}/secret/rotate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.post.api-v1-app-app-id-stream-sink-sink-id-skip",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/app/{app_id}/stream/sink/{sink_id}/skip",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/app/{app_id}/stream/sink/{sink_id}/skip",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.get.api-v1-app-app-id-stream-sink-sink-id-transformation",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/app/{app_id}/stream/sink/{sink_id}/transformation",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/app/{app_id}/stream/sink/{sink_id}/transformation",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.patch.api-v1-app-app-id-stream-sink-sink-id-transformation",
+      "kind": "rest_write",
+      "summary": "PATCH /api/v1/app/{app_id}/stream/sink/{sink_id}/transformation",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/v1/app/{app_id}/stream/sink/{sink_id}/transformation",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.post.api-v1-auth-app-portal-access-app-id",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/auth/app-portal-access/{app_id}",
+      "description": "mints a scoped dashboard-portal access token; a session/auth action, not a data operation",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/auth/app-portal-access/{app_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.post.api-v1-auth-app-app-id-create-message-token",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/auth/app/{app_id}/create-message-token",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/auth/app/{app_id}/create-message-token",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.post.api-v1-auth-app-app-id-expire-all",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/auth/app/{app_id}/expire-all",
+      "description": "expires every outstanding app-portal access token for the application; a session-revocation admin action",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/auth/app/{app_id}/expire-all",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.get.api-v1-auth-app-app-id-mcp-token",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/auth/app/{app_id}/mcp-token",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/auth/app/{app_id}/mcp-token",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.post.api-v1-auth-app-app-id-mcp-token",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/auth/app/{app_id}/mcp-token",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/auth/app/{app_id}/mcp-token",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.delete.api-v1-auth-app-app-id-mcp-token-token-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v1/auth/app/{app_id}/mcp-token/{token_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v1/auth/app/{app_id}/mcp-token/{token_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.get.api-v1-auth-app-app-id-poller-endpoint-id-token",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/auth/app/{app_id}/poller/{endpoint_id}/token",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/auth/app/{app_id}/poller/{endpoint_id}/token",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.post.api-v1-auth-app-app-id-poller-endpoint-id-token-rotate",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/auth/app/{app_id}/poller/{endpoint_id}/token/rotate",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/auth/app/{app_id}/poller/{endpoint_id}/token/rotate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.post.api-v1-auth-logout",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/auth/logout",
+      "description": "ends the caller's own dashboard session; a session action, never a data operation",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/auth/logout",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.post.api-v1-auth-one-time-token",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/auth/one-time-token",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/auth/one-time-token",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.get.api-v1-auth-org-group-admin-token",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/auth/org-group-admin-token",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/auth/org-group-admin-token",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.post.api-v1-auth-org-group-admin-token",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/auth/org-group-admin-token",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/auth/org-group-admin-token",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.put.api-v1-auth-org-group-admin-token-key-id",
+      "kind": "rest_write",
+      "summary": "PUT /api/v1/auth/org-group-admin-token/{key_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v1/auth/org-group-admin-token/{key_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.post.api-v1-auth-org-group-admin-token-key-id-expire",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/auth/org-group-admin-token/{key_id}/expire",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/auth/org-group-admin-token/{key_id}/expire",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.post.api-v1-auth-stream-logout",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/auth/stream-logout",
+      "description": "Stream beta product's session logout; out of scope (non_data_endpoint takes precedence -- it is a session action regardless of product surface)",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/auth/stream-logout",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.post.api-v1-auth-stream-portal-access-stream-id",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/auth/stream-portal-access/{stream_id}",
+      "description": "Stream beta product surface, a distinct, separately-versioned feature line; out of scope for this pass",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/auth/stream-portal-access/{stream_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.post.api-v1-auth-stream-stream-id-expire-all",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/auth/stream/{stream_id}/expire-all",
+      "description": "Stream beta product surface",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/auth/stream/{stream_id}/expire-all",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.get.api-v1-auth-stream-stream-id-sink-sink-id-poller-token",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/auth/stream/{stream_id}/sink/{sink_id}/poller/token",
+      "description": "Stream beta product surface",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/auth/stream/{stream_id}/sink/{sink_id}/poller/token",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.post.api-v1-auth-stream-stream-id-sink-sink-id-poller-token-rotate",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/auth/stream/{stream_id}/sink/{sink_id}/poller/token/rotate",
+      "description": "Stream beta product surface",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/auth/stream/{stream_id}/sink/{sink_id}/poller/token/rotate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.get.api-v1-auth-whoami",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/auth/whoami",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/auth/whoami",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.get.api-v1-background-task-task-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/background-task/{task_id}",
+      "description": "single-background-task detail; identical record shape to the background_tasks list stream's per-item object, already covered by that stream",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/background-task/{task_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.post.api-v1-connector-oauth-discord",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/connector/oauth/discord",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/connector/oauth/discord",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.post.api-v1-connector-oauth-hubspot",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/connector/oauth/hubspot",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/connector/oauth/hubspot",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.post.api-v1-connector-oauth-slack",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/connector/oauth/slack",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/connector/oauth/slack",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.post.api-v1-connector-simulate",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/connector/simulate",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/connector/simulate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.get.api-v1-connector-connector-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/connector/{connector_id}",
+      "description": "single-connector detail; identical record shape to the connectors list stream's per-item object, already covered by that stream",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/connector/{connector_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.patch.api-v1-connector-connector-id",
+      "kind": "rest_write",
+      "summary": "PATCH /api/v1/connector/{connector_id}",
+      "description": "partial-update variant of the same connector resource update_connector (PUT) already covers",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/v1/connector/{connector_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.get.api-v1-connector-connector-id-options",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/connector/{connector_id}/options",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/connector/{connector_id}/options",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.put.api-v1-connector-connector-id-options",
+      "kind": "rest_write",
+      "summary": "PUT /api/v1/connector/{connector_id}/options",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v1/connector/{connector_id}/options",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.post.api-v1-environment-export",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/environment/export",
+      "description": "exports the entire environment (all apps/endpoints/event types/connectors) as a single opaque export-file blob, not a per-record data operation",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/environment/export",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.post.api-v1-environment-import",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/environment/import",
+      "description": "imports an opaque environment export-file blob, replacing/merging configuration in bulk; not a per-record data operation",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/environment/import",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.get.api-v1-environment-settings",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/environment/settings",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/environment/settings",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.post.api-v1-event-type-export-openapi",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/event-type/export/openapi",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/event-type/export/openapi",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.post.api-v1-event-type-import-openapi",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/event-type/import/openapi",
+      "description": "bulk-generates event type definitions from an uploaded OpenAPI document; a document-processing bulk-import action, not a single-record create this dialect's write model expresses",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/event-type/import/openapi",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.get.api-v1-event-type-event-type-name",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/event-type/{event_type_name}",
+      "description": "single-event-type detail; identical record shape to the event_types list stream's per-item object, already covered by that stream",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/event-type/{event_type_name}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.patch.api-v1-event-type-event-type-name",
+      "kind": "rest_write",
+      "summary": "PATCH /api/v1/event-type/{event_type_name}",
+      "description": "partial-update variant of the same event-type resource update_event_type (PUT) already covers",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/v1/event-type/{event_type_name}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.get.api-v1-event-type-event-type-name-retry-schedule",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/event-type/{event_type_name}/retry-schedule",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/event-type/{event_type_name}/retry-schedule",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.put.api-v1-event-type-event-type-name-retry-schedule",
+      "kind": "rest_write",
+      "summary": "PUT /api/v1/event-type/{event_type_name}/retry-schedule",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v1/event-type/{event_type_name}/retry-schedule",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.get.api-v1-events",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/events",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/events",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.get.api-v1-health",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/health",
+      "description": "service liveness probe, not application data",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/health",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.get.api-v1-management-authentication-env-id-api-token",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/management/authentication/{env_id}/api-token",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/management/authentication/{env_id}/api-token",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.post.api-v1-management-authentication-env-id-api-token",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/management/authentication/{env_id}/api-token",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/management/authentication/{env_id}/api-token",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.get.api-v1-management-authentication-env-id-api-token-key-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/management/authentication/{env_id}/api-token/{key_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/management/authentication/{env_id}/api-token/{key_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.put.api-v1-management-authentication-env-id-api-token-key-id",
+      "kind": "rest_write",
+      "summary": "PUT /api/v1/management/authentication/{env_id}/api-token/{key_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v1/management/authentication/{env_id}/api-token/{key_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.patch.api-v1-management-authentication-env-id-api-token-key-id",
+      "kind": "rest_write",
+      "summary": "PATCH /api/v1/management/authentication/{env_id}/api-token/{key_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/v1/management/authentication/{env_id}/api-token/{key_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.post.api-v1-management-authentication-env-id-api-token-key-id-expire",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/management/authentication/{env_id}/api-token/{key_id}/expire",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/management/authentication/{env_id}/api-token/{key_id}/expire",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.get.api-v1-management-environment",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/management/environment",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/management/environment",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.post.api-v1-management-environment",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/management/environment",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/management/environment",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.get.api-v1-management-environment-settings",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/management/environment-settings",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/management/environment-settings",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.put.api-v1-management-environment-settings",
+      "kind": "rest_write",
+      "summary": "PUT /api/v1/management/environment-settings",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v1/management/environment-settings",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.patch.api-v1-management-environment-settings",
+      "kind": "rest_write",
+      "summary": "PATCH /api/v1/management/environment-settings",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/v1/management/environment-settings",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.get.api-v1-management-environment-settings-customer-otel",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/management/environment-settings/customer-otel",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/management/environment-settings/customer-otel",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.put.api-v1-management-environment-settings-customer-otel",
+      "kind": "rest_write",
+      "summary": "PUT /api/v1/management/environment-settings/customer-otel",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v1/management/environment-settings/customer-otel",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.delete.api-v1-management-environment-settings-customer-otel",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v1/management/environment-settings/customer-otel",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v1/management/environment-settings/customer-otel",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.get.api-v1-management-environment-env-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/management/environment/{env_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/management/environment/{env_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.put.api-v1-management-environment-env-id",
+      "kind": "rest_write",
+      "summary": "PUT /api/v1/management/environment/{env_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v1/management/environment/{env_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.delete.api-v1-management-environment-env-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v1/management/environment/{env_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v1/management/environment/{env_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.post.api-v1-msg-broadcast",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/msg/broadcast",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/msg/broadcast",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.get.api-v1-operational-webhook-endpoint-endpoint-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/operational-webhook/endpoint/{endpoint_id}",
+      "description": "single-operational-webhook-endpoint detail; identical record shape to the operational_webhook_endpoints list stream's per-item object, already covered by that stream",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/operational-webhook/endpoint/{endpoint_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.get.api-v1-operational-webhook-endpoint-endpoint-id-headers",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/operational-webhook/endpoint/{endpoint_id}/headers",
+      "description": "custom HTTP header sub-object of the operational webhook endpoint resource; not modeled as a separate read stream",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/operational-webhook/endpoint/{endpoint_id}/headers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.put.api-v1-operational-webhook-endpoint-endpoint-id-headers",
+      "kind": "rest_write",
+      "summary": "PUT /api/v1/operational-webhook/endpoint/{endpoint_id}/headers",
+      "description": "sets custom outgoing HTTP headers on an operational webhook endpoint; a narrow sub-resource mutation better scoped to a dedicated future action",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the provider webhook-URL mutation has no dedicated security-reviewed execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v1/operational-webhook/endpoint/{endpoint_id}/headers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.get.api-v1-operational-webhook-endpoint-endpoint-id-secret",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/operational-webhook/endpoint/{endpoint_id}/secret",
+      "description": "returns the operational webhook endpoint's HMAC signing secret; a credential-shaped value",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/operational-webhook/endpoint/{endpoint_id}/secret",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.post.api-v1-operational-webhook-endpoint-endpoint-id-secret-rotate",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/operational-webhook/endpoint/{endpoint_id}/secret/rotate",
+      "description": "rotates the operational webhook endpoint's HMAC signing secret; a credential-lifecycle action",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the provider webhook-URL mutation has no dedicated security-reviewed execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/operational-webhook/endpoint/{endpoint_id}/secret/rotate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.get.api-v1-stats-app-app-id-attempt",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/stats/app/{app_id}/attempt",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/stats/app/{app_id}/attempt",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.get.api-v1-stats-endpoint-count",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/stats/endpoint/count",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/stats/endpoint/count",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.post.api-v1-stats-usage-app",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/stats/usage/app",
+      "description": "per-application usage/billing aggregate, not a syncable object list",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/stats/usage/app",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.put.api-v1-stats-usage-event-types",
+      "kind": "rest_write",
+      "summary": "PUT /api/v1/stats/usage/event-types",
+      "description": "event-type usage aggregate configuration, not a syncable object list",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v1/stats/usage/event-types",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.get.api-v1-stream",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/stream",
+      "description": "Stream beta product surface (a newer, separately-versioned event-streaming product alongside classic outgoing webhooks); out of scope for this pass",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/stream",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.post.api-v1-stream",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/stream",
+      "description": "Stream beta product surface",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/stream",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.get.api-v1-stream-event-type",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/stream/event-type",
+      "description": "Stream beta product surface",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/stream/event-type",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.post.api-v1-stream-event-type",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/stream/event-type",
+      "description": "Stream beta product surface",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/stream/event-type",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.get.api-v1-stream-event-type-name",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/stream/event-type/{name}",
+      "description": "Stream beta product surface",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/stream/event-type/{name}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.put.api-v1-stream-event-type-name",
+      "kind": "rest_write",
+      "summary": "PUT /api/v1/stream/event-type/{name}",
+      "description": "Stream beta product surface",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v1/stream/event-type/{name}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.patch.api-v1-stream-event-type-name",
+      "kind": "rest_write",
+      "summary": "PATCH /api/v1/stream/event-type/{name}",
+      "description": "Stream beta product surface",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/v1/stream/event-type/{name}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.delete.api-v1-stream-event-type-name",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v1/stream/event-type/{name}",
+      "description": "Stream beta product surface",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v1/stream/event-type/{name}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.post.api-v1-stream-transformations-simulate",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/stream/transformations/simulate",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/stream/transformations/simulate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.get.api-v1-stream-stream-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/stream/{stream_id}",
+      "description": "Stream beta product surface",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/stream/{stream_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.put.api-v1-stream-stream-id",
+      "kind": "rest_write",
+      "summary": "PUT /api/v1/stream/{stream_id}",
+      "description": "Stream beta product surface",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v1/stream/{stream_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.patch.api-v1-stream-stream-id",
+      "kind": "rest_write",
+      "summary": "PATCH /api/v1/stream/{stream_id}",
+      "description": "Stream beta product surface",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/v1/stream/{stream_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.delete.api-v1-stream-stream-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v1/stream/{stream_id}",
+      "description": "Stream beta product surface",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v1/stream/{stream_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.patch.api-v1-stream-stream-id-alert-email",
+      "kind": "rest_write",
+      "summary": "PATCH /api/v1/stream/{stream_id}/alert-email",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/v1/stream/{stream_id}/alert-email",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.post.api-v1-stream-stream-id-events",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/stream/{stream_id}/events",
+      "description": "Stream beta product surface",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/stream/{stream_id}/events",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.get.api-v1-stream-stream-id-events-latest",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/stream/{stream_id}/events/latest",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/stream/{stream_id}/events/latest",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.get.api-v1-stream-stream-id-sink",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/stream/{stream_id}/sink",
+      "description": "Stream beta product surface",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/stream/{stream_id}/sink",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.post.api-v1-stream-stream-id-sink",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/stream/{stream_id}/sink",
+      "description": "Stream beta product surface",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/stream/{stream_id}/sink",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.get.api-v1-stream-stream-id-sink-sink-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/stream/{stream_id}/sink/{sink_id}",
+      "description": "Stream beta product surface",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/stream/{stream_id}/sink/{sink_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.put.api-v1-stream-stream-id-sink-sink-id",
+      "kind": "rest_write",
+      "summary": "PUT /api/v1/stream/{stream_id}/sink/{sink_id}",
+      "description": "Stream beta product surface",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v1/stream/{stream_id}/sink/{sink_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.patch.api-v1-stream-stream-id-sink-sink-id",
+      "kind": "rest_write",
+      "summary": "PATCH /api/v1/stream/{stream_id}/sink/{sink_id}",
+      "description": "Stream beta product surface",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/v1/stream/{stream_id}/sink/{sink_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.delete.api-v1-stream-stream-id-sink-sink-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v1/stream/{stream_id}/sink/{sink_id}",
+      "description": "Stream beta product surface",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v1/stream/{stream_id}/sink/{sink_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.get.api-v1-stream-stream-id-sink-sink-id-events",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/stream/{stream_id}/sink/{sink_id}/events",
+      "description": "Stream beta product surface",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/stream/{stream_id}/sink/{sink_id}/events",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.post.api-v1-stream-stream-id-sink-sink-id-force-retry",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/stream/{stream_id}/sink/{sink_id}/force-retry",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/stream/{stream_id}/sink/{sink_id}/force-retry",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.get.api-v1-stream-stream-id-sink-sink-id-headers",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/stream/{stream_id}/sink/{sink_id}/headers",
+      "description": "Stream beta product surface",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/stream/{stream_id}/sink/{sink_id}/headers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.patch.api-v1-stream-stream-id-sink-sink-id-headers",
+      "kind": "rest_write",
+      "summary": "PATCH /api/v1/stream/{stream_id}/sink/{sink_id}/headers",
+      "description": "Stream beta product surface",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/v1/stream/{stream_id}/sink/{sink_id}/headers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.get.api-v1-stream-stream-id-sink-sink-id-last-acked-event",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/stream/{stream_id}/sink/{sink_id}/last-acked-event",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/stream/{stream_id}/sink/{sink_id}/last-acked-event",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.get.api-v1-stream-stream-id-sink-sink-id-next-event",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/stream/{stream_id}/sink/{sink_id}/next-event",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/stream/{stream_id}/sink/{sink_id}/next-event",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.get.api-v1-stream-stream-id-sink-sink-id-secret",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/stream/{stream_id}/sink/{sink_id}/secret",
+      "description": "Stream beta product surface",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/stream/{stream_id}/sink/{sink_id}/secret",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.post.api-v1-stream-stream-id-sink-sink-id-secret-rotate",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/stream/{stream_id}/sink/{sink_id}/secret/rotate",
+      "description": "Stream beta product surface",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/stream/{stream_id}/sink/{sink_id}/secret/rotate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.post.api-v1-stream-stream-id-sink-sink-id-skip",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/stream/{stream_id}/sink/{sink_id}/skip",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/stream/{stream_id}/sink/{sink_id}/skip",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.get.api-v1-stream-stream-id-sink-sink-id-transformation",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/stream/{stream_id}/sink/{sink_id}/transformation",
+      "description": "Stream beta product surface",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/stream/{stream_id}/sink/{sink_id}/transformation",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.patch.api-v1-stream-stream-id-sink-sink-id-transformation",
+      "kind": "rest_write",
+      "summary": "PATCH /api/v1/stream/{stream_id}/sink/{sink_id}/transformation",
+      "description": "Stream beta product surface",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/v1/stream/{stream_id}/sink/{sink_id}/transformation",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.get.ingest-api-v1-source",
+      "kind": "rest_read",
+      "summary": "GET /ingest/api/v1/source",
+      "description": "Ingest beta product surface (inbound webhook receiving, the reverse direction of classic outgoing webhooks this bundle covers); a distinct, separately-versioned feature line, out of scope for this pass",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/ingest/api/v1/source",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.post.ingest-api-v1-source",
+      "kind": "rest_write",
+      "summary": "POST /ingest/api/v1/source",
+      "description": "Ingest beta product surface",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/ingest/api/v1/source",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.get.ingest-api-v1-source-source-id",
+      "kind": "rest_read",
+      "summary": "GET /ingest/api/v1/source/{source_id}",
+      "description": "Ingest beta product surface",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/ingest/api/v1/source/{source_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.put.ingest-api-v1-source-source-id",
+      "kind": "rest_write",
+      "summary": "PUT /ingest/api/v1/source/{source_id}",
+      "description": "Ingest beta product surface",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/ingest/api/v1/source/{source_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.patch.ingest-api-v1-source-source-id",
+      "kind": "rest_write",
+      "summary": "PATCH /ingest/api/v1/source/{source_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/ingest/api/v1/source/{source_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.delete.ingest-api-v1-source-source-id",
+      "kind": "rest_write",
+      "summary": "DELETE /ingest/api/v1/source/{source_id}",
+      "description": "Ingest beta product surface",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/ingest/api/v1/source/{source_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.post.ingest-api-v1-source-source-id-dashboard",
+      "kind": "rest_write",
+      "summary": "POST /ingest/api/v1/source/{source_id}/dashboard",
+      "description": "Ingest beta product surface",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/ingest/api/v1/source/{source_id}/dashboard",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.get.ingest-api-v1-source-source-id-endpoint",
+      "kind": "rest_read",
+      "summary": "GET /ingest/api/v1/source/{source_id}/endpoint",
+      "description": "Ingest beta product surface",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/ingest/api/v1/source/{source_id}/endpoint",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.post.ingest-api-v1-source-source-id-endpoint",
+      "kind": "rest_write",
+      "summary": "POST /ingest/api/v1/source/{source_id}/endpoint",
+      "description": "Ingest beta product surface",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/ingest/api/v1/source/{source_id}/endpoint",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.get.ingest-api-v1-source-source-id-endpoint-endpoint-id",
+      "kind": "rest_read",
+      "summary": "GET /ingest/api/v1/source/{source_id}/endpoint/{endpoint_id}",
+      "description": "Ingest beta product surface",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/ingest/api/v1/source/{source_id}/endpoint/{endpoint_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.put.ingest-api-v1-source-source-id-endpoint-endpoint-id",
+      "kind": "rest_write",
+      "summary": "PUT /ingest/api/v1/source/{source_id}/endpoint/{endpoint_id}",
+      "description": "Ingest beta product surface",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/ingest/api/v1/source/{source_id}/endpoint/{endpoint_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.delete.ingest-api-v1-source-source-id-endpoint-endpoint-id",
+      "kind": "rest_write",
+      "summary": "DELETE /ingest/api/v1/source/{source_id}/endpoint/{endpoint_id}",
+      "description": "Ingest beta product surface",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/ingest/api/v1/source/{source_id}/endpoint/{endpoint_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.get.ingest-api-v1-source-source-id-endpoint-endpoint-id-headers",
+      "kind": "rest_read",
+      "summary": "GET /ingest/api/v1/source/{source_id}/endpoint/{endpoint_id}/headers",
+      "description": "Ingest beta product surface",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/ingest/api/v1/source/{source_id}/endpoint/{endpoint_id}/headers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.put.ingest-api-v1-source-source-id-endpoint-endpoint-id-headers",
+      "kind": "rest_write",
+      "summary": "PUT /ingest/api/v1/source/{source_id}/endpoint/{endpoint_id}/headers",
+      "description": "Ingest beta product surface",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/ingest/api/v1/source/{source_id}/endpoint/{endpoint_id}/headers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.get.ingest-api-v1-source-source-id-endpoint-endpoint-id-secret",
+      "kind": "rest_read",
+      "summary": "GET /ingest/api/v1/source/{source_id}/endpoint/{endpoint_id}/secret",
+      "description": "Ingest beta product surface",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/ingest/api/v1/source/{source_id}/endpoint/{endpoint_id}/secret",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.post.ingest-api-v1-source-source-id-endpoint-endpoint-id-secret-rotate",
+      "kind": "rest_write",
+      "summary": "POST /ingest/api/v1/source/{source_id}/endpoint/{endpoint_id}/secret/rotate",
+      "description": "Ingest beta product surface",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/ingest/api/v1/source/{source_id}/endpoint/{endpoint_id}/secret/rotate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.get.ingest-api-v1-source-source-id-endpoint-endpoint-id-transformation",
+      "kind": "rest_read",
+      "summary": "GET /ingest/api/v1/source/{source_id}/endpoint/{endpoint_id}/transformation",
+      "description": "Ingest beta product surface",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/ingest/api/v1/source/{source_id}/endpoint/{endpoint_id}/transformation",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.patch.ingest-api-v1-source-source-id-endpoint-endpoint-id-transformation",
+      "kind": "rest_write",
+      "summary": "PATCH /ingest/api/v1/source/{source_id}/endpoint/{endpoint_id}/transformation",
+      "description": "Ingest beta product surface",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/ingest/api/v1/source/{source_id}/endpoint/{endpoint_id}/transformation",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.get.ingest-api-v1-source-source-id-log",
+      "kind": "rest_read",
+      "summary": "GET /ingest/api/v1/source/{source_id}/log",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/ingest/api/v1/source/{source_id}/log",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.post.ingest-api-v1-source-source-id-token-rotate",
+      "kind": "rest_write",
+      "summary": "POST /ingest/api/v1/source/{source_id}/token/rotate",
+      "description": "Ingest beta product surface",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/ingest/api/v1/source/{source_id}/token/rotate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "svix.webhook.background-task-finished-post",
+      "kind": "composite",
+      "summary": "WEBHOOK background_task.finished#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK background_task.finished#POST"
+        ]
+      }
+    },
+    {
+      "id": "svix.webhook.endpoint-created-post",
+      "kind": "composite",
+      "summary": "WEBHOOK endpoint.created#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK endpoint.created#POST"
+        ]
+      }
+    },
+    {
+      "id": "svix.webhook.endpoint-deleted-post",
+      "kind": "composite",
+      "summary": "WEBHOOK endpoint.deleted#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK endpoint.deleted#POST"
+        ]
+      }
+    },
+    {
+      "id": "svix.webhook.endpoint-disabled-post",
+      "kind": "composite",
+      "summary": "WEBHOOK endpoint.disabled#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK endpoint.disabled#POST"
+        ]
+      }
+    },
+    {
+      "id": "svix.webhook.endpoint-enabled-post",
+      "kind": "composite",
+      "summary": "WEBHOOK endpoint.enabled#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK endpoint.enabled#POST"
+        ]
+      }
+    },
+    {
+      "id": "svix.webhook.endpoint-updated-post",
+      "kind": "composite",
+      "summary": "WEBHOOK endpoint.updated#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK endpoint.updated#POST"
+        ]
+      }
+    },
+    {
+      "id": "svix.webhook.ingest-endpoint-disabled-post",
+      "kind": "composite",
+      "summary": "WEBHOOK ingest.endpoint.disabled#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK ingest.endpoint.disabled#POST"
+        ]
+      }
+    },
+    {
+      "id": "svix.webhook.ingest-message-attempt-exhausted-post",
+      "kind": "composite",
+      "summary": "WEBHOOK ingest.message.attempt.exhausted#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK ingest.message.attempt.exhausted#POST"
+        ]
+      }
+    },
+    {
+      "id": "svix.webhook.ingest-message-attempt-failing-post",
+      "kind": "composite",
+      "summary": "WEBHOOK ingest.message.attempt.failing#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK ingest.message.attempt.failing#POST"
+        ]
+      }
+    },
+    {
+      "id": "svix.webhook.ingest-message-attempt-recovered-post",
+      "kind": "composite",
+      "summary": "WEBHOOK ingest.message.attempt.recovered#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK ingest.message.attempt.recovered#POST"
+        ]
+      }
+    },
+    {
+      "id": "svix.webhook.message-attempt-exhausted-post",
+      "kind": "composite",
+      "summary": "WEBHOOK message.attempt.exhausted#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK message.attempt.exhausted#POST"
+        ]
+      }
+    },
+    {
+      "id": "svix.webhook.message-attempt-failing-post",
+      "kind": "composite",
+      "summary": "WEBHOOK message.attempt.failing#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK message.attempt.failing#POST"
+        ]
+      }
+    },
+    {
+      "id": "svix.webhook.message-attempt-log-post",
+      "kind": "composite",
+      "summary": "WEBHOOK message.attempt.log#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK message.attempt.log#POST"
+        ]
+      }
+    },
+    {
+      "id": "svix.webhook.message-attempt-recovered-post",
+      "kind": "composite",
+      "summary": "WEBHOOK message.attempt.recovered#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://api.svix.com/api/v1/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK message.attempt.recovered#POST"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,741 @@
+{
+  "operations": [
+    {
+      "id": "employment-hero.get.oauth2-authorize",
+      "kind": "rest_read",
+      "summary": "GET /oauth2/authorize",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/oauth2/authorize",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "employment-hero.post.oauth2-token",
+      "kind": "rest_write",
+      "summary": "POST /oauth2/token",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/oauth2/token",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "employment-hero.get.v1-organisations-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/organisations/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/organisations/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "employment-hero.get.v1-organisations-organisation-id-awards-and-classifications",
+      "kind": "rest_read",
+      "summary": "GET /v1/organisations/{organisation_id}/awards_and_classifications",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/organisations/{organisation_id}/awards_and_classifications",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "employment-hero.get.v1-organisations-organisation-id-benefits",
+      "kind": "rest_read",
+      "summary": "GET /v1/organisations/{organisation_id}/benefits",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/organisations/{organisation_id}/benefits",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "employment-hero.post.v1-organisations-organisation-id-certifications-file-uploads",
+      "kind": "rest_write",
+      "summary": "POST /v1/organisations/{organisation_id}/certifications/file_uploads",
+      "description": "Official file upload endpoint requires multipart/binary upload semantics not expressible by declarative JSON writes.",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/organisations/{organisation_id}/certifications/file_uploads",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "employment-hero.get.v1-organisations-organisation-id-certifications-polling-status",
+      "kind": "rest_read",
+      "summary": "GET /v1/organisations/{organisation_id}/certifications/polling_status",
+      "description": "Polling endpoint reports async certification import/upload status and needs an ephemeral polling key.",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/organisations/{organisation_id}/certifications/polling_status",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "employment-hero.get.v1-organisations-organisation-id-employee-benefits",
+      "kind": "rest_read",
+      "summary": "GET /v1/organisations/{organisation_id}/employee_benefits",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/organisations/{organisation_id}/employee_benefits",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "employment-hero.get.v1-organisations-organisation-id-employees-onboard-polling-status",
+      "kind": "rest_read",
+      "summary": "GET /v1/organisations/{organisation_id}/employees/onboard/polling_status",
+      "description": "Polling endpoint reports asynchronous job status for a prior mutation and needs an ephemeral polling key.",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/organisations/{organisation_id}/employees/onboard/polling_status",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "employment-hero.post.v1-organisations-organisation-id-employees-employee-id-certifications-file-uploads",
+      "kind": "rest_write",
+      "summary": "POST /v1/organisations/{organisation_id}/employees/{employee_id}/certifications/file_uploads",
+      "description": "Official employee certification file upload requires multipart/binary upload semantics not expressible by declarative JSON writes.",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/certifications/file_uploads",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "employment-hero.patch.v1-organisations-organisation-id-employees-employee-id-custom-fields-bulk",
+      "kind": "rest_write",
+      "summary": "PATCH /v1/organisations/{organisation_id}/employees/{employee_id}/custom_fields/bulk",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/custom_fields/bulk",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "employment-hero.patch.v1-organisations-organisation-id-employees-employee-id-custom-fields-custom-field-id",
+      "kind": "rest_write",
+      "summary": "PATCH /v1/organisations/{organisation_id}/employees/{employee_id}/custom_fields/{custom_field_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/custom_fields/{custom_field_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "employment-hero.post.v1-organisations-organisation-id-employees-employee-id-documents",
+      "kind": "rest_write",
+      "summary": "POST /v1/organisations/{organisation_id}/employees/{employee_id}/documents",
+      "description": "Document creation in the official collection has no JSON body and represents document/file upload behavior outside declarative JSON writes.",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/documents",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "employment-hero.get.v1-organisations-organisation-id-employees-employee-id-employee-benefits",
+      "kind": "rest_read",
+      "summary": "GET /v1/organisations/{organisation_id}/employees/{employee_id}/employee_benefits",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/employee_benefits",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "employment-hero.post.v1-organisations-organisation-id-employees-employee-id-employee-benefits",
+      "kind": "rest_write",
+      "summary": "POST /v1/organisations/{organisation_id}/employees/{employee_id}/employee_benefits",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/employee_benefits",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "employment-hero.patch.v1-organisations-organisation-id-employees-employee-id-employee-benefits-employee-benefit-id",
+      "kind": "rest_write",
+      "summary": "PATCH /v1/organisations/{organisation_id}/employees/{employee_id}/employee_benefits/{employee_benefit_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/employee_benefits/{employee_benefit_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "employment-hero.delete.v1-organisations-organisation-id-employees-employee-id-employee-benefits-employee-benefit-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/organisations/{organisation_id}/employees/{employee_id}/employee_benefits/{employee_benefit_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/employee_benefits/{employee_benefit_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "employment-hero.post.v1-organisations-organisation-id-employees-employee-id-pay-details-salary-versions",
+      "kind": "rest_write",
+      "summary": "POST /v1/organisations/{organisation_id}/employees/{employee_id}/pay_details/salary_versions",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/pay_details/salary_versions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "employment-hero.put.v1-organisations-organisation-id-employees-employee-id-pay-details-work-hours",
+      "kind": "rest_write",
+      "summary": "PUT /v1/organisations/{organisation_id}/employees/{employee_id}/pay_details/work_hours",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/pay_details/work_hours",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "employment-hero.put.v1-organisations-organisation-id-employees-employee-id-payslips-payslip-id-pdf-gen",
+      "kind": "rest_write",
+      "summary": "PUT /v1/organisations/{organisation_id}/employees/{employee_id}/payslips/{payslip_id}/pdf_gen",
+      "description": "Payslip PDF generation returns or prepares a binary PDF artifact, not a JSON write shape for this engine.",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/payslips/{payslip_id}/pdf_gen",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "employment-hero.get.v1-organisations-organisation-id-employees-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/organisations/{organisation_id}/employees/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/organisations/{organisation_id}/employees/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "employment-hero.post.v1-organisations-organisation-id-forms",
+      "kind": "rest_write",
+      "summary": "POST /v1/organisations/{organisation_id}/forms",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/organisations/{organisation_id}/forms",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "employment-hero.patch.v1-organisations-organisation-id-forms-form-id",
+      "kind": "rest_write",
+      "summary": "PATCH /v1/organisations/{organisation_id}/forms/{form_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/v1/organisations/{organisation_id}/forms/{form_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "employment-hero.post.v1-organisations-organisation-id-forms-form-id-archive",
+      "kind": "rest_write",
+      "summary": "POST /v1/organisations/{organisation_id}/forms/{form_id}/archive",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/organisations/{organisation_id}/forms/{form_id}/archive",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "employment-hero.post.v1-organisations-organisation-id-forms-form-id-assign",
+      "kind": "rest_write",
+      "summary": "POST /v1/organisations/{organisation_id}/forms/{form_id}/assign",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/organisations/{organisation_id}/forms/{form_id}/assign",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "employment-hero.post.v1-organisations-organisation-id-forms-form-id-close",
+      "kind": "rest_write",
+      "summary": "POST /v1/organisations/{organisation_id}/forms/{form_id}/close",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/organisations/{organisation_id}/forms/{form_id}/close",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "employment-hero.post.v1-organisations-organisation-id-forms-form-id-publish",
+      "kind": "rest_write",
+      "summary": "POST /v1/organisations/{organisation_id}/forms/{form_id}/publish",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/organisations/{organisation_id}/forms/{form_id}/publish",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "employment-hero.post.v1-organisations-organisation-id-forms-form-id-responses-response-id-approve",
+      "kind": "rest_write",
+      "summary": "POST /v1/organisations/{organisation_id}/forms/{form_id}/responses/{response_id}/approve",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/organisations/{organisation_id}/forms/{form_id}/responses/{response_id}/approve",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "employment-hero.post.v1-organisations-organisation-id-forms-form-id-responses-response-id-decline",
+      "kind": "rest_write",
+      "summary": "POST /v1/organisations/{organisation_id}/forms/{form_id}/responses/{response_id}/decline",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/organisations/{organisation_id}/forms/{form_id}/responses/{response_id}/decline",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "employment-hero.post.v1-organisations-organisation-id-goals",
+      "kind": "rest_write",
+      "summary": "POST /v1/organisations/{organisation_id}/goals",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/organisations/{organisation_id}/goals",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "employment-hero.post.v1-organisations-organisation-id-goals-file-uploads",
+      "kind": "rest_write",
+      "summary": "POST /v1/organisations/{organisation_id}/goals/file_uploads",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/organisations/{organisation_id}/goals/file_uploads",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "employment-hero.patch.v1-organisations-organisation-id-goals-goal-id",
+      "kind": "rest_write",
+      "summary": "PATCH /v1/organisations/{organisation_id}/goals/{goal_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/v1/organisations/{organisation_id}/goals/{goal_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "employment-hero.delete.v1-organisations-organisation-id-goals-goal-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/organisations/{organisation_id}/goals/{goal_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/organisations/{organisation_id}/goals/{goal_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "employment-hero.post.v1-organisations-organisation-id-goals-goal-id-key-results",
+      "kind": "rest_write",
+      "summary": "POST /v1/organisations/{organisation_id}/goals/{goal_id}/key_results",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/organisations/{organisation_id}/goals/{goal_id}/key_results",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "employment-hero.patch.v1-organisations-organisation-id-goals-goal-id-key-results-key-result-id",
+      "kind": "rest_write",
+      "summary": "PATCH /v1/organisations/{organisation_id}/goals/{goal_id}/key_results/{key_result_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/v1/organisations/{organisation_id}/goals/{goal_id}/key_results/{key_result_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "employment-hero.delete.v1-organisations-organisation-id-goals-goal-id-key-results-key-result-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/organisations/{organisation_id}/goals/{goal_id}/key_results/{key_result_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/organisations/{organisation_id}/goals/{goal_id}/key_results/{key_result_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "employment-hero.patch.v1-organisations-organisation-id-goals-goal-id-key-results-key-result-id-archive-status",
+      "kind": "rest_write",
+      "summary": "PATCH /v1/organisations/{organisation_id}/goals/{goal_id}/key_results/{key_result_id}/archive_status",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/v1/organisations/{organisation_id}/goals/{goal_id}/key_results/{key_result_id}/archive_status",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "employment-hero.patch.v1-organisations-organisation-id-goals-goal-id-key-results-key-result-id-status",
+      "kind": "rest_write",
+      "summary": "PATCH /v1/organisations/{organisation_id}/goals/{goal_id}/key_results/{key_result_id}/status",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/v1/organisations/{organisation_id}/goals/{goal_id}/key_results/{key_result_id}/status",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "employment-hero.patch.v1-organisations-organisation-id-goals-goal-id-status",
+      "kind": "rest_write",
+      "summary": "PATCH /v1/organisations/{organisation_id}/goals/{goal_id}/status",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/v1/organisations/{organisation_id}/goals/{goal_id}/status",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "employment-hero.get.v1-organisations-organisation-id-leave-requests-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/organisations/{organisation_id}/leave_requests/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/organisations/{organisation_id}/leave_requests/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "employment-hero.get.v1-organisations-organisation-id-rostered-shifts-cost",
+      "kind": "rest_read",
+      "summary": "GET /v1/organisations/{organisation_id}/rostered_shifts/cost",
+      "description": "Cost endpoint is an aggregate/calculation endpoint rather than a list or object data stream.",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/organisations/{organisation_id}/rostered_shifts/cost",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "employment-hero.get.v1-organisations-organisation-id-rostered-shifts-job-status-job-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/organisations/{organisation_id}/rostered_shifts/job_status/{job_id}",
+      "description": "Async bulk-create job status endpoint needs a prior mutation job id and is not an independent data stream.",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/organisations/{organisation_id}/rostered_shifts/job_status/{job_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "employment-hero.get.v1-organisations-organisation-id-rostered-shifts-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/organisations/{organisation_id}/rostered_shifts/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/organisations/{organisation_id}/rostered_shifts/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "employment-hero.get.v1-organisations-organisation-id-unavailabilities-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/organisations/{organisation_id}/unavailabilities/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/organisations/{organisation_id}/unavailabilities/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "employment-hero.get.https-oauth-employmenthero-com-oauth2-authorize",
+      "kind": "rest_read",
+      "summary": "GET https://oauth.employmenthero.com/oauth2/authorize",
+      "description": "OAuth authorization redirect is an interactive auth flow, not a data endpoint.",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "https://oauth.employmenthero.com/oauth2/authorize",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "employment-hero.post.https-oauth-employmenthero-com-oauth2-token",
+      "kind": "rest_write",
+      "summary": "POST https://oauth.employmenthero.com/oauth2/token",
+      "description": "OAuth token exchange is credential acquisition, not a connector read or reverse-ETL write action.",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "https://oauth.employmenthero.com/oauth2/token",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "employment-hero.post.https-oauth-employmenthero-com-oauth2-token-refresh",
+      "kind": "rest_write",
+      "summary": "POST https://oauth.employmenthero.com/oauth2/token (refresh)",
+      "description": "OAuth token refresh is credential maintenance, not a connector data surface.",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "https://oauth.employmenthero.com/oauth2/token (refresh)",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

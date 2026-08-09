@@ -1,82 +1,3867 @@
 {
-  "api": "RepairShopr API v1 (https://<subdomain>.repairshopr.com/api/v1)",
+  "api": "RepairShopr API v1 (https://\u003csubdomain\u003e.repairshopr.com/api/v1); provider artifact version: RepairShopr API v1; OpenAPI 3.0.0",
   "docs": "https://api-docs.repairshopr.com/",
-  "reviewed_at": "2026-07-02",
-  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only (customers, tickets, invoices, estimates, assets); legacy ships no writes (capabilities.write is false) and the full RepairShopr surface (line items, payments, appointments, users, etc.) is out of scope until Pass B.",
+  "reviewed_at": "2026-08-09",
+  "operation_ledger_version": 2,
+  "scope": "Provider-artifact inventory generated from the cited openapi artifact (174 documented operations across 1 provider-owned source document(s)). Every documented operation is represented; existing source-surface bindings absent from the artifact are retained and flagged with present-in-surface-absent-from-artifact.",
+  "artifacts": [
+    {
+      "id": "repairshopr-artifact-2026-08-09",
+      "url": "https://api-docs.repairshopr.com/swagger.json",
+      "kind": "openapi",
+      "version": "3.0.0",
+      "retrieved_at": "2026-08-09",
+      "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa"
+    }
+  ],
   "endpoints": [
     {
       "method": "GET",
-      "path": "/api/v1/customers",
-      "covered_by": {
-        "stream": "customers"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/v1/tickets",
-      "covered_by": {
-        "stream": "tickets"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/v1/invoices",
-      "covered_by": {
-        "stream": "invoices"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/v1/estimates",
-      "covered_by": {
-        "stream": "estimates"
+      "path": "/api/v1/appointments",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "RepairShopr API v1; OpenAPI 3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "existing-surface[GET /api/v1/appointments]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "/api/v1/appointments is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/api/v1/customer_assets",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "RepairShopr API v1; OpenAPI 3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "existing-surface[GET /api/v1/customer_assets]"
+      },
       "covered_by": {
         "stream": "assets"
       }
     },
     {
       "method": "GET",
-      "path": "/api/v1/line_items",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "/api/v1/line_items is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/v1/payments",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "/api/v1/payments is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/v1/appointments",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "/api/v1/appointments is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/v1/users",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "/api/v1/users is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      "path": "/api/v1/customers",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "RepairShopr API v1; OpenAPI 3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "existing-surface[GET /api/v1/customers]"
+      },
+      "covered_by": {
+        "stream": "customers"
       }
     },
     {
       "method": "POST",
       "path": "/api/v1/customers",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Legacy connector never implemented writes"
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "RepairShopr API v1; OpenAPI 3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "existing-surface[POST /api/v1/customers]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Legacy connector never implemented writes",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/estimates",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "RepairShopr API v1; OpenAPI 3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "existing-surface[GET /api/v1/estimates]"
+      },
+      "covered_by": {
+        "stream": "estimates"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/invoices",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "RepairShopr API v1; OpenAPI 3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "existing-surface[GET /api/v1/invoices]"
+      },
+      "covered_by": {
+        "stream": "invoices"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/line_items",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "RepairShopr API v1; OpenAPI 3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "existing-surface[GET /api/v1/line_items]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "/api/v1/line_items is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/payments",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "RepairShopr API v1; OpenAPI 3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "existing-surface[GET /api/v1/payments]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "/api/v1/payments is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/tickets",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "RepairShopr API v1; OpenAPI 3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "existing-surface[GET /api/v1/tickets]"
+      },
+      "covered_by": {
+        "stream": "tickets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/users",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "RepairShopr API v1; OpenAPI 3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "existing-surface[GET /api/v1/users]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "/api/v1/users is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/appointment_types",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/appointment_types\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/appointment_types",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/appointment_types\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/appointment_types/{id}",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/appointment_types/{id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/appointment_types/{id}",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/appointment_types/{id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/appointment_types/{id}",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/appointment_types/{id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/appointments",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/appointments\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/appointments",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/appointments\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/appointments/{id}",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/appointments/{id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/appointments/{id}",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/appointments/{id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/appointments/{id}",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/appointments/{id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/callerid",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/callerid\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/canned_responses",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/canned_responses\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/canned_responses",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/canned_responses\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/canned_responses/settings",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/canned_responses/settings\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/canned_responses/{id}",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/canned_responses/{id}\"].patch"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/canned_responses/{id}",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/canned_responses/{id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/contacts\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/contacts\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/{id}",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/contacts/{id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/contacts/{id}",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/contacts/{id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/contacts/{id}",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/contacts/{id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contracts",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/contracts\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contracts",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/contracts\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contracts/{id}",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/contracts/{id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/contracts/{id}",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/contracts/{id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/contracts/{id}",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/contracts/{id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customer_assets",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/customer_assets\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/customer_assets",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/customer_assets\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customer_assets/assets_by_contact/{contact_id}",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/customer_assets/assets_by_contact/{contact_id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customer_assets/chat_information_by_ids",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/customer_assets/chat_information_by_ids\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customer_assets/{id}",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/customer_assets/{id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/customer_assets/{id}",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/customer_assets/{id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customer_assets/{id}/installed_applications",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/customer_assets/{id}/installed_applications\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customer_assets/{id}/patches",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/customer_assets/{id}/patches\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customers",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/customers\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/customers",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/customers\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customers/autocomplete",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/customers/autocomplete\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customers/latest",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/customers/latest\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customers/{customer_id}/payment_profiles",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/customers/{customer_id}/payment_profiles\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/customers/{customer_id}/payment_profiles",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/customers/{customer_id}/payment_profiles\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customers/{customer_id}/payment_profiles/{id}",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/customers/{customer_id}/payment_profiles/{id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/customers/{customer_id}/payment_profiles/{id}",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/customers/{customer_id}/payment_profiles/{id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/customers/{customer_id}/payment_profiles/{id}",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/customers/{customer_id}/payment_profiles/{id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customers/{customer_id}/phones",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/customers/{customer_id}/phones\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/customers/{customer_id}/phones",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/customers/{customer_id}/phones\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/customers/{customer_id}/phones/{id}",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/customers/{customer_id}/phones/{id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/customers/{customer_id}/phones/{id}",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/customers/{customer_id}/phones/{id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customers/{id}",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/customers/{id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/customers/{id}",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/customers/{id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/customers/{id}",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/customers/{id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/estimates",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/estimates\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/estimates",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/estimates\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/estimates/{id}",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/estimates/{id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/estimates/{id}",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/estimates/{id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/estimates/{id}",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/estimates/{id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/estimates/{id}/convert_to_invoice",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/estimates/{id}/convert_to_invoice\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/estimates/{id}/email",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/estimates/{id}/email\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/estimates/{id}/line_items",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/estimates/{id}/line_items\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/estimates/{id}/line_items/{line_item_id}",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/estimates/{id}/line_items/{line_item_id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/estimates/{id}/line_items/{line_item_id}",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/estimates/{id}/line_items/{line_item_id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/estimates/{id}/print",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/estimates/{id}/print\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/invoices",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/invoices\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/invoices\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/invoices/{id}",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/invoices/{id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/invoices/{id}",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/invoices/{id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/invoices/{id}",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/invoices/{id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices/{id}/email",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/invoices/{id}/email\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices/{id}/line_items",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/invoices/{id}/line_items\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/invoices/{id}/line_items/{line_item_id}",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/invoices/{id}/line_items/{line_item_id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/invoices/{id}/line_items/{line_item_id}",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/invoices/{id}/line_items/{line_item_id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices/{id}/print",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/invoices/{id}/print\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/invoices/{id}/ticket",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/invoices/{id}/ticket\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/items",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/items\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/leads",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/leads\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/leads",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/leads\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/leads/{id}",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/leads/{id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/leads/{id}",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/leads/{id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/line_items",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/line_items\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/me",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/me\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/new_ticket_forms",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/new_ticket_forms\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/new_ticket_forms/{id}",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/new_ticket_forms/{id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/new_ticket_forms/{id}/process_form",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/new_ticket_forms/{id}/process_form\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/otp_login",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/otp_login\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/payment_methods",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/payment_methods\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/payments",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/payments\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/payments",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/payments\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/payments/{id}",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/payments/{id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/portal_users",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/portal_users\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/portal_users",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/portal_users\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/portal_users/create_invitation",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/portal_users/create_invitation\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/portal_users/{id}",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/portal_users/{id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/portal_users/{id}",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/portal_users/{id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/products",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/products\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/products",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/products\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/products/barcode",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/products/barcode\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/products/categories",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/products/categories\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/products/{id}",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/products/{id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/products/{id}",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/products/{id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/products/{id}/add_images",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/products/{id}/add_images\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/products/{id}/delete_image",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/products/{id}/delete_image\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/products/{id}/location_quantities",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/products/{id}/location_quantities\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/products/{product_id}/product_serials",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/products/{product_id}/product_serials\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/products/{product_id}/product_serials",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/products/{product_id}/product_serials\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/products/{product_id}/product_serials/attach_to_line_item",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/products/{product_id}/product_serials/attach_to_line_item\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/products/{product_id}/product_serials/{id}",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/products/{product_id}/product_serials/{id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/purchase_orders",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/purchase_orders\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/purchase_orders",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/purchase_orders\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/purchase_orders/{id}",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/purchase_orders/{id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/purchase_orders/{id}",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/purchase_orders/{id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/purchase_orders/{id}/attachments",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/purchase_orders/{id}/attachments\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/purchase_orders/{id}/create_po_line_item",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/purchase_orders/{id}/create_po_line_item\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/purchase_orders/{id}/receive",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/purchase_orders/{id}/receive\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rmm/public_scripts/{asset_id}/schedule",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/rmm/public_scripts/{asset_id}/schedule\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rmm_alerts",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/rmm_alerts\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rmm_alerts",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/rmm_alerts\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rmm_alerts/{id}",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/rmm_alerts/{id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rmm_alerts/{id}",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/rmm_alerts/{id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rmm_alerts/{id}/mute",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/rmm_alerts/{id}/mute\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/schedules",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/schedules\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/schedules",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/schedules\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/schedules/{id}",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/schedules/{id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/schedules/{id}",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/schedules/{id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/schedules/{id}",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/schedules/{id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/schedules/{id}/add_line_item",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/schedules/{id}/add_line_item\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/schedules/{id}/line_items/{schedule_line_item_id}",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/schedules/{id}/line_items/{schedule_line_item_id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/schedules/{id}/remove_line_item",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/schedules/{id}/remove_line_item\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/search",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/search\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/settings",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/settings\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/settings/printing",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/settings/printing\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/settings/tabs",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/settings/tabs\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ticket_blueprints",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/ticket_blueprints\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ticket_blueprints/{id}/apply",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/ticket_blueprints/{id}/apply\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ticket_comments",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/ticket_comments\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ticket_timers",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/ticket_timers\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tickets",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/tickets\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tickets",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/tickets\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tickets/settings",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/tickets/settings\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tickets/{id}",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/tickets/{id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/tickets/{id}",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/tickets/{id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/tickets/{id}",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/tickets/{id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tickets/{id}/add_line_item",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/tickets/{id}/add_line_item\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tickets/{id}/attach_file_url",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/tickets/{id}/attach_file_url\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tickets/{id}/charge_timer_entry",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/tickets/{id}/charge_timer_entry\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tickets/{id}/comment",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/tickets/{id}/comment\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tickets/{id}/comments",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/tickets/{id}/comments\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tickets/{id}/delete_attachment",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/tickets/{id}/delete_attachment\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tickets/{id}/delete_timer_entry",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/tickets/{id}/delete_timer_entry\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tickets/{id}/print",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/tickets/{id}/print\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tickets/{id}/remove_line_item",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/tickets/{id}/remove_line_item\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tickets/{id}/timer_entry",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/tickets/{id}/timer_entry\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/tickets/{id}/update_line_item",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/tickets/{id}/update_line_item\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/tickets/{id}/update_timer_entry",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/tickets/{id}/update_timer_entry\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tickets/{ticket_id}/worksheet_results",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/tickets/{ticket_id}/worksheet_results\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tickets/{ticket_id}/worksheet_results",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/tickets/{ticket_id}/worksheet_results\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tickets/{ticket_id}/worksheet_results/{id}",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/tickets/{ticket_id}/worksheet_results/{id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/tickets/{ticket_id}/worksheet_results/{id}",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/tickets/{ticket_id}/worksheet_results/{id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/tickets/{ticket_id}/worksheet_results/{id}",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/tickets/{ticket_id}/worksheet_results/{id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/timelogs",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/timelogs\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/timelogs",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/timelogs\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/timelogs/last",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/timelogs/last\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/user_devices",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/user_devices\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/user_devices/{id}",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/user_devices/{id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/user_devices/{id}",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/user_devices/{id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/users\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{id}",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/users/{id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/vendors",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/vendors\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/vendors",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/vendors\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/vendors/{id}",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/vendors/{id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/vendors/{id}",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/vendors/{id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/wiki_pages",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/wiki_pages\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/wiki_pages",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/wiki_pages\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/wiki_pages/{id}",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/wiki_pages/{id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/wiki_pages/{id}",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/wiki_pages/{id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/wiki_pages/{id}",
+      "provenance": {
+        "artifact": "repairshopr-artifact-2026-08-09",
+        "source_url": "https://api-docs.repairshopr.com/swagger.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6c279a792889ff2e5f6f0ae1e015589d500ac38ec39d501940e6d17902bb60aa",
+        "coordinate": "paths[\"/wiki_pages/{id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     }
   ]

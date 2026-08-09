@@ -1,0 +1,955 @@
+{
+  "tagline": "Run Blogger's declared streams and reverse-ETL actions.",
+  "usage": "pm blogger \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "api get blogs blogid comments commentid",
+        "api get blogs blogid posts postid",
+        "api get blogs byurl",
+        "api get v3 blogs blogid",
+        "api get v3 blogs blogid comments",
+        "api get v3 blogs blogid pages",
+        "api get v3 blogs blogid pages pageid",
+        "api get v3 blogs blogid pageviews",
+        "api get v3 blogs blogid posts",
+        "api get v3 blogs blogid posts bypath",
+        "api get v3 blogs blogid posts postid",
+        "api get v3 blogs blogid posts postid comments",
+        "api get v3 blogs blogid posts postid comments commentid",
+        "api get v3 blogs blogid posts search",
+        "api get v3 blogs byurl",
+        "api get v3 users userid",
+        "api get v3 users userid blogs",
+        "api get v3 users userid blogs blogid",
+        "api get v3 users userid blogs blogid posts",
+        "api get v3 users userid blogs blogid posts postid",
+        "blogs list",
+        "comments list",
+        "pages list",
+        "pageviews list",
+        "posts list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "api delete blogs blogid posts postid",
+        "api delete v3 blogs blogid pages pageid",
+        "api delete v3 blogs blogid posts postid",
+        "api delete v3 blogs blogid posts postid comments commentid",
+        "api patch v3 blogs blogid pages pageid",
+        "api patch v3 blogs blogid posts postid",
+        "api post blogs blogid comments commentid moderate-true",
+        "api post blogs blogid posts",
+        "api post v3 blogs blogid pages",
+        "api post v3 blogs blogid pages pageid publish",
+        "api post v3 blogs blogid pages pageid revert",
+        "api post v3 blogs blogid posts",
+        "api post v3 blogs blogid posts postid comments commentid approve",
+        "api post v3 blogs blogid posts postid comments commentid removecontent",
+        "api post v3 blogs blogid posts postid comments commentid spam",
+        "api post v3 blogs blogid posts postid publish",
+        "api post v3 blogs blogid posts postid revert",
+        "api put blogs blogid posts postid",
+        "api put v3 blogs blogid pages pageid",
+        "api put v3 blogs blogid posts postid"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "api delete blogs blogid posts postid",
+      "summary": "Documented DELETE /blogs/{blogId}/posts/{postId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+      "examples": [
+        "pm blogger api delete blogs blogid posts postid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/blogs/{blogId}/posts/{postId}"
+        }
+      ],
+      "operation": "blogger.delete.blogs-blogid-posts-postid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v3 blogs blogid pages pageid",
+      "summary": "Documented DELETE /v3/blogs/{blogId}/pages/{pageId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+      "examples": [
+        "pm blogger api delete v3 blogs blogid pages pageid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v3/blogs/{blogId}/pages/{pageId}"
+        }
+      ],
+      "operation": "blogger.delete.v3-blogs-blogid-pages-pageid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v3 blogs blogid posts postid",
+      "summary": "Documented DELETE /v3/blogs/{blogId}/posts/{postId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+      "examples": [
+        "pm blogger api delete v3 blogs blogid posts postid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v3/blogs/{blogId}/posts/{postId}"
+        }
+      ],
+      "operation": "blogger.delete.v3-blogs-blogid-posts-postid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v3 blogs blogid posts postid comments commentid",
+      "summary": "Documented DELETE /v3/blogs/{blogId}/posts/{postId}/comments/{commentId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+      "examples": [
+        "pm blogger api delete v3 blogs blogid posts postid comments commentid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v3/blogs/{blogId}/posts/{postId}/comments/{commentId}"
+        }
+      ],
+      "operation": "blogger.delete.v3-blogs-blogid-posts-postid-comments-commentid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api get blogs blogid comments commentid",
+      "summary": "Documented GET /blogs/{blogId}/comments/{commentId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+      "examples": [
+        "pm blogger api get blogs blogid comments commentid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/blogs/{blogId}/comments/{commentId}"
+        }
+      ],
+      "operation": "blogger.get.blogs-blogid-comments-commentid",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get blogs blogid posts postid",
+      "summary": "Documented GET /blogs/{blogId}/posts/{postId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+      "examples": [
+        "pm blogger api get blogs blogid posts postid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/blogs/{blogId}/posts/{postId}"
+        }
+      ],
+      "operation": "blogger.get.blogs-blogid-posts-postid",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get blogs byurl",
+      "summary": "Documented GET /blogs/byurl (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+      "examples": [
+        "pm blogger api get blogs byurl --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/blogs/byurl"
+        }
+      ],
+      "operation": "blogger.get.blogs-byurl",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 blogs blogid",
+      "summary": "Documented GET /v3/blogs/{blogId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+      "examples": [
+        "pm blogger api get v3 blogs blogid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/blogs/{blogId}"
+        }
+      ],
+      "operation": "blogger.get.v3-blogs-blogid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 blogs blogid comments",
+      "summary": "Documented GET /v3/blogs/{blogId}/comments (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+      "examples": [
+        "pm blogger api get v3 blogs blogid comments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/blogs/{blogId}/comments"
+        }
+      ],
+      "operation": "blogger.get.v3-blogs-blogid-comments",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 blogs blogid pages",
+      "summary": "Documented GET /v3/blogs/{blogId}/pages (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+      "examples": [
+        "pm blogger api get v3 blogs blogid pages --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/blogs/{blogId}/pages"
+        }
+      ],
+      "operation": "blogger.get.v3-blogs-blogid-pages",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 blogs blogid pages pageid",
+      "summary": "Documented GET /v3/blogs/{blogId}/pages/{pageId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+      "examples": [
+        "pm blogger api get v3 blogs blogid pages pageid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/blogs/{blogId}/pages/{pageId}"
+        }
+      ],
+      "operation": "blogger.get.v3-blogs-blogid-pages-pageid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 blogs blogid pageviews",
+      "summary": "Documented GET /v3/blogs/{blogId}/pageviews (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+      "examples": [
+        "pm blogger api get v3 blogs blogid pageviews --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/blogs/{blogId}/pageviews"
+        }
+      ],
+      "operation": "blogger.get.v3-blogs-blogid-pageviews",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 blogs blogid posts",
+      "summary": "Documented GET /v3/blogs/{blogId}/posts (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+      "examples": [
+        "pm blogger api get v3 blogs blogid posts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/blogs/{blogId}/posts"
+        }
+      ],
+      "operation": "blogger.get.v3-blogs-blogid-posts",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 blogs blogid posts bypath",
+      "summary": "Documented GET /v3/blogs/{blogId}/posts/bypath (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+      "examples": [
+        "pm blogger api get v3 blogs blogid posts bypath --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/blogs/{blogId}/posts/bypath"
+        }
+      ],
+      "operation": "blogger.get.v3-blogs-blogid-posts-bypath",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 blogs blogid posts postid",
+      "summary": "Documented GET /v3/blogs/{blogId}/posts/{postId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+      "examples": [
+        "pm blogger api get v3 blogs blogid posts postid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/blogs/{blogId}/posts/{postId}"
+        }
+      ],
+      "operation": "blogger.get.v3-blogs-blogid-posts-postid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 blogs blogid posts postid comments",
+      "summary": "Documented GET /v3/blogs/{blogId}/posts/{postId}/comments (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+      "examples": [
+        "pm blogger api get v3 blogs blogid posts postid comments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/blogs/{blogId}/posts/{postId}/comments"
+        }
+      ],
+      "operation": "blogger.get.v3-blogs-blogid-posts-postid-comments",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 blogs blogid posts postid comments commentid",
+      "summary": "Documented GET /v3/blogs/{blogId}/posts/{postId}/comments/{commentId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+      "examples": [
+        "pm blogger api get v3 blogs blogid posts postid comments commentid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/blogs/{blogId}/posts/{postId}/comments/{commentId}"
+        }
+      ],
+      "operation": "blogger.get.v3-blogs-blogid-posts-postid-comments-commentid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 blogs blogid posts search",
+      "summary": "Documented GET /v3/blogs/{blogId}/posts/search (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+      "examples": [
+        "pm blogger api get v3 blogs blogid posts search --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/blogs/{blogId}/posts/search"
+        }
+      ],
+      "operation": "blogger.get.v3-blogs-blogid-posts-search",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 blogs byurl",
+      "summary": "Documented GET /v3/blogs/byurl (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+      "examples": [
+        "pm blogger api get v3 blogs byurl --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/blogs/byurl"
+        }
+      ],
+      "operation": "blogger.get.v3-blogs-byurl",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 users userid",
+      "summary": "Documented GET /v3/users/{userId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+      "examples": [
+        "pm blogger api get v3 users userid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/users/{userId}"
+        }
+      ],
+      "operation": "blogger.get.v3-users-userid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 users userid blogs",
+      "summary": "Documented GET /v3/users/{userId}/blogs (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+      "examples": [
+        "pm blogger api get v3 users userid blogs --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/users/{userId}/blogs"
+        }
+      ],
+      "operation": "blogger.get.v3-users-userid-blogs",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 users userid blogs blogid",
+      "summary": "Documented GET /v3/users/{userId}/blogs/{blogId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+      "examples": [
+        "pm blogger api get v3 users userid blogs blogid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/users/{userId}/blogs/{blogId}"
+        }
+      ],
+      "operation": "blogger.get.v3-users-userid-blogs-blogid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 users userid blogs blogid posts",
+      "summary": "Documented GET /v3/users/{userId}/blogs/{blogId}/posts (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+      "examples": [
+        "pm blogger api get v3 users userid blogs blogid posts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/users/{userId}/blogs/{blogId}/posts"
+        }
+      ],
+      "operation": "blogger.get.v3-users-userid-blogs-blogid-posts",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 users userid blogs blogid posts postid",
+      "summary": "Documented GET /v3/users/{userId}/blogs/{blogId}/posts/{postId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+      "examples": [
+        "pm blogger api get v3 users userid blogs blogid posts postid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/users/{userId}/blogs/{blogId}/posts/{postId}"
+        }
+      ],
+      "operation": "blogger.get.v3-users-userid-blogs-blogid-posts-postid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api patch v3 blogs blogid pages pageid",
+      "summary": "Documented PATCH /v3/blogs/{blogId}/pages/{pageId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+      "examples": [
+        "pm blogger api patch v3 blogs blogid pages pageid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v3/blogs/{blogId}/pages/{pageId}"
+        }
+      ],
+      "operation": "blogger.patch.v3-blogs-blogid-pages-pageid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch v3 blogs blogid posts postid",
+      "summary": "Documented PATCH /v3/blogs/{blogId}/posts/{postId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+      "examples": [
+        "pm blogger api patch v3 blogs blogid posts postid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v3/blogs/{blogId}/posts/{postId}"
+        }
+      ],
+      "operation": "blogger.patch.v3-blogs-blogid-posts-postid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post blogs blogid comments commentid moderate-true",
+      "summary": "Documented POST /blogs/{blogId}/comments/{commentId}?moderate=true (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+      "examples": [
+        "pm blogger api post blogs blogid comments commentid moderate-true --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/blogs/{blogId}/comments/{commentId}?moderate=true"
+        }
+      ],
+      "operation": "blogger.post.blogs-blogid-comments-commentid-moderate-true",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post blogs blogid posts",
+      "summary": "Documented POST /blogs/{blogId}/posts (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+      "examples": [
+        "pm blogger api post blogs blogid posts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/blogs/{blogId}/posts"
+        }
+      ],
+      "operation": "blogger.post.blogs-blogid-posts",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v3 blogs blogid pages",
+      "summary": "Documented POST /v3/blogs/{blogId}/pages (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+      "examples": [
+        "pm blogger api post v3 blogs blogid pages --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v3/blogs/{blogId}/pages"
+        }
+      ],
+      "operation": "blogger.post.v3-blogs-blogid-pages",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v3 blogs blogid pages pageid publish",
+      "summary": "Documented POST /v3/blogs/{blogId}/pages/{pageId}/publish (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+      "examples": [
+        "pm blogger api post v3 blogs blogid pages pageid publish --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v3/blogs/{blogId}/pages/{pageId}/publish"
+        }
+      ],
+      "operation": "blogger.post.v3-blogs-blogid-pages-pageid-publish",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v3 blogs blogid pages pageid revert",
+      "summary": "Documented POST /v3/blogs/{blogId}/pages/{pageId}/revert (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+      "examples": [
+        "pm blogger api post v3 blogs blogid pages pageid revert --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v3/blogs/{blogId}/pages/{pageId}/revert"
+        }
+      ],
+      "operation": "blogger.post.v3-blogs-blogid-pages-pageid-revert",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v3 blogs blogid posts",
+      "summary": "Documented POST /v3/blogs/{blogId}/posts (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+      "examples": [
+        "pm blogger api post v3 blogs blogid posts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v3/blogs/{blogId}/posts"
+        }
+      ],
+      "operation": "blogger.post.v3-blogs-blogid-posts",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v3 blogs blogid posts postid comments commentid approve",
+      "summary": "Documented POST /v3/blogs/{blogId}/posts/{postId}/comments/{commentId}/approve (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+      "examples": [
+        "pm blogger api post v3 blogs blogid posts postid comments commentid approve --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v3/blogs/{blogId}/posts/{postId}/comments/{commentId}/approve"
+        }
+      ],
+      "operation": "blogger.post.v3-blogs-blogid-posts-postid-comments-commentid-approve",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v3 blogs blogid posts postid comments commentid removecontent",
+      "summary": "Documented POST /v3/blogs/{blogId}/posts/{postId}/comments/{commentId}/removecontent (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+      "examples": [
+        "pm blogger api post v3 blogs blogid posts postid comments commentid removecontent --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v3/blogs/{blogId}/posts/{postId}/comments/{commentId}/removecontent"
+        }
+      ],
+      "operation": "blogger.post.v3-blogs-blogid-posts-postid-comments-commentid-removecontent",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v3 blogs blogid posts postid comments commentid spam",
+      "summary": "Documented POST /v3/blogs/{blogId}/posts/{postId}/comments/{commentId}/spam (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+      "examples": [
+        "pm blogger api post v3 blogs blogid posts postid comments commentid spam --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v3/blogs/{blogId}/posts/{postId}/comments/{commentId}/spam"
+        }
+      ],
+      "operation": "blogger.post.v3-blogs-blogid-posts-postid-comments-commentid-spam",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v3 blogs blogid posts postid publish",
+      "summary": "Documented POST /v3/blogs/{blogId}/posts/{postId}/publish (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+      "examples": [
+        "pm blogger api post v3 blogs blogid posts postid publish --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v3/blogs/{blogId}/posts/{postId}/publish"
+        }
+      ],
+      "operation": "blogger.post.v3-blogs-blogid-posts-postid-publish",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v3 blogs blogid posts postid revert",
+      "summary": "Documented POST /v3/blogs/{blogId}/posts/{postId}/revert (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+      "examples": [
+        "pm blogger api post v3 blogs blogid posts postid revert --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v3/blogs/{blogId}/posts/{postId}/revert"
+        }
+      ],
+      "operation": "blogger.post.v3-blogs-blogid-posts-postid-revert",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put blogs blogid posts postid",
+      "summary": "Documented PUT /blogs/{blogId}/posts/{postId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+      "examples": [
+        "pm blogger api put blogs blogid posts postid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/blogs/{blogId}/posts/{postId}"
+        }
+      ],
+      "operation": "blogger.put.blogs-blogid-posts-postid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v3 blogs blogid pages pageid",
+      "summary": "Documented PUT /v3/blogs/{blogId}/pages/{pageId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+      "examples": [
+        "pm blogger api put v3 blogs blogid pages pageid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v3/blogs/{blogId}/pages/{pageId}"
+        }
+      ],
+      "operation": "blogger.put.v3-blogs-blogid-pages-pageid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v3 blogs blogid posts postid",
+      "summary": "Documented PUT /v3/blogs/{blogId}/posts/{postId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+      "examples": [
+        "pm blogger api put v3 blogs blogid posts postid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v3/blogs/{blogId}/posts/{postId}"
+        }
+      ],
+      "operation": "blogger.put.v3-blogs-blogid-posts-postid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "blogs list",
+      "summary": "Run the blogs ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "blogs",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+      "examples": [
+        "pm blogger blogs list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/blogs/{blogId}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "comments list",
+      "summary": "Run the comments ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "comments",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+      "examples": [
+        "pm blogger comments list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/blogs/{blogId}/comments"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "pages list",
+      "summary": "Run the pages ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "pages",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+      "examples": [
+        "pm blogger pages list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/blogs/{blogId}/pages"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "pageviews list",
+      "summary": "Run the pageviews ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "pageviews",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+      "examples": [
+        "pm blogger pageviews list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/blogs/{blogId}/pageviews"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "posts list",
+      "summary": "Run the posts ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "posts",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+      "examples": [
+        "pm blogger posts list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/blogs/{blogId}/posts"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    }
+  ]
+}

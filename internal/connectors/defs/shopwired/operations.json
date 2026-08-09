@@ -1,0 +1,454 @@
+{
+  "operations": [
+    {
+      "id": "shopwired.get.blog-categories-count",
+      "kind": "rest_read",
+      "summary": "GET /blog-categories/count",
+      "description": "count endpoint returns aggregate metadata rather than list/detail records",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/blog-categories/count",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shopwired.get.blog-posts-count",
+      "kind": "rest_read",
+      "summary": "GET /blog-posts/count",
+      "description": "count endpoint returns aggregate metadata rather than list/detail records",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/blog-posts/count",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shopwired.get.blog-tags-count",
+      "kind": "rest_read",
+      "summary": "GET /blog-tags/count",
+      "description": "count endpoint returns aggregate metadata rather than list/detail records",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/blog-tags/count",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shopwired.get.brands-count",
+      "kind": "rest_read",
+      "summary": "GET /brands/count",
+      "description": "count endpoint returns aggregate metadata rather than list/detail records",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/brands/count",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shopwired.get.categories-count",
+      "kind": "rest_read",
+      "summary": "GET /categories/count",
+      "description": "count endpoint returns aggregate metadata rather than list/detail records",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/categories/count",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shopwired.get.collect-locations-count",
+      "kind": "rest_read",
+      "summary": "GET /collect-locations/count",
+      "description": "count endpoint returns aggregate metadata rather than list/detail records",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/collect-locations/count",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shopwired.get.countries",
+      "kind": "rest_read",
+      "summary": "GET /countries",
+      "description": "count endpoint returns aggregate metadata rather than list/detail records",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/countries",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shopwired.get.countries-id",
+      "kind": "rest_read",
+      "summary": "GET /countries/{id}",
+      "description": "count endpoint returns aggregate metadata rather than list/detail records",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/countries/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shopwired.get.custom-fields-count",
+      "kind": "rest_read",
+      "summary": "GET /custom-fields/count",
+      "description": "count endpoint returns aggregate metadata rather than list/detail records",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/custom-fields/count",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shopwired.get.customers-count",
+      "kind": "rest_read",
+      "summary": "GET /customers/count",
+      "description": "count endpoint returns aggregate metadata rather than list/detail records",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/customers/count",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shopwired.get.digital-files-count",
+      "kind": "rest_read",
+      "summary": "GET /digital-files/count",
+      "description": "count endpoint returns aggregate metadata rather than list/detail records",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/digital-files/count",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shopwired.get.events-count",
+      "kind": "rest_read",
+      "summary": "GET /events/count",
+      "description": "count endpoint returns aggregate metadata rather than list/detail records",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/events/count",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shopwired.get.filter-groups-count",
+      "kind": "rest_read",
+      "summary": "GET /filter-groups/count",
+      "description": "count endpoint returns aggregate metadata rather than list/detail records",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/filter-groups/count",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shopwired.get.gift-vouchers-count",
+      "kind": "rest_read",
+      "summary": "GET /gift-vouchers/count",
+      "description": "count endpoint returns aggregate metadata rather than list/detail records",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/gift-vouchers/count",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shopwired.get.incomplete-orders-count",
+      "kind": "rest_read",
+      "summary": "GET /incomplete-orders/count",
+      "description": "count endpoint returns aggregate metadata rather than list/detail records",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/incomplete-orders/count",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shopwired.get.offers-count",
+      "kind": "rest_read",
+      "summary": "GET /offers/count",
+      "description": "count endpoint returns aggregate metadata rather than list/detail records",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/offers/count",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shopwired.get.orders-count",
+      "kind": "rest_read",
+      "summary": "GET /orders/count",
+      "description": "count endpoint returns aggregate metadata rather than list/detail records",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/orders/count",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shopwired.get.pages-count",
+      "kind": "rest_read",
+      "summary": "GET /pages/count",
+      "description": "count endpoint returns aggregate metadata rather than list/detail records",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/pages/count",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shopwired.get.products-count",
+      "kind": "rest_read",
+      "summary": "GET /products/count",
+      "description": "count endpoint returns aggregate metadata rather than list/detail records",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/products/count",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shopwired.get.redirects-count",
+      "kind": "rest_read",
+      "summary": "GET /redirects/count",
+      "description": "count endpoint returns aggregate metadata rather than list/detail records",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/redirects/count",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shopwired.get.sales-count",
+      "kind": "rest_read",
+      "summary": "GET /sales/count",
+      "description": "count endpoint returns aggregate metadata rather than list/detail records",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/sales/count",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shopwired.get.shipping-zones-count",
+      "kind": "rest_read",
+      "summary": "GET /shipping-zones/count",
+      "description": "count endpoint returns aggregate metadata rather than list/detail records",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/shipping-zones/count",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shopwired.get.shopwired-payments-disputes-count",
+      "kind": "rest_read",
+      "summary": "GET /shopwired-payments/disputes/count",
+      "description": "count endpoint returns aggregate metadata rather than list/detail records",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/shopwired-payments/disputes/count",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shopwired.get.shopwired-payments-payouts-count",
+      "kind": "rest_read",
+      "summary": "GET /shopwired-payments/payouts/count",
+      "description": "count endpoint returns aggregate metadata rather than list/detail records",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/shopwired-payments/payouts/count",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shopwired.get.shopwired-payments-transactions-count",
+      "kind": "rest_read",
+      "summary": "GET /shopwired-payments/transactions/count",
+      "description": "count endpoint returns aggregate metadata rather than list/detail records",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/shopwired-payments/transactions/count",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shopwired.get.themes-count",
+      "kind": "rest_read",
+      "summary": "GET /themes/count",
+      "description": "count endpoint returns aggregate metadata rather than list/detail records",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/themes/count",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shopwired.get.trade-customer-product-prices-count",
+      "kind": "rest_read",
+      "summary": "GET /trade-customer-product-prices/count",
+      "description": "count endpoint returns aggregate metadata rather than list/detail records",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/trade-customer-product-prices/count",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shopwired.get.vouchers-count",
+      "kind": "rest_read",
+      "summary": "GET /vouchers/count",
+      "description": "count endpoint returns aggregate metadata rather than list/detail records",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/vouchers/count",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shopwired.get.webhooks-count",
+      "kind": "rest_read",
+      "summary": "GET /webhooks/count",
+      "description": "count endpoint returns aggregate metadata rather than list/detail records",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/webhooks/count",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shopwired.get.wishlists-count",
+      "kind": "rest_read",
+      "summary": "GET /wishlists/count",
+      "description": "count endpoint returns aggregate metadata rather than list/detail records",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/wishlists/count",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

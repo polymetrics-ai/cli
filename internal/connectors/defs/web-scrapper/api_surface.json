@@ -1,28 +1,756 @@
 {
-  "api": "Web Scraper Cloud API v1 (https://webscraper.io/documentation/web-scraper-cloud/api)",
+  "api": "Web Scraper Cloud API v1 (https://webscraper.io/documentation/web-scraper-cloud/api); provider artifact version: OpenAPI 3.0.3; Web Scraper Cloud API info.version 1.0.0",
   "docs": "https://webscraper.io/documentation/web-scraper-cloud/api",
-  "reviewed_at": "2026-07-04",
-  "scope": "Pass B full-surface expansion: every practical GET list/detail endpoint (verified against the official webscraper.io API documentation and the webscraperio/api-client-php reference client, which mirrors the real wire paths/response shapes exactly) is now covered_by a stream, and every real create/update/delete mutation is covered_by a writes.json action. Legacy's original 2 streams (`sitemaps`/`jobs`, singular /sitemap and /scraping-job paths with no id) are kept byte-for-byte as-is for parity even though the real documented listing endpoints are the plural /sitemaps and /scraping-jobs paths — see docs.md Known limits for the discrepancy this surfaced.",
+  "reviewed_at": "2026-08-09",
+  "operation_ledger_version": 2,
+  "scope": "Provider-artifact inventory generated from the cited openapi artifact (22 documented operations across 1 provider-owned source document(s)). Every documented operation is represented; existing source-surface bindings absent from the artifact are retained and flagged with present-in-surface-absent-from-artifact.",
+  "artifacts": [
+    {
+      "id": "web-scrapper-artifact-2026-08-09",
+      "url": "https://webscraper.io/openapi.yaml",
+      "kind": "openapi",
+      "version": "3.0.3",
+      "retrieved_at": "2026-08-09",
+      "sha256": "0c1d30f72dab7c61544387706f921cb19a4b02fa692a69768d433af9a11f8716"
+    }
+  ],
   "endpoints": [
-    { "method": "GET", "path": "/sitemap", "covered_by": { "stream": "sitemaps" } },
-    { "method": "GET", "path": "/scraping-job", "covered_by": { "stream": "jobs" } },
-    { "method": "GET", "path": "/sitemaps", "covered_by": { "stream": "sitemaps_list" } },
-    { "method": "GET", "path": "/scraping-jobs", "covered_by": { "stream": "scraping_jobs_list" } },
-    { "method": "GET", "path": "/account", "covered_by": { "stream": "account" } },
-    { "method": "GET", "path": "/scraping-job/{id}/problematic-urls", "covered_by": { "stream": "problematic_urls" } },
-    { "method": "POST", "path": "/sitemap", "covered_by": { "write": "create_sitemap" } },
-    { "method": "PUT", "path": "/sitemap/{id}", "covered_by": { "write": "update_sitemap" } },
-    { "method": "DELETE", "path": "/sitemap/{id}", "covered_by": { "write": "delete_sitemap" } },
-    { "method": "POST", "path": "/scraping-job", "covered_by": { "write": "create_scraping_job" } },
-    { "method": "DELETE", "path": "/scraping-job/{id}", "covered_by": { "write": "delete_scraping_job" } },
-    { "method": "GET", "path": "/sitemap/{id}", "excluded": { "category": "duplicate_of", "reason": "single-sitemap detail lookup returns the same {id, name, sitemap} shape already reachable via the sitemaps/sitemaps_list list streams' individual records; no incremental value as a separate stream without a fan_out id-list config surface duplicating sitemaps_list's own output" } },
-    { "method": "GET", "path": "/scraping-job/{id}", "excluded": { "category": "duplicate_of", "reason": "single-scraping-job detail lookup returns the same object shape already reachable via the jobs/scraping_jobs_list list streams' individual records" } },
-    { "method": "GET", "path": "/scraping-job/{id}/json", "excluded": { "category": "binary_payload", "reason": "returns a newline-delimited-JSON bulk data export file (one scraped record per line, arbitrary caller-defined selector schema), not a single structured object this dialect's records.path/schema projection can describe" } },
-    { "method": "GET", "path": "/scraping-job/{id}/csv", "excluded": { "category": "binary_payload", "reason": "returns a raw CSV export file (arbitrary caller-defined selector-driven columns), not JSON" } },
-    { "method": "GET", "path": "/scraping-job/{id}/xlsx", "excluded": { "category": "binary_payload", "reason": "returns a raw XLSX binary export file, not JSON" } },
-    { "method": "GET", "path": "/scraping-job/{id}/data-quality", "excluded": { "category": "out_of_scope", "reason": "undocumented on the public API reference (only exposed via the community PHP SDK's getScrapingJobDataQuality helper with no published response schema); no authoritative field-level source to build a schema from" } },
-    { "method": "GET", "path": "/sitemap/{id}/scheduler", "excluded": { "category": "out_of_scope", "reason": "undocumented on the public API reference (only exposed via the community PHP SDK's scheduler helpers with no published response schema); no authoritative field-level source to build a schema from" } },
-    { "method": "POST", "path": "/sitemap/{id}/enable-scheduler", "excluded": { "category": "out_of_scope", "reason": "undocumented on the public API reference (community PHP SDK only, no published request/response schema)" } },
-    { "method": "POST", "path": "/sitemap/{id}/disable-scheduler", "excluded": { "category": "out_of_scope", "reason": "undocumented on the public API reference (community PHP SDK only, no published request/response schema)" } }
+    {
+      "method": "GET",
+      "path": "/account",
+      "provenance": {
+        "artifact": "web-scrapper-artifact-2026-08-09",
+        "source_url": "https://webscraper.io/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0c1d30f72dab7c61544387706f921cb19a4b02fa692a69768d433af9a11f8716",
+        "coordinate": "paths[\"/account\"].get"
+      },
+      "covered_by": {
+        "stream": "account"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/scraping-job",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "web-scrapper-artifact-2026-08-09",
+        "source_url": "https://webscraper.io/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "OpenAPI 3.0.3; Web Scraper Cloud API info.version 1.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0c1d30f72dab7c61544387706f921cb19a4b02fa692a69768d433af9a11f8716",
+        "coordinate": "existing-surface[GET /scraping-job]"
+      },
+      "covered_by": {
+        "stream": "jobs"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/scraping-job",
+      "provenance": {
+        "artifact": "web-scrapper-artifact-2026-08-09",
+        "source_url": "https://webscraper.io/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0c1d30f72dab7c61544387706f921cb19a4b02fa692a69768d433af9a11f8716",
+        "coordinate": "paths[\"/scraping-job\"].post"
+      },
+      "covered_by": {
+        "write": "create_scraping_job"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/scraping-job/{id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "web-scrapper-artifact-2026-08-09",
+        "source_url": "https://webscraper.io/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "OpenAPI 3.0.3; Web Scraper Cloud API info.version 1.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0c1d30f72dab7c61544387706f921cb19a4b02fa692a69768d433af9a11f8716",
+        "coordinate": "existing-surface[GET /scraping-job/{id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-scraping-job detail lookup returns the same object shape already reachable via the jobs/scraping_jobs_list list streams' individual records",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/scraping-job/{id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "web-scrapper-artifact-2026-08-09",
+        "source_url": "https://webscraper.io/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "OpenAPI 3.0.3; Web Scraper Cloud API info.version 1.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0c1d30f72dab7c61544387706f921cb19a4b02fa692a69768d433af9a11f8716",
+        "coordinate": "existing-surface[DELETE /scraping-job/{id}]"
+      },
+      "covered_by": {
+        "write": "delete_scraping_job"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/scraping-job/{id}/csv",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "web-scrapper-artifact-2026-08-09",
+        "source_url": "https://webscraper.io/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "OpenAPI 3.0.3; Web Scraper Cloud API info.version 1.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0c1d30f72dab7c61544387706f921cb19a4b02fa692a69768d433af9a11f8716",
+        "coordinate": "existing-surface[GET /scraping-job/{id}/csv]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "returns a raw CSV export file (arbitrary caller-defined selector-driven columns), not JSON",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/scraping-job/{id}/data-quality",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "web-scrapper-artifact-2026-08-09",
+        "source_url": "https://webscraper.io/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "OpenAPI 3.0.3; Web Scraper Cloud API info.version 1.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0c1d30f72dab7c61544387706f921cb19a4b02fa692a69768d433af9a11f8716",
+        "coordinate": "existing-surface[GET /scraping-job/{id}/data-quality]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "undocumented on the public API reference (only exposed via the community PHP SDK's getScrapingJobDataQuality helper with no published response schema); no authoritative field-level source to build a schema from",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/scraping-job/{id}/json",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "web-scrapper-artifact-2026-08-09",
+        "source_url": "https://webscraper.io/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "OpenAPI 3.0.3; Web Scraper Cloud API info.version 1.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0c1d30f72dab7c61544387706f921cb19a4b02fa692a69768d433af9a11f8716",
+        "coordinate": "existing-surface[GET /scraping-job/{id}/json]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "returns a newline-delimited-JSON bulk data export file (one scraped record per line, arbitrary caller-defined selector schema), not a single structured object this dialect's records.path/schema projection can describe",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/scraping-job/{id}/problematic-urls",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "web-scrapper-artifact-2026-08-09",
+        "source_url": "https://webscraper.io/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "OpenAPI 3.0.3; Web Scraper Cloud API info.version 1.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0c1d30f72dab7c61544387706f921cb19a4b02fa692a69768d433af9a11f8716",
+        "coordinate": "existing-surface[GET /scraping-job/{id}/problematic-urls]"
+      },
+      "covered_by": {
+        "stream": "problematic_urls"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/scraping-job/{id}/xlsx",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "web-scrapper-artifact-2026-08-09",
+        "source_url": "https://webscraper.io/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "OpenAPI 3.0.3; Web Scraper Cloud API info.version 1.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0c1d30f72dab7c61544387706f921cb19a4b02fa692a69768d433af9a11f8716",
+        "coordinate": "existing-surface[GET /scraping-job/{id}/xlsx]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "returns a raw XLSX binary export file, not JSON",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/scraping-job/{scrapingJobId}",
+      "provenance": {
+        "artifact": "web-scrapper-artifact-2026-08-09",
+        "source_url": "https://webscraper.io/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0c1d30f72dab7c61544387706f921cb19a4b02fa692a69768d433af9a11f8716",
+        "coordinate": "paths[\"/scraping-job/{scrapingJobId}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/scraping-job/{scrapingJobId}",
+      "provenance": {
+        "artifact": "web-scrapper-artifact-2026-08-09",
+        "source_url": "https://webscraper.io/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0c1d30f72dab7c61544387706f921cb19a4b02fa692a69768d433af9a11f8716",
+        "coordinate": "paths[\"/scraping-job/{scrapingJobId}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/scraping-job/{scrapingJobId}/continue",
+      "provenance": {
+        "artifact": "web-scrapper-artifact-2026-08-09",
+        "source_url": "https://webscraper.io/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0c1d30f72dab7c61544387706f921cb19a4b02fa692a69768d433af9a11f8716",
+        "coordinate": "paths[\"/scraping-job/{scrapingJobId}/continue\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/scraping-job/{scrapingJobId}/data-quality",
+      "provenance": {
+        "artifact": "web-scrapper-artifact-2026-08-09",
+        "source_url": "https://webscraper.io/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0c1d30f72dab7c61544387706f921cb19a4b02fa692a69768d433af9a11f8716",
+        "coordinate": "paths[\"/scraping-job/{scrapingJobId}/data-quality\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/scraping-job/{scrapingJobId}/problematic-urls",
+      "provenance": {
+        "artifact": "web-scrapper-artifact-2026-08-09",
+        "source_url": "https://webscraper.io/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0c1d30f72dab7c61544387706f921cb19a4b02fa692a69768d433af9a11f8716",
+        "coordinate": "paths[\"/scraping-job/{scrapingJobId}/problematic-urls\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/scraping-job/{scrapingJobId}/stop",
+      "provenance": {
+        "artifact": "web-scrapper-artifact-2026-08-09",
+        "source_url": "https://webscraper.io/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0c1d30f72dab7c61544387706f921cb19a4b02fa692a69768d433af9a11f8716",
+        "coordinate": "paths[\"/scraping-job/{scrapingJobId}/stop\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/scraping-job/{scrapingJobId}/{extension}",
+      "provenance": {
+        "artifact": "web-scrapper-artifact-2026-08-09",
+        "source_url": "https://webscraper.io/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0c1d30f72dab7c61544387706f921cb19a4b02fa692a69768d433af9a11f8716",
+        "coordinate": "paths[\"/scraping-job/{scrapingJobId}/{extension}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/scraping-jobs",
+      "provenance": {
+        "artifact": "web-scrapper-artifact-2026-08-09",
+        "source_url": "https://webscraper.io/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0c1d30f72dab7c61544387706f921cb19a4b02fa692a69768d433af9a11f8716",
+        "coordinate": "paths[\"/scraping-jobs\"].get"
+      },
+      "covered_by": {
+        "stream": "scraping_jobs_list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sitemap",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "web-scrapper-artifact-2026-08-09",
+        "source_url": "https://webscraper.io/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "OpenAPI 3.0.3; Web Scraper Cloud API info.version 1.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0c1d30f72dab7c61544387706f921cb19a4b02fa692a69768d433af9a11f8716",
+        "coordinate": "existing-surface[GET /sitemap]"
+      },
+      "covered_by": {
+        "stream": "sitemaps"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/sitemap",
+      "provenance": {
+        "artifact": "web-scrapper-artifact-2026-08-09",
+        "source_url": "https://webscraper.io/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0c1d30f72dab7c61544387706f921cb19a4b02fa692a69768d433af9a11f8716",
+        "coordinate": "paths[\"/sitemap\"].post"
+      },
+      "covered_by": {
+        "write": "create_sitemap"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sitemap/{id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "web-scrapper-artifact-2026-08-09",
+        "source_url": "https://webscraper.io/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "OpenAPI 3.0.3; Web Scraper Cloud API info.version 1.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0c1d30f72dab7c61544387706f921cb19a4b02fa692a69768d433af9a11f8716",
+        "coordinate": "existing-surface[GET /sitemap/{id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-sitemap detail lookup returns the same {id, name, sitemap} shape already reachable via the sitemaps/sitemaps_list list streams' individual records; no incremental value as a separate stream without a fan_out id-list config surface duplicating sitemaps_list's own output",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/sitemap/{id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "web-scrapper-artifact-2026-08-09",
+        "source_url": "https://webscraper.io/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "OpenAPI 3.0.3; Web Scraper Cloud API info.version 1.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0c1d30f72dab7c61544387706f921cb19a4b02fa692a69768d433af9a11f8716",
+        "coordinate": "existing-surface[PUT /sitemap/{id}]"
+      },
+      "covered_by": {
+        "write": "update_sitemap"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/sitemap/{id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "web-scrapper-artifact-2026-08-09",
+        "source_url": "https://webscraper.io/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "OpenAPI 3.0.3; Web Scraper Cloud API info.version 1.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0c1d30f72dab7c61544387706f921cb19a4b02fa692a69768d433af9a11f8716",
+        "coordinate": "existing-surface[DELETE /sitemap/{id}]"
+      },
+      "covered_by": {
+        "write": "delete_sitemap"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/sitemap/{id}/disable-scheduler",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "web-scrapper-artifact-2026-08-09",
+        "source_url": "https://webscraper.io/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "OpenAPI 3.0.3; Web Scraper Cloud API info.version 1.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0c1d30f72dab7c61544387706f921cb19a4b02fa692a69768d433af9a11f8716",
+        "coordinate": "existing-surface[POST /sitemap/{id}/disable-scheduler]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "undocumented on the public API reference (community PHP SDK only, no published request/response schema)",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/sitemap/{id}/enable-scheduler",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "web-scrapper-artifact-2026-08-09",
+        "source_url": "https://webscraper.io/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "OpenAPI 3.0.3; Web Scraper Cloud API info.version 1.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0c1d30f72dab7c61544387706f921cb19a4b02fa692a69768d433af9a11f8716",
+        "coordinate": "existing-surface[POST /sitemap/{id}/enable-scheduler]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "undocumented on the public API reference (community PHP SDK only, no published request/response schema)",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sitemap/{id}/scheduler",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "web-scrapper-artifact-2026-08-09",
+        "source_url": "https://webscraper.io/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "OpenAPI 3.0.3; Web Scraper Cloud API info.version 1.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0c1d30f72dab7c61544387706f921cb19a4b02fa692a69768d433af9a11f8716",
+        "coordinate": "existing-surface[GET /sitemap/{id}/scheduler]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "undocumented on the public API reference (only exposed via the community PHP SDK's scheduler helpers with no published response schema); no authoritative field-level source to build a schema from",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sitemap/{sitemapId}",
+      "provenance": {
+        "artifact": "web-scrapper-artifact-2026-08-09",
+        "source_url": "https://webscraper.io/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0c1d30f72dab7c61544387706f921cb19a4b02fa692a69768d433af9a11f8716",
+        "coordinate": "paths[\"/sitemap/{sitemapId}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/sitemap/{sitemapId}",
+      "provenance": {
+        "artifact": "web-scrapper-artifact-2026-08-09",
+        "source_url": "https://webscraper.io/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0c1d30f72dab7c61544387706f921cb19a4b02fa692a69768d433af9a11f8716",
+        "coordinate": "paths[\"/sitemap/{sitemapId}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/sitemap/{sitemapId}",
+      "provenance": {
+        "artifact": "web-scrapper-artifact-2026-08-09",
+        "source_url": "https://webscraper.io/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0c1d30f72dab7c61544387706f921cb19a4b02fa692a69768d433af9a11f8716",
+        "coordinate": "paths[\"/sitemap/{sitemapId}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/sitemap/{sitemapId}/add-tag",
+      "provenance": {
+        "artifact": "web-scrapper-artifact-2026-08-09",
+        "source_url": "https://webscraper.io/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0c1d30f72dab7c61544387706f921cb19a4b02fa692a69768d433af9a11f8716",
+        "coordinate": "paths[\"/sitemap/{sitemapId}/add-tag\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/sitemap/{sitemapId}/disable-scheduler",
+      "provenance": {
+        "artifact": "web-scrapper-artifact-2026-08-09",
+        "source_url": "https://webscraper.io/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0c1d30f72dab7c61544387706f921cb19a4b02fa692a69768d433af9a11f8716",
+        "coordinate": "paths[\"/sitemap/{sitemapId}/disable-scheduler\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/sitemap/{sitemapId}/enable-scheduler",
+      "provenance": {
+        "artifact": "web-scrapper-artifact-2026-08-09",
+        "source_url": "https://webscraper.io/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0c1d30f72dab7c61544387706f921cb19a4b02fa692a69768d433af9a11f8716",
+        "coordinate": "paths[\"/sitemap/{sitemapId}/enable-scheduler\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/sitemap/{sitemapId}/remove-tag",
+      "provenance": {
+        "artifact": "web-scrapper-artifact-2026-08-09",
+        "source_url": "https://webscraper.io/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0c1d30f72dab7c61544387706f921cb19a4b02fa692a69768d433af9a11f8716",
+        "coordinate": "paths[\"/sitemap/{sitemapId}/remove-tag\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/sitemap/{sitemapId}/rename",
+      "provenance": {
+        "artifact": "web-scrapper-artifact-2026-08-09",
+        "source_url": "https://webscraper.io/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0c1d30f72dab7c61544387706f921cb19a4b02fa692a69768d433af9a11f8716",
+        "coordinate": "paths[\"/sitemap/{sitemapId}/rename\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sitemap/{sitemapId}/scheduler",
+      "provenance": {
+        "artifact": "web-scrapper-artifact-2026-08-09",
+        "source_url": "https://webscraper.io/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0c1d30f72dab7c61544387706f921cb19a4b02fa692a69768d433af9a11f8716",
+        "coordinate": "paths[\"/sitemap/{sitemapId}/scheduler\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sitemap/{sitemapId}/tags",
+      "provenance": {
+        "artifact": "web-scrapper-artifact-2026-08-09",
+        "source_url": "https://webscraper.io/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0c1d30f72dab7c61544387706f921cb19a4b02fa692a69768d433af9a11f8716",
+        "coordinate": "paths[\"/sitemap/{sitemapId}/tags\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sitemaps",
+      "provenance": {
+        "artifact": "web-scrapper-artifact-2026-08-09",
+        "source_url": "https://webscraper.io/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0c1d30f72dab7c61544387706f921cb19a4b02fa692a69768d433af9a11f8716",
+        "coordinate": "paths[\"/sitemaps\"].get"
+      },
+      "covered_by": {
+        "stream": "sitemaps_list"
+      }
+    }
   ]
 }

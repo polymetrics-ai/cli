@@ -1,0 +1,4861 @@
+{
+  "tagline": "Run Vantage's declared streams and reverse-ETL actions.",
+  "usage": "pm vantage \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "anomaly alerts list",
+        "anomaly notifications list",
+        "api get access-grants",
+        "api get access-grants access-grant-token",
+        "api get anomaly-alerts anomaly-alert-token",
+        "api get anomaly-notifications anomaly-notification-token",
+        "api get audit-logs",
+        "api get audit-logs audit-log-token",
+        "api get billing-profiles",
+        "api get billing-profiles billing-profile-token",
+        "api get billing-rules",
+        "api get billing-rules billing-rule-token",
+        "api get budget-alerts budget-alert-token",
+        "api get budgets budget-token",
+        "api get business-metrics business-metric-token",
+        "api get business-metrics business-metric-token forecasted-values",
+        "api get business-metrics business-metric-token labels",
+        "api get business-metrics business-metric-token values",
+        "api get canvases canvas-token",
+        "api get cost-alerts cost-alert-token",
+        "api get cost-alerts cost-alert-token events",
+        "api get cost-alerts cost-alert-token events event-token",
+        "api get cost-provider-accounts",
+        "api get cost-providers",
+        "api get cost-reports cost-report-token",
+        "api get cost-reports cost-report-token forecasted-costs",
+        "api get cost-services",
+        "api get dashboards dashboard-token",
+        "api get data-exports data-export-token",
+        "api get exchange-rates",
+        "api get financial-commitment-reports",
+        "api get financial-commitment-reports financial-commitment-report-token",
+        "api get folders folder-token",
+        "api get integrations integration-token",
+        "api get integrations integration-token costs",
+        "api get invoices invoice-token",
+        "api get invoices invoice-token cost-report",
+        "api get kubernetes-efficiency-reports kubernetes-efficiency-report-token",
+        "api get managed-accounts managed-account-token",
+        "api get me",
+        "api get network-flow-logs",
+        "api get network-flow-reports network-flow-report-token",
+        "api get ping",
+        "api get products",
+        "api get products id",
+        "api get products product-id prices",
+        "api get products product-id prices id",
+        "api get recommendation-views recommendation-view-token",
+        "api get recommendations by-type type resources",
+        "api get recommendations recommendation-token",
+        "api get recommendations recommendation-token resources",
+        "api get recommendations recommendation-token resources resource-token",
+        "api get report-forecasts",
+        "api get report-forecasts report-forecast-token",
+        "api get report-notifications report-notification-token",
+        "api get resource-reports columns",
+        "api get resource-reports resource-report-token",
+        "api get resources",
+        "api get resources resource-token",
+        "api get saved-filters saved-filter-token",
+        "api get scenario-models",
+        "api get scenario-models scenario-model-token",
+        "api get segments segment-token",
+        "api get tags key values",
+        "api get teams team-token",
+        "api get teams team-token members",
+        "api get unit-costs",
+        "api get users",
+        "api get users user-token",
+        "api get virtual-tag-configs async request-id",
+        "api get virtual-tag-configs token",
+        "api get virtual-tag-configs token status",
+        "api get virtual-tag-configs virtual-tag-config-token values virtual-tag-config-value-token",
+        "api get workspaces workspace-token",
+        "budget alerts list",
+        "budgets list",
+        "business metrics list",
+        "canvases list",
+        "cost alerts list",
+        "cost reports list",
+        "costs list",
+        "dashboards list",
+        "financial commitments list",
+        "folders list",
+        "integrations list",
+        "invoices list",
+        "kubernetes efficiency reports list",
+        "managed accounts list",
+        "network flow reports list",
+        "recommendation views list",
+        "recommendations list",
+        "report notifications list",
+        "resource reports list",
+        "saved filters list",
+        "segments list",
+        "tags list",
+        "teams list",
+        "virtual tag configs list",
+        "workspaces list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "api delete access-grants access-grant-token",
+        "api delete billing-profiles billing-profile-token",
+        "api delete billing-rules billing-rule-token",
+        "api delete business-metrics business-metric-token values",
+        "api delete financial-commitment-reports financial-commitment-report-token",
+        "api delete integrations integration-token",
+        "api delete integrations integration-token costs user-costs-upload-token",
+        "api delete managed-accounts managed-account-token",
+        "api delete managed-accounts managed-account-token sso-connection",
+        "api delete report-forecasts report-forecast-token",
+        "api delete scenario-models scenario-model-token",
+        "api delete teams team-token members user-token",
+        "api delete virtual-tag-configs virtual-tag-config-token values virtual-tag-config-value-token",
+        "api patch virtual-tag-configs virtual-tag-config-token values virtual-tag-config-value-token",
+        "api post access-grants",
+        "api post billing-profiles",
+        "api post billing-rules",
+        "api post costs data-exports",
+        "api post exchange-rates csv",
+        "api post financial-commitment-reports",
+        "api post integrations azure",
+        "api post integrations custom-provider",
+        "api post integrations gcp",
+        "api post integrations integration-token costs-csv",
+        "api post invoices",
+        "api post invoices invoice-token download",
+        "api post invoices invoice-token regenerate",
+        "api post invoices invoice-token send",
+        "api post invoices invoice-token send-and-approve",
+        "api post kubernetes-efficiency-reports data-exports",
+        "api post managed-accounts",
+        "api post managed-accounts managed-account-token sso-connection",
+        "api post report-forecasts",
+        "api post scenario-models",
+        "api post teams team-token members",
+        "api post unit-costs data-exports",
+        "api post user-feedback",
+        "api post virtual-tag-configs virtual-tag-config-token values",
+        "api put access-grants access-grant-token",
+        "api put billing-profiles billing-profile-token",
+        "api put billing-rules billing-rule-token",
+        "api put business-metrics business-metric-token values-csv",
+        "api put financial-commitment-reports financial-commitment-report-token",
+        "api put integrations integration-token",
+        "api put managed-accounts managed-account-token",
+        "api put managed-accounts managed-account-token sso-connection",
+        "api put me",
+        "api put report-forecasts report-forecast-token",
+        "api put scenario-models scenario-model-token",
+        "api put tags",
+        "api put users user-token",
+        "api put virtual-tag-configs token async",
+        "create anomaly notification apply",
+        "create budget alert apply",
+        "create budget apply",
+        "create business metric apply",
+        "create canvas apply",
+        "create cost alert apply",
+        "create cost report apply",
+        "create dashboard apply",
+        "create folder apply",
+        "create kubernetes efficiency report apply",
+        "create network flow report apply",
+        "create recommendation view apply",
+        "create report notification apply",
+        "create resource report apply",
+        "create saved filter apply",
+        "create segment apply",
+        "create team apply",
+        "create virtual tag config apply",
+        "create workspace apply",
+        "delete anomaly notification apply",
+        "delete budget alert apply",
+        "delete budget apply",
+        "delete business metric apply",
+        "delete canvas apply",
+        "delete cost alert apply",
+        "delete cost report apply",
+        "delete dashboard apply",
+        "delete folder apply",
+        "delete kubernetes efficiency report apply",
+        "delete network flow report apply",
+        "delete recommendation view apply",
+        "delete report notification apply",
+        "delete resource report apply",
+        "delete saved filter apply",
+        "delete segment apply",
+        "delete team apply",
+        "delete virtual tag config apply",
+        "delete workspace apply",
+        "update anomaly alert apply",
+        "update anomaly notification apply",
+        "update budget alert apply",
+        "update budget apply",
+        "update business metric apply",
+        "update canvas apply",
+        "update cost alert apply",
+        "update cost report apply",
+        "update dashboard apply",
+        "update folder apply",
+        "update kubernetes efficiency report apply",
+        "update network flow report apply",
+        "update recommendation view apply",
+        "update report notification apply",
+        "update resource report apply",
+        "update saved filter apply",
+        "update segment apply",
+        "update team apply",
+        "update virtual tag config apply",
+        "update workspace apply"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "anomaly alerts list",
+      "summary": "Run the anomaly alerts ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "anomaly_alerts",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage anomaly alerts list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/anomaly_alerts"
+        }
+      ]
+    },
+    {
+      "path": "anomaly notifications list",
+      "summary": "Run the anomaly notifications ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "anomaly_notifications",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage anomaly notifications list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/anomaly_notifications"
+        }
+      ]
+    },
+    {
+      "path": "api delete access-grants access-grant-token",
+      "summary": "Documented DELETE /access_grants/{access_grant_token} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api delete access-grants access-grant-token --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/access_grants/{access_grant_token}"
+        }
+      ],
+      "operation": "vantage.delete.access-grants-access-grant-token",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete billing-profiles billing-profile-token",
+      "summary": "Documented DELETE /billing_profiles/{billing_profile_token} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api delete billing-profiles billing-profile-token --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/billing_profiles/{billing_profile_token}"
+        }
+      ],
+      "operation": "vantage.delete.billing-profiles-billing-profile-token",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete billing-rules billing-rule-token",
+      "summary": "Documented DELETE /billing_rules/{billing_rule_token} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api delete billing-rules billing-rule-token --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/billing_rules/{billing_rule_token}"
+        }
+      ],
+      "operation": "vantage.delete.billing-rules-billing-rule-token",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete business-metrics business-metric-token values",
+      "summary": "Documented DELETE /business_metrics/{business_metric_token}/values (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api delete business-metrics business-metric-token values --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/business_metrics/{business_metric_token}/values"
+        }
+      ],
+      "operation": "vantage.delete.business-metrics-business-metric-token-values",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete financial-commitment-reports financial-commitment-report-token",
+      "summary": "Documented DELETE /financial_commitment_reports/{financial_commitment_report_token} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api delete financial-commitment-reports financial-commitment-report-token --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/financial_commitment_reports/{financial_commitment_report_token}"
+        }
+      ],
+      "operation": "vantage.delete.financial-commitment-reports-financial-commitment-report-token",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete integrations integration-token",
+      "summary": "Documented DELETE /integrations/{integration_token} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api delete integrations integration-token --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/integrations/{integration_token}"
+        }
+      ],
+      "operation": "vantage.delete.integrations-integration-token",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete integrations integration-token costs user-costs-upload-token",
+      "summary": "Documented DELETE /integrations/{integration_token}/costs/{user_costs_upload_token} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api delete integrations integration-token costs user-costs-upload-token --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/integrations/{integration_token}/costs/{user_costs_upload_token}"
+        }
+      ],
+      "operation": "vantage.delete.integrations-integration-token-costs-user-costs-upload-token",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete managed-accounts managed-account-token",
+      "summary": "Documented DELETE /managed_accounts/{managed_account_token} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api delete managed-accounts managed-account-token --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/managed_accounts/{managed_account_token}"
+        }
+      ],
+      "operation": "vantage.delete.managed-accounts-managed-account-token",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete managed-accounts managed-account-token sso-connection",
+      "summary": "Documented DELETE /managed_accounts/{managed_account_token}/sso_connection (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api delete managed-accounts managed-account-token sso-connection --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/managed_accounts/{managed_account_token}/sso_connection"
+        }
+      ],
+      "operation": "vantage.delete.managed-accounts-managed-account-token-sso-connection",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete report-forecasts report-forecast-token",
+      "summary": "Documented DELETE /report_forecasts/{report_forecast_token} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api delete report-forecasts report-forecast-token --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/report_forecasts/{report_forecast_token}"
+        }
+      ],
+      "operation": "vantage.delete.report-forecasts-report-forecast-token",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete scenario-models scenario-model-token",
+      "summary": "Documented DELETE /scenario_models/{scenario_model_token} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api delete scenario-models scenario-model-token --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/scenario_models/{scenario_model_token}"
+        }
+      ],
+      "operation": "vantage.delete.scenario-models-scenario-model-token",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete teams team-token members user-token",
+      "summary": "Documented DELETE /teams/{team_token}/members/{user_token} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api delete teams team-token members user-token --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/teams/{team_token}/members/{user_token}"
+        }
+      ],
+      "operation": "vantage.delete.teams-team-token-members-user-token",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete virtual-tag-configs virtual-tag-config-token values virtual-tag-config-value-token",
+      "summary": "Documented DELETE /virtual_tag_configs/{virtual_tag_config_token}/values/{virtual_tag_config_value_token} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api delete virtual-tag-configs virtual-tag-config-token values virtual-tag-config-value-token --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/virtual_tag_configs/{virtual_tag_config_token}/values/{virtual_tag_config_value_token}"
+        }
+      ],
+      "operation": "vantage.delete.virtual-tag-configs-virtual-tag-config-token-values-virtual-tag-config-value-token",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api get access-grants",
+      "summary": "Documented GET /access_grants (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api get access-grants --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/access_grants"
+        }
+      ],
+      "operation": "vantage.get.access-grants",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get access-grants access-grant-token",
+      "summary": "Documented GET /access_grants/{access_grant_token} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api get access-grants access-grant-token --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/access_grants/{access_grant_token}"
+        }
+      ],
+      "operation": "vantage.get.access-grants-access-grant-token",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get anomaly-alerts anomaly-alert-token",
+      "summary": "Documented GET /anomaly_alerts/{anomaly_alert_token} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api get anomaly-alerts anomaly-alert-token --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/anomaly_alerts/{anomaly_alert_token}"
+        }
+      ],
+      "operation": "vantage.get.anomaly-alerts-anomaly-alert-token",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get anomaly-notifications anomaly-notification-token",
+      "summary": "Documented GET /anomaly_notifications/{anomaly_notification_token} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api get anomaly-notifications anomaly-notification-token --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/anomaly_notifications/{anomaly_notification_token}"
+        }
+      ],
+      "operation": "vantage.get.anomaly-notifications-anomaly-notification-token",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get audit-logs",
+      "summary": "Documented GET /audit_logs (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api get audit-logs --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/audit_logs"
+        }
+      ],
+      "operation": "vantage.get.audit-logs",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get audit-logs audit-log-token",
+      "summary": "Documented GET /audit_logs/{audit_log_token} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api get audit-logs audit-log-token --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/audit_logs/{audit_log_token}"
+        }
+      ],
+      "operation": "vantage.get.audit-logs-audit-log-token",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get billing-profiles",
+      "summary": "Documented GET /billing_profiles (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api get billing-profiles --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/billing_profiles"
+        }
+      ],
+      "operation": "vantage.get.billing-profiles",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get billing-profiles billing-profile-token",
+      "summary": "Documented GET /billing_profiles/{billing_profile_token} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api get billing-profiles billing-profile-token --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/billing_profiles/{billing_profile_token}"
+        }
+      ],
+      "operation": "vantage.get.billing-profiles-billing-profile-token",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get billing-rules",
+      "summary": "Documented GET /billing_rules (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api get billing-rules --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/billing_rules"
+        }
+      ],
+      "operation": "vantage.get.billing-rules",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get billing-rules billing-rule-token",
+      "summary": "Documented GET /billing_rules/{billing_rule_token} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api get billing-rules billing-rule-token --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/billing_rules/{billing_rule_token}"
+        }
+      ],
+      "operation": "vantage.get.billing-rules-billing-rule-token",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get budget-alerts budget-alert-token",
+      "summary": "Documented GET /budget_alerts/{budget_alert_token} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api get budget-alerts budget-alert-token --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/budget_alerts/{budget_alert_token}"
+        }
+      ],
+      "operation": "vantage.get.budget-alerts-budget-alert-token",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get budgets budget-token",
+      "summary": "Documented GET /budgets/{budget_token} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api get budgets budget-token --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/budgets/{budget_token}"
+        }
+      ],
+      "operation": "vantage.get.budgets-budget-token",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get business-metrics business-metric-token",
+      "summary": "Documented GET /business_metrics/{business_metric_token} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api get business-metrics business-metric-token --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/business_metrics/{business_metric_token}"
+        }
+      ],
+      "operation": "vantage.get.business-metrics-business-metric-token",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get business-metrics business-metric-token forecasted-values",
+      "summary": "Documented GET /business_metrics/{business_metric_token}/forecasted_values (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api get business-metrics business-metric-token forecasted-values --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/business_metrics/{business_metric_token}/forecasted_values"
+        }
+      ],
+      "operation": "vantage.get.business-metrics-business-metric-token-forecasted-values",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get business-metrics business-metric-token labels",
+      "summary": "Documented GET /business_metrics/{business_metric_token}/labels (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api get business-metrics business-metric-token labels --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/business_metrics/{business_metric_token}/labels"
+        }
+      ],
+      "operation": "vantage.get.business-metrics-business-metric-token-labels",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get business-metrics business-metric-token values",
+      "summary": "Documented GET /business_metrics/{business_metric_token}/values (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api get business-metrics business-metric-token values --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/business_metrics/{business_metric_token}/values"
+        }
+      ],
+      "operation": "vantage.get.business-metrics-business-metric-token-values",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get canvases canvas-token",
+      "summary": "Documented GET /canvases/{canvas_token} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api get canvases canvas-token --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/canvases/{canvas_token}"
+        }
+      ],
+      "operation": "vantage.get.canvases-canvas-token",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get cost-alerts cost-alert-token",
+      "summary": "Documented GET /cost_alerts/{cost_alert_token} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api get cost-alerts cost-alert-token --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/cost_alerts/{cost_alert_token}"
+        }
+      ],
+      "operation": "vantage.get.cost-alerts-cost-alert-token",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get cost-alerts cost-alert-token events",
+      "summary": "Documented GET /cost_alerts/{cost_alert_token}/events (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api get cost-alerts cost-alert-token events --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/cost_alerts/{cost_alert_token}/events"
+        }
+      ],
+      "operation": "vantage.get.cost-alerts-cost-alert-token-events",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get cost-alerts cost-alert-token events event-token",
+      "summary": "Documented GET /cost_alerts/{cost_alert_token}/events/{event_token} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api get cost-alerts cost-alert-token events event-token --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/cost_alerts/{cost_alert_token}/events/{event_token}"
+        }
+      ],
+      "operation": "vantage.get.cost-alerts-cost-alert-token-events-event-token",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get cost-provider-accounts",
+      "summary": "Documented GET /cost_provider_accounts (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api get cost-provider-accounts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/cost_provider_accounts"
+        }
+      ],
+      "operation": "vantage.get.cost-provider-accounts",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get cost-providers",
+      "summary": "Documented GET /cost_providers (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api get cost-providers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/cost_providers"
+        }
+      ],
+      "operation": "vantage.get.cost-providers",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get cost-reports cost-report-token",
+      "summary": "Documented GET /cost_reports/{cost_report_token} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api get cost-reports cost-report-token --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/cost_reports/{cost_report_token}"
+        }
+      ],
+      "operation": "vantage.get.cost-reports-cost-report-token",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get cost-reports cost-report-token forecasted-costs",
+      "summary": "Documented GET /cost_reports/{cost_report_token}/forecasted_costs (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api get cost-reports cost-report-token forecasted-costs --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/cost_reports/{cost_report_token}/forecasted_costs"
+        }
+      ],
+      "operation": "vantage.get.cost-reports-cost-report-token-forecasted-costs",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get cost-services",
+      "summary": "Documented GET /cost_services (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api get cost-services --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/cost_services"
+        }
+      ],
+      "operation": "vantage.get.cost-services",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get dashboards dashboard-token",
+      "summary": "Documented GET /dashboards/{dashboard_token} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api get dashboards dashboard-token --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/dashboards/{dashboard_token}"
+        }
+      ],
+      "operation": "vantage.get.dashboards-dashboard-token",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get data-exports data-export-token",
+      "summary": "Documented GET /data_exports/{data_export_token} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api get data-exports data-export-token --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/data_exports/{data_export_token}"
+        }
+      ],
+      "operation": "vantage.get.data-exports-data-export-token",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get exchange-rates",
+      "summary": "Documented GET /exchange_rates (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api get exchange-rates --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/exchange_rates"
+        }
+      ],
+      "operation": "vantage.get.exchange-rates",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get financial-commitment-reports",
+      "summary": "Documented GET /financial_commitment_reports (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api get financial-commitment-reports --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/financial_commitment_reports"
+        }
+      ],
+      "operation": "vantage.get.financial-commitment-reports",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get financial-commitment-reports financial-commitment-report-token",
+      "summary": "Documented GET /financial_commitment_reports/{financial_commitment_report_token} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api get financial-commitment-reports financial-commitment-report-token --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/financial_commitment_reports/{financial_commitment_report_token}"
+        }
+      ],
+      "operation": "vantage.get.financial-commitment-reports-financial-commitment-report-token",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get folders folder-token",
+      "summary": "Documented GET /folders/{folder_token} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api get folders folder-token --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/folders/{folder_token}"
+        }
+      ],
+      "operation": "vantage.get.folders-folder-token",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get integrations integration-token",
+      "summary": "Documented GET /integrations/{integration_token} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api get integrations integration-token --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/integrations/{integration_token}"
+        }
+      ],
+      "operation": "vantage.get.integrations-integration-token",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get integrations integration-token costs",
+      "summary": "Documented GET /integrations/{integration_token}/costs (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api get integrations integration-token costs --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/integrations/{integration_token}/costs"
+        }
+      ],
+      "operation": "vantage.get.integrations-integration-token-costs",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get invoices invoice-token",
+      "summary": "Documented GET /invoices/{invoice_token} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api get invoices invoice-token --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/invoices/{invoice_token}"
+        }
+      ],
+      "operation": "vantage.get.invoices-invoice-token",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get invoices invoice-token cost-report",
+      "summary": "Documented GET /invoices/{invoice_token}/cost_report (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api get invoices invoice-token cost-report --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/invoices/{invoice_token}/cost_report"
+        }
+      ],
+      "operation": "vantage.get.invoices-invoice-token-cost-report",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get kubernetes-efficiency-reports kubernetes-efficiency-report-token",
+      "summary": "Documented GET /kubernetes_efficiency_reports/{kubernetes_efficiency_report_token} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api get kubernetes-efficiency-reports kubernetes-efficiency-report-token --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/kubernetes_efficiency_reports/{kubernetes_efficiency_report_token}"
+        }
+      ],
+      "operation": "vantage.get.kubernetes-efficiency-reports-kubernetes-efficiency-report-token",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get managed-accounts managed-account-token",
+      "summary": "Documented GET /managed_accounts/{managed_account_token} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api get managed-accounts managed-account-token --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/managed_accounts/{managed_account_token}"
+        }
+      ],
+      "operation": "vantage.get.managed-accounts-managed-account-token",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get me",
+      "summary": "Documented GET /me (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api get me --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/me"
+        }
+      ],
+      "operation": "vantage.get.me",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get network-flow-logs",
+      "summary": "Documented GET /network_flow_logs (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api get network-flow-logs --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/network_flow_logs"
+        }
+      ],
+      "operation": "vantage.get.network-flow-logs",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get network-flow-reports network-flow-report-token",
+      "summary": "Documented GET /network_flow_reports/{network_flow_report_token} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api get network-flow-reports network-flow-report-token --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/network_flow_reports/{network_flow_report_token}"
+        }
+      ],
+      "operation": "vantage.get.network-flow-reports-network-flow-report-token",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get ping",
+      "summary": "Documented GET /ping (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api get ping --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/ping"
+        }
+      ],
+      "operation": "vantage.get.ping",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get products",
+      "summary": "Documented GET /products (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api get products --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/products"
+        }
+      ],
+      "operation": "vantage.get.products",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get products id",
+      "summary": "Documented GET /products/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api get products id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/products/{id}"
+        }
+      ],
+      "operation": "vantage.get.products-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get products product-id prices",
+      "summary": "Documented GET /products/{product_id}/prices (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api get products product-id prices --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/products/{product_id}/prices"
+        }
+      ],
+      "operation": "vantage.get.products-product-id-prices",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get products product-id prices id",
+      "summary": "Documented GET /products/{product_id}/prices/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api get products product-id prices id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/products/{product_id}/prices/{id}"
+        }
+      ],
+      "operation": "vantage.get.products-product-id-prices-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get recommendation-views recommendation-view-token",
+      "summary": "Documented GET /recommendation_views/{recommendation_view_token} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api get recommendation-views recommendation-view-token --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/recommendation_views/{recommendation_view_token}"
+        }
+      ],
+      "operation": "vantage.get.recommendation-views-recommendation-view-token",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get recommendations by-type type resources",
+      "summary": "Documented GET /recommendations/by_type/{type}/resources (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api get recommendations by-type type resources --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/recommendations/by_type/{type}/resources"
+        }
+      ],
+      "operation": "vantage.get.recommendations-by-type-type-resources",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get recommendations recommendation-token",
+      "summary": "Documented GET /recommendations/{recommendation_token} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api get recommendations recommendation-token --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/recommendations/{recommendation_token}"
+        }
+      ],
+      "operation": "vantage.get.recommendations-recommendation-token",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get recommendations recommendation-token resources",
+      "summary": "Documented GET /recommendations/{recommendation_token}/resources (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api get recommendations recommendation-token resources --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/recommendations/{recommendation_token}/resources"
+        }
+      ],
+      "operation": "vantage.get.recommendations-recommendation-token-resources",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get recommendations recommendation-token resources resource-token",
+      "summary": "Documented GET /recommendations/{recommendation_token}/resources/{resource_token} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api get recommendations recommendation-token resources resource-token --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/recommendations/{recommendation_token}/resources/{resource_token}"
+        }
+      ],
+      "operation": "vantage.get.recommendations-recommendation-token-resources-resource-token",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get report-forecasts",
+      "summary": "Documented GET /report_forecasts (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api get report-forecasts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/report_forecasts"
+        }
+      ],
+      "operation": "vantage.get.report-forecasts",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get report-forecasts report-forecast-token",
+      "summary": "Documented GET /report_forecasts/{report_forecast_token} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api get report-forecasts report-forecast-token --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/report_forecasts/{report_forecast_token}"
+        }
+      ],
+      "operation": "vantage.get.report-forecasts-report-forecast-token",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get report-notifications report-notification-token",
+      "summary": "Documented GET /report_notifications/{report_notification_token} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api get report-notifications report-notification-token --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/report_notifications/{report_notification_token}"
+        }
+      ],
+      "operation": "vantage.get.report-notifications-report-notification-token",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get resource-reports columns",
+      "summary": "Documented GET /resource_reports/columns (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api get resource-reports columns --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/resource_reports/columns"
+        }
+      ],
+      "operation": "vantage.get.resource-reports-columns",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get resource-reports resource-report-token",
+      "summary": "Documented GET /resource_reports/{resource_report_token} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api get resource-reports resource-report-token --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/resource_reports/{resource_report_token}"
+        }
+      ],
+      "operation": "vantage.get.resource-reports-resource-report-token",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get resources",
+      "summary": "Documented GET /resources (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api get resources --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/resources"
+        }
+      ],
+      "operation": "vantage.get.resources",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get resources resource-token",
+      "summary": "Documented GET /resources/{resource_token} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api get resources resource-token --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/resources/{resource_token}"
+        }
+      ],
+      "operation": "vantage.get.resources-resource-token",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get saved-filters saved-filter-token",
+      "summary": "Documented GET /saved_filters/{saved_filter_token} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api get saved-filters saved-filter-token --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/saved_filters/{saved_filter_token}"
+        }
+      ],
+      "operation": "vantage.get.saved-filters-saved-filter-token",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get scenario-models",
+      "summary": "Documented GET /scenario_models (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api get scenario-models --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/scenario_models"
+        }
+      ],
+      "operation": "vantage.get.scenario-models",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get scenario-models scenario-model-token",
+      "summary": "Documented GET /scenario_models/{scenario_model_token} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api get scenario-models scenario-model-token --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/scenario_models/{scenario_model_token}"
+        }
+      ],
+      "operation": "vantage.get.scenario-models-scenario-model-token",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get segments segment-token",
+      "summary": "Documented GET /segments/{segment_token} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api get segments segment-token --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/segments/{segment_token}"
+        }
+      ],
+      "operation": "vantage.get.segments-segment-token",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get tags key values",
+      "summary": "Documented GET /tags/{key}/values (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api get tags key values --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tags/{key}/values"
+        }
+      ],
+      "operation": "vantage.get.tags-key-values",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get teams team-token",
+      "summary": "Documented GET /teams/{team_token} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api get teams team-token --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/teams/{team_token}"
+        }
+      ],
+      "operation": "vantage.get.teams-team-token",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get teams team-token members",
+      "summary": "Documented GET /teams/{team_token}/members (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api get teams team-token members --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/teams/{team_token}/members"
+        }
+      ],
+      "operation": "vantage.get.teams-team-token-members",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get unit-costs",
+      "summary": "Documented GET /unit_costs (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api get unit-costs --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/unit_costs"
+        }
+      ],
+      "operation": "vantage.get.unit-costs",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get users",
+      "summary": "Documented GET /users (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api get users --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users"
+        }
+      ],
+      "operation": "vantage.get.users",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get users user-token",
+      "summary": "Documented GET /users/{user_token} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api get users user-token --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users/{user_token}"
+        }
+      ],
+      "operation": "vantage.get.users-user-token",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get virtual-tag-configs async request-id",
+      "summary": "Documented GET /virtual_tag_configs/async/{request_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api get virtual-tag-configs async request-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/virtual_tag_configs/async/{request_id}"
+        }
+      ],
+      "operation": "vantage.get.virtual-tag-configs-async-request-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get virtual-tag-configs token",
+      "summary": "Documented GET /virtual_tag_configs/{token} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api get virtual-tag-configs token --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/virtual_tag_configs/{token}"
+        }
+      ],
+      "operation": "vantage.get.virtual-tag-configs-token",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get virtual-tag-configs token status",
+      "summary": "Documented GET /virtual_tag_configs/{token}/status (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api get virtual-tag-configs token status --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/virtual_tag_configs/{token}/status"
+        }
+      ],
+      "operation": "vantage.get.virtual-tag-configs-token-status",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get virtual-tag-configs virtual-tag-config-token values virtual-tag-config-value-token",
+      "summary": "Documented GET /virtual_tag_configs/{virtual_tag_config_token}/values/{virtual_tag_config_value_token} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api get virtual-tag-configs virtual-tag-config-token values virtual-tag-config-value-token --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/virtual_tag_configs/{virtual_tag_config_token}/values/{virtual_tag_config_value_token}"
+        }
+      ],
+      "operation": "vantage.get.virtual-tag-configs-virtual-tag-config-token-values-virtual-tag-config-value-token",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get workspaces workspace-token",
+      "summary": "Documented GET /workspaces/{workspace_token} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api get workspaces workspace-token --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/workspaces/{workspace_token}"
+        }
+      ],
+      "operation": "vantage.get.workspaces-workspace-token",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api patch virtual-tag-configs virtual-tag-config-token values virtual-tag-config-value-token",
+      "summary": "Documented PATCH /virtual_tag_configs/{virtual_tag_config_token}/values/{virtual_tag_config_value_token} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api patch virtual-tag-configs virtual-tag-config-token values virtual-tag-config-value-token --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/virtual_tag_configs/{virtual_tag_config_token}/values/{virtual_tag_config_value_token}"
+        }
+      ],
+      "operation": "vantage.patch.virtual-tag-configs-virtual-tag-config-token-values-virtual-tag-config-value-token",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post access-grants",
+      "summary": "Documented POST /access_grants (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api post access-grants --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/access_grants"
+        }
+      ],
+      "operation": "vantage.post.access-grants",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post billing-profiles",
+      "summary": "Documented POST /billing_profiles (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api post billing-profiles --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/billing_profiles"
+        }
+      ],
+      "operation": "vantage.post.billing-profiles",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post billing-rules",
+      "summary": "Documented POST /billing_rules (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api post billing-rules --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/billing_rules"
+        }
+      ],
+      "operation": "vantage.post.billing-rules",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post costs data-exports",
+      "summary": "Documented POST /costs/data_exports (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api post costs data-exports --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/costs/data_exports"
+        }
+      ],
+      "operation": "vantage.post.costs-data-exports",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post exchange-rates csv",
+      "summary": "Documented POST /exchange_rates/csv (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api post exchange-rates csv --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/exchange_rates/csv"
+        }
+      ],
+      "operation": "vantage.post.exchange-rates-csv",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post financial-commitment-reports",
+      "summary": "Documented POST /financial_commitment_reports (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api post financial-commitment-reports --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/financial_commitment_reports"
+        }
+      ],
+      "operation": "vantage.post.financial-commitment-reports",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post integrations azure",
+      "summary": "Documented POST /integrations/azure (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api post integrations azure --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/integrations/azure"
+        }
+      ],
+      "operation": "vantage.post.integrations-azure",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post integrations custom-provider",
+      "summary": "Documented POST /integrations/custom_provider (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api post integrations custom-provider --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/integrations/custom_provider"
+        }
+      ],
+      "operation": "vantage.post.integrations-custom-provider",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post integrations gcp",
+      "summary": "Documented POST /integrations/gcp (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api post integrations gcp --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/integrations/gcp"
+        }
+      ],
+      "operation": "vantage.post.integrations-gcp",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post integrations integration-token costs-csv",
+      "summary": "Documented POST /integrations/{integration_token}/costs.csv (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api post integrations integration-token costs-csv --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/integrations/{integration_token}/costs.csv"
+        }
+      ],
+      "operation": "vantage.post.integrations-integration-token-costs-csv",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post invoices",
+      "summary": "Documented POST /invoices (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api post invoices --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/invoices"
+        }
+      ],
+      "operation": "vantage.post.invoices",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post invoices invoice-token download",
+      "summary": "Documented POST /invoices/{invoice_token}/download (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api post invoices invoice-token download --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/invoices/{invoice_token}/download"
+        }
+      ],
+      "operation": "vantage.post.invoices-invoice-token-download",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post invoices invoice-token regenerate",
+      "summary": "Documented POST /invoices/{invoice_token}/regenerate (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api post invoices invoice-token regenerate --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/invoices/{invoice_token}/regenerate"
+        }
+      ],
+      "operation": "vantage.post.invoices-invoice-token-regenerate",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post invoices invoice-token send",
+      "summary": "Documented POST /invoices/{invoice_token}/send (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api post invoices invoice-token send --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/invoices/{invoice_token}/send"
+        }
+      ],
+      "operation": "vantage.post.invoices-invoice-token-send",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post invoices invoice-token send-and-approve",
+      "summary": "Documented POST /invoices/{invoice_token}/send_and_approve (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api post invoices invoice-token send-and-approve --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/invoices/{invoice_token}/send_and_approve"
+        }
+      ],
+      "operation": "vantage.post.invoices-invoice-token-send-and-approve",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post kubernetes-efficiency-reports data-exports",
+      "summary": "Documented POST /kubernetes_efficiency_reports/data_exports (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api post kubernetes-efficiency-reports data-exports --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/kubernetes_efficiency_reports/data_exports"
+        }
+      ],
+      "operation": "vantage.post.kubernetes-efficiency-reports-data-exports",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post managed-accounts",
+      "summary": "Documented POST /managed_accounts (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api post managed-accounts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/managed_accounts"
+        }
+      ],
+      "operation": "vantage.post.managed-accounts",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post managed-accounts managed-account-token sso-connection",
+      "summary": "Documented POST /managed_accounts/{managed_account_token}/sso_connection (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api post managed-accounts managed-account-token sso-connection --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/managed_accounts/{managed_account_token}/sso_connection"
+        }
+      ],
+      "operation": "vantage.post.managed-accounts-managed-account-token-sso-connection",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post report-forecasts",
+      "summary": "Documented POST /report_forecasts (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api post report-forecasts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/report_forecasts"
+        }
+      ],
+      "operation": "vantage.post.report-forecasts",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post scenario-models",
+      "summary": "Documented POST /scenario_models (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api post scenario-models --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/scenario_models"
+        }
+      ],
+      "operation": "vantage.post.scenario-models",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post teams team-token members",
+      "summary": "Documented POST /teams/{team_token}/members (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api post teams team-token members --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/teams/{team_token}/members"
+        }
+      ],
+      "operation": "vantage.post.teams-team-token-members",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post unit-costs data-exports",
+      "summary": "Documented POST /unit_costs/data_exports (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api post unit-costs data-exports --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/unit_costs/data_exports"
+        }
+      ],
+      "operation": "vantage.post.unit-costs-data-exports",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post user-feedback",
+      "summary": "Documented POST /user_feedback (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api post user-feedback --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/user_feedback"
+        }
+      ],
+      "operation": "vantage.post.user-feedback",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post virtual-tag-configs virtual-tag-config-token values",
+      "summary": "Documented POST /virtual_tag_configs/{virtual_tag_config_token}/values (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api post virtual-tag-configs virtual-tag-config-token values --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/virtual_tag_configs/{virtual_tag_config_token}/values"
+        }
+      ],
+      "operation": "vantage.post.virtual-tag-configs-virtual-tag-config-token-values",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put access-grants access-grant-token",
+      "summary": "Documented PUT /access_grants/{access_grant_token} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api put access-grants access-grant-token --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/access_grants/{access_grant_token}"
+        }
+      ],
+      "operation": "vantage.put.access-grants-access-grant-token",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put billing-profiles billing-profile-token",
+      "summary": "Documented PUT /billing_profiles/{billing_profile_token} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api put billing-profiles billing-profile-token --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/billing_profiles/{billing_profile_token}"
+        }
+      ],
+      "operation": "vantage.put.billing-profiles-billing-profile-token",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put billing-rules billing-rule-token",
+      "summary": "Documented PUT /billing_rules/{billing_rule_token} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api put billing-rules billing-rule-token --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/billing_rules/{billing_rule_token}"
+        }
+      ],
+      "operation": "vantage.put.billing-rules-billing-rule-token",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put business-metrics business-metric-token values-csv",
+      "summary": "Documented PUT /business_metrics/{business_metric_token}/values.csv (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api put business-metrics business-metric-token values-csv --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/business_metrics/{business_metric_token}/values.csv"
+        }
+      ],
+      "operation": "vantage.put.business-metrics-business-metric-token-values-csv",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put financial-commitment-reports financial-commitment-report-token",
+      "summary": "Documented PUT /financial_commitment_reports/{financial_commitment_report_token} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api put financial-commitment-reports financial-commitment-report-token --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/financial_commitment_reports/{financial_commitment_report_token}"
+        }
+      ],
+      "operation": "vantage.put.financial-commitment-reports-financial-commitment-report-token",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put integrations integration-token",
+      "summary": "Documented PUT /integrations/{integration_token} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api put integrations integration-token --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/integrations/{integration_token}"
+        }
+      ],
+      "operation": "vantage.put.integrations-integration-token",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put managed-accounts managed-account-token",
+      "summary": "Documented PUT /managed_accounts/{managed_account_token} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api put managed-accounts managed-account-token --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/managed_accounts/{managed_account_token}"
+        }
+      ],
+      "operation": "vantage.put.managed-accounts-managed-account-token",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put managed-accounts managed-account-token sso-connection",
+      "summary": "Documented PUT /managed_accounts/{managed_account_token}/sso_connection (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api put managed-accounts managed-account-token sso-connection --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/managed_accounts/{managed_account_token}/sso_connection"
+        }
+      ],
+      "operation": "vantage.put.managed-accounts-managed-account-token-sso-connection",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put me",
+      "summary": "Documented PUT /me (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api put me --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/me"
+        }
+      ],
+      "operation": "vantage.put.me",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put report-forecasts report-forecast-token",
+      "summary": "Documented PUT /report_forecasts/{report_forecast_token} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api put report-forecasts report-forecast-token --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/report_forecasts/{report_forecast_token}"
+        }
+      ],
+      "operation": "vantage.put.report-forecasts-report-forecast-token",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put scenario-models scenario-model-token",
+      "summary": "Documented PUT /scenario_models/{scenario_model_token} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api put scenario-models scenario-model-token --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/scenario_models/{scenario_model_token}"
+        }
+      ],
+      "operation": "vantage.put.scenario-models-scenario-model-token",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put tags",
+      "summary": "Documented PUT /tags (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api put tags --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/tags"
+        }
+      ],
+      "operation": "vantage.put.tags",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put users user-token",
+      "summary": "Documented PUT /users/{user_token} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api put users user-token --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/users/{user_token}"
+        }
+      ],
+      "operation": "vantage.put.users-user-token",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put virtual-tag-configs token async",
+      "summary": "Documented PUT /virtual_tag_configs/{token}/async (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage api put virtual-tag-configs token async --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/virtual_tag_configs/{token}/async"
+        }
+      ],
+      "operation": "vantage.put.virtual-tag-configs-token-async",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "budget alerts list",
+      "summary": "Run the budget alerts ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "budget_alerts",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage budget alerts list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/budget_alerts"
+        }
+      ]
+    },
+    {
+      "path": "budgets list",
+      "summary": "Run the budgets ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "budgets",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage budgets list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/budgets"
+        }
+      ]
+    },
+    {
+      "path": "business metrics list",
+      "summary": "Run the business metrics ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "business_metrics",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage business metrics list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/business_metrics"
+        }
+      ]
+    },
+    {
+      "path": "canvases list",
+      "summary": "Run the canvases ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "canvases",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage canvases list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/canvases"
+        }
+      ]
+    },
+    {
+      "path": "cost alerts list",
+      "summary": "Run the cost alerts ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "cost_alerts",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage cost alerts list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/cost_alerts"
+        }
+      ]
+    },
+    {
+      "path": "cost reports list",
+      "summary": "Run the cost reports ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "cost_reports",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage cost reports list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/cost_reports"
+        }
+      ]
+    },
+    {
+      "path": "costs list",
+      "summary": "Run the costs ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "costs",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage costs list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/costs"
+        }
+      ]
+    },
+    {
+      "path": "create anomaly notification apply",
+      "summary": "Plan and execute the create anomaly notification reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_anomaly_notification",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "flags": [
+        {
+          "name": "cost_report_token",
+          "type": "string",
+          "summary": "Required cost report token record field.",
+          "maps_to": "record.cost_report_token",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm vantage create anomaly notification apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/anomaly_notifications"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create budget alert apply",
+      "summary": "Plan and execute the create budget alert reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_budget_alert",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "flags": [
+        {
+          "name": "budget_token",
+          "type": "string",
+          "summary": "Required budget token record field.",
+          "maps_to": "record.budget_token",
+          "required": true
+        },
+        {
+          "name": "threshold",
+          "type": "string",
+          "summary": "Required threshold record field.",
+          "maps_to": "record.threshold",
+          "required": true
+        },
+        {
+          "name": "user_token",
+          "type": "string",
+          "summary": "Required user token record field.",
+          "maps_to": "record.user_token",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm vantage create budget alert apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/budget_alerts"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create budget apply",
+      "summary": "Plan and execute the create budget reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_budget",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        },
+        {
+          "name": "period_amount",
+          "type": "string",
+          "summary": "Required period amount record field.",
+          "maps_to": "record.period_amount",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm vantage create budget apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/budgets"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create business metric apply",
+      "summary": "Plan and execute the create business metric reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_business_metric",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "flags": [
+        {
+          "name": "title",
+          "type": "string",
+          "summary": "Required title record field.",
+          "maps_to": "record.title",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm vantage create business metric apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/business_metrics"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create canvas apply",
+      "summary": "Plan and execute the create canvas reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_canvas",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "flags": [
+        {
+          "name": "prompt",
+          "type": "string",
+          "summary": "Required prompt record field.",
+          "maps_to": "record.prompt",
+          "required": true
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "summary": "Required title record field.",
+          "maps_to": "record.title",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm vantage create canvas apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/canvases"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create cost alert apply",
+      "summary": "Plan and execute the create cost alert reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_cost_alert",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "flags": [
+        {
+          "name": "title",
+          "type": "string",
+          "summary": "Required title record field.",
+          "maps_to": "record.title",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm vantage create cost alert apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/cost_alerts"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create cost report apply",
+      "summary": "Plan and execute the create cost report reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_cost_report",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "flags": [
+        {
+          "name": "title",
+          "type": "string",
+          "summary": "Required title record field.",
+          "maps_to": "record.title",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm vantage create cost report apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/cost_reports"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create dashboard apply",
+      "summary": "Plan and execute the create dashboard reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_dashboard",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "flags": [
+        {
+          "name": "title",
+          "type": "string",
+          "summary": "Required title record field.",
+          "maps_to": "record.title",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm vantage create dashboard apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/dashboards"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create folder apply",
+      "summary": "Plan and execute the create folder reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_folder",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "flags": [
+        {
+          "name": "title",
+          "type": "string",
+          "summary": "Required title record field.",
+          "maps_to": "record.title",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm vantage create folder apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/folders"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create kubernetes efficiency report apply",
+      "summary": "Plan and execute the create kubernetes efficiency report reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_kubernetes_efficiency_report",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "flags": [
+        {
+          "name": "title",
+          "type": "string",
+          "summary": "Required title record field.",
+          "maps_to": "record.title",
+          "required": true
+        },
+        {
+          "name": "workspace_token",
+          "type": "string",
+          "summary": "Required workspace token record field.",
+          "maps_to": "record.workspace_token",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm vantage create kubernetes efficiency report apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/kubernetes_efficiency_reports"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create network flow report apply",
+      "summary": "Plan and execute the create network flow report reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_network_flow_report",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "flags": [
+        {
+          "name": "title",
+          "type": "string",
+          "summary": "Required title record field.",
+          "maps_to": "record.title",
+          "required": true
+        },
+        {
+          "name": "workspace_token",
+          "type": "string",
+          "summary": "Required workspace token record field.",
+          "maps_to": "record.workspace_token",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm vantage create network flow report apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/network_flow_reports"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create recommendation view apply",
+      "summary": "Plan and execute the create recommendation view reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_recommendation_view",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "flags": [
+        {
+          "name": "title",
+          "type": "string",
+          "summary": "Required title record field.",
+          "maps_to": "record.title",
+          "required": true
+        },
+        {
+          "name": "workspace_token",
+          "type": "string",
+          "summary": "Required workspace token record field.",
+          "maps_to": "record.workspace_token",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm vantage create recommendation view apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/recommendation_views"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create report notification apply",
+      "summary": "Plan and execute the create report notification reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_report_notification",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "flags": [
+        {
+          "name": "change",
+          "type": "string",
+          "summary": "Required change record field.",
+          "maps_to": "record.change",
+          "required": true
+        },
+        {
+          "name": "cost_report_token",
+          "type": "string",
+          "summary": "Required cost report token record field.",
+          "maps_to": "record.cost_report_token",
+          "required": true
+        },
+        {
+          "name": "frequency",
+          "type": "string",
+          "summary": "Required frequency record field.",
+          "maps_to": "record.frequency",
+          "required": true
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "summary": "Required title record field.",
+          "maps_to": "record.title",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm vantage create report notification apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/report_notifications"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create resource report apply",
+      "summary": "Plan and execute the create resource report reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_resource_report",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "flags": [
+        {
+          "name": "workspace_token",
+          "type": "string",
+          "summary": "Required workspace token record field.",
+          "maps_to": "record.workspace_token",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm vantage create resource report apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/resource_reports"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create saved filter apply",
+      "summary": "Plan and execute the create saved filter reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_saved_filter",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "flags": [
+        {
+          "name": "filter",
+          "type": "string",
+          "summary": "Required filter record field.",
+          "maps_to": "record.filter",
+          "required": true
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "summary": "Required title record field.",
+          "maps_to": "record.title",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm vantage create saved filter apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/saved_filters"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create segment apply",
+      "summary": "Plan and execute the create segment reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_segment",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "flags": [
+        {
+          "name": "title",
+          "type": "string",
+          "summary": "Required title record field.",
+          "maps_to": "record.title",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm vantage create segment apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/segments"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create team apply",
+      "summary": "Plan and execute the create team reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_team",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm vantage create team apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/teams"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create virtual tag config apply",
+      "summary": "Plan and execute the create virtual tag config reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_virtual_tag_config",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage create virtual tag config apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/virtual_tag_configs"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create workspace apply",
+      "summary": "Plan and execute the create workspace reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_workspace",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm vantage create workspace apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/workspaces"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "dashboards list",
+      "summary": "Run the dashboards ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "dashboards",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage dashboards list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/dashboards"
+        }
+      ]
+    },
+    {
+      "path": "delete anomaly notification apply",
+      "summary": "Plan and execute the delete anomaly notification reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_anomaly_notification",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "flags": [
+        {
+          "name": "anomaly_notification_token",
+          "type": "string",
+          "summary": "Required anomaly notification token record field.",
+          "maps_to": "record.anomaly_notification_token",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm vantage delete anomaly notification apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/anomaly_notifications/{anomaly_notification_token}"
+        }
+      ],
+      "risk": "destructive external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete budget alert apply",
+      "summary": "Plan and execute the delete budget alert reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_budget_alert",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "flags": [
+        {
+          "name": "budget_alert_token",
+          "type": "string",
+          "summary": "Required budget alert token record field.",
+          "maps_to": "record.budget_alert_token",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm vantage delete budget alert apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/budget_alerts/{budget_alert_token}"
+        }
+      ],
+      "risk": "destructive external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete budget apply",
+      "summary": "Plan and execute the delete budget reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_budget",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "flags": [
+        {
+          "name": "budget_token",
+          "type": "string",
+          "summary": "Required budget token record field.",
+          "maps_to": "record.budget_token",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm vantage delete budget apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/budgets/{budget_token}"
+        }
+      ],
+      "risk": "destructive external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete business metric apply",
+      "summary": "Plan and execute the delete business metric reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_business_metric",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "flags": [
+        {
+          "name": "business_metric_token",
+          "type": "string",
+          "summary": "Required business metric token record field.",
+          "maps_to": "record.business_metric_token",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm vantage delete business metric apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/business_metrics/{business_metric_token}"
+        }
+      ],
+      "risk": "destructive external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete canvas apply",
+      "summary": "Plan and execute the delete canvas reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_canvas",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "flags": [
+        {
+          "name": "canvas_token",
+          "type": "string",
+          "summary": "Required canvas token record field.",
+          "maps_to": "record.canvas_token",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm vantage delete canvas apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/canvases/{canvas_token}"
+        }
+      ],
+      "risk": "destructive external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete cost alert apply",
+      "summary": "Plan and execute the delete cost alert reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_cost_alert",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "flags": [
+        {
+          "name": "cost_alert_token",
+          "type": "string",
+          "summary": "Required cost alert token record field.",
+          "maps_to": "record.cost_alert_token",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm vantage delete cost alert apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/cost_alerts/{cost_alert_token}"
+        }
+      ],
+      "risk": "destructive external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete cost report apply",
+      "summary": "Plan and execute the delete cost report reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_cost_report",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "flags": [
+        {
+          "name": "cost_report_token",
+          "type": "string",
+          "summary": "Required cost report token record field.",
+          "maps_to": "record.cost_report_token",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm vantage delete cost report apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/cost_reports/{cost_report_token}"
+        }
+      ],
+      "risk": "destructive external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete dashboard apply",
+      "summary": "Plan and execute the delete dashboard reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_dashboard",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "flags": [
+        {
+          "name": "dashboard_token",
+          "type": "string",
+          "summary": "Required dashboard token record field.",
+          "maps_to": "record.dashboard_token",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm vantage delete dashboard apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/dashboards/{dashboard_token}"
+        }
+      ],
+      "risk": "destructive external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete folder apply",
+      "summary": "Plan and execute the delete folder reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_folder",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "flags": [
+        {
+          "name": "folder_token",
+          "type": "string",
+          "summary": "Required folder token record field.",
+          "maps_to": "record.folder_token",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm vantage delete folder apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/folders/{folder_token}"
+        }
+      ],
+      "risk": "destructive external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete kubernetes efficiency report apply",
+      "summary": "Plan and execute the delete kubernetes efficiency report reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_kubernetes_efficiency_report",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "flags": [
+        {
+          "name": "kubernetes_efficiency_report_token",
+          "type": "string",
+          "summary": "Required kubernetes efficiency report token record field.",
+          "maps_to": "record.kubernetes_efficiency_report_token",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm vantage delete kubernetes efficiency report apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/kubernetes_efficiency_reports/{kubernetes_efficiency_report_token}"
+        }
+      ],
+      "risk": "destructive external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete network flow report apply",
+      "summary": "Plan and execute the delete network flow report reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_network_flow_report",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "flags": [
+        {
+          "name": "network_flow_report_token",
+          "type": "string",
+          "summary": "Required network flow report token record field.",
+          "maps_to": "record.network_flow_report_token",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm vantage delete network flow report apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/network_flow_reports/{network_flow_report_token}"
+        }
+      ],
+      "risk": "destructive external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete recommendation view apply",
+      "summary": "Plan and execute the delete recommendation view reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_recommendation_view",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "flags": [
+        {
+          "name": "recommendation_view_token",
+          "type": "string",
+          "summary": "Required recommendation view token record field.",
+          "maps_to": "record.recommendation_view_token",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm vantage delete recommendation view apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/recommendation_views/{recommendation_view_token}"
+        }
+      ],
+      "risk": "destructive external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete report notification apply",
+      "summary": "Plan and execute the delete report notification reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_report_notification",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "flags": [
+        {
+          "name": "report_notification_token",
+          "type": "string",
+          "summary": "Required report notification token record field.",
+          "maps_to": "record.report_notification_token",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm vantage delete report notification apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/report_notifications/{report_notification_token}"
+        }
+      ],
+      "risk": "destructive external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete resource report apply",
+      "summary": "Plan and execute the delete resource report reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_resource_report",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "flags": [
+        {
+          "name": "resource_report_token",
+          "type": "string",
+          "summary": "Required resource report token record field.",
+          "maps_to": "record.resource_report_token",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm vantage delete resource report apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/resource_reports/{resource_report_token}"
+        }
+      ],
+      "risk": "destructive external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete saved filter apply",
+      "summary": "Plan and execute the delete saved filter reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_saved_filter",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "flags": [
+        {
+          "name": "saved_filter_token",
+          "type": "string",
+          "summary": "Required saved filter token record field.",
+          "maps_to": "record.saved_filter_token",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm vantage delete saved filter apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/saved_filters/{saved_filter_token}"
+        }
+      ],
+      "risk": "destructive external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete segment apply",
+      "summary": "Plan and execute the delete segment reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_segment",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "flags": [
+        {
+          "name": "segment_token",
+          "type": "string",
+          "summary": "Required segment token record field.",
+          "maps_to": "record.segment_token",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm vantage delete segment apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/segments/{segment_token}"
+        }
+      ],
+      "risk": "destructive external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete team apply",
+      "summary": "Plan and execute the delete team reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_team",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "flags": [
+        {
+          "name": "team_token",
+          "type": "string",
+          "summary": "Required team token record field.",
+          "maps_to": "record.team_token",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm vantage delete team apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/teams/{team_token}"
+        }
+      ],
+      "risk": "destructive external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete virtual tag config apply",
+      "summary": "Plan and execute the delete virtual tag config reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_virtual_tag_config",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "flags": [
+        {
+          "name": "token",
+          "type": "string",
+          "summary": "Required token record field.",
+          "maps_to": "record.token",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm vantage delete virtual tag config apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/virtual_tag_configs/{token}"
+        }
+      ],
+      "risk": "destructive external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete workspace apply",
+      "summary": "Plan and execute the delete workspace reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_workspace",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "flags": [
+        {
+          "name": "workspace_token",
+          "type": "string",
+          "summary": "Required workspace token record field.",
+          "maps_to": "record.workspace_token",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm vantage delete workspace apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/workspaces/{workspace_token}"
+        }
+      ],
+      "risk": "destructive external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "financial commitments list",
+      "summary": "Run the financial commitments ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "financial_commitments",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage financial commitments list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/financial_commitments"
+        }
+      ]
+    },
+    {
+      "path": "folders list",
+      "summary": "Run the folders ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "folders",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage folders list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/folders"
+        }
+      ]
+    },
+    {
+      "path": "integrations list",
+      "summary": "Run the integrations ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "integrations",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage integrations list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/integrations"
+        }
+      ]
+    },
+    {
+      "path": "invoices list",
+      "summary": "Run the invoices ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "invoices",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage invoices list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/invoices"
+        }
+      ]
+    },
+    {
+      "path": "kubernetes efficiency reports list",
+      "summary": "Run the kubernetes efficiency reports ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "kubernetes_efficiency_reports",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage kubernetes efficiency reports list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/kubernetes_efficiency_reports"
+        }
+      ]
+    },
+    {
+      "path": "managed accounts list",
+      "summary": "Run the managed accounts ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "managed_accounts",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage managed accounts list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/managed_accounts"
+        }
+      ]
+    },
+    {
+      "path": "network flow reports list",
+      "summary": "Run the network flow reports ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "network_flow_reports",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage network flow reports list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/network_flow_reports"
+        }
+      ]
+    },
+    {
+      "path": "recommendation views list",
+      "summary": "Run the recommendation views ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "recommendation_views",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage recommendation views list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/recommendation_views"
+        }
+      ]
+    },
+    {
+      "path": "recommendations list",
+      "summary": "Run the recommendations ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "recommendations",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage recommendations list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/recommendations"
+        }
+      ]
+    },
+    {
+      "path": "report notifications list",
+      "summary": "Run the report notifications ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "report_notifications",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage report notifications list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/report_notifications"
+        }
+      ]
+    },
+    {
+      "path": "resource reports list",
+      "summary": "Run the resource reports ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "resource_reports",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage resource reports list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/resource_reports"
+        }
+      ]
+    },
+    {
+      "path": "saved filters list",
+      "summary": "Run the saved filters ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "saved_filters",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage saved filters list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/saved_filters"
+        }
+      ]
+    },
+    {
+      "path": "segments list",
+      "summary": "Run the segments ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "segments",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage segments list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/segments"
+        }
+      ]
+    },
+    {
+      "path": "tags list",
+      "summary": "Run the tags ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tags",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage tags list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tags"
+        }
+      ]
+    },
+    {
+      "path": "teams list",
+      "summary": "Run the teams ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "teams",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage teams list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/teams"
+        }
+      ]
+    },
+    {
+      "path": "update anomaly alert apply",
+      "summary": "Plan and execute the update anomaly alert reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_anomaly_alert",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "flags": [
+        {
+          "name": "anomaly_alert_token",
+          "type": "string",
+          "summary": "Required anomaly alert token record field.",
+          "maps_to": "record.anomaly_alert_token",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm vantage update anomaly alert apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/anomaly_alerts/{anomaly_alert_token}"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update anomaly notification apply",
+      "summary": "Plan and execute the update anomaly notification reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_anomaly_notification",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "flags": [
+        {
+          "name": "anomaly_notification_token",
+          "type": "string",
+          "summary": "Required anomaly notification token record field.",
+          "maps_to": "record.anomaly_notification_token",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm vantage update anomaly notification apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/anomaly_notifications/{anomaly_notification_token}"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update budget alert apply",
+      "summary": "Plan and execute the update budget alert reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_budget_alert",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "flags": [
+        {
+          "name": "budget_alert_token",
+          "type": "string",
+          "summary": "Required budget alert token record field.",
+          "maps_to": "record.budget_alert_token",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm vantage update budget alert apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/budget_alerts/{budget_alert_token}"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update budget apply",
+      "summary": "Plan and execute the update budget reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_budget",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "flags": [
+        {
+          "name": "budget_token",
+          "type": "string",
+          "summary": "Required budget token record field.",
+          "maps_to": "record.budget_token",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm vantage update budget apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/budgets/{budget_token}"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update business metric apply",
+      "summary": "Plan and execute the update business metric reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_business_metric",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "flags": [
+        {
+          "name": "business_metric_token",
+          "type": "string",
+          "summary": "Required business metric token record field.",
+          "maps_to": "record.business_metric_token",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm vantage update business metric apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/business_metrics/{business_metric_token}"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update canvas apply",
+      "summary": "Plan and execute the update canvas reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_canvas",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "flags": [
+        {
+          "name": "canvas_token",
+          "type": "string",
+          "summary": "Required canvas token record field.",
+          "maps_to": "record.canvas_token",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm vantage update canvas apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/canvases/{canvas_token}"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update cost alert apply",
+      "summary": "Plan and execute the update cost alert reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_cost_alert",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "flags": [
+        {
+          "name": "cost_alert_token",
+          "type": "string",
+          "summary": "Required cost alert token record field.",
+          "maps_to": "record.cost_alert_token",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm vantage update cost alert apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/cost_alerts/{cost_alert_token}"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update cost report apply",
+      "summary": "Plan and execute the update cost report reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_cost_report",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "flags": [
+        {
+          "name": "cost_report_token",
+          "type": "string",
+          "summary": "Required cost report token record field.",
+          "maps_to": "record.cost_report_token",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm vantage update cost report apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/cost_reports/{cost_report_token}"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update dashboard apply",
+      "summary": "Plan and execute the update dashboard reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_dashboard",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "flags": [
+        {
+          "name": "dashboard_token",
+          "type": "string",
+          "summary": "Required dashboard token record field.",
+          "maps_to": "record.dashboard_token",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm vantage update dashboard apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/dashboards/{dashboard_token}"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update folder apply",
+      "summary": "Plan and execute the update folder reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_folder",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "flags": [
+        {
+          "name": "folder_token",
+          "type": "string",
+          "summary": "Required folder token record field.",
+          "maps_to": "record.folder_token",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm vantage update folder apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/folders/{folder_token}"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update kubernetes efficiency report apply",
+      "summary": "Plan and execute the update kubernetes efficiency report reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_kubernetes_efficiency_report",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "flags": [
+        {
+          "name": "kubernetes_efficiency_report_token",
+          "type": "string",
+          "summary": "Required kubernetes efficiency report token record field.",
+          "maps_to": "record.kubernetes_efficiency_report_token",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm vantage update kubernetes efficiency report apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/kubernetes_efficiency_reports/{kubernetes_efficiency_report_token}"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update network flow report apply",
+      "summary": "Plan and execute the update network flow report reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_network_flow_report",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "flags": [
+        {
+          "name": "network_flow_report_token",
+          "type": "string",
+          "summary": "Required network flow report token record field.",
+          "maps_to": "record.network_flow_report_token",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm vantage update network flow report apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/network_flow_reports/{network_flow_report_token}"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update recommendation view apply",
+      "summary": "Plan and execute the update recommendation view reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_recommendation_view",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "flags": [
+        {
+          "name": "recommendation_view_token",
+          "type": "string",
+          "summary": "Required recommendation view token record field.",
+          "maps_to": "record.recommendation_view_token",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm vantage update recommendation view apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/recommendation_views/{recommendation_view_token}"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update report notification apply",
+      "summary": "Plan and execute the update report notification reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_report_notification",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "flags": [
+        {
+          "name": "report_notification_token",
+          "type": "string",
+          "summary": "Required report notification token record field.",
+          "maps_to": "record.report_notification_token",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm vantage update report notification apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/report_notifications/{report_notification_token}"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update resource report apply",
+      "summary": "Plan and execute the update resource report reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_resource_report",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "flags": [
+        {
+          "name": "resource_report_token",
+          "type": "string",
+          "summary": "Required resource report token record field.",
+          "maps_to": "record.resource_report_token",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm vantage update resource report apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/resource_reports/{resource_report_token}"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update saved filter apply",
+      "summary": "Plan and execute the update saved filter reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_saved_filter",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "flags": [
+        {
+          "name": "saved_filter_token",
+          "type": "string",
+          "summary": "Required saved filter token record field.",
+          "maps_to": "record.saved_filter_token",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm vantage update saved filter apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/saved_filters/{saved_filter_token}"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update segment apply",
+      "summary": "Plan and execute the update segment reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_segment",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "flags": [
+        {
+          "name": "segment_token",
+          "type": "string",
+          "summary": "Required segment token record field.",
+          "maps_to": "record.segment_token",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm vantage update segment apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/segments/{segment_token}"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update team apply",
+      "summary": "Plan and execute the update team reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_team",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "flags": [
+        {
+          "name": "team_token",
+          "type": "string",
+          "summary": "Required team token record field.",
+          "maps_to": "record.team_token",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm vantage update team apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/teams/{team_token}"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update virtual tag config apply",
+      "summary": "Plan and execute the update virtual tag config reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_virtual_tag_config",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "flags": [
+        {
+          "name": "token",
+          "type": "string",
+          "summary": "Required token record field.",
+          "maps_to": "record.token",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm vantage update virtual tag config apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/virtual_tag_configs/{token}"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update workspace apply",
+      "summary": "Plan and execute the update workspace reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_workspace",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "flags": [
+        {
+          "name": "workspace_token",
+          "type": "string",
+          "summary": "Required workspace token record field.",
+          "maps_to": "record.workspace_token",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm vantage update workspace apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/workspaces/{workspace_token}"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "virtual tag configs list",
+      "summary": "Run the virtual tag configs ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "virtual_tag_configs",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage virtual tag configs list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/virtual_tag_configs"
+        }
+      ]
+    },
+    {
+      "path": "workspaces list",
+      "summary": "Run the workspaces ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "workspaces",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "examples": [
+        "pm vantage workspaces list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/workspaces"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1081 @@
+{
+  "tagline": "Run OnceHub's declared streams and reverse-ETL actions.",
+  "usage": "pm oncehub \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "api get booking-calendars",
+        "api get booking-calendars id",
+        "api get booking-calendars id time-slots",
+        "api get bookings",
+        "api get bookings id",
+        "api get contacts",
+        "api get contacts id",
+        "api get notifications sms",
+        "api get teams",
+        "api get teams id",
+        "api get test",
+        "api get users",
+        "api get users id",
+        "api get users id scheduling-availability",
+        "api get v2 availability",
+        "api get v2 webhooks",
+        "api get webhooks",
+        "api get webhooks id",
+        "api webhook booking-canceled-post",
+        "api webhook booking-canceled-reschedule-requested-post",
+        "api webhook booking-canceled-then-rescheduled-post",
+        "api webhook booking-completed-post",
+        "api webhook booking-no-show-post",
+        "api webhook booking-reassigned-post",
+        "api webhook booking-rescheduled-post",
+        "api webhook booking-scheduled-post",
+        "api webhook conversation-abandoned-post",
+        "api webhook conversation-closed-post",
+        "api webhook conversation-started-post",
+        "booking pages list",
+        "bookings list",
+        "contacts list",
+        "event types list",
+        "users list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "api delete contacts id",
+        "api delete users id",
+        "api delete v2 bookings id",
+        "api delete webhooks id",
+        "api patch contacts id",
+        "api patch users id",
+        "api patch users id scheduling-availability",
+        "api post booking-calendars id one-time-links",
+        "api post booking-calendars id schedule",
+        "api post bookings id cancel",
+        "api post bookings id no-show",
+        "api post bookings id reassign",
+        "api post bookings id request-reschedule",
+        "api post contacts",
+        "api post users",
+        "api post v2 bookings",
+        "api post webhooks"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "api delete contacts id",
+      "summary": "Documented DELETE /contacts/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "examples": [
+        "pm oncehub api delete contacts id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/contacts/{id}"
+        }
+      ],
+      "operation": "oncehub.delete.contacts-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete users id",
+      "summary": "Documented DELETE /users/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "examples": [
+        "pm oncehub api delete users id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/users/{id}"
+        }
+      ],
+      "operation": "oncehub.delete.users-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v2 bookings id",
+      "summary": "Documented DELETE /v2/bookings/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "examples": [
+        "pm oncehub api delete v2 bookings id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/bookings/{id}"
+        }
+      ],
+      "operation": "oncehub.delete.v2-bookings-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete webhooks id",
+      "summary": "Documented DELETE /webhooks/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "examples": [
+        "pm oncehub api delete webhooks id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/webhooks/{id}"
+        }
+      ],
+      "operation": "oncehub.delete.webhooks-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api get booking-calendars",
+      "summary": "Documented GET /booking-calendars (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "examples": [
+        "pm oncehub api get booking-calendars --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/booking-calendars"
+        }
+      ],
+      "operation": "oncehub.get.booking-calendars",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get booking-calendars id",
+      "summary": "Documented GET /booking-calendars/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "examples": [
+        "pm oncehub api get booking-calendars id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/booking-calendars/{id}"
+        }
+      ],
+      "operation": "oncehub.get.booking-calendars-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get booking-calendars id time-slots",
+      "summary": "Documented GET /booking-calendars/{id}/time-slots (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "examples": [
+        "pm oncehub api get booking-calendars id time-slots --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/booking-calendars/{id}/time-slots"
+        }
+      ],
+      "operation": "oncehub.get.booking-calendars-id-time-slots",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get bookings",
+      "summary": "Documented GET /bookings (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "examples": [
+        "pm oncehub api get bookings --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/bookings"
+        }
+      ],
+      "operation": "oncehub.get.bookings",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get bookings id",
+      "summary": "Documented GET /bookings/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "examples": [
+        "pm oncehub api get bookings id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/bookings/{id}"
+        }
+      ],
+      "operation": "oncehub.get.bookings-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get contacts",
+      "summary": "Documented GET /contacts (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "examples": [
+        "pm oncehub api get contacts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/contacts"
+        }
+      ],
+      "operation": "oncehub.get.contacts",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get contacts id",
+      "summary": "Documented GET /contacts/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "examples": [
+        "pm oncehub api get contacts id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/contacts/{id}"
+        }
+      ],
+      "operation": "oncehub.get.contacts-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get notifications sms",
+      "summary": "Documented GET /notifications/sms (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "examples": [
+        "pm oncehub api get notifications sms --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/notifications/sms"
+        }
+      ],
+      "operation": "oncehub.get.notifications-sms",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get teams",
+      "summary": "Documented GET /teams (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "examples": [
+        "pm oncehub api get teams --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/teams"
+        }
+      ],
+      "operation": "oncehub.get.teams",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get teams id",
+      "summary": "Documented GET /teams/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "examples": [
+        "pm oncehub api get teams id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/teams/{id}"
+        }
+      ],
+      "operation": "oncehub.get.teams-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get test",
+      "summary": "Documented GET /test (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "examples": [
+        "pm oncehub api get test --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/test"
+        }
+      ],
+      "operation": "oncehub.get.test",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get users",
+      "summary": "Documented GET /users (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "examples": [
+        "pm oncehub api get users --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users"
+        }
+      ],
+      "operation": "oncehub.get.users",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get users id",
+      "summary": "Documented GET /users/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "examples": [
+        "pm oncehub api get users id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users/{id}"
+        }
+      ],
+      "operation": "oncehub.get.users-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get users id scheduling-availability",
+      "summary": "Documented GET /users/{id}/scheduling-availability (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "examples": [
+        "pm oncehub api get users id scheduling-availability --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users/{id}/scheduling-availability"
+        }
+      ],
+      "operation": "oncehub.get.users-id-scheduling-availability",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 availability",
+      "summary": "Documented GET /v2/availability (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "examples": [
+        "pm oncehub api get v2 availability --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/availability"
+        }
+      ],
+      "operation": "oncehub.get.v2-availability",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 webhooks",
+      "summary": "Documented GET /v2/webhooks (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "examples": [
+        "pm oncehub api get v2 webhooks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/webhooks"
+        }
+      ],
+      "operation": "oncehub.get.v2-webhooks",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get webhooks",
+      "summary": "Documented GET /webhooks (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "examples": [
+        "pm oncehub api get webhooks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/webhooks"
+        }
+      ],
+      "operation": "oncehub.get.webhooks",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get webhooks id",
+      "summary": "Documented GET /webhooks/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "examples": [
+        "pm oncehub api get webhooks id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/webhooks/{id}"
+        }
+      ],
+      "operation": "oncehub.get.webhooks-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api patch contacts id",
+      "summary": "Documented PATCH /contacts/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "examples": [
+        "pm oncehub api patch contacts id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/contacts/{id}"
+        }
+      ],
+      "operation": "oncehub.patch.contacts-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch users id",
+      "summary": "Documented PATCH /users/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "examples": [
+        "pm oncehub api patch users id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/users/{id}"
+        }
+      ],
+      "operation": "oncehub.patch.users-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch users id scheduling-availability",
+      "summary": "Documented PATCH /users/{id}/scheduling-availability (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "examples": [
+        "pm oncehub api patch users id scheduling-availability --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/users/{id}/scheduling-availability"
+        }
+      ],
+      "operation": "oncehub.patch.users-id-scheduling-availability",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post booking-calendars id one-time-links",
+      "summary": "Documented POST /booking-calendars/{id}/one-time-links (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "examples": [
+        "pm oncehub api post booking-calendars id one-time-links --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/booking-calendars/{id}/one-time-links"
+        }
+      ],
+      "operation": "oncehub.post.booking-calendars-id-one-time-links",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post booking-calendars id schedule",
+      "summary": "Documented POST /booking-calendars/{id}/schedule (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "examples": [
+        "pm oncehub api post booking-calendars id schedule --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/booking-calendars/{id}/schedule"
+        }
+      ],
+      "operation": "oncehub.post.booking-calendars-id-schedule",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post bookings id cancel",
+      "summary": "Documented POST /bookings/{id}/cancel (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "examples": [
+        "pm oncehub api post bookings id cancel --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/bookings/{id}/cancel"
+        }
+      ],
+      "operation": "oncehub.post.bookings-id-cancel",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post bookings id no-show",
+      "summary": "Documented POST /bookings/{id}/no-show (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "examples": [
+        "pm oncehub api post bookings id no-show --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/bookings/{id}/no-show"
+        }
+      ],
+      "operation": "oncehub.post.bookings-id-no-show",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post bookings id reassign",
+      "summary": "Documented POST /bookings/{id}/reassign (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "examples": [
+        "pm oncehub api post bookings id reassign --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/bookings/{id}/reassign"
+        }
+      ],
+      "operation": "oncehub.post.bookings-id-reassign",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post bookings id request-reschedule",
+      "summary": "Documented POST /bookings/{id}/request-reschedule (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "examples": [
+        "pm oncehub api post bookings id request-reschedule --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/bookings/{id}/request-reschedule"
+        }
+      ],
+      "operation": "oncehub.post.bookings-id-request-reschedule",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post contacts",
+      "summary": "Documented POST /contacts (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "examples": [
+        "pm oncehub api post contacts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/contacts"
+        }
+      ],
+      "operation": "oncehub.post.contacts",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post users",
+      "summary": "Documented POST /users (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "examples": [
+        "pm oncehub api post users --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/users"
+        }
+      ],
+      "operation": "oncehub.post.users",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 bookings",
+      "summary": "Documented POST /v2/bookings (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "examples": [
+        "pm oncehub api post v2 bookings --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/bookings"
+        }
+      ],
+      "operation": "oncehub.post.v2-bookings",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post webhooks",
+      "summary": "Documented POST /webhooks (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "examples": [
+        "pm oncehub api post webhooks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/webhooks"
+        }
+      ],
+      "operation": "oncehub.post.webhooks",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api webhook booking-canceled-post",
+      "summary": "Documented WEBHOOK booking.canceled#POST (not implemented)",
+      "intent": "docs_only",
+      "availability": "not_implemented",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "examples": [
+        "pm oncehub api webhook booking-canceled-post --help"
+      ],
+      "api_surface": [
+        {
+          "method": "WEBHOOK",
+          "path": "booking.canceled#POST"
+        }
+      ],
+      "operation": "oncehub.webhook.booking-canceled-post",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "notes": "named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations"
+    },
+    {
+      "path": "api webhook booking-canceled-reschedule-requested-post",
+      "summary": "Documented WEBHOOK booking.canceled_reschedule_requested#POST (not implemented)",
+      "intent": "docs_only",
+      "availability": "not_implemented",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "examples": [
+        "pm oncehub api webhook booking-canceled-reschedule-requested-post --help"
+      ],
+      "api_surface": [
+        {
+          "method": "WEBHOOK",
+          "path": "booking.canceled_reschedule_requested#POST"
+        }
+      ],
+      "operation": "oncehub.webhook.booking-canceled-reschedule-requested-post",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "notes": "named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations"
+    },
+    {
+      "path": "api webhook booking-canceled-then-rescheduled-post",
+      "summary": "Documented WEBHOOK booking.canceled_then_rescheduled#POST (not implemented)",
+      "intent": "docs_only",
+      "availability": "not_implemented",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "examples": [
+        "pm oncehub api webhook booking-canceled-then-rescheduled-post --help"
+      ],
+      "api_surface": [
+        {
+          "method": "WEBHOOK",
+          "path": "booking.canceled_then_rescheduled#POST"
+        }
+      ],
+      "operation": "oncehub.webhook.booking-canceled-then-rescheduled-post",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "notes": "named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations"
+    },
+    {
+      "path": "api webhook booking-completed-post",
+      "summary": "Documented WEBHOOK booking.completed#POST (not implemented)",
+      "intent": "docs_only",
+      "availability": "not_implemented",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "examples": [
+        "pm oncehub api webhook booking-completed-post --help"
+      ],
+      "api_surface": [
+        {
+          "method": "WEBHOOK",
+          "path": "booking.completed#POST"
+        }
+      ],
+      "operation": "oncehub.webhook.booking-completed-post",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "notes": "named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations"
+    },
+    {
+      "path": "api webhook booking-no-show-post",
+      "summary": "Documented WEBHOOK booking.no_show#POST (not implemented)",
+      "intent": "docs_only",
+      "availability": "not_implemented",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "examples": [
+        "pm oncehub api webhook booking-no-show-post --help"
+      ],
+      "api_surface": [
+        {
+          "method": "WEBHOOK",
+          "path": "booking.no_show#POST"
+        }
+      ],
+      "operation": "oncehub.webhook.booking-no-show-post",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "notes": "named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations"
+    },
+    {
+      "path": "api webhook booking-reassigned-post",
+      "summary": "Documented WEBHOOK booking.reassigned#POST (not implemented)",
+      "intent": "docs_only",
+      "availability": "not_implemented",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "examples": [
+        "pm oncehub api webhook booking-reassigned-post --help"
+      ],
+      "api_surface": [
+        {
+          "method": "WEBHOOK",
+          "path": "booking.reassigned#POST"
+        }
+      ],
+      "operation": "oncehub.webhook.booking-reassigned-post",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "notes": "named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations"
+    },
+    {
+      "path": "api webhook booking-rescheduled-post",
+      "summary": "Documented WEBHOOK booking.rescheduled#POST (not implemented)",
+      "intent": "docs_only",
+      "availability": "not_implemented",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "examples": [
+        "pm oncehub api webhook booking-rescheduled-post --help"
+      ],
+      "api_surface": [
+        {
+          "method": "WEBHOOK",
+          "path": "booking.rescheduled#POST"
+        }
+      ],
+      "operation": "oncehub.webhook.booking-rescheduled-post",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "notes": "named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations"
+    },
+    {
+      "path": "api webhook booking-scheduled-post",
+      "summary": "Documented WEBHOOK booking.scheduled#POST (not implemented)",
+      "intent": "docs_only",
+      "availability": "not_implemented",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "examples": [
+        "pm oncehub api webhook booking-scheduled-post --help"
+      ],
+      "api_surface": [
+        {
+          "method": "WEBHOOK",
+          "path": "booking.scheduled#POST"
+        }
+      ],
+      "operation": "oncehub.webhook.booking-scheduled-post",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "notes": "named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations"
+    },
+    {
+      "path": "api webhook conversation-abandoned-post",
+      "summary": "Documented WEBHOOK conversation.abandoned#POST (not implemented)",
+      "intent": "docs_only",
+      "availability": "not_implemented",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "examples": [
+        "pm oncehub api webhook conversation-abandoned-post --help"
+      ],
+      "api_surface": [
+        {
+          "method": "WEBHOOK",
+          "path": "conversation.abandoned#POST"
+        }
+      ],
+      "operation": "oncehub.webhook.conversation-abandoned-post",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "notes": "named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations"
+    },
+    {
+      "path": "api webhook conversation-closed-post",
+      "summary": "Documented WEBHOOK conversation.closed#POST (not implemented)",
+      "intent": "docs_only",
+      "availability": "not_implemented",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "examples": [
+        "pm oncehub api webhook conversation-closed-post --help"
+      ],
+      "api_surface": [
+        {
+          "method": "WEBHOOK",
+          "path": "conversation.closed#POST"
+        }
+      ],
+      "operation": "oncehub.webhook.conversation-closed-post",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "notes": "named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations"
+    },
+    {
+      "path": "api webhook conversation-started-post",
+      "summary": "Documented WEBHOOK conversation.started#POST (not implemented)",
+      "intent": "docs_only",
+      "availability": "not_implemented",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "examples": [
+        "pm oncehub api webhook conversation-started-post --help"
+      ],
+      "api_surface": [
+        {
+          "method": "WEBHOOK",
+          "path": "conversation.started#POST"
+        }
+      ],
+      "operation": "oncehub.webhook.conversation-started-post",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "notes": "named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations"
+    },
+    {
+      "path": "booking pages list",
+      "summary": "Run the booking pages ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "booking_pages",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "examples": [
+        "pm oncehub booking pages list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/booking-pages"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "bookings list",
+      "summary": "Run the bookings ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "bookings",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "examples": [
+        "pm oncehub bookings list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/bookings"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "contacts list",
+      "summary": "Run the contacts ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "contacts",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "examples": [
+        "pm oncehub contacts list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/contacts"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "event types list",
+      "summary": "Run the event types ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "event_types",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "examples": [
+        "pm oncehub event types list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/event-types"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "users list",
+      "summary": "Run the users ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "users",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "examples": [
+        "pm oncehub users list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/users"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    }
+  ]
+}
