@@ -121,6 +121,27 @@ positive input/output/frame limits with the frame limit no larger than either se
 `json_redacted` output, no mutation or approval escalation, and a compiled recursively closed,
 bounded session-update schema. The next slice must begin with a separate transport RED test.
 
+## Upgrade transport RED — captured 2026-08-10
+
+Before adding any client upgrade code, a loopback-only connsdk contract test was added. It requires
+one fixed relative GET request, standard WebSocket upgrade headers and acceptance hash, the declared
+subprotocol, an authentication marker applied through the existing authenticator seam, a writable
+post-101 connection, and refusal of an ordinary or redirect HTTP response.
+
+```text
+$ go test -count=1 -timeout 20m ./internal/connectors/connsdk -run '^TestOpenWebSocket'
+# polymetrics.ai/internal/connectors/connsdk [polymetrics.ai/internal/connectors/connsdk.test]
+internal/connectors/connsdk/websocket_test.go:45:32: undefined: websocketAcceptGUID
+internal/connectors/connsdk/websocket_test.go:80:28: requester.OpenWebSocket undefined (type *Requester has no field or method OpenWebSocket)
+internal/connectors/connsdk/websocket_test.go:125:45: (&Requester{…}).OpenWebSocket undefined (type *Requester has no field or method OpenWebSocket)
+FAIL	polymetrics.ai/internal/connectors/connsdk [build failed]
+FAIL
+```
+
+The test contains only loopback traffic and a non-secret `X-Connector-Auth: present` marker. It does
+not read a provider endpoint, credential, token, transcript, or signed URL. The missing method is
+the intended transport-foundation red state.
+
 ## Safety assertions
 
 - No test fixture carries a credential, authorization value, token-derived value, signed URL, or
