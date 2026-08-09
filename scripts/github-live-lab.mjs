@@ -154,6 +154,19 @@ function normalizeLabTarget(value, label = "lab target") {
   };
 }
 
+/** Historical runs are audit-only and never enter the executable allowlist. */
+function normalizeHistoricalRun(value, label) {
+  const run = requirePlainObject(value, label);
+  const target = normalizeLabTarget(run.target, `${label}.target`);
+  if (target.run_owned !== true) {
+    throw new Error(`${label}.target must be marked run_owned`);
+  }
+  return {
+    run_id: requireString(run.run_id, `${label}.run_id`),
+    target,
+  };
+}
+
 function targetIdentity(target) {
   if (target.resource_type === "repository") {
     return [target.resource_type, target.owner_slug, target.owner_id, target.repo_slug, target.repo_id].join(":");
@@ -274,6 +287,25 @@ export function validateLabBoundary(candidate) {
     byIdentity.add(identity);
     keys.add(target.key);
   }
+  if (boundary.historical_runs !== undefined && !Array.isArray(boundary.historical_runs)) {
+    throw new Error("lab boundary.historical_runs must be an array when present");
+  }
+  const historicalRuns = (boundary.historical_runs || []).map((entry, index) =>
+    normalizeHistoricalRun(entry, `lab boundary.historical_runs[${index}]`),
+  );
+  const historicalRunIDs = new Set();
+  for (const historical of historicalRuns) {
+    if (historical.run_id === boundary.run_id.trim() || historicalRunIDs.has(historical.run_id)) {
+      throw new Error(`lab boundary has an ambiguous historical run ${historical.run_id}`);
+    }
+    historicalRunIDs.add(historical.run_id);
+    if (isProtectedTarget({ protected_owners: protectedOwners, protected_repositories: protectedRepositories, working_repositories: workingRepositories }, historical.target)) {
+      throw new Error(`lab boundary historical run includes protected target ${targetLabel(historical.target)}`);
+    }
+    if (allowedTargets.some((target) => targetIdentity(target) === targetIdentity(historical.target))) {
+      throw new Error(`lab boundary historical target must not be executable ${targetLabel(historical.target)}`);
+    }
+  }
   if (boundary.bootstrap_principals !== undefined && !Array.isArray(boundary.bootstrap_principals)) {
     throw new Error("lab boundary.bootstrap_principals must be an array when present");
   }
@@ -301,6 +333,7 @@ export function validateLabBoundary(candidate) {
     protected_repositories: protectedRepositories,
     working_repositories: workingRepositories,
     allowed_targets: allowedTargets,
+    historical_runs: historicalRuns,
     bootstrap_principals: bootstrapPrincipals,
   };
 }
@@ -329,6 +362,53 @@ export function assertPMOnly(invocation) {
   }
   ensureNoSensitiveData(command, "fixture invocation");
   return command;
+}
+
+/**
+ * Preserve a diagnostic PM JSON Error envelope without turning an unclassified
+ * provider failure into a credential or setup result.  Evidence is admissible
+ * only when the entire envelope is JSON, bounded, and contains no sensitive
+ * field or credential-shaped value.  A missing HTTP status remains `null`;
+ * callers must not infer one.
+ */
+export function capturePMErrorEnvelope({ invocation, envelope }) {
+  const command = assertPMOnly(invocation);
+  const errorEnvelope = requirePlainObject(envelope, "PM Error envelope");
+  if (errorEnvelope.kind !== "Error") {
+    throw new Error("PM diagnostic requires a kind: Error envelope");
+  }
+  ensureNoSensitiveData(errorEnvelope, "PM Error envelope");
+
+  let serialized;
+  try {
+    serialized = JSON.stringify(errorEnvelope);
+  } catch {
+    throw new Error("PM Error envelope must be JSON serializable");
+  }
+  if (Buffer.byteLength(serialized, "utf8") > OUTPUT_LIMIT_BYTES) {
+    throw new Error("PM Error envelope exceeds bounded output");
+  }
+
+  const statusFields = ["status", "http_status", "provider_status"].filter(
+    (field) => errorEnvelope[field] !== undefined,
+  );
+  if (statusFields.length > 1) {
+    throw new Error("PM Error envelope has ambiguous provider status");
+  }
+  let providerStatus = null;
+  if (statusFields.length === 1) {
+    const status = errorEnvelope[statusFields[0]];
+    if (!Number.isInteger(status) || status < 100 || status > 599) {
+      throw new Error("PM Error envelope provider status must be an HTTP status");
+    }
+    providerStatus = status;
+  }
+
+  return {
+    invocation: command,
+    envelope: JSON.parse(serialized),
+    provider_status: providerStatus,
+  };
 }
 
 /**
@@ -1227,6 +1307,16 @@ export async function readCleanupLedger(ledgerPath) {
   return entries;
 }
 
+function authorizeHistoricalLedgerTarget(boundary, runID, targetCandidate) {
+  const historical = boundary.historical_runs.find((entry) => entry.run_id === runID);
+  if (!historical) return undefined;
+  const target = normalizeLabTarget(targetCandidate, "historical cleanup ledger target");
+  if (targetIdentity(target) !== targetIdentity(historical.target)) {
+    throw new Error(`historical cleanup ledger target does not match archived run ${runID}`);
+  }
+  return historical.target;
+}
+
 /** Validate ledger order and allow repeated idempotent cleanup observations. */
 export function validateCleanupLedger({ entries, boundary }) {
   if (!Array.isArray(entries)) throw new Error("cleanup ledger entries must be an array");
@@ -1235,7 +1325,10 @@ export function validateCleanupLedger({ entries, boundary }) {
   let initialized = false;
   for (const [index, rawEntry] of entries.entries()) {
     const entry = sanitizeCleanupEntry(rawEntry);
-    if (entry.run_id !== normalizedBoundary.run_id) {
+    const historical = entry.run_id === normalizedBoundary.run_id
+      ? undefined
+      : normalizedBoundary.historical_runs.find((candidate) => candidate.run_id === entry.run_id);
+    if (entry.run_id !== normalizedBoundary.run_id && !historical) {
       throw new Error(`cleanup ledger entry ${index + 1} has a different run_id`);
     }
     if (entry.action === "initialized") {
@@ -1243,15 +1336,18 @@ export function validateCleanupLedger({ entries, boundary }) {
       initialized = true;
       continue;
     }
-    authorizeLabTarget(normalizedBoundary, entry.target);
-    const prior = fixtures.get(entry.fixture_id);
+    const authorizedTarget = historical
+      ? authorizeHistoricalLedgerTarget(normalizedBoundary, entry.run_id, entry.target)
+      : authorizeLabTarget(normalizedBoundary, entry.target);
+    const fixtureKey = `${entry.run_id}\u0000${entry.fixture_id}`;
+    const prior = fixtures.get(fixtureKey);
     if (entry.action === "created") {
       if (prior) throw new Error(`cleanup ledger fixture ${JSON.stringify(entry.fixture_id)} was created twice`);
-      fixtures.set(entry.fixture_id, { target: entry.target, terminal: false });
+      fixtures.set(fixtureKey, { target: authorizedTarget, terminal: false });
       continue;
     }
     if (!prior) throw new Error(`cleanup ledger action ${entry.action} has no created fixture ${JSON.stringify(entry.fixture_id)}`);
-    if (targetIdentity(prior.target) !== targetIdentity(entry.target)) {
+    if (targetIdentity(prior.target) !== targetIdentity(authorizedTarget)) {
       throw new Error(`cleanup ledger fixture ${JSON.stringify(entry.fixture_id)} changed target identity`);
     }
     if (["cleanup_completed", "cleanup_already_absent", "retained"].includes(entry.action)) {

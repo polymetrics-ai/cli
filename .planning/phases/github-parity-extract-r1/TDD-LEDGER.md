@@ -2506,3 +2506,86 @@ namespace, `query viewer`, the typed `create-enterprise-organization` mutation, 
 `internal/app` and `internal/cli` package suites, and the website script suite all passed.  This
 cycle made no `pm` provider invocation, browser action, credential read, fixture creation, cleanup,
 or provider write.
+
+---
+
+## Cycle 32 — target rebind and authenticated direct-read finding (planned)
+
+**Scope:** GitHub-only live-lab safety and one authenticated PM direct-read defect. The captain
+supplied the independently verified immutable target ID `1327549621`; it is not an authorization to
+retain the prior target or to bypass PM for provider activity.
+
+**Red 32a:** Current `validateCleanupLedger` rejects every historical event as soon as the current
+boundary's run ID/target changes. Add a regression with an archived historical run and a new exact
+current target. It must fail until historical validation is explicitly separate from normal target
+authorization, and it must prove the archived target cannot reach PM read/write execution.
+
+**Red 32b:** The authenticated PM command returned a JSON `kind: Error` envelope twice with no safe
+provider status. Add a red regression requiring a bounded safe capture to preserve all non-sensitive
+envelope fields, retain status/null faithfully, reject secrets, and never silently convert the error
+to a credential or setup outcome.
+
+**Green criteria:** historical target evidence validates only under an exact archived identity;
+current executors allow only the captain target; the committed boundary contains the supplied owner
+and repository IDs; the current-head PM failure is captured as a sanitized finding and traced through
+the direct-read path before any provider mutation.
+
+**Red 32a — retired cleanup evidence was coupled to the live allowlist.**
+`node --test --test-name-pattern='archived cleanup evidence never reauthorizes'
+scripts/tests/github-live-lab.test.mjs` first failed with `cleanup ledger entry 1 has a different
+run_id`. The old current-run-only validator could neither retain the `8ccd8dd6` history nor prove
+that it had become mutation-ineligible.
+
+**Green 32a — history is validation-only.** The boundary now archives the historical run under its
+own exact immutable target while the one executable `allowed_targets` entry is the captain-approved
+`karthik-sivadas/pm-live-test-direct-read-20260808081515` / repository ID `1327549621` target.
+`normalizeHistoricalRun` and `validateCleanupLedger` validate archived entries only against that
+archive; `authorizeLabTarget` and every PM execution seam continue to read `allowed_targets` only.
+The regression proves an archived target fails before a PM runner can start.
+
+**Red 32b — the PM failure could not be safely preserved as evidence.** The initial capture test
+failed to load because `github-live-lab.mjs` exported no `capturePMErrorEnvelope`. The missing
+seam would have encouraged a shape-only summary and lost the classified error details the captain
+explicitly required.
+
+**Green 32b — bounded full Error envelope capture.** `capturePMErrorEnvelope` now accepts only a
+JSON `kind: Error` PM envelope, rejects sensitive fields and credential-shaped values, bounds the
+serialized object, preserves every safe field, and reports `provider_status: null` unless an actual
+structural HTTP status field exists. The regression includes a message that merely mentions a status
+to prove the harness does not invent one.
+
+**Red 32c — the current finding/control had no source-controlled record.** The divergence test
+failed twice with the new records absent (then with `current_run_id` absent), preventing a
+historical run ID from being silently reused for current-head evidence.
+
+**Green 32c — current-head diagnostic and control are mechanically pinned.**
+`GITHUB-LIVE-LAB-DIVERGENCES.json` now carries a distinct
+`github-live-lab-20260810-target-rebind` record for each current invocation. The exact PM-only
+authenticated repository-list diagnostic exited `1` with the full safe envelope:
+
+```
+{"api_version":"polymetrics.ai/v1","error":{"category":"internal","code":"internal_error","message":"rate-limit policy \"authenticated-user\" requires non-secret config \"rate_limit_account\" for its declared scope"},"kind":"Error"}
+```
+
+There was no provider status because `newRuntime` resolves GitHub's whole-connector
+`authenticated-user` rate-limit policy before a requester dispatches. This is GitHub-specific, and
+affects every GitHub runtime request selected by that policy; it is not shared all-connector
+direct-read machinery. The GitHub specification/docs describe `rate_limit_account` as optional but
+the matching policy requires it, while the CLI serialized the local configuration error as
+`internal_error`; that contract gap is recorded as a defect rather than credential friction.
+
+After adding only the approved non-secret rate-limit account subject to the disposable credential
+(the owner/repository scope was unchanged), the preserved PM-only `repo view` control exited `0`,
+returned `ConnectorCommandRead`, and matched the bound immutable ID, exact slug, and private state
+without `--owner`, `--repo`, `--config`, or `--connection` overrides. Its `repository` stream
+projection has no `archived` schema field, so it deliberately does **not** claim unarchived state;
+the captain's independent target verification remains the authority for that admission property.
+
+Focused safety gates passed before the control and remain green:
+
+```
+go test -timeout 20m ./internal/app -run '^TestGitHubDeployKeyDeleteDoesNotMaskNotFoundForAVisibleBoundFixture$' -count=1
+node --test scripts/tests/github-live-lab.test.mjs
+node scripts/github-live-lab.mjs --check-boundary --boundary .planning/phases/github-parity-extract-r1/GITHUB-LIVE-LAB-BOUNDARY.json
+git diff --check
+```

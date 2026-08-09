@@ -175,3 +175,21 @@ close and retained-state verification. Record re-supply is required at preview a
 the runtime's withheld-field contract remains valid; PM read/provider errors are not retried or
 reclassified as visibility delay. No provider payload, comment text, or credential detail is
 persisted.
+
+---
+
+## Target rebind and authenticated-list failure (2026-08-10)
+
+| Option | Description | Selected |
+|---|---|---|
+| Treat PM error as setup friction | Use the externally confirmed repository and omit the failing PM read. | |
+| Preserve the PM error as a connector finding | Bind the independently confirmed immutable target, then capture and diagnose the same PM-only failure. | ✓ |
+
+**Choice:** Preserve the failure as a connector finding.
+**Notes:** Firstmate independently confirmed the captain-approved target is private, unarchived,
+and has immutable repository ID `1327549621`. The current boundary must allow only that exact
+owner/repository identity. The historical target remains validation-only evidence and cannot be
+re-authorized for fixture traffic. The two earlier `repos list-for-authenticated-user` error
+envelopes are a defect candidate: preserve the exact PM call and complete safe envelope, record a
+provider status only if the envelope contains one, and determine whether the break is shared
+authenticated direct-read plumbing or operation-specific before resuming the cohort.

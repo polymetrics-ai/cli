@@ -7,6 +7,7 @@ import { fileURLToPath } from "node:url";
 
 import {
   appendCleanupEntry,
+  capturePMErrorEnvelope,
   authorizeAccountBootstrapProbe,
   assertPMOnly,
   assertAccountBootstrapProbeInvocation,
@@ -196,6 +197,55 @@ test("a denied target cannot reach the PM fixture executor", async () => {
       },
     }),
     /denied/i,
+  );
+  assert.equal(started, false);
+});
+
+test("archived cleanup evidence never reauthorizes a retired provider target", async () => {
+  const current = structuredClone(boundary);
+  const retiredTarget = structuredClone(boundary.allowed_targets[0]);
+  current.run_id = "github-live-lab-current-20260810";
+  current.allowed_targets = [{
+    ...retiredTarget,
+    owner_slug: "captain-owner",
+    owner_id: "O_captain_owner",
+    repo_slug: "pm-live-test-current",
+    repo_id: "R_captain_current",
+  }];
+  current.historical_runs = [{ run_id: boundary.run_id, target: retiredTarget }];
+  const entries = [
+    { schema_version: 1, run_id: boundary.run_id, action: "initialized", note: "retired run" },
+    {
+      schema_version: 1,
+      run_id: boundary.run_id,
+      action: "created",
+      fixture_id: "repository:R_lab_repository",
+      target: retiredTarget,
+      pm_command: "pm github repo create --name pm-live-lab-001",
+      provider_id: "R_lab_repository",
+    },
+  ];
+
+  assert.doesNotThrow(() => validateLabBoundary(current));
+  assert.doesNotThrow(() => validateCleanupLedger({ entries, boundary: current }));
+  assert.throws(() => authorizeLabTarget(current, retiredTarget), /denied|match|allowlist/i);
+
+  let started = false;
+  await assert.rejects(
+    runPMScopedRead({
+      binary: "pm",
+      root: "/tmp/github-live-lab-root",
+      credentialName: "lab-credential",
+      command: "issue list",
+      commandArgs: ["--config", "owner=lab-owner", "--config", "repo=pm-live-lab-001"],
+      boundary: current,
+      target: retiredTarget,
+      run: async () => {
+        started = true;
+        throw new Error("retired target must not reach PM");
+      },
+    }),
+    /denied|match|allowlist/i,
   );
   assert.equal(started, false);
 });
@@ -429,11 +479,18 @@ test("records personal-repository cohort results only after immutable target bin
   const target = boundaryFile.allowed_targets.find((entry) => entry.key === "personal_repo");
   assert.ok(target);
   assert.equal(target?.run_owned, true);
-  assert.equal(typeof target?.repo_id, "string");
-  const created = entries.find((entry) => entry.action === "created" && entry.fixture_id === `repository:${target.repo_id}`);
-  const readBack = entries.find((entry) => entry.action === "read_back" && entry.fixture_id === `repository:${target.repo_id}`);
-  assert.equal(created?.provider_id, target.repo_id);
-  assert.equal(readBack?.provider_id, target.repo_id);
+  assert.deepEqual(
+    { owner_slug: target?.owner_slug, owner_id: target?.owner_id, repo_slug: target?.repo_slug, repo_id: target?.repo_id },
+    { owner_slug: "karthik-sivadas", owner_id: "6113982", repo_slug: "pm-live-test-direct-read-20260808081515", repo_id: "1327549621" },
+  );
+  const historical = boundaryFile.historical_runs?.find((entry) => entry.run_id === report.run_id);
+  assert.ok(historical);
+  assert.notDeepEqual(historical?.target, target);
+  assert.throws(() => authorizeLabTarget(boundaryFile, historical?.target), /denied|match|allowlist/i);
+  const created = entries.find((entry) => entry.action === "created" && entry.fixture_id === `repository:${historical?.target.repo_id}`);
+  const readBack = entries.find((entry) => entry.action === "read_back" && entry.fixture_id === `repository:${historical?.target.repo_id}`);
+  assert.equal(created?.provider_id, historical?.target.repo_id);
+  assert.equal(readBack?.provider_id, historical?.target.repo_id);
   const issue = entries.find((entry) => entry.action === "created" && String(entry.fixture_id || "").startsWith("issue:"));
   assert.ok(issue);
   const issueEvents = entries.filter((entry) => entry.fixture_id === issue.fixture_id).map((entry) => entry.action);
@@ -987,6 +1044,36 @@ test("fixture commands are PM-only and cleanup ledger remains append-only, redac
   }
 });
 
+test("captures a complete safe PM Error envelope without inventing a provider status", () => {
+  const invocation = "pm github repos list-for-authenticated-user --credential lab-credential --root /tmp/github-live-lab --json";
+  const noStatus = {
+    api_version: "polymetrics.ai/v1",
+    kind: "Error",
+    error: {
+      category: "internal",
+      code: "internal_error",
+      message: "direct read GET /user/repos: status 403 was not exposed structurally",
+    },
+  };
+  assert.deepEqual(
+    capturePMErrorEnvelope({ invocation, envelope: noStatus }),
+    { invocation, envelope: noStatus, provider_status: null },
+  );
+  const withStatus = { ...noStatus, status: 403 };
+  assert.deepEqual(
+    capturePMErrorEnvelope({ invocation, envelope: withStatus }),
+    { invocation, envelope: withStatus, provider_status: 403 },
+  );
+  assert.throws(
+    () => capturePMErrorEnvelope({ invocation, envelope: { ...noStatus, token: "ghp_example_do_not_store" } }),
+    /secret|credential|forbidden/i,
+  );
+  assert.throws(
+    () => capturePMErrorEnvelope({ invocation, envelope: { ...noStatus, status: 99 } }),
+    /status/i,
+  );
+});
+
 test("lab terminal accounting requires exactly one safe terminal result per executed command", () => {
   assert.doesNotThrow(() => validateLabTerminalRecords([
     { command: "issue create", state: "proven", assertion: "readback-matched" },
@@ -1102,7 +1189,67 @@ test("source-derived bootstrap probe inventory proves the organization/App surfa
 
 test("records exact PM-surface and GitHub credential divergences without a provider fallback or retained account data", async () => {
   const divergences = await loadJSON(".planning/phases/github-parity-extract-r1/GITHUB-LIVE-LAB-DIVERGENCES.json");
+  assert.equal(divergences.current_run_id, "github-live-lab-20260810-target-rebind");
   const records = new Map(divergences.records.map((record) => [record.id, record]));
+  assert.deepEqual(
+    records.get("github-authenticated-repository-list-rate-limit-scope-error"),
+    {
+      id: "github-authenticated-repository-list-rate-limit-scope-error",
+      run_id: "github-live-lab-20260810-target-rebind",
+      command: "repos list-for-authenticated-user",
+      phase: "authenticated repository bootstrap discovery",
+      state: "local_preflight_defect_observed",
+      invocation: "pm github repos list-for-authenticated-user --credential github-pm-live-test-20260808081515 --root /tmp/fm-cli-github-parity-extract-r1/pm-lab --json",
+      executed_binary: "/tmp/fm-cli-github-parity-extract-r1/pm-lab/pm",
+      pm_exit: 1,
+      provider_request_started: false,
+      provider_status: null,
+      error_envelope: {
+        api_version: "polymetrics.ai/v1",
+        error: {
+          category: "internal",
+          code: "internal_error",
+          message: "rate-limit policy \"authenticated-user\" requires non-secret config \"rate_limit_account\" for its declared scope",
+        },
+        kind: "Error",
+      },
+      diagnosis: {
+        local_stage: "GitHub engine newRuntime rate-limit resolution before requester dispatch",
+        affected_scope: "GitHub only: every runtime request selected by the whole-connector authenticated-user policy; not shared all-connectors direct-read machinery",
+        source: "internal/connectors/defs/github/rate_limits.json + internal/connectors/engine/rate_limit_runtime.go",
+        contract_gap: "GitHub's declared config describes rate_limit_account as optional, but the matching runtime policy fails without it and CLI serializes that local configuration error as internal.",
+      },
+      resolution: "Use the approved non-secret account coordination subject in the target-scoped lab credential, then fix and test the configuration/error-classification contract before relying on this cohort.",
+    },
+  );
+  assert.deepEqual(
+    records.get("github-repo-view-current-target-control"),
+    {
+      id: "github-repo-view-current-target-control",
+      run_id: "github-live-lab-20260810-target-rebind",
+      command: "repo view",
+      phase: "current target current-head read control",
+      state: "proven_read_with_projection_limit",
+      invocation: "pm github repo view --credential github-pm-live-test-20260808081515 --root /tmp/fm-cli-github-parity-extract-r1/pm-lab --json",
+      executed_binary: "/tmp/fm-cli-github-parity-extract-r1/pm-lab/pm",
+      pm_exit: 0,
+      provider_request_started: true,
+      provider_status: null,
+      output_envelope: {
+        kind: "ConnectorCommandRead",
+        connector: "github",
+        command: "repo view",
+      },
+      assertions: {
+        immutable_repository_id: "1327549621",
+        exact_owner_repo: "karthik-sivadas/pm-live-test-direct-read-20260808081515",
+        private: true,
+        archived: "not_exposed_by_repo_view_projection",
+      },
+      limitation: "repo view is the repository ETL stream, and its committed projected schema has no archived field; the successful PM control cannot establish that property.",
+      resolution: "The captain's independently verified unarchived state remains the authority for target admission; the boundary is pinned to the PM-read immutable repository ID and this control supplies no override flags.",
+    },
+  );
   assert.deepEqual(
     records.get("org-bootstrap-create-command-absent"),
     {
