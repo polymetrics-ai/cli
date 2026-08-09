@@ -142,6 +142,28 @@ The test contains only loopback traffic and a non-secret `X-Connector-Auth: pres
 not read a provider endpoint, credential, token, transcript, or signed URL. The missing method is
 the intended transport-foundation red state.
 
+## Upgrade transport GREEN — captured 2026-08-10
+
+The green slice adds `connsdk.Requester.OpenWebSocket`, a deliberately narrow client bridge. It
+uses only the Requester's existing configured base URL, headers, authenticator, and declared
+rate-limit admission. It requires a rooted connector-relative path, `GET`, one token-shaped
+subprotocol, RFC 6455 key/accept validation, exact selected subprotocol, and `101 Switching
+Protocols`; redirects return as terminal non-101 responses and are never followed. It exposes only
+the verified read-write upgraded connection to the operation executor.
+
+```text
+$ go test -count=1 -timeout 20m ./internal/connectors/connsdk -run '^TestOpenWebSocket'
+ok  	polymetrics.ai/internal/connectors/connsdk	0.396s
+
+$ go test -count=1 -timeout 20m ./internal/connectors/connsdk
+ok  	polymetrics.ai/internal/connectors/connsdk	0.726s
+```
+
+The implementation returns status/protocol failures without provider response content and redacts
+transport error text before returning it. It does not add a CLI command, operation executor, raw
+frame API, or caller-selected transport control. The next slice starts with an engine frame/session
+RED test.
+
 ## Safety assertions
 
 - No test fixture carries a credential, authorization value, token-derived value, signed URL, or
