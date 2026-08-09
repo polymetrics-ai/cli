@@ -65,6 +65,39 @@ This is deliberately red because the current closed schema rejects every `websoc
 the loader can assess its method, path, subprotocol, bounds, or nested schema. The next GREEN
 change must make the valid declaration load while preserving each specific rejection.
 
+## Schema/loader RED expansion — captured 2026-08-10
+
+Before production edits, the same focused test was extended to cover a frame bound larger than a
+declared session bound and a non-redacted output policy, then rerun:
+
+```text
+$ go test -count=1 -timeout 20m ./internal/connectors/engine -run 'TestBundle(LoadAcceptsClosedWebSocketSessionContract|RejectsUnsafeWebSocketSessionContracts)$'
+--- FAIL: TestBundleLoadAcceptsClosedWebSocketSessionContract (0.00s)
+    websocket_session_test.go:51: Load closed WebSocket session operation: load bundle acme: operations.json: /operations/0/websocket: additional property not allowed
+--- FAIL: TestBundleRejectsUnsafeWebSocketSessionContracts (0.00s)
+    --- FAIL: TestBundleRejectsUnsafeWebSocketSessionContracts/non_get_upgrade (0.00s)
+        websocket_session_test.go:117: Load unsafe websocket session contract = load bundle acme: operations.json: /operations/0/websocket: additional property not allowed, want error containing "websocket_session method must be GET"
+    --- FAIL: TestBundleRejectsUnsafeWebSocketSessionContracts/absolute_endpoint (0.00s)
+        websocket_session_test.go:117: Load unsafe websocket session contract = load bundle acme: operations.json: /operations/0/websocket: additional property not allowed, want error containing "websocket_session path must be connector-relative"
+    --- FAIL: TestBundleRejectsUnsafeWebSocketSessionContracts/empty_subprotocol (0.00s)
+        websocket_session_test.go:117: Load unsafe websocket session contract = load bundle acme: operations.json: /operations/0/websocket: additional property not allowed, want error containing "websocket_session requires subprotocol"
+    --- FAIL: TestBundleRejectsUnsafeWebSocketSessionContracts/unbounded_frame (0.00s)
+        websocket_session_test.go:117: Load unsafe websocket session contract = load bundle acme: operations.json: /operations/0/websocket: additional property not allowed, want error containing "websocket_session max_frame_bytes must be positive"
+    --- FAIL: TestBundleRejectsUnsafeWebSocketSessionContracts/frame_larger_than_session_bound (0.00s)
+        websocket_session_test.go:117: Load unsafe websocket session contract = load bundle acme: operations.json: /operations/0/websocket: additional property not allowed, want error containing "websocket_session max_frame_bytes must not exceed max_input_bytes or max_output_bytes"
+    --- FAIL: TestBundleRejectsUnsafeWebSocketSessionContracts/open_session_update (0.00s)
+        websocket_session_test.go:117: Load unsafe websocket session contract = load bundle acme: operations.json: /operations/0/websocket: additional property not allowed, want error containing "websocket_session session_update_schema must declare additionalProperties false"
+    --- FAIL: TestBundleRejectsUnsafeWebSocketSessionContracts/unredacted_output (0.00s)
+        websocket_session_test.go:117: Load unsafe websocket session contract = load bundle acme: operations.json: /operations/0/websocket: additional property not allowed, want error containing "websocket_session requires json_redacted output_policy"
+FAIL
+FAIL	polymetrics.ai/internal/connectors/engine	0.701s
+FAIL
+```
+
+The schema still rejects the declaration at its closed boundary; that is the expected red state.
+The added cases lock the output-redaction and finite-bound invariants before the schema recognizes
+the operation kind.
+
 ## Safety assertions
 
 - No test fixture carries a credential, authorization value, token-derived value, signed URL, or
