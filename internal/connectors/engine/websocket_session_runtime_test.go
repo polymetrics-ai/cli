@@ -189,7 +189,9 @@ func websocketSessionFixtureServer(t *testing.T, run func(*testing.T, io.ReadWri
 			t.Errorf("Hijack: %v", err)
 			return
 		}
-		defer connection.Close()
+		defer func() {
+			_ = connection.Close()
+		}()
 
 		key := request.Header.Get("Sec-WebSocket-Key")
 		sum := sha1.Sum([]byte(key + "258EAFA5-E914-47DA-95CA-C5AB0DC85B11"))
