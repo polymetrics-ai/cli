@@ -110,3 +110,25 @@ The reusable WebSocket runtime is now split to dedicated foundation issue #3963 
 required by the connector-lane ownership contract. This is a delivery-boundary change only: no
 production connector declaration has changed, and the recorded RED remains the applicable test
 contract for the consumer slice.
+
+## Consumer resume confirmation — 2026-08-10
+
+The consumer branch starts from the verified #3963 foundation without adding Zoom declarations to
+that shared-runtime PR. The formerly missing WebSocket schema property is now accepted by the closed
+operation loader; the remaining consumer RED is the 22 exact AI Services command paths:
+
+```text
+$ go test -count=1 -timeout 20m ./internal/connectors/engine -run '^TestBundleLoadAcceptsClosedWebSocketSessionContract$'
+ok  polymetrics.ai/internal/connectors/engine  0.728s
+
+$ go test -count=1 -timeout 20m ./internal/connectors/defs/zoom -run '^TestAIServicesOperationCommandsAreReachable$'
+--- FAIL: TestAIServicesOperationCommandsAreReachable (0.06s)
+    command_surface_test.go:814: Preflight("ai-services scribe jobs list") = connector command "ai-services scribe jobs list" is blocked: unknown command, want declared executable AI Services action
+    ... all 22 documented AI Services command paths remain unknown ...
+FAIL
+FAIL  polymetrics.ai/internal/connectors/defs/zoom
+```
+
+The current artifact was also re-fetched immediately before this continuation: HTTP `200`, `87,750`
+bytes, SHA-256 `154631ef97c292468c81a79dc50cd51ea142d18f1f9fab060622215ddf3ba367`, retrieved
+2026-08-09T23:06:39Z / 2026-08-10 IST. No source or ledger delta exists.

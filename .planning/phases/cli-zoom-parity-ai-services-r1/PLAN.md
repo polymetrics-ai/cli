@@ -94,6 +94,15 @@ The current branch still has exactly 22 `provider_module=ai-services` rows. The 
 not import the 426-sweep surface: that branch's 1,913 rows remain a checklist only because it has
 only three implemented operations.
 
+### Active consumer re-fetch — 2026-08-10 (IST)
+
+Immediately before declaration authoring, the official artifact was fetched again from
+`https://developers.zoom.us/docs/api/ai-services.md` at `2026-08-09T23:06:39Z` (2026-08-10 IST).
+It returned HTTP `200`, exactly `87,750` bytes, and SHA-256
+`154631ef97c292468c81a79dc50cd51ea142d18f1f9fab060622215ddf3ba367`. This is byte-for-byte
+identical to both earlier audited retrievals. The consumer continues from the same 22 source
+operations; it does not import the 426-sweep generated Zoom surface.
+
 ## Locked implementation decisions
 
 1. The twelve ordinary HTTP reads become bounded `rest_read` operations with fixed paths,
@@ -104,15 +113,16 @@ only three implemented operations.
    exposed.
 3. Live Scribe becomes a fixed, declaration-owned WebSocket session operation. It admits exactly
    the documented relative endpoint, `live-asr` subprotocol, closed `session.update` JSON schema,
-   PCM16 file input, fixed client frame sequence, finite output and input bounds, normal connector
-   authentication/rate-limit admission, and redacted result framing. It has no caller-selected
+   PCM16 file input, fixed client frame sequence, finite output and input bounds, a declaration-owned
+   capped session lifetime, normal connector authentication/rate-limit admission, and redacted result
+   framing. It has no caller-selected
    origin, protocol, header, arbitrary initial frame, arbitrary frame type, or raw HTTP escape.
 4. The WebSocket runtime/schema/CLI route is reusable shared runtime work. The connector-lane
-   ownership contract therefore requires foundation [#3963](https://github.com/polymetrics-ai/cli/issues/3963)
-   and its stacked PR before this AI Services bundle declaration proceeds. It must use the Go standard library and add no
-   dependency. This slice remains at its committed foundation RED checkpoint until that PR lands;
-   the foundation must stay closed enough to make the documented Zoom operation executable without
-   exposing caller-selected transport, origin, protocol, header, or frame controls.
+   ownership contract therefore required foundation [#3963](https://github.com/polymetrics-ai/cli/issues/3963),
+   now present in stacked PR #3965, before this AI Services bundle declaration proceeds. Its closed
+   schema acceptance test is green on the consumer base. It uses the Go standard library and adds no
+   dependency; the consumer must stay closed enough to make the documented Zoom operation executable
+   without exposing caller-selected transport, origin, protocol, header, or frame controls.
 5. `surface-sync`, `surface-reconcile`, documentation/manual, and website catalogs are generated
    normally. The recorded mechanical retention trace may restore non-Zoom aggregate catalog rows;
    generated Zoom data is never hand-merged.
