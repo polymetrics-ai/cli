@@ -96,7 +96,7 @@ Common `kind` values:
 | `ReversePlan` | `pm reverse plan --json` |
 | `ReversePlanPreview` | `pm reverse preview --json` |
 | `ReverseRun` | `pm reverse run --json` |
-| `CommandManual` | any `pm <cmd> --help --json` |
+| `CommandManual` | a resolved `pm <cmd> --help --json` request |
 
 ## Connector discovery
 
@@ -220,4 +220,4 @@ pm reverse run <plan-id> --approve <token> --json
   <Card title="Reverse ETL" href="/docs/reverse-etl" description="The full plan-preview-approve-run security model." />
   <Card title="Connector catalog" href="/docs/connectors" description="Connector pages with per-connector setup, auth fields, and machine-readable metadata." />
 </Cards>
-Manual surfaces such as `pm help <topic>` are intentionally human-readable. Use `pm <command> --help --json` when an agent needs the embedded manual envelope.
+Manual surfaces such as `pm help <topic>` are intentionally human-readable. For a resolved command path, use `pm <command> --help --json` when an agent needs the embedded manual envelope.

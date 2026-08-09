@@ -9,6 +9,8 @@ Status: **local verification complete**.
 - [x] Golden transcript regeneration is inspected; only the new deep-invalid-help JSON entry changed.
 - [x] CLI parity checks pass: connector root, root help flag, real deep help, invalid deep help,
   connector-level unknown, and JSON structured error.
+- [x] The canonical website CLI reference and agent guide describe the resolved-help requirement;
+  `website/lib/docs.generated.ts` was regenerated from those source documents.
 - [x] `scripts/verify-gsd-workflow origin/main` accepts the committed implementation and its GSD/TDD evidence.
 - [x] Individual relevant verification gates pass: `agentcontractgen check`, `connectorgen validate`,
   `connectorgen surface-sync --check`, `connectorgen boundary . --json`, and
@@ -25,4 +27,5 @@ go run ./cmd/connectorgen validate internal/connectors/defs
 go run ./cmd/connectorgen surface-sync --check
 go run ./cmd/connectorgen boundary . --json
 scripts/tests/release-target-parity.sh
+node website/scripts/gen-docs-data.mjs
 ```

@@ -7,6 +7,8 @@
   silently returning the connector root manual at exit 0.
 - Existing connector root/bare help, one-segment group help, and declared deep-command help retain
   their successful output and exit code.
+- Updated the canonical website CLI and agent documentation so a `CommandManual` is promised only
+  for resolved help paths, then regenerated the website docs data.
 - Added a red/green regression covering a real deep command, invalid deep command, and the JSON
   envelope. Added the corresponding reviewed golden transcript entry.
 

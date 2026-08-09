@@ -8,13 +8,15 @@
 - Manual-GSD fallback: execute generated `scripts/gsd prompt` instructions inline because Pi is
   unavailable and this task/canonical contract forbids role spawning.
 - Skills loaded: `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`,
-  `golang-security`, and `golang-spf13-cobra`.
+  `golang-security`, `golang-safety`, `golang-lint`, `golang-documentation`, and
+  `golang-spf13-cobra`.
 
 ## Scope
 
-`internal/cli` only, plus the required GSD evidence. No connector definition, generated surface,
-manual, or website doc changes are expected: the command syntax and help text do not change; only
-the erroneous success exit for an invalid path is corrected.
+`internal/cli`, the canonical website CLI and agent documentation, plus the required GSD evidence.
+No connector definition, generated surface, or top-level CLI manual changes are expected: the
+command syntax and help text do not change, but documentation must record the corrected error
+contract for an invalid path.
 
 ## TDD execution plan
 
@@ -31,7 +33,8 @@ the erroneous success exit for an invalid path is corrected.
 - [x] Real group and deep-command `--help` retain exit 0.
 - [x] Invalid action returns a usage error.
 - [x] JSON errors use the existing structured error envelope.
-- [x] CLI manual/website updates are not applicable: syntax and help content are unchanged.
+- [x] Website CLI reference documents resolved help paths and the usage-error contract; the agent
+  guide limits `CommandManual` to resolved help paths, and generated website docs data is refreshed.
 
 ## Commit checkpoints
 

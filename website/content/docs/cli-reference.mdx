@@ -105,9 +105,12 @@ schedule:
 
 ## Connector command surfaces
 
-The GitHub connector exposes a dynamic `pm github ...` command tree generated from connector
-metadata. `pm github`, `pm github --help`, and `pm help github` render its manual; declared
-product-safe command paths dispatch through the connector command runner. See
+Connector command surfaces use dynamic `pm <connector> ...` command trees generated from connector
+metadata. `pm <connector>`, `pm <connector> --help`, and `pm help <connector>` render a root
+manual; a declared group or command followed by `--help` renders its own manual. An unrecognized
+connector path is a usage error even when `--help` is present (exit `2`; with `--json`,
+`error.code` is `usage_error`). Declared product-safe command paths dispatch through the connector
+command runner. See
 [/docs/github-cli-surface](/docs/github-cli-surface) for the current command metadata, safety labels,
 and staged parity roadmap.
 
