@@ -98,6 +98,29 @@ The schema still rejects the declaration at its closed boundary; that is the exp
 The added cases lock the output-redaction and finite-bound invariants before the schema recognizes
 the operation kind.
 
+## Schema/loader GREEN — captured 2026-08-10
+
+The production slice adds only the closed `websocket_session` kind: its meta-schema, typed bundle
+model, one-block discriminator, API-surface coverage annotation, and load-time semantic validator.
+It has no transport or command route yet. The focused red suite is green:
+
+```text
+$ go test -count=1 -timeout 20m ./internal/connectors/engine -run 'TestBundle(LoadAcceptsClosedWebSocketSessionContract|RejectsUnsafeWebSocketSessionContracts)$'
+ok  	polymetrics.ai/internal/connectors/engine	0.698s
+```
+
+The package regression suite is also green:
+
+```text
+$ go test -count=1 -timeout 20m ./internal/connectors/engine
+ok  	polymetrics.ai/internal/connectors/engine	4.642s
+```
+
+The green validator enforces a rooted connector-relative GET path, exactly one valid protocol token,
+positive input/output/frame limits with the frame limit no larger than either session limit,
+`json_redacted` output, no mutation or approval escalation, and a compiled recursively closed,
+bounded session-update schema. The next slice must begin with a separate transport RED test.
+
 ## Safety assertions
 
 - No test fixture carries a credential, authorization value, token-derived value, signed URL, or

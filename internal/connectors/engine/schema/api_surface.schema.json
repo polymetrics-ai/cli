@@ -58,7 +58,8 @@
               "direct_writes": {
                 "type": "array",
                 "items": { "type": "string" }
-              }
+              },
+              "websocket_session": { "type": "string" }
             }
           },
           "excluded": {

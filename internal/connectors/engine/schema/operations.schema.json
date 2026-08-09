@@ -32,7 +32,8 @@
               "local_git",
               "local_file",
               "browser_open",
-              "composite"
+              "composite",
+              "websocket_session"
             ]
           },
           "summary": { "type": "string" },
@@ -236,6 +237,20 @@
                   "max_hops": { "type": "integer" }
                 }
               }
+            }
+          },
+          "websocket": {
+            "type": "object",
+            "required": ["method", "path", "subprotocol", "max_input_bytes", "max_output_bytes", "max_frame_bytes", "session_update_schema"],
+            "additionalProperties": false,
+            "properties": {
+              "method": { "type": "string" },
+              "path": { "type": "string" },
+              "subprotocol": { "type": "string" },
+              "max_input_bytes": { "type": "integer" },
+              "max_output_bytes": { "type": "integer" },
+              "max_frame_bytes": { "type": "integer" },
+              "session_update_schema": { "type": "object" }
             }
           },
           "graphql": {

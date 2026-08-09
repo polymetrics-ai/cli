@@ -699,11 +699,12 @@ type SurfaceCoverage struct {
 	// Writes names every write action an endpoint backs when it backs more than
 	// one. A provider documents one path per operation, but a bundle may model
 	// several distinct write contracts over that one path.
-	Writes       []string `json:"writes,omitempty"`
-	DirectRead   string   `json:"direct_read,omitempty"`
-	DirectReads  []string `json:"direct_reads,omitempty"`
-	DirectWrite  string   `json:"direct_write,omitempty"`
-	DirectWrites []string `json:"direct_writes,omitempty"`
+	Writes           []string `json:"writes,omitempty"`
+	DirectRead       string   `json:"direct_read,omitempty"`
+	DirectReads      []string `json:"direct_reads,omitempty"`
+	DirectWrite      string   `json:"direct_write,omitempty"`
+	DirectWrites     []string `json:"direct_writes,omitempty"`
+	WebSocketSession string   `json:"websocket_session,omitempty"`
 }
 
 // WriteTargets returns every write action a coverage entry names, singular and
@@ -772,6 +773,7 @@ type OperationSpec struct {
 	LocalFile       *LocalFileOperationSpec `json:"local_file,omitempty"`
 	Browser         *BrowserOperationSpec   `json:"browser,omitempty"`
 	Composite       *CompositeOperationSpec `json:"composite,omitempty"`
+	WebSocket       *WebSocketSessionSpec   `json:"websocket,omitempty"`
 }
 
 // IsBatchable reports whether the operation may be placed in a bulk plan.
@@ -842,6 +844,20 @@ type RESTOperationSpec struct {
 	// the constraint is about the wire request rather than about who supplied
 	// it. Empty (the default) imposes nothing.
 	RequiredQuery []RequiredQueryGroup `json:"required_query,omitempty"`
+}
+
+// WebSocketSessionSpec is the closed declaration for one provider-owned
+// WebSocket session. The connector owns the GET endpoint and one protocol
+// token; callers can supply only schema-bound session data and bounded frame
+// payloads through the dedicated runtime capability.
+type WebSocketSessionSpec struct {
+	Method              string          `json:"method"`
+	Path                string          `json:"path"`
+	Subprotocol         string          `json:"subprotocol"`
+	MaxInputBytes       int             `json:"max_input_bytes"`
+	MaxOutputBytes      int             `json:"max_output_bytes"`
+	MaxFrameBytes       int             `json:"max_frame_bytes"`
+	SessionUpdateSchema json.RawMessage `json:"session_update_schema"`
 }
 
 // MutationRedirectSpec is the closed operation declaration for a multipart,
@@ -2123,6 +2139,7 @@ func operationExecutionBlock(op OperationSpec) (string, int) {
 	add("local_file", op.LocalFile != nil)
 	add("browser", op.Browser != nil)
 	add("composite", op.Composite != nil)
+	add("websocket", op.WebSocket != nil)
 	return block, count
 }
 
@@ -2146,6 +2163,8 @@ func expectedOperationBlock(kind string) string {
 		return "browser"
 	case "stream_etl", "composite":
 		return "composite"
+	case "websocket_session":
+		return "websocket"
 	default:
 		return ""
 	}
@@ -2640,9 +2659,110 @@ func validateOperationSemantics(i int, op OperationSpec) error {
 		if op.LocalFile.Action == "write" && op.LocalFile.MaxBytes <= 0 {
 			return fmt.Errorf("operation %d (%q) local_file write must declare positive max_bytes", i, op.ID)
 		}
+	case "websocket_session":
+		if err := validateWebSocketSessionSemantics(i, op); err != nil {
+			return err
+		}
 	}
 	if err := validateSensitivePolicy(i, op); err != nil {
 		return err
+	}
+	return nil
+}
+
+// validateWebSocketSessionSemantics makes the session capability safe by
+// declaration, before a connector can expose it. It accepts no caller-owned
+// origin, protocol, response policy, or unbounded input/output shape.
+func validateWebSocketSessionSemantics(i int, op OperationSpec) error {
+	if op.WebSocket == nil {
+		return fmt.Errorf("operation %d (%q) websocket_session requires websocket block", i, op.ID)
+	}
+	spec := op.WebSocket
+	method := strings.ToUpper(strings.TrimSpace(spec.Method))
+	if method != "GET" {
+		return fmt.Errorf("operation %d (%q) websocket_session method must be GET, got %s", i, op.ID, method)
+	}
+	path := strings.TrimSpace(spec.Path)
+	if path != spec.Path || !strings.HasPrefix(path, "/") || strings.HasPrefix(path, "//") || strings.ContainsAny(path, "\r\n?#") || isAbsoluteHTTPURL(path) {
+		return fmt.Errorf("operation %d (%q) websocket_session path must be connector-relative", i, op.ID)
+	}
+	subprotocol := strings.TrimSpace(spec.Subprotocol)
+	if subprotocol == "" || subprotocol != spec.Subprotocol || !httpHeaderNamePattern.MatchString(subprotocol) {
+		return fmt.Errorf("operation %d (%q) websocket_session requires subprotocol", i, op.ID)
+	}
+	if spec.MaxInputBytes <= 0 {
+		return fmt.Errorf("operation %d (%q) websocket_session max_input_bytes must be positive", i, op.ID)
+	}
+	if spec.MaxOutputBytes <= 0 {
+		return fmt.Errorf("operation %d (%q) websocket_session max_output_bytes must be positive", i, op.ID)
+	}
+	if spec.MaxFrameBytes <= 0 {
+		return fmt.Errorf("operation %d (%q) websocket_session max_frame_bytes must be positive", i, op.ID)
+	}
+	if spec.MaxFrameBytes > spec.MaxInputBytes || spec.MaxFrameBytes > spec.MaxOutputBytes {
+		return fmt.Errorf("operation %d (%q) websocket_session max_frame_bytes must not exceed max_input_bytes or max_output_bytes", i, op.ID)
+	}
+	if op.OutputPolicy != "json_redacted" {
+		return fmt.Errorf("operation %d (%q) websocket_session requires json_redacted output_policy", i, op.ID)
+	}
+	if approval := strings.TrimSpace(op.Approval); approval != "none" {
+		return fmt.Errorf("operation %d (%q) websocket_session approval must be none", i, op.ID)
+	}
+	if mutationClass := strings.TrimSpace(op.MutationClass); mutationClass != "" && mutationClass != "none" {
+		return fmt.Errorf("operation %d (%q) websocket_session must not declare mutating mutation_class %q", i, op.ID, mutationClass)
+	}
+	if len(spec.SessionUpdateSchema) == 0 {
+		return fmt.Errorf("operation %d (%q) websocket_session requires session_update_schema", i, op.ID)
+	}
+	var schema map[string]any
+	if err := json.Unmarshal(spec.SessionUpdateSchema, &schema); err != nil {
+		return fmt.Errorf("operation %d (%q) websocket_session session_update_schema is not an object: %w", i, op.ID, err)
+	}
+	if !isObjectType(schema) {
+		return fmt.Errorf("operation %d (%q) websocket_session session_update_schema must be an object", i, op.ID)
+	}
+	if closed, ok := schema["additionalProperties"].(bool); !ok || closed {
+		return fmt.Errorf("operation %d (%q) websocket_session session_update_schema must declare additionalProperties false", i, op.ID)
+	}
+	if _, err := CompileSchema(spec.SessionUpdateSchema); err != nil {
+		return fmt.Errorf("operation %d (%q) websocket_session session_update_schema: %w", i, op.ID, err)
+	}
+	return requireClosedBoundedWebSocketSessionSchema(i, op.ID, schema, "session_update_schema")
+}
+
+func requireClosedBoundedWebSocketSessionSchema(i int, id string, node map[string]any, path string) error {
+	if isArrayType(node) {
+		if _, ok := node["maxItems"]; !ok {
+			return fmt.Errorf("operation %d (%q) websocket_session %s declares an array without maxItems", i, id, path)
+		}
+	}
+	if isObjectType(node) {
+		if closed, ok := node["additionalProperties"].(bool); !ok || closed {
+			return fmt.Errorf("operation %d (%q) websocket_session %s must declare additionalProperties false", i, id, path)
+		}
+	}
+	if items, ok := node["items"].(map[string]any); ok {
+		if err := requireClosedBoundedWebSocketSessionSchema(i, id, items, path+"/items"); err != nil {
+			return err
+		}
+	}
+	props, ok := node["properties"].(map[string]any)
+	if !ok {
+		return nil
+	}
+	names := make([]string, 0, len(props))
+	for name := range props {
+		names = append(names, name)
+	}
+	sort.Strings(names)
+	for _, name := range names {
+		child, ok := props[name].(map[string]any)
+		if !ok {
+			continue
+		}
+		if err := requireClosedBoundedWebSocketSessionSchema(i, id, child, path+"/"+name); err != nil {
+			return err
+		}
 	}
 	return nil
 }
