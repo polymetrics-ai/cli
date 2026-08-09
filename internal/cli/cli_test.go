@@ -81,6 +81,89 @@ func TestDynamicConnectorHelpAndBareNamespace(t *testing.T) {
 	}
 }
 
+func TestDynamicConnectorDeepHelpPathsResolveOrReportUsage(t *testing.T) {
+	t.Run("real deep command", func(t *testing.T) {
+		var stdout, stderr bytes.Buffer
+		code := cli.Run([]string{"gong", "calls", "transcript", "--help"}, &stdout, &stderr)
+		if code != 0 {
+			t.Fatalf("Run(gong calls transcript --help) code = %d stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+		}
+		if !strings.Contains(stdout.String(), "pm gong calls transcript") {
+			t.Fatalf("real deep command help missing command manual:\n%s", stdout.String())
+		}
+	})
+
+	t.Run("unknown deep command", func(t *testing.T) {
+		var stdout, stderr bytes.Buffer
+		code := cli.Run([]string{"gong", "calls", "definitely-not-real", "--help"}, &stdout, &stderr)
+		if code == 0 {
+			t.Fatalf("Run(gong calls definitely-not-real --help) code = 0, want usage error; stdout=%s stderr=%s", stdout.String(), stderr.String())
+		}
+		out := stdout.String() + stderr.String()
+		for _, want := range []string{`unknown command "calls definitely-not-real"`} {
+			if !strings.Contains(out, want) {
+				t.Fatalf("unknown deep command output missing %q:\nstdout=%s\nstderr=%s", want, stdout.String(), stderr.String())
+			}
+		}
+		if strings.Contains(out, "pm gong - Gong command surface") {
+			t.Fatalf("unknown deep command rendered connector root help:\nstdout=%s\nstderr=%s", stdout.String(), stderr.String())
+		}
+	})
+
+	t.Run("unknown deep command JSON", func(t *testing.T) {
+		var stdout, stderr bytes.Buffer
+		code := cli.Run([]string{"gong", "calls", "definitely-not-real", "--help", "--json"}, &stdout, &stderr)
+		if code != 2 {
+			t.Fatalf("Run(gong calls definitely-not-real --help --json) code = %d, want usage error; stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+		}
+		var env struct {
+			Error struct {
+				Category string `json:"category"`
+				Code     string `json:"code"`
+				Message  string `json:"message"`
+			} `json:"error"`
+		}
+		if err := json.Unmarshal(stdout.Bytes(), &env); err != nil {
+			t.Fatalf("decode JSON error: %v\nstdout=%s", err, stdout.String())
+		}
+		if env.Error.Category != "usage" || env.Error.Code != "usage_error" || !strings.Contains(env.Error.Message, `unknown command "calls definitely-not-real"`) {
+			t.Fatalf("error = %+v, want usage_error for unresolved path", env.Error)
+		}
+	})
+
+	t.Run("unknown group with trailing help value JSON", func(t *testing.T) {
+		var stdout, stderr bytes.Buffer
+		code := cli.Run([]string{"gong", "definitely-not-real", "--help", "trailing", "--json"}, &stdout, &stderr)
+		if code != 2 {
+			t.Fatalf("Run(gong definitely-not-real --help trailing --json) code = %d, want usage error; stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+		}
+		var env struct {
+			Error struct {
+				Category string `json:"category"`
+				Code     string `json:"code"`
+				Message  string `json:"message"`
+			} `json:"error"`
+		}
+		if err := json.Unmarshal(stdout.Bytes(), &env); err != nil {
+			t.Fatalf("decode JSON error: %v\nstdout=%s", err, stdout.String())
+		}
+		if env.Error.Category != "usage" || env.Error.Code != "usage_error" || !strings.Contains(env.Error.Message, `unknown command "definitely-not-real"`) {
+			t.Fatalf("error = %+v, want usage_error for unresolved path", env.Error)
+		}
+	})
+
+	t.Run("valid group with trailing help value", func(t *testing.T) {
+		var stdout, stderr bytes.Buffer
+		code := cli.Run([]string{"gong", "calls", "--help", "trailing"}, &stdout, &stderr)
+		if code != 0 {
+			t.Fatalf("Run(gong calls --help trailing) code = %d, want success; stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+		}
+		if !strings.Contains(stdout.String(), "pm gong calls - Gong calls commands") {
+			t.Fatalf("valid group help missing group manual:\n%s", stdout.String())
+		}
+	})
+}
+
 func TestGongCallsListHelpDocumentsDateFlagsAndLimitOutputCap(t *testing.T) {
 	var stdout, stderr bytes.Buffer
 	code := cli.Run([]string{"gong", "calls", "list", "--help"}, &stdout, &stderr)

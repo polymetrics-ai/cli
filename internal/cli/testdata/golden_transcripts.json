@@ -885,6 +885,19 @@
     "stderr": "error: unknown command \"definitely-not-command\"\n"
   },
   {
+    "name": "dynamic_connector_unknown_deep_help_json",
+    "args": [
+      "gong",
+      "calls",
+      "definitely-not-real",
+      "--help",
+      "--json"
+    ],
+    "exit_code": 2,
+    "stdout": "{\n  \"api_version\": \"polymetrics.ai/v1\",\n  \"error\": {\n    \"category\": \"usage\",\n    \"code\": \"usage_error\",\n    \"message\": \"unknown command \\\"calls definitely-not-real\\\"\"\n  },\n  \"kind\": \"Error\"\n}\n",
+    "stderr": "error: unknown command \"calls definitely-not-real\"\n"
+  },
+  {
     "name": "hidden_extract_help_json",
     "args": [
       "extract",

@@ -121,6 +121,7 @@ var goldenTranscriptInputs = []struct {
 	{Name: "help_missing_topic", Args: []string{"help", "nosuchtopic"}},
 	{Name: "dynamic_connector_bare_json", Args: []string{"github", "--json"}},
 	{Name: "dynamic_connector_unknown_path_json", Args: []string{"github", "definitely-not-command", "--json"}},
+	{Name: "dynamic_connector_unknown_deep_help_json", Args: []string{"gong", "calls", "definitely-not-real", "--help", "--json"}},
 	{Name: "hidden_extract_help_json", Args: []string{"extract", "--help", "--json"}},
 	{Name: "hidden_worker_help_json", Args: []string{"worker", "--help", "--json"}},
 }

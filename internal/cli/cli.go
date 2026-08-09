@@ -710,7 +710,7 @@ func runMaybeConnectorCommand(ctx context.Context, root, connectorName string, a
 		return usageErrorf("unknown command %q", connectorName)
 	}
 	surface := surfaceProvider.CommandSurface()
-	if len(args) == 0 || connectorHelpRequested(args, surface) {
+	if len(args) == 0 {
 		command, manual := renderConnectorCommandManual(connectorName, connector, surface, args)
 		if jsonOut {
 			return writeJSON(stdout, envelope{"kind": "CommandManual", "command": command, "manual": manual})
@@ -719,6 +719,23 @@ func runMaybeConnectorCommand(ctx context.Context, root, connectorName string, a
 		return nil
 	}
 	flags := parseFlags(args)
+	if connectorHelpRequested(args, surface) {
+		helpPath := connectorHelpPath(flags.values["_"])
+		if len(helpPath) > 0 {
+			command := strings.Join(helpPath, " ")
+			_, isCommand := connectorSurfaceCommand(surface, command)
+			isGroup := len(helpPath) == 1 && connectorSurfaceHasPrefix(surface, helpPath[0])
+			if !isCommand && !isGroup {
+				return connectorCommandUsageError(surface, helpPath)
+			}
+		}
+		command, manual := renderConnectorCommandManual(connectorName, connector, surface, args)
+		if jsonOut {
+			return writeJSON(stdout, envelope{"kind": "CommandManual", "command": command, "manual": manual})
+		}
+		_, _ = fmt.Fprint(stdout, manual)
+		return nil
+	}
 	path := flags.values["_"]
 	if len(path) == 0 {
 		return usageErrorf("missing connector command path")
