@@ -9,6 +9,7 @@ import (
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/defs"
 	"polymetrics.ai/internal/connectors/engine"
+	nativemysql "polymetrics.ai/internal/connectors/native/mysql"
 	nativepostgres "polymetrics.ai/internal/connectors/native/postgres"
 )
 
@@ -40,8 +41,8 @@ func TestNewLoadsDeclarativeBundlesWithHooksAndNativeOverrides(t *testing.T) {
 	if err != nil {
 		t.Fatalf("LoadAll(defs): %v", err)
 	}
-	if len(bundles) != 551 {
-		t.Fatalf("bundle count = %d, want 551", len(bundles))
+	if len(bundles) != 552 {
+		t.Fatalf("bundle count = %d, want 552", len(bundles))
 	}
 
 	registry := New()
@@ -107,6 +108,20 @@ func TestNewLoadsDeclarativeBundlesWithHooksAndNativeOverrides(t *testing.T) {
 	}
 	if _, ok := postgresConnector.(nativepostgres.Connector); !ok {
 		t.Fatalf("postgres registry type = %T, want Tier-3 native override", postgresConnector)
+	}
+	mysqlConnector, ok := registry.Get("mysql")
+	if !ok {
+		t.Fatal("registry missing mysql")
+	}
+	if _, ok := mysqlConnector.(nativemysql.Connector); !ok {
+		t.Fatalf("mysql registry type = %T, want Tier-3 native override", mysqlConnector)
+	}
+	mysqlDefinition, ok := connectors.DefinitionOf(mysqlConnector)
+	if !ok || mysqlDefinition.Changefeed != nil || mysqlDefinition.Capabilities.CDC {
+		t.Fatal("mysql registry connector must keep CDC non-public before a runtime entrypoint exists")
+	}
+	if _, ok := mysqlConnector.(connectors.ChangefeedExecutor); ok {
+		t.Fatal("mysql registry connector must not expose an internal CDC reader as a changefeed executor")
 	}
 }
 

@@ -1,0 +1,7 @@
+{
+  "api": "MySQL client protocol",
+  "docs": "https://dev.mysql.com/doc/refman/8.4/en/",
+  "reviewed_at": "2026-08-06",
+  "scope": "This Tier-3 database connector speaks the MySQL client protocol rather than HTTP. Check, catalog, and snapshot/incremental reads operate against dynamic tables discovered from the configured database. There is no REST endpoint surface to enumerate.",
+  "endpoints": []
+}

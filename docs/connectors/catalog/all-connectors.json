@@ -90115,6 +90115,105 @@
     }
   },
   {
+    "name": "mysql",
+    "display_name": "MySQL",
+    "description": "Native MySQL source connector for wire-protocol checks, dynamic schemas, and bounded reads. Read-only source.",
+    "integration_type": "database",
+    "docs_url": "https://dev.mysql.com/doc/refman/8.4/en/",
+    "release_stage": "ga",
+    "capabilities": {
+      "check": true,
+      "catalog": true,
+      "read": true,
+      "write": false,
+      "query": false
+    },
+    "spec": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "MySQL connection config",
+      "type": "object",
+      "required": [
+        "host",
+        "database",
+        "username"
+      ],
+      "properties": {
+        "host": {
+          "type": "string",
+          "description": "Bare MySQL hostname or IP address. URL-shaped values and embedded credentials are rejected."
+        },
+        "port": {
+          "type": "string",
+          "description": "TCP port, 1-65535. Defaults to 3306 when omitted."
+        },
+        "database": {
+          "type": "string",
+          "description": "MySQL database to discover and read."
+        },
+        "username": {
+          "type": "string",
+          "description": "Database account used to authenticate."
+        },
+        "password": {
+          "type": "string",
+          "x-secret": true,
+          "description": "Database password. Never logged."
+        },
+        "sslmode": {
+          "type": "string",
+          "enum": [
+            "disabled",
+            "preferred",
+            "required",
+            "verify-ca",
+            "verify-identity",
+            "disable",
+            "allow",
+            "prefer",
+            "require",
+            "verify-full",
+            "verify_ca",
+            "verify_identity"
+          ],
+          "description": "Transport security. disabled never negotiates TLS; preferred (the default) encrypts when the server offers TLS and is the only mode that falls back to plaintext; required encrypts and fails when the server offers no TLS; verify-ca also verifies the server chain; verify-identity also verifies the server name. libpq and underscore spellings are accepted for compatibility; use canonical values for a portable policy across SQL connectors."
+        },
+        "sslrootcert": {
+          "type": "string",
+          "description": "Absolute path to a PEM CA bundle used by verify-ca and verify-identity. Defaults to the host trust store when omitted."
+        },
+        "sslservername": {
+          "type": "string",
+          "description": "Server name to verify under verify-identity when it differs from host, such as an IP-addressed endpoint fronting a named certificate."
+        },
+        "cursor_field": {
+          "type": "string",
+          "description": "Optional safe, non-null, single-column primary or unique key for cursor-incremental reads. A present cursor state, including an empty or whitespace value, is a strict resume boundary."
+        },
+        "page_size": {
+          "type": "string",
+          "description": "Maximum records per read page. Defaults to 1000."
+        },
+        "read_limit": {
+          "type": "string",
+          "description": "Total maximum rows for a Read. Defaults to 10000; set to 0, all, or unlimited to disable this bound."
+        }
+      }
+    },
+    "streams": [],
+    "risk": {
+      "read": "read-only MySQL wire-protocol queries against the configured database",
+      "write": "n/a (read-only source)",
+      "approval": "none required for read-only sync"
+    },
+    "icon": {
+      "id": "mysql",
+      "path": "icons/mysql.svg",
+      "source": "upstream_registry",
+      "review_status": "upstream_seeded",
+      "review_url": "https://dev.mysql.com/doc/"
+    }
+  },
+  {
     "name": "n8n",
     "display_name": "n8n",
     "description": "Reads n8n workflows, executions, tags, users, variables, projects, data tables, and credential metadata; writes supported n8n public REST API mutations.",
@@ -118108,14 +118207,28 @@
         "sslmode": {
           "type": "string",
           "enum": [
+            "disabled",
+            "preferred",
+            "required",
+            "verify-ca",
+            "verify-identity",
             "disable",
             "allow",
             "prefer",
             "require",
-            "verify-ca",
-            "verify-full"
+            "verify-full",
+            "verify_ca",
+            "verify_identity"
           ],
-          "description": "libpq sslmode. Defaults to disable when omitted."
+          "description": "Transport security. Canonical values are disabled (the default), preferred, required, verify-ca, and verify-identity. Existing libpq and underscore spellings are accepted for compatibility."
+        },
+        "sslrootcert": {
+          "type": "string",
+          "description": "Absolute path to a PEM CA bundle used by verify-ca and verify-identity. Defaults to the host trust store when omitted."
+        },
+        "sslservername": {
+          "type": "string",
+          "description": "Server name to verify under verify-identity when it differs from host, such as an IP-addressed endpoint fronting a named certificate."
         },
         "schema": {
           "type": "string",
@@ -158583,7 +158696,7 @@
   {
     "name": "warehouse",
     "display_name": "Local Warehouse",
-    "description": "Local JSONL warehouse destination used by the dependency-free MVP.",
+    "description": "Local Parquet warehouse destination queried by the embedded DuckDB engine.",
     "integration_type": "database",
     "release_stage": "",
     "capabilities": {

@@ -11,7 +11,6 @@ import (
 	"os"
 	"path/filepath"
 	"sort"
-	"strconv"
 	"strings"
 	"time"
 
@@ -1103,8 +1102,10 @@ func (a *App) runConnectorETL(ctx context.Context, runID string, conn Connection
 	result := etlExecutionResult{}
 	batch := make([]connectors.Record, 0, batchSize)
 	firstWrite := true
-	priorCursor := streamStateCursor(prior)
-	nextCursor := priorCursor
+	cursorTracker, err := newStreamCursorTracker(prior, source, sourceRuntime, stream.CursorField, mode.Source)
+	if err != nil {
+		return etlExecutionResult{}, err
+	}
 	observedAt := time.Time{}
 
 	flush := func(force bool) error {
@@ -1148,36 +1149,25 @@ func (a *App) runConnectorETL(ctx context.Context, runID string, conn Connection
 		return nil
 	}
 
-	readConfig := sourceRuntime
-	readConfig.Config = cloneStringMap(sourceRuntime.Config)
-	if priorCursor != "" {
-		readConfig.Config["since"] = priorCursor
-	}
-	err := source.Read(ctx, connectors.ReadRequest{
-		Stream: streamName,
-		Config: readConfig,
-		State:  map[string]string{"cursor": priorCursor, "generation_id": strconv.FormatInt(generationID, 10)},
-	}, func(record connectors.Record) error {
+	err = source.Read(ctx, cursorTracker.readRequest(streamName, sourceRuntime, prior, generationID, mode.Source), func(record connectors.Record) error {
 		result.RecordsRead++
 		cursor := ""
 		if stream.CursorField != "" {
+			var include bool
 			var err error
-			cursor, err = recordCursor(record, stream.CursorField)
+			cursor, _, include, err = cursorTracker.observe(record, stream.CursorField, mode.Source)
 			if err != nil {
 				return err
 			}
-			if mode.Source == SourceSyncIncremental && priorCursor != "" && compareCursor(cursor, priorCursor) < 0 {
+			if !include {
 				return nil
-			}
-			if nextCursor == "" || compareCursor(cursor, nextCursor) > 0 {
-				nextCursor = cursor
 			}
 		}
 		r := cloneRecord(record)
 		r["_polymetrics_run_id"] = runID
 		r["_polymetrics_synced_at"] = now
 		r["_polymetrics_deleted"] = isDeletedRecord(record)
-		if cursor != "" {
+		if stream.CursorField != "" {
 			r["_polymetrics_cursor"] = cursor
 		}
 		result.RecordsTransformed++
@@ -1204,11 +1194,13 @@ func (a *App) runConnectorETL(ctx context.Context, runID string, conn Connection
 	if acknowledgement.Sink != destination.Name() {
 		return result, fmt.Errorf("durable downstream acknowledgement sink %q does not match destination %q", acknowledgement.Sink, destination.Name())
 	}
-	updated, err := committedLegacyStreamState(conn, sourceExpectation, streamName, stream, runID, nextCursor, generationID, result.RecordsLoaded, observedAt, acknowledgement)
+	nextCursor, nextCursorObserved := cursorTracker.checkpoint()
+	updated, err := committedLegacyStreamState(conn, sourceExpectation, streamName, stream, runID, nextCursor, nextCursorObserved, generationID, result.RecordsLoaded, observedAt, acknowledgement)
 	if err != nil {
 		return result, err
 	}
-	result.Checkpoint = checkpointForResult(result, mode, stateKey, updated)
+	reportedCursor, reportedCursorObserved := cursorTracker.reportedCursor()
+	result.Checkpoint = checkpointForResult(result, mode, stateKey, updated, reportedCursor, reportedCursorObserved)
 	result.PendingStreamState = &pendingStreamState{Key: stateKey, State: updated}
 	return result, nil
 }

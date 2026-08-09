@@ -44,7 +44,6 @@ Wave 6 removed the legacy Airbyte-style `catalog_data.json`. The names below wer
 - motherduck
 - mssql
 - mssql-v2
-- mysql
 - netsuite-enterprise
 - oracle
 - oracle-enterprise

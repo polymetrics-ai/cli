@@ -67,13 +67,147 @@ func cloneStreamState(state StreamState) StreamState {
 	return clone
 }
 
-func streamStateCursor(state StreamState) string {
-	if state.Checkpoint == nil {
-		return ""
+func streamStateCursor(state StreamState) (string, bool) {
+	if !streamStateHasSourcePosition(state) {
+		return "", false
 	}
-	// This adapter is only for the pre-contract connector ReadRequest shape.
-	// Native sync executors consume OpaqueToken directly from the envelope.
-	return string(state.Checkpoint.Position.Primary)
+	return string(state.Checkpoint.Position.Primary), true
+}
+
+func streamStateHasSourcePosition(state StreamState) bool {
+	if state.Checkpoint == nil {
+		return false
+	}
+	if state.Checkpoint.PositionObserved != nil {
+		return *state.Checkpoint.PositionObserved
+	}
+	return len(state.Checkpoint.Position.Primary) != 0
+}
+
+func streamReadState(state StreamState, generationID int64) map[string]string {
+	readState := map[string]string{
+		"generation_id": strconv.FormatInt(generationID, 10),
+	}
+	if cursor, present := streamStateCursor(state); present {
+		readState["cursor"] = cursor
+	}
+	return readState
+}
+
+func streamReadCursorState(state StreamState) connectors.OpaqueCursorState {
+	if !streamStateHasSourcePosition(state) {
+		return connectors.OpaqueCursorState{}
+	}
+	return connectors.OpaqueCursorState{
+		Token:   append([]byte(nil), state.Checkpoint.Position.Primary...),
+		Present: true,
+	}
+}
+
+type streamCursorTracker struct {
+	sourceOrdered  connectors.SourceOrderedCursorReader
+	prior          string
+	priorObserved  bool
+	nextLegacy     string
+	nextOpaque     synccontract.OpaqueToken
+	nextObserved   bool
+	report         string
+	reportObserved bool
+}
+
+func newStreamCursorTracker(state StreamState, source connectors.Connector, config connectors.RuntimeConfig, field string, mode SourceSyncMode) (streamCursorTracker, error) {
+	tracker := streamCursorTracker{}
+	if mode == SourceSyncIncremental {
+		prior, observed := streamStateCursor(state)
+		tracker.prior = prior
+		tracker.priorObserved = observed
+		tracker.nextLegacy = prior
+		tracker.nextObserved = observed
+		if observed {
+			tracker.nextOpaque = append(synccontract.OpaqueToken(nil), state.Checkpoint.Position.Primary...)
+		}
+	}
+	if strings.TrimSpace(field) == "" {
+		return tracker, nil
+	}
+	if sourceOrdered, ok := source.(connectors.SourceOrderedCursorReader); ok {
+		if err := sourceOrdered.ValidateCursorField(config, field); err != nil {
+			return streamCursorTracker{}, fmt.Errorf("validate source-ordered cursor field: %w", err)
+		}
+		tracker.sourceOrdered = sourceOrdered
+	}
+	return tracker, nil
+}
+
+func (t streamCursorTracker) legacyLowerBound() (string, bool) {
+	if t.sourceOrdered != nil {
+		return "", false
+	}
+	return t.prior, t.priorObserved
+}
+
+func (t *streamCursorTracker) observe(record connectors.Record, field string, mode SourceSyncMode) (string, connectors.OpaqueCursorState, bool, error) {
+	cursor, err := recordCursor(record, field)
+	if err != nil {
+		return "", connectors.OpaqueCursorState{}, false, err
+	}
+	if t.sourceOrdered != nil {
+		state, err := t.sourceOrdered.CursorStateFromRecord(record, field)
+		if err != nil {
+			return "", connectors.OpaqueCursorState{}, false, err
+		}
+		if !state.Present {
+			return "", connectors.OpaqueCursorState{}, false, fmt.Errorf("source-ordered cursor reader did not provide a cursor state")
+		}
+		t.nextOpaque = append(t.nextOpaque[:0], state.Token...)
+		t.nextObserved = true
+		t.report = cursor
+		t.reportObserved = true
+		return cursor, state, true, nil
+	}
+	if mode == SourceSyncIncremental && t.priorObserved && compareCursor(cursor, t.prior) < 0 {
+		return cursor, connectors.OpaqueCursorState{}, false, nil
+	}
+	if !t.nextObserved || compareCursor(cursor, t.nextLegacy) > 0 {
+		t.nextLegacy = cursor
+		t.nextObserved = true
+	}
+	return cursor, connectors.OpaqueCursorState{}, true, nil
+}
+
+func (t streamCursorTracker) readRequest(stream string, config connectors.RuntimeConfig, state StreamState, generationID int64, mode SourceSyncMode) connectors.ReadRequest {
+	readConfig := config
+	readConfig.Config = cloneStringMap(config.Config)
+	request := connectors.ReadRequest{
+		Stream: stream,
+		Config: readConfig,
+		State: map[string]string{
+			"generation_id": strconv.FormatInt(generationID, 10),
+		},
+	}
+	if mode != SourceSyncIncremental {
+		return request
+	}
+	request.State = streamReadState(state, generationID)
+	request.CursorState = streamReadCursorState(state)
+	if cursor, present := t.legacyLowerBound(); present {
+		request.Config.Config["since"] = cursor
+	}
+	return request
+}
+
+func (t streamCursorTracker) checkpoint() (synccontract.OpaqueToken, bool) {
+	if t.sourceOrdered != nil {
+		return append(synccontract.OpaqueToken(nil), t.nextOpaque...), t.nextObserved
+	}
+	return synccontract.OpaqueToken([]byte(t.nextLegacy)), t.nextObserved
+}
+
+func (t streamCursorTracker) reportedCursor() (string, bool) {
+	if t.sourceOrdered != nil {
+		return t.report, t.reportObserved
+	}
+	return t.nextLegacy, t.nextObserved
 }
 
 func streamSourceIdentity(source connectors.Connector, credential CredentialMeta, streamName string) synccontract.SourceIdentity {
@@ -120,7 +254,7 @@ func validateStreamStateResume(state StreamState, expected synccontract.ResumeEx
 	return state.Checkpoint.ValidateResume(expected)
 }
 
-func legacyCheckpointEnvelope(source synccontract.ResumeExpectation, stream StreamConfig, runID, cursor string, observedAt time.Time) synccontract.CheckpointEnvelope {
+func legacyCheckpointEnvelope(source synccontract.ResumeExpectation, stream StreamConfig, runID string, cursor synccontract.OpaqueToken, positionObserved bool, observedAt time.Time) synccontract.CheckpointEnvelope {
 	dedupeIdentity, _ := json.Marshal(stream.PrimaryKey)
 	return synccontract.CheckpointEnvelope{
 		StateVersion:    synccontract.StateVersion,
@@ -128,9 +262,10 @@ func legacyCheckpointEnvelope(source synccontract.ResumeExpectation, stream Stre
 		Mechanism:       "legacy_scalar_cursor",
 		SnapshotBarrier: &synccontract.SnapshotBarrier{Kind: "legacy_run", Token: synccontract.OpaqueToken([]byte(runID))},
 		Position: synccontract.CheckpointPosition{
-			Primary:    synccontract.OpaqueToken([]byte(cursor)),
+			Primary:    append(synccontract.OpaqueToken(nil), cursor...),
 			TieBreaker: synccontract.OpaqueToken([]byte(runID)),
 		},
+		PositionObserved: &positionObserved,
 		Partitions:       []synccontract.PartitionState{},
 		SourceGeneration: source.SourceGeneration,
 		SchemaVersion:    "legacy-app-v1",
@@ -148,8 +283,8 @@ func legacyCheckpointEnvelope(source synccontract.ResumeExpectation, stream Stre
 	}
 }
 
-func committedLegacyStreamState(conn Connection, source synccontract.ResumeExpectation, streamName string, stream StreamConfig, runID, cursor string, generationID int64, recordsLoaded int, observedAt time.Time, acknowledgement synccontract.DownstreamAcknowledgement) (StreamState, error) {
-	candidate := legacyCheckpointEnvelope(source, stream, runID, cursor, observedAt)
+func committedLegacyStreamState(conn Connection, source synccontract.ResumeExpectation, streamName string, stream StreamConfig, runID string, cursor synccontract.OpaqueToken, positionObserved bool, generationID int64, recordsLoaded int, observedAt time.Time, acknowledgement synccontract.DownstreamAcknowledgement) (StreamState, error) {
+	candidate := legacyCheckpointEnvelope(source, stream, runID, cursor, positionObserved, observedAt)
 	var committed synccontract.CheckpointEnvelope
 	if err := synccontract.CommitAfterDownstreamAcknowledgement(candidate, acknowledgement, func(checkpoint synccontract.CheckpointEnvelope) error {
 		committed = checkpoint

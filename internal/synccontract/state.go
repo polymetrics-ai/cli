@@ -177,6 +177,7 @@ type CheckpointEnvelope struct {
 	Mechanism        string             `json:"mechanism"`
 	SnapshotBarrier  *SnapshotBarrier   `json:"snapshot_barrier"`
 	Position         CheckpointPosition `json:"position"`
+	PositionObserved *bool              `json:"position_observed,omitempty"`
 	Partitions       []PartitionState   `json:"partitions"`
 	SourceGeneration OpaqueToken        `json:"source_generation,omitempty"`
 	SchemaVersion    string             `json:"schema_version"`
@@ -195,6 +196,10 @@ func (c CheckpointEnvelope) Clone() CheckpointEnvelope {
 		clone.SnapshotBarrier = &barrier
 	}
 	clone.Position = c.Position.Clone()
+	if c.PositionObserved != nil {
+		positionObserved := *c.PositionObserved
+		clone.PositionObserved = &positionObserved
+	}
 	if c.Partitions != nil {
 		clone.Partitions = make([]PartitionState, len(c.Partitions))
 		for i := range c.Partitions {

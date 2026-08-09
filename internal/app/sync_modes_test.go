@@ -1,6 +1,7 @@
 package app
 
 import (
+	"bytes"
 	"context"
 	"errors"
 	"path/filepath"
@@ -17,6 +18,81 @@ type scriptedSyncSource struct {
 	failAfter int
 	requests  []connectors.ReadRequest
 	onRead    func(context.Context, connectors.ReadRequest) error
+}
+
+type orderedOpaqueCursorSource struct {
+	*scriptedSyncSource
+	emitted []string
+}
+
+func newOrderedOpaqueCursorSource(name string, records []connectors.Record) *orderedOpaqueCursorSource {
+	return &orderedOpaqueCursorSource{scriptedSyncSource: newScriptedSyncSource(name, records)}
+}
+
+func (s *orderedOpaqueCursorSource) Read(ctx context.Context, req connectors.ReadRequest, emit func(connectors.Record) error) error {
+	s.requests = append(s.requests, req)
+	var lower []byte
+	if req.CursorState.Present {
+		lower = append([]byte(nil), req.CursorState.Token...)
+	}
+	for _, record := range s.records {
+		if err := ctx.Err(); err != nil {
+			return err
+		}
+		cursor, ok := record["updated_at"].([]byte)
+		if !ok {
+			return errors.New("ordered opaque cursor source requires binary cursors")
+		}
+		if req.CursorState.Present && bytes.Compare(cursor, lower) <= 0 {
+			continue
+		}
+		if err := emit(cloneRecord(record)); err != nil {
+			return err
+		}
+		id, ok := record["id"].(string)
+		if !ok {
+			return errors.New("ordered opaque cursor source requires string identifiers")
+		}
+		s.emitted = append(s.emitted, id)
+	}
+	return nil
+}
+
+func (s *orderedOpaqueCursorSource) CursorStateFromRecord(record connectors.Record, field string) (connectors.OpaqueCursorState, error) {
+	value, ok := record[field].([]byte)
+	if !ok {
+		return connectors.OpaqueCursorState{}, errors.New("ordered opaque cursor source requires binary cursor state")
+	}
+	return connectors.OpaqueCursorState{Token: append([]byte(nil), value...), Present: true}, nil
+}
+
+func (s *orderedOpaqueCursorSource) ValidateCursorField(_ connectors.RuntimeConfig, field string) error {
+	if strings.TrimSpace(field) == "" {
+		return errors.New("ordered opaque cursor source requires a cursor field")
+	}
+	return nil
+}
+
+func (s *orderedOpaqueCursorSource) CompareCursorStates(left, right connectors.OpaqueCursorState) (int, error) {
+	if !left.Present || !right.Present {
+		return 0, errors.New("ordered opaque cursor source requires cursor states")
+	}
+	return bytes.Compare(left.Token, right.Token), nil
+}
+
+type boundOrderedOpaqueCursorSource struct {
+	*orderedOpaqueCursorSource
+}
+
+func newBoundOrderedOpaqueCursorSource(name string, records []connectors.Record) *boundOrderedOpaqueCursorSource {
+	return &boundOrderedOpaqueCursorSource{orderedOpaqueCursorSource: newOrderedOpaqueCursorSource(name, records)}
+}
+
+func (s *boundOrderedOpaqueCursorSource) ValidateCursorField(config connectors.RuntimeConfig, field string) error {
+	if configured := strings.TrimSpace(config.Config["cursor_field"]); configured == "" || configured != strings.TrimSpace(field) {
+		return errors.New("bound ordered cursor source field does not match config")
+	}
+	return nil
 }
 
 func newScriptedSyncSource(name string, records []connectors.Record) *scriptedSyncSource {
@@ -72,11 +148,11 @@ func (s *scriptedSyncSource) Write(ctx context.Context, req connectors.WriteRequ
 	return connectors.WriteResult{}, connectors.ErrUnsupportedOperation
 }
 
-func setupSyncModeApp(t *testing.T, source *scriptedSyncSource, mode string) (*App, string) {
+func setupSyncModeApp(t *testing.T, source connectors.Connector, mode string) (*App, string) {
 	return setupSyncModeAppWithCompatibility(t, source, mode, false)
 }
 
-func setupSyncModeAppWithCompatibility(t *testing.T, source *scriptedSyncSource, mode string, legacyCompatibility bool) (*App, string) {
+func setupSyncModeAppWithCompatibility(t *testing.T, source connectors.Connector, mode string, legacyCompatibility bool) (*App, string) {
 	t.Helper()
 	ctx := context.Background()
 	root := t.TempDir()
@@ -344,8 +420,22 @@ func TestIncrementalAppendCommitsCursorOnlyAfterSuccess(t *testing.T) {
 		t.Fatal("RunETL(failing incremental) error = nil")
 	}
 	state := a.state.StreamStates[streamStateKey(connection, "records")]
-	if cursor := streamStateCursor(state); cursor != "2026-01-03T00:00:00Z" {
+	if cursor, present := streamStateCursor(state); !present || cursor != "2026-01-03T00:00:00Z" {
 		t.Fatalf("cursor advanced after failed run = %q", cursor)
+	}
+}
+
+func TestRecordCursorPreservesOpaqueEmptyAndWhitespaceValues(t *testing.T) {
+	for _, cursor := range []string{"", "  "} {
+		t.Run("cursor_"+strings.ReplaceAll(cursor, " ", "space"), func(t *testing.T) {
+			got, err := recordCursor(connectors.Record{"updated_at": cursor}, "updated_at")
+			if err != nil || got != cursor {
+				t.Fatalf("recordCursor() = %q, %v, want %q, nil", got, err, cursor)
+			}
+		})
+	}
+	if compareCursor("", "  ") == 0 {
+		t.Fatal("compareCursor() collapsed distinct opaque cursor values")
 	}
 }
 
