@@ -27,7 +27,10 @@ import (
 	"time"
 )
 
-const defaultPodmanBinary = "podman"
+const (
+	defaultPodmanBinary = "podman"
+	cleanupTimeout      = 3 * time.Minute
+)
 
 var errPodmanResourceNotFound = errors.New("podman resource not found")
 
@@ -222,7 +225,7 @@ func (h *Harness) Start(ctx context.Context) (endpoint Endpoint, startErr error)
 		if startErr == nil {
 			return
 		}
-		cleanupCtx, cancel := context.WithTimeout(context.Background(), 3*time.Minute)
+		cleanupCtx, cancel := context.WithTimeout(context.Background(), cleanupTimeout)
 		defer cancel()
 		if cleanupErr := h.Close(cleanupCtx); cleanupErr != nil {
 			startErr = errors.Join(startErr, cleanupErr)
@@ -348,8 +351,10 @@ func (h *Harness) Start(ctx context.Context) (endpoint Endpoint, startErr error)
 // cleanup in that order. Each later action still runs if an earlier one fails.
 // A tagged test must call this in a defer before assertions, so a failing
 // assertion cannot leak a generated resource.
-func (h *Harness) Close(ctx context.Context) error {
+func (h *Harness) Close(_ context.Context) error {
 	h.closeOnce.Do(func() {
+		cleanupCtx, cancel := context.WithTimeout(context.Background(), cleanupTimeout)
+		defer cancel()
 		// The interrupt registration outlives every removal below. Dropping it
 		// first restored default signal handling for the whole teardown, so a
 		// Ctrl-C between here and the last removal killed the process with this
@@ -372,22 +377,22 @@ func (h *Harness) Close(ctx context.Context) error {
 
 		var errs []error
 		if h.known(func(h *Harness) bool { return h.containerKnown }) {
-			if _, err := h.runOnVerifiedTarget(ctx, "container", "rm", "--force", h.containerName); err != nil && !errors.Is(err, errPodmanResourceNotFound) {
+			if _, err := h.runOnVerifiedTarget(cleanupCtx, "container", "rm", "--force", h.containerName); err != nil && !errors.Is(err, errPodmanResourceNotFound) {
 				errs = append(errs, fmt.Errorf("remove %s test container: %w", h.config.Engine, err))
 			}
 		}
 		if h.known(func(h *Harness) bool { return h.volumeKnown }) {
-			if _, err := h.runOnVerifiedTarget(ctx, "volume", "rm", "--force", h.volumeName); err != nil && !errors.Is(err, errPodmanResourceNotFound) {
+			if _, err := h.runOnVerifiedTarget(cleanupCtx, "volume", "rm", "--force", h.volumeName); err != nil && !errors.Is(err, errPodmanResourceNotFound) {
 				errs = append(errs, fmt.Errorf("remove %s test volume: %w", h.config.Engine, err))
 			}
 		}
 		if h.known(func(h *Harness) bool { return h.runImageKnown }) {
-			if _, err := h.runOnVerifiedTarget(ctx, "image", "rm", h.runImage); err != nil && !errors.Is(err, errPodmanResourceNotFound) {
+			if _, err := h.runOnVerifiedTarget(cleanupCtx, "image", "rm", h.runImage); err != nil && !errors.Is(err, errPodmanResourceNotFound) {
 				errs = append(errs, fmt.Errorf("remove %s test image: %w", h.config.Engine, err))
 			}
 		}
 		if h.known(func(h *Harness) bool { return h.targetKnown }) {
-			after, err := h.targetImageStoreFree(ctx)
+			after, err := h.targetImageStoreFree(cleanupCtx)
 			if err != nil {
 				errs = append(errs, fmt.Errorf("measure target image-store free space after %s test: %w", h.config.Engine, err))
 			} else {

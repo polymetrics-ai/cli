@@ -312,3 +312,21 @@ boundary. The warehouse WAL retains opaque source cursor tokens for deduplicatio
 native binary and numeric tokens directly and uses already-proven source emission order where a
 server collation is not portable. The focused regressions cover mismatch refusal, repeated full
 refresh overwrite, binary `0x00` to `0xff` deduplication, and resume without replay.
+
+**Red — review round 11 cancellation-safe harness teardown:**
+
+Source inspection found that `Close` passed its caller context directly into every Podman removal
+while `sync.Once` permanently consumed the cleanup path. A caller-canceled or expired context could
+therefore skip all generated-resource removal and unregister interrupt cleanup before any later
+close could retry. The focused regression uses a context-aware fake runner and a canceled caller
+context to prove that teardown receives an independent bounded cleanup context.
+
+**Green — review round 11 cancellation-safe harness teardown:**
+
+```text
+go test -count=1 -timeout 20m ./internal/connectors/native/dbtest
+```
+
+Passed. `Close` now gives the generated-resource cleanup sequence its own three-minute context, so
+a canceled caller cannot prevent container, volume, and run-image removal or consume the one
+idempotent teardown path.

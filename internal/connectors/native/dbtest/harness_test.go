@@ -33,6 +33,17 @@ type scriptedRunner struct {
 	endpoints           []string
 }
 
+type contextAwareRunner struct {
+	scriptedRunner
+}
+
+func (r *contextAwareRunner) Run(ctx context.Context, endpoint string, args ...string) (string, error) {
+	if err := ctx.Err(); err != nil {
+		return "", err
+	}
+	return r.scriptedRunner.Run(ctx, endpoint, args...)
+}
+
 func (r *scriptedRunner) Run(_ context.Context, endpoint string, args ...string) (string, error) {
 	r.endpoints = append(r.endpoints, endpoint)
 	r.commands = append(r.commands, append([]string(nil), args...))
@@ -776,6 +787,31 @@ func TestCloseKeepsInterruptCleanupArmedUntilTeardownFinishes(t *testing.T) {
 	interruptCleanup.mu.Unlock()
 	if registered {
 		t.Fatal("Close left the finished harness registered for interrupt cleanup")
+	}
+}
+
+func TestCloseCleansUpWithCanceledCallerContext(t *testing.T) {
+	runner := &contextAwareRunner{}
+	h, err := New(testConfig(runner))
+	if err != nil {
+		t.Fatalf("New(): %v", err)
+	}
+	if _, err := h.Start(context.Background()); err != nil {
+		t.Fatalf("Start(): %v", err)
+	}
+	canceled, cancel := context.WithCancel(context.Background())
+	cancel()
+	if err := h.Close(canceled); err != nil {
+		t.Fatalf("Close() with canceled context: %v", err)
+	}
+	if runner.containerLive || runner.volumePresent || runner.imagePresent(h.runImage) {
+		t.Fatal("Close() with canceled context left a generated resource behind")
+	}
+	interruptCleanup.mu.Lock()
+	_, registered := interruptCleanup.live[h]
+	interruptCleanup.mu.Unlock()
+	if registered {
+		t.Fatal("Close() with canceled context left interrupt cleanup registered")
 	}
 }
 
