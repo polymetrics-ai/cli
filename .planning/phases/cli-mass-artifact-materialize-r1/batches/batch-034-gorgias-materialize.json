@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "manifest": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-034-gorgias-unversioned-reference-manifest.json",
+  "candidates": 1,
+  "included": [
+    {
+      "connector": "gorgias",
+      "evidence_mode": "existing_surface_evidence",
+      "artifact": {
+        "kind": "html_reference",
+        "url": "https://developers.gorgias.com/reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db"
+      },
+      "artifact_operations": 114,
+      "declared_operations": 114,
+      "operation_split": {
+        "executable": 108,
+        "provider_blocked": 5,
+        "excluded": 1
+      },
+      "cli_commands": 114,
+      "implemented_commands": 93,
+      "named_dependency_commands": 6,
+      "flagged_discrepancies": 0,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 49
+    }
+  ],
+  "dropped": []
+}

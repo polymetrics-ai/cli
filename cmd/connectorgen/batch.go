@@ -25,6 +25,7 @@ const (
 	defaultMinOperations       = 20
 	defaultMaxOperations       = 250
 	maxLedgerBytes             = 8 << 20
+	batchNoVersionMarker       = "provider-publishes-no-version-marker"
 )
 
 // batchLedger is the intentionally permissive decoder for the artifact survey.
@@ -97,10 +98,11 @@ type BatchManifestConnector struct {
 }
 
 type BatchArtifact struct {
-	URL         string `json:"url"`
-	Kind        string `json:"kind"`
-	Version     string `json:"version"`
-	RetrievedAt string `json:"retrieved_at"`
+	URL                          string `json:"url"`
+	Kind                         string `json:"kind"`
+	Version                      string `json:"version"`
+	UnversionedOfficialReference bool   `json:"unversioned_official_reference,omitempty"`
+	RetrievedAt                  string `json:"retrieved_at"`
 }
 
 var supportedBatchArtifactKinds = map[string]bool{
@@ -809,7 +811,15 @@ func validateBatchManifest(manifest BatchManifest) error {
 		if !supportedBatchArtifactKinds[candidate.Artifact.Kind] {
 			return fmt.Errorf("manifest connector %q: artifact.kind %q is not an authoritative supported source", candidate.Connector, candidate.Artifact.Kind)
 		}
-		if strings.TrimSpace(candidate.Artifact.Version) == "" {
+		artifactVersion := strings.TrimSpace(candidate.Artifact.Version)
+		if candidate.Artifact.UnversionedOfficialReference {
+			if candidate.Artifact.Kind != "html_reference" {
+				return fmt.Errorf("manifest connector %q: unversioned_official_reference requires artifact.kind html_reference", candidate.Connector)
+			}
+			if artifactVersion != "" {
+				return fmt.Errorf("manifest connector %q: unversioned_official_reference requires an empty artifact.version", candidate.Connector)
+			}
+		} else if artifactVersion == "" {
 			return fmt.Errorf("manifest connector %q: artifact.version is required", candidate.Connector)
 		}
 		if _, err := time.Parse("2006-01-02", candidate.Artifact.RetrievedAt); err != nil {

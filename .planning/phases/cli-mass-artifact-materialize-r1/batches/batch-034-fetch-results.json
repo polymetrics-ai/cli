@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "manifest": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-034-gorgias-unversioned-reference-manifest.json",
+  "fetched": [
+    {
+      "connector": "gorgias",
+      "source_url": "https://developers.gorgias.com/reference",
+      "cache_file": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-034-gorgias-artifacts/gorgias.html",
+      "status": "retrieved",
+      "reason": null
+    }
+  ]
+}
