@@ -50,7 +50,12 @@ bounded parallelism is explicit opt-in only.
    `TestGen_NativesetImportsRuntimePackagesAndExcludesSupportLibraries` now distinguishes runtime
    connector packages from support libraries, and the generated native set is regenerated from that
    source of truth.
-5. Run generated-surface regeneration, focused tests, CLI tests, vet/build, individual verify gates,
+5. **Red:** the `verify-ca` TLS configuration placed its manual chain verification in
+   `VerifyPeerCertificate`, which Go skips for resumed sessions when built-in verification is disabled.
+   **Green:** focused `sqltls` tests require `VerifyConnection` to reject an untrusted chain and
+   accept a trusted chain without hostname verification, then prove it is called during a resumed
+   TLS 1.2 session.
+6. Run generated-surface regeneration, focused tests, CLI tests, vet/build, individual verify gates,
    a live direct-endpoint Podman proof, and an inline review. Record exact commands/results in
    `VERIFICATION.md` and PR-ready facts in `PR-BODY.md`.
 

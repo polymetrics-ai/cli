@@ -161,12 +161,13 @@ func (o Options) TLSConfig(host string) (*tls.Config, error) {
 	}
 
 	// verify-ca checks the chain but not the name. Go has no direct switch
-	// for that, so verification is done by hand with the hostname omitted;
-	// InsecureSkipVerify only suppresses the built-in check, it does not skip
-	// the explicit one below.
+	// for that, so verification is done by hand with the hostname omitted.
+	// InsecureSkipVerify only suppresses the built-in check; VerifyConnection
+	// supplies the explicit one below for every handshake, including a resumed
+	// TLS session. VerifyPeerCertificate would not run on resumptions.
 	config.InsecureSkipVerify = true
-	config.VerifyPeerCertificate = func(rawCerts [][]byte, _ [][]*x509.Certificate) error {
-		return verifyChainWithoutHostname(rawCerts, roots)
+	config.VerifyConnection = func(state tls.ConnectionState) error {
+		return verifyChainWithoutHostname(state.PeerCertificates, roots)
 	}
 	return config, nil
 }
@@ -194,17 +195,9 @@ func (o Options) rootPool() (*x509.CertPool, error) {
 	return pool, nil
 }
 
-func verifyChainWithoutHostname(rawCerts [][]byte, roots *x509.CertPool) error {
-	if len(rawCerts) == 0 {
+func verifyChainWithoutHostname(certs []*x509.Certificate, roots *x509.CertPool) error {
+	if len(certs) == 0 {
 		return errors.New("server presented no certificate")
-	}
-	certs := make([]*x509.Certificate, 0, len(rawCerts))
-	for _, raw := range rawCerts {
-		cert, err := x509.ParseCertificate(raw)
-		if err != nil {
-			return errors.New("server presented an unparsable certificate")
-		}
-		certs = append(certs, cert)
 	}
 	intermediates := x509.NewCertPool()
 	for _, cert := range certs[1:] {

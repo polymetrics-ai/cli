@@ -18,6 +18,7 @@
 | M5 | #3902 direct-read boundary | A database ETL reader is mistaken for a pagewise HTTP direct-read command and omits page context. | `TestReadIsETLNotPagewiseDirectRead` proves MySQL exposes neither `DirectReader` nor `OperationDirectReader`; the SQL `Read` drains its bounded pages to ETL rather than returning an exploratory page. |
 | T1 | TLS is enforced, not declared | A strict TLS mode can quietly downgrade or be ignored by replication. | TLS-less server tests make strict modes refuse; certificate tests prove verification; live checks use the server's own `Ssl_cipher`; the binlog syncer receives the same TLS config. |
 | T2 | SQL option shape does not drift | MySQL and PostgreSQL expose incompatible TLS field names or validation. | `sqltls` centralizes the vocabulary. PostgreSQL's definition accepts the runtime vocabulary and `TestPostgresPoolConfigUsesSharedTransportSecurityOptions` proves CA/server-name application and no strict plaintext fallback. |
+| T3 | Resumed verify-ca TLS remains verified | Go skips `VerifyPeerCertificate` on a resumed TLS session after built-in hostname verification is disabled, allowing a resumed session to bypass the manual chain check. | `TestVerifyCARejectsAChainOutsideTheConfiguredRoot` and `TestVerifyCAAcceptsTheConfiguredRootIgnoringHostname` require `VerifyConnection`; `TestVerifyCARevalidatesResumedSessions` proves it is called on both a full and resumed TLS 1.2 handshake. |
 | G1 | Production native wiring contains only connectors | A test harness or shared helper is blank-imported solely because it sits below `native/`. | `TestGen_NativesetImportsRuntimePackagesAndExcludesSupportLibraries` fails for `dbtest`/`sqltls`; `nativeSupportPackages` and regenerated wiring exclude both while retaining real connector packages. |
 
 > Historical machine/connection execution entries below remain as audit history. The direct-endpoint
@@ -356,3 +357,33 @@ Both passed. The focused unit proof accepts only a reported safe Unix forward wi
 store capacity and rejects malformed forwarded capacity before any pull, tag, volume, or container
 mutation. The real MySQL proof then completed check, catalog discovery, five-record full and
 incremental reads, all TLS modes including `verify-ca`, and internal insert/update/delete CDC.
+
+**Red — CI Snyk verify-ca resumption remediation:**
+
+```text
+go test -count=1 -timeout 5m ./internal/connectors/native/sqltls \
+  -run 'TestVerifyCA(RejectsAChainOutsideTheConfiguredRoot|AcceptsTheConfiguredRootIgnoringHostname)$'
+```
+
+This failed before the implementation because `TLSConfig` set only
+`VerifyPeerCertificate`; both tests reported `verify-ca installed no connection verifier`. Go
+documents that callback as skipped on resumed connections when built-in certificate verification is
+disabled, so its manual chain check did not cover every verify-ca handshake.
+
+**Green — CI Snyk verify-ca resumption remediation:**
+
+```text
+go test -count=1 -timeout 5m ./internal/connectors/native/sqltls
+go test -count=1 -timeout 20m ./internal/connectors/native/sqltls \
+  ./internal/connectors/native/mysql \
+  ./internal/connectors/native/postgres
+go vet ./internal/connectors/native/sqltls \
+  ./internal/connectors/native/mysql \
+  ./internal/connectors/native/postgres
+govulncheck ./internal/connectors/native/sqltls \
+  ./internal/connectors/native/mysql \
+  ./internal/connectors/native/postgres
+```
+
+All passed. `verify-ca` now uses `VerifyConnection`, which Go invokes for every connection,
+including resumptions, while preserving its documented chain-only (no-hostname) verification.

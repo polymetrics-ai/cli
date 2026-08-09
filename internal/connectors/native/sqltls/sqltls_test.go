@@ -4,12 +4,15 @@ import (
 	"crypto/ecdsa"
 	"crypto/elliptic"
 	"crypto/rand"
+	"crypto/tls"
 	"crypto/x509"
 	"crypto/x509/pkix"
 	"encoding/pem"
 	"math/big"
+	"net"
 	"os"
 	"path/filepath"
+	"sync/atomic"
 	"testing"
 	"time"
 )
@@ -181,14 +184,17 @@ func TestVerifyCARejectsAChainOutsideTheConfiguredRoot(t *testing.T) {
 	if err != nil {
 		t.Fatalf("TLSConfig(): %v", err)
 	}
-	if config.VerifyPeerCertificate == nil {
-		t.Fatal("verify-ca installed no explicit chain verifier")
+	if config.VerifyConnection == nil {
+		t.Fatal("verify-ca installed no connection verifier")
 	}
-	leaf := newTestLeaf(t, untrustedCA, untrustedKey, "db.internal")
-	if err := config.VerifyPeerCertificate([][]byte{leaf.Raw}, nil); err == nil {
+	if config.VerifyPeerCertificate != nil {
+		t.Fatal("verify-ca used a verifier that skips resumed TLS sessions")
+	}
+	leaf, _ := newTestLeaf(t, untrustedCA, untrustedKey, "db.internal")
+	if err := config.VerifyConnection(tls.ConnectionState{PeerCertificates: []*x509.Certificate{leaf}}); err == nil {
 		t.Fatal("verify-ca accepted a certificate signed by an untrusted CA")
 	}
-	if err := config.VerifyPeerCertificate(nil, nil); err == nil {
+	if err := config.VerifyConnection(tls.ConnectionState{}); err == nil {
 		t.Fatal("verify-ca accepted an empty certificate chain")
 	}
 }
@@ -204,11 +210,62 @@ func TestVerifyCAAcceptsTheConfiguredRootIgnoringHostname(t *testing.T) {
 	if err != nil {
 		t.Fatalf("TLSConfig(): %v", err)
 	}
+	if config.VerifyConnection == nil {
+		t.Fatal("verify-ca installed no connection verifier")
+	}
 	// The leaf names a different host on purpose: verify-ca proves the chain,
 	// not the name.
-	leaf := newTestLeaf(t, ca, key, "someone-else.internal")
-	if err := config.VerifyPeerCertificate([][]byte{leaf.Raw}, nil); err != nil {
+	leaf, _ := newTestLeaf(t, ca, key, "someone-else.internal")
+	if err := config.VerifyConnection(tls.ConnectionState{PeerCertificates: []*x509.Certificate{leaf}}); err != nil {
 		t.Fatalf("verify-ca rejected a correctly chained certificate: %v", err)
+	}
+}
+
+func TestVerifyCARevalidatesResumedSessions(t *testing.T) {
+	dir := t.TempDir()
+	ca, key := newTestCA(t, "trusted")
+	caPath := filepath.Join(dir, "ca.pem")
+	if err := os.WriteFile(caPath, pemBytes(ca.Raw), 0o600); err != nil {
+		t.Fatalf("write CA: %v", err)
+	}
+
+	clientConfig, err := Options{Mode: ModeVerifyCA, RootCAPath: caPath}.TLSConfig("db.internal")
+	if err != nil {
+		t.Fatalf("TLSConfig(): %v", err)
+	}
+	if clientConfig.VerifyConnection == nil {
+		t.Fatal("verify-ca installed no connection verifier")
+	}
+	clientConfig.MinVersion = tls.VersionTLS12
+	clientConfig.MaxVersion = tls.VersionTLS12
+	clientConfig.ClientSessionCache = tls.NewLRUClientSessionCache(1)
+	verifyConnection := clientConfig.VerifyConnection
+	var verificationCalls atomic.Int32
+	clientConfig.VerifyConnection = func(state tls.ConnectionState) error {
+		verificationCalls.Add(1)
+		return verifyConnection(state)
+	}
+
+	serverLeaf, serverKey := newTestLeaf(t, ca, key, "someone-else.internal")
+	serverConfig := &tls.Config{
+		MinVersion:   tls.VersionTLS12,
+		MaxVersion:   tls.VersionTLS12,
+		Certificates: []tls.Certificate{{Certificate: [][]byte{serverLeaf.Raw}, PrivateKey: serverKey}},
+	}
+	if state, err := testTLSHandshake(clientConfig, serverConfig); err != nil {
+		t.Fatalf("initial TLS handshake: %v", err)
+	} else if state.DidResume {
+		t.Fatal("initial TLS handshake unexpectedly resumed")
+	}
+	state, err := testTLSHandshake(clientConfig, serverConfig)
+	if err != nil {
+		t.Fatalf("resumed TLS handshake: %v", err)
+	}
+	if !state.DidResume {
+		t.Fatal("second TLS handshake did not resume")
+	}
+	if got := verificationCalls.Load(); got != 2 {
+		t.Fatalf("VerifyConnection calls = %d, want 2 including the resumed handshake", got)
 	}
 }
 
@@ -272,7 +329,7 @@ func newTestCA(t *testing.T, name string) (*x509.Certificate, *ecdsa.PrivateKey)
 	return cert, key
 }
 
-func newTestLeaf(t *testing.T, ca *x509.Certificate, caKey *ecdsa.PrivateKey, host string) *x509.Certificate {
+func newTestLeaf(t *testing.T, ca *x509.Certificate, caKey *ecdsa.PrivateKey, host string) (*x509.Certificate, *ecdsa.PrivateKey) {
 	t.Helper()
 	key, err := ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
 	if err != nil {
@@ -295,7 +352,29 @@ func newTestLeaf(t *testing.T, ca *x509.Certificate, caKey *ecdsa.PrivateKey, ho
 	if err != nil {
 		t.Fatalf("parse leaf: %v", err)
 	}
-	return cert
+	return cert, key
+}
+
+func testTLSHandshake(clientConfig, serverConfig *tls.Config) (tls.ConnectionState, error) {
+	serverRaw, clientRaw := net.Pipe()
+	server := tls.Server(serverRaw, serverConfig)
+	client := tls.Client(clientRaw, clientConfig)
+	serverDone := make(chan error, 1)
+	go func() {
+		serverDone <- server.Handshake()
+	}()
+	clientErr := client.Handshake()
+	state := client.ConnectionState()
+	_ = clientRaw.Close()
+	serverErr := <-serverDone
+	_ = serverRaw.Close()
+	if clientErr != nil {
+		return state, clientErr
+	}
+	if serverErr != nil {
+		return state, serverErr
+	}
+	return state, nil
 }
 
 func pemBytes(der []byte) []byte {

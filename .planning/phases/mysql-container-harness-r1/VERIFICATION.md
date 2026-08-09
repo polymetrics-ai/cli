@@ -15,6 +15,27 @@ direct endpoint after the focused dbtest check recorded in `TDD-LEDGER.md`.
       internal row-event CDC all completed; generated container, volume, and run-image cleanup
       completed with equal before/after daemon image-store capacity.
 
+## CI Snyk verify-ca resumption remediation — 2026-08-09
+
+`verify-ca` previously installed its manual certificate-chain check through
+`tls.Config.VerifyPeerCertificate`. Go skips that callback for resumed connections when
+`InsecureSkipVerify` is needed to omit hostname verification, so this failed Snyk's TLS hardening
+gate despite the initial handshake proof. The callback is now `VerifyConnection`, which Go invokes
+on all connections, including resumptions.
+
+- [x] Red: the focused `TestVerifyCA...` regression failed before the implementation because no
+      connection-wide verifier was installed.
+- [x] `TestVerifyCARevalidatesResumedSessions` proves the chain-only verifier runs for both the
+      initial and resumed TLS 1.2 handshakes.
+- [x] `go test -count=10 -timeout 1m ./internal/connectors/native/sqltls -run '^TestVerifyCARevalidatesResumedSessions$'`
+- [x] `go test -count=1 -timeout 5m ./internal/connectors/native/sqltls`
+- [x] `go test -count=1 -timeout 20m ./internal/connectors/native/sqltls ./internal/connectors/native/mysql ./internal/connectors/native/postgres`
+- [x] `go vet ./internal/connectors/native/sqltls ./internal/connectors/native/mysql ./internal/connectors/native/postgres`
+- [x] `govulncheck ./internal/connectors/native/sqltls ./internal/connectors/native/mysql ./internal/connectors/native/postgres` — **No vulnerabilities found.**
+
+The outer CI phase must re-run Snyk against its pushed commit; this local phase intentionally did
+not push or control the gate.
+
 ## Fresh post-rebase evidence — 2026-08-08
 
 The branch was rebased onto current `origin/main` before this verification. Generated files were
