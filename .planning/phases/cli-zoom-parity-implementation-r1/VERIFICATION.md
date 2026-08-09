@@ -65,3 +65,25 @@ provider reason and source URL). This was a validator format requirement, not a 
 - Focused proof: `go test ./internal/connectors/defs/zoom -run
   'TestProviderInventoryLedgerIsComplete|TestCoveredStreamsHaveReachableCommands' -count=1`
   passes, retaining the 1,913-row ledger and exactly the three reachable command bindings.
+
+## Rebase and generated-artifact re-gate — 2026-08-10
+
+- Rebased the parent Zoom stack from its preserved checkpoint lineage onto
+  `origin/main` at `f96a47e801b89f25386c33951a53a93d1a4c7c8d` (PR #3964), before any
+  PR update. The rebase preserved mainline plural write coverage and Zoom's
+  direct-write coverage checks together; focused `connectorgen`, conformance,
+  and certification packages passed afterwards.
+- Generated conflicts were resolved by retaining the current-main generated
+  inputs during the rebase, then regenerating from the rebased source — never
+  hand-merging generated content — with `go run ./cmd/pm docs generate --dir
+  docs/cli --connectors-dir docs/connectors`, `pnpm --dir website run
+  gen:website-data`, and `POLYMETRICS_UPDATE_GOLDEN_TRANSCRIPTS=1 go test
+  -timeout 20m ./internal/cli -run '^TestGoldenTranscripts$'`.
+- Inspected the resulting four-file generated diff. The catalog projections now
+  expose the rebased 145-command, 17-group Zoom surface. The golden change is
+  limited to the root-manual Zoom listing; the new non-zero unresolved
+  connector-command `--help` behavior was already present in the mainline
+  baseline and therefore required no hand-authored transcript adjustment.
+- A fresh built-binary reachability sweep is required after the pending
+  WebSocket foundation/AI Services consumer integration, so it exercises the
+  rebased non-zero exit semantics against the final command set.
