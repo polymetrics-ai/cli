@@ -86,6 +86,12 @@ connector docs and capability tests are updated.
 5. **Documentation and proof:** update the PostgreSQL bundle metadata,
    changefeed evidence, and docs; measure the post-dependency binary; run
    focused tests plus all non-suite gates; record review and parity evidence.
+6. **Post-rebase hardening:** retain only a source-bound native checkpoint,
+   preserve its original slot barrier across restart, refuse an existing slot
+   without that checkpoint, validate publication membership before slot
+   creation, filter multi-table publications to the requested relation, and
+   map full-table truncation as an explicit empty-record CDC event. Prove this
+   against a real PostgreSQL source as well as focused decoder tests.
 
 ## Exclusions
 

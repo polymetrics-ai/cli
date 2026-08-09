@@ -44,7 +44,7 @@ type postgresReplicationSlot struct {
 }
 
 func replicationConnection(ctx context.Context, conn connConfig) (*pgconn.PgConn, error) {
-	config, err := pgconn.ParseConfig(conn.dsn())
+	config, err := conn.replicationConfig()
 	if err != nil {
 		return nil, fmt.Errorf("postgres CDC: configure replication connection: %w", err)
 	}
@@ -54,7 +54,7 @@ func replicationConnection(ctx context.Context, conn connConfig) (*pgconn.PgConn
 	config.RuntimeParams["replication"] = "database"
 	replication, err := pgconn.ConnectConfig(ctx, config)
 	if err != nil {
-		return nil, fmt.Errorf("postgres CDC: connect replication: %w", err)
+		return nil, errors.New("postgres CDC: connect replication source failed")
 	}
 	return replication, nil
 }
@@ -141,9 +141,9 @@ func cdcPublication(cfg connectors.RuntimeConfig) (string, error) {
 }
 
 func replicationSlotStatus(ctx context.Context, conn connConfig, slotName string) (postgresReplicationSlot, bool, error) {
-	data, err := pgx.Connect(ctx, conn.dsn())
+	data, err := cdcDataConnection(ctx, conn)
 	if err != nil {
-		return postgresReplicationSlot{}, false, fmt.Errorf("postgres CDC: connect slot inspection: %w", err)
+		return postgresReplicationSlot{}, false, err
 	}
 	defer func() { _ = data.Close(ctx) }()
 
@@ -162,6 +162,49 @@ WHERE slot_name = $1`, slotName).Scan(&slot.plugin, &slot.database, &slot.active
 	return slot, true, nil
 }
 
+func cdcDataConnection(ctx context.Context, conn connConfig) (*pgx.Conn, error) {
+	config, err := conn.dataConfig()
+	if err != nil {
+		return nil, fmt.Errorf("postgres CDC: configure data connection: %w", err)
+	}
+	data, err := pgx.ConnectConfig(ctx, config)
+	if err != nil {
+		return nil, errors.New("postgres CDC: connect source failed")
+	}
+	return data, nil
+}
+
+// validateCDCPublicationStream proves the pre-existing publication actually
+// includes the requested relation before a WAL-retaining slot is created. A
+// publication can contain several tables, so the decoder still filters every
+// row frame to this same source-bound relation after startup.
+func validateCDCPublicationStream(ctx context.Context, conn connConfig, source postgresCDCSource, publication string) error {
+	schema, table, found := strings.Cut(source.identity.ObjectScope, ".")
+	if !found || schema == "" || table == "" {
+		return errors.New("postgres CDC: source identity has an invalid stream scope")
+	}
+	data, err := cdcDataConnection(ctx, conn)
+	if err != nil {
+		return err
+	}
+	defer func() { _ = data.Close(ctx) }()
+
+	var included bool
+	err = data.QueryRow(ctx, `
+	SELECT EXISTS (
+		SELECT 1
+		FROM pg_publication_tables
+		WHERE pubname = $1 AND schemaname = $2 AND tablename = $3
+	)`, publication, schema, table).Scan(&included)
+	if err != nil {
+		return fmt.Errorf("postgres CDC: inspect publication membership: %w", err)
+	}
+	if !included {
+		return errors.New("postgres CDC: publication does not include the requested stream")
+	}
+	return nil
+}
+
 func validateReplicationSlot(slot postgresReplicationSlot, database string) error {
 	if slot.plugin != "pgoutput" {
 		return errors.New("postgres CDC: derived replication slot uses an incompatible output plugin")
@@ -175,33 +218,39 @@ func validateReplicationSlot(slot postgresReplicationSlot, database string) erro
 	return nil
 }
 
-func slotBarrier(slot postgresReplicationSlot, fallback pglogrepl.LSN) (pglogrepl.LSN, error) {
-	for _, raw := range []string{slot.confirmedLSN, slot.restartLSN} {
-		if strings.TrimSpace(raw) == "" {
-			continue
-		}
-		lsn, err := pglogrepl.ParseLSN(raw)
-		if err != nil {
-			return 0, errors.New("postgres CDC: replication slot has an invalid retained position")
-		}
-		return lsn, nil
+// slotRetentionLSN returns the oldest position PostgreSQL still guarantees
+// this slot can replay. confirmed_flush_lsn is deliberately not used: it is
+// an acknowledgement high-water mark, and using it as a recovery lower bound
+// could skip a transaction whose checkpoint was not durably retained.
+func slotRetentionLSN(slot postgresReplicationSlot) (pglogrepl.LSN, error) {
+	if strings.TrimSpace(slot.restartLSN) == "" {
+		return 0, errors.New("postgres CDC: replication slot has no usable retained position")
 	}
-	if fallback == 0 {
-		return 0, errors.New("postgres CDC: replication slot has no usable start position")
+	lsn, err := pglogrepl.ParseLSN(slot.restartLSN)
+	if err != nil {
+		return 0, errors.New("postgres CDC: replication slot has an invalid retained position")
 	}
-	return fallback, nil
+	return lsn, nil
 }
 
-func ensureReplicationSlot(ctx context.Context, replication *pgconn.PgConn, conn connConfig, source postgresCDCSource) (pglogrepl.LSN, error) {
+// ensureReplicationSlot creates a connector-owned logical slot or returns
+// its retained replay boundary. The bool is true only for a slot created by
+// this call; callers use it to refuse an uncheckpointed existing slot rather
+// than silently skipping prior source transactions.
+func ensureReplicationSlot(ctx context.Context, replication *pgconn.PgConn, conn connConfig, source postgresCDCSource) (pglogrepl.LSN, bool, error) {
 	slot, found, err := replicationSlotStatus(ctx, conn, source.slotName)
 	if err != nil {
-		return 0, err
+		return 0, false, err
 	}
 	if found {
 		if err := validateReplicationSlot(slot, conn.database); err != nil {
-			return 0, err
+			return 0, false, err
 		}
-		return slotBarrier(slot, source.system.XLogPos)
+		retained, err := slotRetentionLSN(slot)
+		if err != nil {
+			return 0, false, err
+		}
+		return retained, false, nil
 	}
 
 	// NOEXPORT_SNAPSHOT is accepted by PostgreSQL 12+ and avoids leaving an
@@ -213,21 +262,25 @@ func ensureReplicationSlot(ctx context.Context, replication *pgconn.PgConn, conn
 		// inspection. Re-read it and accept only the same safe shape.
 		slot, found, err = replicationSlotStatus(ctx, conn, source.slotName)
 		if err != nil || !found {
-			return 0, fmt.Errorf("postgres CDC: create replication slot: %w", createErr)
+			return 0, false, fmt.Errorf("postgres CDC: create replication slot: %w", createErr)
 		}
 		if err := validateReplicationSlot(slot, conn.database); err != nil {
-			return 0, err
+			return 0, false, err
 		}
-		return slotBarrier(slot, source.system.XLogPos)
+		retained, err := slotRetentionLSN(slot)
+		if err != nil {
+			return 0, false, err
+		}
+		return retained, false, nil
 	}
 	if created.OutputPlugin != "pgoutput" {
-		return 0, errors.New("postgres CDC: created replication slot did not select pgoutput")
+		return 0, false, errors.New("postgres CDC: created replication slot did not select pgoutput")
 	}
 	barrier, err := pglogrepl.ParseLSN(created.ConsistentPoint)
 	if err != nil {
-		return 0, errors.New("postgres CDC: created replication slot returned an invalid consistent point")
+		return 0, false, errors.New("postgres CDC: created replication slot returned an invalid consistent point")
 	}
-	return barrier, nil
+	return barrier, true, nil
 }
 
 // CDCSlotName returns the source-bound, connector-owned replication slot name
@@ -288,7 +341,10 @@ func (c Connector) TeardownCDC(ctx context.Context, cfg connectors.RuntimeConfig
 	if err := validateReplicationSlot(slot, conn.database); err != nil {
 		return err
 	}
-	if err := pglogrepl.DropReplicationSlot(ctx, replication, source.slotName, pglogrepl.DropReplicationSlotOptions{Wait: true}); err != nil {
+	// Do not wait for an activity race to clear: waiting could drop a slot a
+	// concurrent reader started after validation. An active slot is refused,
+	// preserving deterministic cleanup without tearing down another reader.
+	if err := pglogrepl.DropReplicationSlot(ctx, replication, source.slotName, pglogrepl.DropReplicationSlotOptions{Wait: false}); err != nil {
 		return fmt.Errorf("postgres CDC: drop replication slot: %w", err)
 	}
 	return nil

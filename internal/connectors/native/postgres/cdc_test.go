@@ -95,6 +95,74 @@ func TestCDCStartLSNRejectsUnretainedCheckpoint(t *testing.T) {
 	if !errors.Is(err, synccontract.ErrRebootstrapRequired) {
 		t.Fatalf("cdcStartLSN(unretained) = %v, want rebootstrap error", err)
 	}
+	var recovery *synccontract.RebootstrapRequiredError
+	if !errors.As(err, &recovery) || recovery.Outcome != synccontract.RecoveryOutcomeRetentionGap {
+		t.Fatalf("cdcStartLSN(unretained) recovery = %#v, want retention gap", recovery)
+	}
+}
+
+func TestCDCResumeRejectsIncompatibleNativeCheckpointShape(t *testing.T) {
+	source := postgresCDCSource{
+		identity: synccontract.SourceIdentity{
+			Engine:           "postgres",
+			AccountOrCluster: "system-one:database-one",
+			ObjectScope:      "public.events",
+		},
+		generation: synccontract.OpaqueToken([]byte("timeline-one")),
+	}
+	candidate := postgresCDCCheckpoint(source, pglogrepl.LSN(16), 0, &pglogrepl.CommitMessage{
+		CommitLSN:         pglogrepl.LSN(24),
+		TransactionEndLSN: pglogrepl.LSN(32),
+	})
+	acknowledgement, err := synccontract.NewDurableDownstreamAcknowledgement("cdc-test-sink", time.Now().UTC())
+	if err != nil {
+		t.Fatalf("NewDurableDownstreamAcknowledgement: %v", err)
+	}
+	var checkpoint synccontract.CheckpointEnvelope
+	if err := synccontract.CommitAfterDownstreamAcknowledgement(candidate, acknowledgement, func(committed synccontract.CheckpointEnvelope) error {
+		checkpoint = committed
+		return nil
+	}); err != nil {
+		t.Fatalf("CommitAfterDownstreamAcknowledgement: %v", err)
+	}
+
+	for _, mutate := range []func(*synccontract.CheckpointEnvelope){
+		func(checkpoint *synccontract.CheckpointEnvelope) { checkpoint.SchemaVersion = "other-schema" },
+		func(checkpoint *synccontract.CheckpointEnvelope) { checkpoint.ProtocolVersion = "other-protocol" },
+		func(checkpoint *synccontract.CheckpointEnvelope) { checkpoint.SnapshotBarrier.Kind = "other-barrier" },
+	} {
+		mutated := checkpoint.Clone()
+		mutate(&mutated)
+		err := validateCDCResume(&mutated, source)
+		if !errors.Is(err, synccontract.ErrRebootstrapRequired) {
+			t.Fatalf("validateCDCResume(incompatible native shape) = %v, want rebootstrap error", err)
+		}
+		var recovery *synccontract.RebootstrapRequiredError
+		if !errors.As(err, &recovery) || recovery.Outcome != synccontract.RecoveryOutcomeInvalidCheckpoint {
+			t.Fatalf("validateCDCResume(incompatible native shape) recovery = %#v, want invalid checkpoint", recovery)
+		}
+	}
+}
+
+func TestSlotRetentionLSNUsesRestartPosition(t *testing.T) {
+	got, err := slotRetentionLSN(postgresReplicationSlot{
+		confirmedLSN: "0/40",
+		restartLSN:   "0/20",
+	})
+	if err != nil {
+		t.Fatalf("slotRetentionLSN: %v", err)
+	}
+	if want := pglogrepl.LSN(0x20); got != want {
+		t.Fatalf("slotRetentionLSN = %s, want %s", got, want)
+	}
+}
+
+func TestStandbyStatusAcknowledgesOnlyTheDurablePosition(t *testing.T) {
+	position := pglogrepl.LSN(0x1234)
+	status := standbyStatusUpdate(position)
+	if status.WALWritePosition != position || status.WALFlushPosition != position || status.WALApplyPosition != position {
+		t.Fatalf("standby status = %+v, want all positions at %s", status, position)
+	}
 }
 
 func TestClassifyCDCStartErrorRequiresRebootstrapForLostWAL(t *testing.T) {

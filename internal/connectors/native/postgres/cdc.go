@@ -80,11 +80,21 @@ func (c Connector) ReadCDC(ctx context.Context, req connectors.CDCReadRequest, e
 	if err := validateCDCResume(req.Checkpoint, source); err != nil {
 		return err
 	}
-	barrier, err := ensureReplicationSlot(ctx, replication, conn, source)
+	if err := validateCDCPublicationStream(ctx, conn, source, publication); err != nil {
+		return err
+	}
+	retained, created, err := ensureReplicationSlot(ctx, replication, conn, source)
 	if err != nil {
 		return err
 	}
-	start, err := cdcStartLSN(req.Checkpoint, barrier)
+	if req.Checkpoint == nil && !created {
+		return synccontract.RequireRebootstrap(synccontract.RecoveryOutcomeInvalidCheckpoint, "existing PostgreSQL replication slot requires its durable checkpoint or explicit teardown")
+	}
+	start, err := cdcStartLSN(req.Checkpoint, retained)
+	if err != nil {
+		return err
+	}
+	snapshotBarrier, err := cdcSnapshotBarrier(req.Checkpoint, retained)
 	if err != nil {
 		return err
 	}
@@ -99,7 +109,7 @@ func (c Connector) ReadCDC(ctx context.Context, req connectors.CDCReadRequest, e
 		return classifyCDCStartError(req.Checkpoint, err)
 	}
 
-	return consumeLogicalReplication(ctx, replication, source, barrier, req, emit)
+	return consumeLogicalReplication(ctx, replication, source, snapshotBarrier, start, req, emit)
 }
 
 func classifyCDCStartError(checkpoint *synccontract.CheckpointEnvelope, err error) error {
@@ -122,29 +132,48 @@ func validateCDCResume(checkpoint *synccontract.CheckpointEnvelope, source postg
 	if checkpoint.Mechanism != cdcChangefeedMechanism {
 		return synccontract.RequireRebootstrap(synccontract.RecoveryOutcomeInvalidCheckpoint, "checkpoint mechanism is not PostgreSQL logical replication")
 	}
+	if checkpoint.SchemaVersion != cdcCheckpointSchema || checkpoint.ProtocolVersion != cdcProtocolVersion || checkpoint.SnapshotBarrier == nil || checkpoint.SnapshotBarrier.Kind != cdcSnapshotBarrierKind {
+		return synccontract.RequireRebootstrap(synccontract.RecoveryOutcomeInvalidCheckpoint, "checkpoint does not match the PostgreSQL logical replication protocol")
+	}
 	return checkpoint.ValidateResume(synccontract.ResumeExpectation{
 		Source:           source.identity,
 		SourceGeneration: source.generation,
 	})
 }
 
-func cdcStartLSN(checkpoint *synccontract.CheckpointEnvelope, barrier pglogrepl.LSN) (pglogrepl.LSN, error) {
+func cdcStartLSN(checkpoint *synccontract.CheckpointEnvelope, retained pglogrepl.LSN) (pglogrepl.LSN, error) {
 	if checkpoint == nil {
-		return barrier, nil
+		return retained, nil
 	}
 	if len(checkpoint.Position.Primary) == 0 {
 		return 0, synccontract.RequireRebootstrap(synccontract.RecoveryOutcomeInvalidCheckpoint, "checkpoint LSN is missing")
 	}
 	lsn, err := pglogrepl.ParseLSN(string(checkpoint.Position.Primary))
-	if err != nil || lsn < barrier {
+	if err != nil {
 		return 0, synccontract.RequireRebootstrap(synccontract.RecoveryOutcomeInvalidCheckpoint, "checkpoint LSN is not retained by the derived replication slot")
+	}
+	if lsn < retained {
+		return 0, synccontract.RequireRebootstrap(synccontract.RecoveryOutcomeRetentionGap, "PostgreSQL no longer retains the persisted replication position")
 	}
 	return lsn, nil
 }
 
-func consumeLogicalReplication(ctx context.Context, replication *pgconn.PgConn, source postgresCDCSource, barrier pglogrepl.LSN, req connectors.CDCReadRequest, emit func(connectors.CDCEvent) error) error {
-	decoder := newPGOutputDecoder()
-	lastDurable := pglogrepl.LSN(0)
+func cdcSnapshotBarrier(checkpoint *synccontract.CheckpointEnvelope, fallback pglogrepl.LSN) (pglogrepl.LSN, error) {
+	if checkpoint == nil {
+		return fallback, nil
+	}
+	barrier, err := pglogrepl.ParseLSN(string(checkpoint.SnapshotBarrier.Token))
+	if err != nil {
+		return 0, synccontract.RequireRebootstrap(synccontract.RecoveryOutcomeInvalidCheckpoint, "checkpoint snapshot barrier is invalid")
+	}
+	return barrier, nil
+}
+
+func consumeLogicalReplication(ctx context.Context, replication *pgconn.PgConn, source postgresCDCSource, snapshotBarrier, start pglogrepl.LSN, req connectors.CDCReadRequest, emit func(connectors.CDCEvent) error) error {
+	decoder := newPGOutputDecoderForRelation(source.identity.ObjectScope)
+	// A resumed checkpoint or a newly created slot's consistent point is the
+	// only position safe to report before the next transaction is committed.
+	lastDurable := start
 	inTransaction := false
 
 	for {
@@ -196,7 +225,7 @@ func consumeLogicalReplication(ctx context.Context, replication *pgconn.PgConn, 
 				if !inTransaction {
 					return errors.New("postgres CDC: commit without a pgoutput transaction")
 				}
-				candidate := postgresCDCCheckpoint(source, barrier, lastDurable, message)
+				candidate := postgresCDCCheckpoint(source, snapshotBarrier, lastDurable, message)
 				if err := req.DurableCheckpointCommitter.CommitDurableChangefeedCheckpoint(ctx, candidate); err != nil {
 					return fmt.Errorf("postgres CDC: persist durable checkpoint: %w", err)
 				}
@@ -205,11 +234,29 @@ func consumeLogicalReplication(ctx context.Context, replication *pgconn.PgConn, 
 				}
 				lastDurable = message.TransactionEndLSN
 				inTransaction = false
+			case *pglogrepl.TruncateMessage:
+				if !inTransaction {
+					return errors.New("postgres CDC: pgoutput truncate arrived outside a transaction")
+				}
+				events, err := decoder.truncate(message.RelationIDs, xlog.WALStart.String())
+				if err != nil {
+					return fmt.Errorf("postgres CDC: decode pgoutput truncate: %w", err)
+				}
+				for _, event := range events {
+					if err := emit(event); err != nil {
+						return err
+					}
+				}
+			case *pglogrepl.OriginMessage, *pglogrepl.TypeMessage, *pglogrepl.LogicalDecodingMessage:
+				// These pgoutput frames carry replication metadata or a
+				// user-emitted logical message, not a row change for the
+				// selected table. They must not make a valid table stream fail.
+				// A transactional message is still covered by its CommitMessage.
 			default:
 				if !inTransaction {
 					return errors.New("postgres CDC: pgoutput data arrived outside a transaction")
 				}
-				events, err := decoder.decode(xlog.WALData, "")
+				events, err := decoder.decode(xlog.WALData, xlog.WALStart.String())
 				if err != nil {
 					return fmt.Errorf("postgres CDC: decode pgoutput: %w", err)
 				}
@@ -261,10 +308,16 @@ func postgresCDCCheckpoint(source postgresCDCSource, barrier, previous pglogrepl
 }
 
 func sendStandbyStatus(ctx context.Context, replication *pgconn.PgConn, position pglogrepl.LSN) error {
-	if err := pglogrepl.SendStandbyStatusUpdate(ctx, replication, pglogrepl.StandbyStatusUpdate{
-		WALWritePosition: position,
-	}); err != nil {
+	if err := pglogrepl.SendStandbyStatusUpdate(ctx, replication, standbyStatusUpdate(position)); err != nil {
 		return fmt.Errorf("postgres CDC: acknowledge durable LSN: %w", err)
 	}
 	return nil
+}
+
+func standbyStatusUpdate(position pglogrepl.LSN) pglogrepl.StandbyStatusUpdate {
+	return pglogrepl.StandbyStatusUpdate{
+		WALWritePosition: position,
+		WALFlushPosition: position,
+		WALApplyPosition: position,
+	}
 }
