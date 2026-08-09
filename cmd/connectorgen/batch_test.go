@@ -2232,6 +2232,72 @@ func TestNormalizeBatchHTMLOperationPathConvertsAnglePlaceholders(t *testing.T) 
 	}
 }
 
+func TestParseBatchHTMLReferencePrefersStructuralRoutesOverRequestExamples(t *testing.T) {
+	root := []byte(`<html><body>
+		<p>GET /discovery/v2/attractions</p>
+		<p>GET /discovery/v2/attractions/{id}</p>
+		<p>GET /discovery/v2/events/{id}/images</p>
+		<p>GET /users/{id}</p>
+		<pre>GET /discovery/v2/attractions.json</pre>
+		<pre>GET /discovery/v2/attractions/K8vZ9175BhV.json</pre>
+		<pre>GET /discovery/v2/events/0B004F0401BD55E5/images.json</pre>
+		<pre>GET /users/me</pre>
+	</body></html>`)
+
+	inventory, err := parseBatchHTMLReference(root, batchArtifactSource{URL: "https://provider.example/reference", Kind: "html_reference", Retrieved: "2026-08-09"}, nil)
+	if err != nil {
+		t.Fatalf("parse HTML reference: %v", err)
+	}
+	paths := map[string]bool{}
+	for _, endpoint := range inventory.Endpoints {
+		paths[endpoint.Path] = true
+	}
+	for _, path := range []string{
+		"/discovery/v2/attractions",
+		"/discovery/v2/attractions/{id}",
+		"/discovery/v2/events/{id}/images",
+		"/users/{id}",
+		"/users/me",
+	} {
+		if !paths[path] {
+			t.Fatalf("HTML routes = %+v, want %q", inventory.Endpoints, path)
+		}
+	}
+	if len(paths) != 5 || paths["/discovery/v2/attractions.json"] || paths["/discovery/v2/attractions/K8vZ9175BhV.json"] || paths["/discovery/v2/events/0B004F0401BD55E5/images.json"] {
+		t.Fatalf("HTML routes = %+v, want structural routes without concrete request examples", inventory.Endpoints)
+	}
+}
+
+func TestTicketmasterGeneratedSurfaceExcludesReferenceExamples(t *testing.T) {
+	root := filepath.Join("..", "..", "internal", "connectors", "defs", "ticketmaster")
+	var surface engine.APISurface
+	decodeJSONFile(t, filepath.Join(root, "api_surface.json"), &surface)
+	if len(surface.Endpoints) != 19 || !strings.Contains(surface.Scope, "13 documented operations") {
+		t.Fatalf("Ticketmaster surface = %d endpoint(s), scope %q, want 19 endpoints from 13 documented operations", len(surface.Endpoints), surface.Scope)
+	}
+	for _, endpoint := range surface.Endpoints {
+		if endpoint.Path == "/discovery/v2/attractions/K8vZ9175BhV.json" {
+			t.Fatalf("Ticketmaster surface retains concrete example endpoint %+v", endpoint)
+		}
+	}
+
+	var operations struct {
+		Operations []json.RawMessage `json:"operations"`
+	}
+	decodeJSONFile(t, filepath.Join(root, "operations.json"), &operations)
+	if len(operations.Operations) != 15 {
+		t.Fatalf("Ticketmaster operations = %d, want 15 after suppressing request examples", len(operations.Operations))
+	}
+
+	var cli struct {
+		Commands []json.RawMessage `json:"commands"`
+	}
+	decodeJSONFile(t, filepath.Join(root, "cli_surface.json"), &cli)
+	if len(cli.Commands) != 19 {
+		t.Fatalf("Ticketmaster CLI commands = %d, want 19 after suppressing request examples", len(cli.Commands))
+	}
+}
+
 func TestParseBatchHTMLReferenceDoesNotScanMachineDocumentProse(t *testing.T) {
 	rootURL := "https://provider.example/reference"
 	machineURL := "https://provider.example/openapi.json"

@@ -276,20 +276,133 @@ func batchHTMLExplicitOperationMatches(raw []byte) [][][]byte {
 	if !bytes.Contains(raw, []byte("<")) {
 		return matches
 	}
-	var text strings.Builder
+	var structuralText strings.Builder
+	var exampleText strings.Builder
+	var allText strings.Builder
+	var ignoredDepth, exampleDepth int
 	tokenizer := nethtml.NewTokenizer(bytes.NewReader(raw))
 	for {
 		tokenType := tokenizer.Next()
 		if tokenType == nethtml.ErrorToken {
 			break
 		}
-		if tokenType != nethtml.TextToken {
+		switch tokenType {
+		case nethtml.StartTagToken:
+			token := tokenizer.Token()
+			switch token.Data {
+			case "pre":
+				exampleDepth++
+			case "script", "style", "template", "noscript":
+				ignoredDepth++
+			}
+		case nethtml.EndTagToken:
+			token := tokenizer.Token()
+			switch token.Data {
+			case "pre":
+				if exampleDepth > 0 {
+					exampleDepth--
+				}
+			case "script", "style", "template", "noscript":
+				if ignoredDepth > 0 {
+					ignoredDepth--
+				}
+			}
+		case nethtml.TextToken:
+			if ignoredDepth > 0 {
+				continue
+			}
+			text := tokenizer.Raw()
+			allText.Write(text)
+			allText.WriteByte(' ')
+			if exampleDepth > 0 {
+				exampleText.Write(text)
+				exampleText.WriteByte(' ')
+				continue
+			}
+			structuralText.Write(text)
+			structuralText.WriteByte(' ')
+		}
+	}
+	structuralMatches := batchHTMLExplicitOperation.FindAllSubmatch([]byte(structuralText.String()), -1)
+	if len(structuralMatches) == 0 {
+		return append(matches, batchHTMLExplicitOperation.FindAllSubmatch([]byte(allText.String()), -1)...)
+	}
+	for _, example := range batchHTMLExplicitOperation.FindAllSubmatch([]byte(exampleText.String()), -1) {
+		if batchHTMLExampleOperationMatchesStructuralRoute(example, structuralMatches) {
 			continue
 		}
-		text.Write(tokenizer.Raw())
-		text.WriteByte(' ')
+		structuralMatches = append(structuralMatches, example)
 	}
-	return append(matches, batchHTMLExplicitOperation.FindAllSubmatch([]byte(text.String()), -1)...)
+	return structuralMatches
+}
+
+func batchHTMLExampleOperationMatchesStructuralRoute(example [][]byte, structuralMatches [][][]byte) bool {
+	if len(example) < 3 {
+		return false
+	}
+	method := strings.ToUpper(string(example[1]))
+	path := normalizeBatchHTMLOperationPath(string(example[2]))
+	if method == "" || path == "" {
+		return false
+	}
+	for _, structural := range structuralMatches {
+		if len(structural) < 3 || method != strings.ToUpper(string(structural[1])) {
+			continue
+		}
+		structuralPath := normalizeBatchHTMLOperationPath(string(structural[2]))
+		if structuralPath != "" && batchHTMLExamplePathMatchesStructuralRoute(path, structuralPath) {
+			return true
+		}
+	}
+	return false
+}
+
+func batchHTMLExamplePathMatchesStructuralRoute(examplePath, structuralPath string) bool {
+	if examplePath == structuralPath {
+		return true
+	}
+	exampleSegments := strings.Split(strings.TrimPrefix(examplePath, "/"), "/")
+	structuralSegments := strings.Split(strings.TrimPrefix(structuralPath, "/"), "/")
+	if len(exampleSegments) != len(structuralSegments) {
+		return false
+	}
+	for index, structuralSegment := range structuralSegments {
+		exampleSegment := exampleSegments[index]
+		if start := strings.IndexByte(structuralSegment, '{'); start >= 0 {
+			end := strings.IndexByte(structuralSegment[start:], '}')
+			if end < 1 {
+				return false
+			}
+			end += start
+			prefix, suffix := structuralSegment[:start], structuralSegment[end+1:]
+			if !strings.HasPrefix(exampleSegment, prefix) || !strings.HasSuffix(exampleSegment, suffix) {
+				return false
+			}
+			value := strings.TrimSuffix(strings.TrimPrefix(exampleSegment, prefix), suffix)
+			if !batchHTMLExamplePathSegmentValue(value) {
+				return false
+			}
+			continue
+		}
+		if structuralSegment == exampleSegment || structuralSegment == strings.TrimSuffix(exampleSegment, ".json") {
+			continue
+		}
+		return false
+	}
+	return true
+}
+
+func batchHTMLExamplePathSegmentValue(value string) bool {
+	value = strings.ToLower(strings.TrimSuffix(strings.TrimSpace(value), ".json"))
+	if value == "" || strings.ContainsAny(value, "{}") {
+		return false
+	}
+	switch value {
+	case "all", "current", "default", "latest", "me", "self":
+		return false
+	default:
+		return true
+	}
 }
 
 func batchReferenceURLHasSuffix(rawURL string, suffixes ...string) bool {
