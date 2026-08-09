@@ -123,6 +123,8 @@ type Report struct {
 type targetIdentity struct {
 	socketPath string
 	graphRoot  string
+	forwarded  bool
+	daemonFree uint64
 }
 
 // Harness owns exactly one generated container and one generated named
@@ -424,6 +426,9 @@ func (h *Harness) targetImageStoreFree(ctx context.Context) (uint64, error) {
 	if err != nil {
 		return 0, err
 	}
+	if target.forwarded {
+		return target.daemonFree, nil
+	}
 	free, err := h.config.DiskFreeAt(target.graphRoot)
 	if err != nil {
 		return 0, errors.New("target Podman image-store capacity query failed")
@@ -443,20 +448,17 @@ func (h *Harness) assertTarget(ctx context.Context) (targetIdentity, error) {
 	if err != nil {
 		return targetIdentity{}, err
 	}
-	raw, err := h.config.Run.Run(ctx, h.config.ContainerEndpoint, "info", "--format", "{{.Host.RemoteSocket.Path}}\t{{.Store.GraphRoot}}")
+	raw, err := h.config.Run.Run(ctx, h.config.ContainerEndpoint, "info", "--format", "{{.Host.RemoteSocket.Path}}\t{{.Store.GraphRoot}}\t{{.Store.GraphRootAllocated}}\t{{.Store.GraphRootUsed}}")
 	if err != nil {
 		return targetIdentity{}, errors.New("target Podman endpoint could not be inspected")
 	}
-	target, err := parseTargetIdentity(raw)
+	target, err := parseTargetIdentity(raw, endpointPath)
 	if err != nil {
 		return targetIdentity{}, err
 	}
-	if target.socketPath != endpointPath {
-		return targetIdentity{}, errors.New("target Podman endpoint identity does not match the configured socket")
-	}
 	h.mu.Lock()
 	defer h.mu.Unlock()
-	if h.targetKnown && h.target != target {
+	if h.targetKnown && !sameTargetIdentity(h.target, target) {
 		return targetIdentity{}, errors.New("target Podman endpoint identity changed during the test")
 	}
 	h.target = target
@@ -476,16 +478,16 @@ func podmanEndpointPath(raw string) (string, error) {
 	return safePodmanStorePath(endpoint.Path)
 }
 
-func parseTargetIdentity(raw string) (targetIdentity, error) {
+func parseTargetIdentity(raw, endpointPath string) (targetIdentity, error) {
 	line := strings.TrimSpace(raw)
 	if line == "" || strings.Contains(line, "\n") {
 		return targetIdentity{}, errors.New("target Podman endpoint returned an invalid identity")
 	}
 	fields := strings.Split(line, "\t")
-	if len(fields) != 2 {
+	if len(fields) != 4 {
 		return targetIdentity{}, errors.New("target Podman endpoint returned an invalid identity")
 	}
-	socketPath, err := safePodmanStorePath(fields[0])
+	socketPath, forwarded, err := podmanReportedSocketPath(fields[0])
 	if err != nil {
 		return targetIdentity{}, errors.New("target Podman endpoint returned an invalid socket path")
 	}
@@ -493,7 +495,58 @@ func parseTargetIdentity(raw string) (targetIdentity, error) {
 	if err != nil {
 		return targetIdentity{}, errors.New("target Podman image store path is invalid")
 	}
-	return targetIdentity{socketPath: socketPath, graphRoot: graphRoot}, nil
+	if socketPath == endpointPath {
+		return targetIdentity{socketPath: socketPath, graphRoot: graphRoot}, nil
+	}
+	if !forwarded {
+		return targetIdentity{}, errors.New("target Podman endpoint identity does not match the configured socket")
+	}
+	free, err := podmanStoreFree(fields[2], fields[3])
+	if err != nil {
+		return targetIdentity{}, errors.New("target Podman endpoint returned an invalid image-store capacity")
+	}
+	return targetIdentity{socketPath: socketPath, graphRoot: graphRoot, forwarded: true, daemonFree: free}, nil
+}
+
+func sameTargetIdentity(left, right targetIdentity) bool {
+	return left.socketPath == right.socketPath && left.graphRoot == right.graphRoot && left.forwarded == right.forwarded
+}
+
+func podmanReportedSocketPath(raw string) (string, bool, error) {
+	value := strings.TrimSpace(raw)
+	if value == "" || value != raw {
+		return "", false, errors.New("invalid Podman socket path")
+	}
+	if strings.HasPrefix(value, "unix://") {
+		path, err := podmanEndpointPath(value)
+		return path, true, err
+	}
+	path, err := safePodmanStorePath(value)
+	return path, false, err
+}
+
+func podmanStoreFree(allocatedRaw, usedRaw string) (uint64, error) {
+	allocated, err := parsePodmanBytes(allocatedRaw)
+	if err != nil {
+		return 0, err
+	}
+	used, err := parsePodmanBytes(usedRaw)
+	if err != nil || used > allocated {
+		return 0, errors.New("invalid Podman image-store capacity")
+	}
+	return allocated - used, nil
+}
+
+func parsePodmanBytes(raw string) (uint64, error) {
+	if raw == "" || strings.TrimSpace(raw) != raw {
+		return 0, errors.New("invalid Podman byte count")
+	}
+	for _, r := range raw {
+		if r < '0' || r > '9' {
+			return 0, errors.New("invalid Podman byte count")
+		}
+	}
+	return strconv.ParseUint(raw, 10, 64)
 }
 
 func safePodmanStorePath(raw string) (string, error) {

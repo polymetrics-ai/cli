@@ -109,7 +109,7 @@ func (r *scriptedRunner) Run(_ context.Context, endpoint string, args ...string)
 		}
 		r.infoCalls++
 		if output == "" {
-			output = "/tmp/dbtest.sock\t/var/lib/containers/storage\n"
+			output = "/tmp/dbtest.sock\t/var/lib/containers/storage\t0\t0\n"
 		}
 		return output, nil
 	}
@@ -252,8 +252,8 @@ func TestCleanupRemovesOnlyRunOwnedResources(t *testing.T) {
 
 func TestStartFailsClosedWhenCachedTargetIdentityCannotBeProven(t *testing.T) {
 	runner := &scriptedRunner{infoOutputs: []string{
-		"/tmp/dbtest.sock\t/var/lib/containers/storage\n",
-		"/tmp/other.sock\t/var/lib/containers/storage\n",
+		"/tmp/dbtest.sock\t/var/lib/containers/storage\t0\t0\n",
+		"/tmp/other.sock\t/var/lib/containers/storage\t0\t0\n",
 	}}
 	config := testConfig(runner)
 	runner.setImage(config.Image, true)
@@ -320,8 +320,8 @@ func TestEveryTargetCommandRechecksTargetIdentity(t *testing.T) {
 
 func TestCleanupFailsClosedWhenTargetIdentityChanges(t *testing.T) {
 	for _, changedIdentity := range []string{
-		"/tmp/other.sock\t/var/lib/containers/storage\n",
-		"/tmp/dbtest.sock\t/var/lib/other-storage\n",
+		"/tmp/other.sock\t/var/lib/containers/storage\t0\t0\n",
+		"/tmp/dbtest.sock\t/var/lib/other-storage\t0\t0\n",
 	} {
 		t.Run(changedIdentity, func(t *testing.T) {
 			runner := &scriptedRunner{}
@@ -897,6 +897,54 @@ func TestTargetCapacityUsesTheProvenStorePath(t *testing.T) {
 	}
 }
 
+func TestStartUsesPodmanMachineDaemonCapacity(t *testing.T) {
+	runner := &scriptedRunner{infoOutput: "unix:///run/user/1000/podman/podman.sock\t/var/lib/containers/storage\t300\t100\n"}
+	config := testConfig(runner)
+	var hostCapacityCalls int
+	config.DiskFreeAt = func(string) (uint64, error) {
+		hostCapacityCalls++
+		return 0, errors.New("host store is not mounted")
+	}
+	h, err := New(config)
+	if err != nil {
+		t.Fatalf("New(): %v", err)
+	}
+	defer func() {
+		if err := h.Close(context.Background()); err != nil {
+			t.Fatalf("Close(): %v", err)
+		}
+	}()
+	if _, err := h.Start(context.Background()); err != nil {
+		t.Fatalf("Start(): %v", err)
+	}
+	if hostCapacityCalls != 0 {
+		t.Fatalf("host capacity checks = %d, want daemon capacity for a forwarded Podman machine", hostCapacityCalls)
+	}
+	if report := h.Report(); report.DiskFreeBefore != 200 {
+		t.Fatalf("disk report before = %d, want daemon-reported free capacity", report.DiskFreeBefore)
+	}
+}
+
+func TestStartRefusesForwardedPodmanMachineWithoutDaemonCapacity(t *testing.T) {
+	runner := &scriptedRunner{infoOutput: "unix:///run/user/1000/podman/podman.sock\t/var/lib/containers/storage\tunknown\t100\n"}
+	config := testConfig(runner)
+	config.DiskFreeAt = func(string) (uint64, error) {
+		return 1 << 30, nil
+	}
+	h, err := New(config)
+	if err != nil {
+		t.Fatalf("New(): %v", err)
+	}
+	if _, err := h.Start(context.Background()); err == nil || !strings.Contains(err.Error(), "invalid image-store capacity") {
+		t.Fatalf("Start() error = %v, want a forwarded-target capacity refusal", err)
+	}
+	for _, prefix := range [][]string{{"pull"}, {"image", "tag"}, {"volume", "create"}, {"run"}} {
+		if commandsContain(runner.commands, prefix...) {
+			t.Fatalf("commands = %v, want no mutation before forwarded capacity is proven", runner.commands)
+		}
+	}
+}
+
 func TestStartRefusesToCreateAfterClose(t *testing.T) {
 	runner := &scriptedRunner{}
 	h, err := New(testConfig(runner))
@@ -927,15 +975,15 @@ func TestStartRefusesToCreateAfterClose(t *testing.T) {
 }
 
 func TestParseTargetIdentity(t *testing.T) {
-	identity, err := parseTargetIdentity("/tmp/dbtest.sock\t/var/lib/containers/storage\n")
+	identity, err := parseTargetIdentity("/tmp/dbtest.sock\t/var/lib/containers/storage\t0\t0\n", "/tmp/dbtest.sock")
 	if err != nil {
 		t.Fatalf("parseTargetIdentity(): %v", err)
 	}
 	if identity.socketPath != "/tmp/dbtest.sock" || identity.graphRoot != "/var/lib/containers/storage" {
 		t.Fatalf("identity = %+v, want socket and image-store paths", identity)
 	}
-	for _, raw := range []string{"", "/tmp/socket", "/tmp/socket\t../store", "/tmp/socket\t/store\nsecond"} {
-		if _, err := parseTargetIdentity(raw); err == nil {
+	for _, raw := range []string{"", "/tmp/socket", "/tmp/socket\t../store\t0\t0", "/tmp/socket\t/store\t0\t0\nsecond"} {
+		if _, err := parseTargetIdentity(raw, "/tmp/socket"); err == nil {
 			t.Fatalf("parseTargetIdentity(%q) accepted invalid target evidence", raw)
 		}
 	}

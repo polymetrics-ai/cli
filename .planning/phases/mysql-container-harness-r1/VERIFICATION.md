@@ -9,8 +9,11 @@ capacity before every command. The outer validation phase must run the tagged My
 direct endpoint after the focused dbtest check recorded in `TDD-LEDGER.md`.
 
 - [x] `go test -count=1 -timeout 5m ./internal/connectors/native/dbtest` passed for the current
-      endpoint-contract correction.
-- [ ] The tagged live MySQL proof against a direct local endpoint remains owned by outer validation.
+      endpoint-contract correction and Podman 5.3 forwarded-Unix capacity handling.
+- [x] The tagged live MySQL proof passed against the supplied task-owned direct local Unix forward:
+      check, catalog discovery, full/incremental reads, every TLS mode including `verify-ca`, and
+      internal row-event CDC all completed; generated container, volume, and run-image cleanup
+      completed with equal before/after daemon image-store capacity.
 
 ## Fresh post-rebase evidence — 2026-08-08
 

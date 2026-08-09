@@ -10,6 +10,7 @@
 | H8 | Pull headroom | A pull started on a target with insufficient or unproven image-store capacity fills it partway through and leaves a partial image plus a container to clean up. | `TestStartRefusesToPullWithoutHeadroomForTheImage` proves the documented threshold; `TestStartFailsClosedWhenCachedTargetCapacityCannotBeProven` proves cached sources still need capacity proof; `TestNewRequiresTheImageFootprint` stops an engine from silently skipping the gate. |
 | H5 | Non-default endpoint | A connector silently assumes 3306 on the host. | `TestStartPublishesOnlyLoopback` asserts `127.0.0.1::<port>` publishing; `TestParseMappedPortRefusesTheEngineDefaultPort` refuses a default host mapping. |
 | H6 | Target-store accounting | Capacity can be measured on a different filesystem than the selected daemon's image store. | `TestTargetCapacityUsesTheProvenStorePath` checks `DiskFreeAt` receives the reported graph root; unprovable target identity or capacity fails before resource mutation. |
+| H9 | Forwarded local Podman machines | Podman 5.3 can expose a direct host Unix forward while reporting VM-local Unix socket and image-store paths, which a host-only proof rejects despite daemon capacity evidence. | `TestStartUsesPodmanMachineDaemonCapacity` proves a forwarded Unix report uses `GraphRootAllocated - GraphRootUsed`, never a host path; malformed forwarded capacity remains a pre-mutation refusal. |
 | M1 | Honest CDC declaration | MySQL can advertise a CDC capability before a production runtime entrypoint exists. | Metadata, definition, catalog, generated docs, and website data keep `cdc: false`; no changefeed descriptor or executor is registered, while the native row-event reader remains covered by internal evidence. |
 | M2 | SQL safety | Stream/schema/cursor values are concatenated into SQL. | Identifier tests reject unsafe values; queries quote only validated identifiers and bind all values. |
 | M3 | Complete ETL paging and incrementals | A read proves a single record or repeats/skips at shared cursor values. | Keyset query tests cover primary-key and `(cursor, primary_key)` boundaries; the real five-row seed with `page_size=2` proves multiple pages and exact incremental rows. |
@@ -330,3 +331,28 @@ go test -count=1 -timeout 20m ./internal/connectors/native/dbtest
 Passed. `Close` now gives the generated-resource cleanup sequence its own three-minute context, so
 a canceled caller cannot prevent container, volume, and run-image removal or consume the one
 idempotent teardown path.
+
+**Red — test-phase Podman-machine compatibility:**
+
+```text
+go test -count=1 -timeout 5m ./internal/connectors/native/dbtest \
+  -run '^TestStartUsesPodmanMachineDaemonCapacity$'
+```
+
+This failed with `target Podman endpoint returned an invalid identity`: Podman 5.3 returned a
+VM-local `unix://` remote socket and a VM image-store path over the supplied direct host Unix
+forward, while the harness accepted only a host-path-equivalent socket and host `statfs` capacity.
+
+**Green — test-phase Podman-machine compatibility:**
+
+```text
+go test -count=1 -timeout 5m ./internal/connectors/native/dbtest
+POLYMETRICS_DATABASE_INTEGRATION=1 POLYMETRICS_PODMAN_ENDPOINT=<direct-local-unix-forward> \
+  go test -tags=databaseintegration -count=1 -v -timeout 20m \
+  -run '^TestMySQLContainerHarness$' ./internal/connectors/native/mysql
+```
+
+Both passed. The focused unit proof accepts only a reported safe Unix forward with numeric daemon
+store capacity and rejects malformed forwarded capacity before any pull, tag, volume, or container
+mutation. The real MySQL proof then completed check, catalog discovery, five-record full and
+incremental reads, all TLS modes including `verify-ca`, and internal insert/update/delete CDC.

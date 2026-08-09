@@ -22,10 +22,12 @@ default is never read or changed.
 ## Capacity and cleanup
 
 Before startup and before every command directed at the daemon, `dbtest` reads identity and image-store data from
-the selected endpoint. The endpoint's reported socket must match the configured socket, and its
-reported image-store path must be measurable locally. An unprovable endpoint or capacity fails
-before the pull, including when the source image is cached. An absent source image needs three times
-`ExpectedImageBytes` free.
+the selected endpoint. A direct daemon must report the configured socket and a locally measurable
+image-store path. Podman 5.3 machine forwards are also accepted when both sides report safe Unix
+sockets and the daemon reports numeric `GraphRootAllocated`/`GraphRootUsed` capacity; the harness
+uses their difference rather than a host path inside the VM. Any other socket mismatch, remote
+scheme, or unprovable capacity fails before the pull, including when the source image is cached. An
+absent source image needs three times `ExpectedImageBytes` free.
 
 The harness owns only its generated container, volume, and run-image reference. The source image is
 always retained. Cleanup is unconditional and idempotent, including failure and interrupt paths, and
