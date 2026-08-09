@@ -209,6 +209,13 @@ func requireOperationWebSocketSessionEndpoint(b Bundle, op OperationSpec) error 
 		if endpoint.CoveredBy != nil && endpoint.CoveredBy.WebSocketSession == op.ID {
 			return nil
 		}
+		// A source-ledger operation row is the only valid bootstrap state for
+		// surface-reconcile: runtime preflight proves this exact declaration
+		// before the generator replaces that row with covered_by. Requiring the
+		// generated coverage here would make that transition impossible.
+		if endpoint.Operation != nil && endpoint.Operation.Model == "websocket_session" {
+			return nil
+		}
 	}
 	return fmt.Errorf("api_surface endpoint GET %s is not declared for websocket session %q", op.WebSocket.Path, op.ID)
 }
