@@ -90,6 +90,11 @@
 - Red: ActiveCampaign's provider OpenAPI 3 fragments declare the v3 API root in `servers[0].url` (`https://{youraccountname}.api-us1.com/api/3`) while their `paths` are root-relative. The extractor returned `/contacts` rather than `/api/3/contacts`, causing all 61 legacy classifications to become false artifact-absent discrepancies.
 - Green: TestParseBatchOpenAPIArtifactPrefixesServerBasePath first reproduced the root-relative result, then passes with the literal /api/3 request base path retained from a templated official server URL. The parser admits a server base only when every declared server has the same valid literal request path; ordinary OpenAPI provenance and Swagger basePath behavior remain unchanged. go test -count=1 ./cmd/connectorgen -run '^(TestParseBatchOpenAPIArtifactPrefixesServerBasePath|TestParseBatchSwaggerArtifactPrefixesBasePath)$' passes.
 
+## Pipeliner dynamic OpenAPI server base
+
+- Red: B054 reached Pipeliner's provider-linked HTTPS S3 OpenAPI object but the parser rejected `https://us-east.api.pipelinersales.com/api/v100/rest/spaces/{space_id}` because a documented server path variable was treated as a non-literal request path. The source operation inventory could not be extracted.
+- Green: `TestParseBatchOpenAPIArtifactPrefixesServerBasePathWithPathVariable` now proves the exact path-variable form is retained, while `TestMaterializeAPISurfaceUsesExistingDynamicServerBaseSuffix` proves the existing `/spaces/{space_id}/...` connector-relative classification remains bound rather than becoming an artifact-absent discrepancy. The focused test command preserves the literal-server and Swagger-base-path contracts; B055 stages 1,510 cited operations and validates cleanly.
+
 ## 426-target rate-limit declaration completeness
 
 - Red: find internal/connectors/defs -name rate_limits.json returned zero files, while the one-flow captain order requires exactly one provider-cited declaration for every 426 target. TestEverySweepTargetLoadsRateLimitDeclaration is added before production changes and must fail until every target has an embedded, schema-loadable declaration.
@@ -126,6 +131,26 @@
 - Green: `TestBatchMaterializeAllowsExactUnversionedOfficialReference` proves an explicitly declared unversioned official HTML reference materializes only through `--existing-surface-evidence`, emits the `provider-publishes-no-version-marker` provenance value, rejects a non-evidence invocation, and rejects a 3-versus-4 immutable-count mismatch. `TestReadBatchManifestRejectsUndeclaredUnversionedArtifact` proves ordinary artifacts still require a nonempty version. `go test -count=1 ./cmd/connectorgen -run 'TestBatchMaterializeAllowsExactUnversionedOfficialReference|TestReadBatchManifestRejectsUndeclaredUnversionedArtifact|TestBatchMaterializeUsesExactExistingSurfaceEvidence'` passes.
 - Skills: `golang-how-to`, `golang-cli`, `golang-testing`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-error-handling`, `golang-security`, and `golang-safety`.
 
+## Cached-reference static batch boundary
+
+- Red: B043 showed `batch materialize` resolving hundreds of provider-linked documents from a 37-root cache, even though the fast sweep must cap work at the cited primary source and place a cache miss back on the retry route.
+- Green: `TestBatchArtifactSourceFetcherCachedReferencesOnlyRefusesCacheMiss` proves the opt-in `--cached-references-only` source fetcher refuses an uncached reference before any network fetch. The normal mode remains unchanged; focused `cmd/connectorgen` tests cover the new flag's argument contract and cache-miss behavior.
+
+## Recovered fast-sweep authority and deterministic retry ledger
+
+- Red: the preserved reconciler and plan still named a superseded unblock order. Rebuilding the otherwise correct 205-materialized/221-retry partition would therefore reintroduce stale scope authority and invite a broad generator-review loop before the captain's required deterministic retry sweep.
+- Green: the reconciler emits `CAPTAIN-ORDER-fast-426-terra-20260809.md`, and its check validates the recovered `205 materialized + 221 retry_pending + 0 genuinely_blocked = 426` partition with all 426 rate-limit declarations conserved. The cache-only batch test proves the retry pass cannot turn a missing cached secondary official source into an unbounded network crawl; it records the normal retry stage instead.
+
+## RSS reference-link admission
+
+- Red: `TestParseBatchHTMLReferenceSkipsFeedCandidates` initially failed because the reference walker fetched `https://provider.example/reference/rss.xml` after matching its incidental `reference` path segment.
+- Green: the same test now passes after RSS/Atom feeds join the existing non-operation static-asset exclusions. `TestParseBatchHTMLReferenceSkipsStaticAssetCandidates`, `TestBatchArtifactSourceFetcherCachedReferencesOnlyRefusesCacheMiss`, and `TestParseBatchMaterializeOptionsCachedReferencesOnlyRequiresArtifactDir` stay green.
+
+## Rendered Markdown request lines
+
+- Red: `TestParseBatchHTMLReferenceRecognizesMarkdownCodeOperations` failed with `official HTML reference traversal found no explicit operations or linked machine-readable contract` for the provider-documented form ``<mark>`GET`</mark> `/widgets` ``.
+- Green: `batchHTMLExplicitOperationMatches` also scans the visible text tokens, preserving raw parsing while recognizing code-formatted requests separated by HTML markup. The Markdown, feed, static-asset, machine-source, and cache-only focused regressions pass; the bounded official Countercyclical retry materializes and schema-loads all 12 cited operations.
+
 ## Shared endpoint bindings in direct evidence materialization
 
 - Red: the first B028 staging preflight found SearXNG's two ETL streams bound to one `GET /search` provider request emitted as duplicate v2 endpoint rows. The generated CLI can only resolve one coverage classifier for a method/path, so `search list` appeared to target the `reddit` binding.
@@ -135,3 +160,18 @@
 
 - Red: an ad-hoc `jq` ledger update evaluated a candidate-selection expression with the wrong input scope after shell redirection had already opened the destination. The command therefore replaced `MATERIALIZATION-LEDGER.json` and `RETRY-QUEUE.json` with zero-byte files and left `RUN-STATE.json` with null counts, despite every connector bundle and batch report remaining intact.
 - Green: `scripts/reconcile_cli_mass_artifact_ledgers.go --expected-materialized 194 --check` reads only the target manifest, retained batch reports/outcomes, the reconciliation record, and current bundle provenance. It rebuilt all three ledgers only after asserting 426 unique target names, a disjoint 232/194 queue/resolved partition, and `194 materialized + 232 retry_pending + 0 blocked = 426`. Its JSON writer stages validated non-empty temporary files before atomic rename; `TestStageValidatedJSONBytesLeavesDestinationUntouchedForInvalidCandidate` proves an invalid candidate cannot replace an existing ledger.
+
+## Explicit terminal official-source exhaustion
+
+- Red: a normal `retry_pending` attempt must never become a terminal block merely because a later batch was run; the pre-final reconciler consequently retained the 195 unresolved targets in the retry queue.
+- Green: `TestFinalBlockedAttemptRequiresExplicitTerminalOutcome` accepts only a final `genuinely_blocked` event whose stage is `official_source_exhausted` and whose route, reason, and evidence are all nonempty. It rejects ordinary retries, malformed terminal data, and a valid terminal event followed by a new retry. B056 supplies that evidence for all 195 remaining targets, and `go run scripts/reconcile_cli_mass_artifact_ledgers.go --expected-materialized 231 --check` proves `231 materialized + 195 genuinely_blocked + 0 retry_pending = 426`.
+
+## Zero-operation non-HTTP bundle
+
+- Red: Faker had a valid target/rate-limit declaration but an obsolete API-surface version, even though it is a pure-Go generator with no provider HTTP API from which an operation artifact could honestly be derived.
+- Green: its `api_surface.json` is upgraded to v2 with an explicit empty artifact/endpoints inventory and scope statement. `connectorgen validate internal/connectors/defs` plus `pm connectors inspect faker --json` prove the zero-operation declaration schema-loads without inventing HTTP commands.
+
+## V2 endpoint-local provenance assertions
+
+- Red: `TestGorgiasAPISurfaceOperationLedger` and `TestNotionAPISurfaceOperationLedger` failed after the completed source pass because they required `operation_ledger_version: 1` and looked for a blocked operation's citation in the removed v1 `operation.source_url` field. Notion's prior row arithmetic also omitted the generic blocked `POST /v1/search` contract alongside its two qualified stream bindings.
+- Green: both tests require version 2 and validate `endpoint.provenance.source_url` for blocked rows. Notion now explicitly asserts 51 unique documented operations in 55 rows (four qualified-binding views); the targeted pair and complete `go test -timeout 20m -count=1 ./cmd/connectorgen` suite pass.

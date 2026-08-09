@@ -1,0 +1,11 @@
+{
+  "outcomes": [
+    {
+      "connector": "clickup-api",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-002-clickup-api-retry-materialize.json"
+    }
+  ]
+}

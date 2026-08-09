@@ -1,65 +1,1977 @@
 {
-  "api": "Beamer REST API v0 (https://api.getbeamer.com/v0)",
+  "api": "Beamer REST API v0 (https://api.getbeamer.com/v0); provider artifact version: 0.1.0",
   "docs": "https://www.getbeamer.com/api/docs",
-  "reviewed_at": "2026-07-04",
-  "scope": "Pass B full-surface expansion. Beamer's official docs page (getbeamer.com/api/docs, getbeamer.com/api) renders no static endpoint reference reachable by an automated fetch; the full endpoint/parameter/response inventory below was cross-checked against a third-party reverse-engineered API reference (getbeamer-api.pages.dev) AND this bundle's own legacy Go implementation (internal/connectors/beamer/*.go), which is the authoritative parity source whenever the two disagree. Two disagreements were found and resolved in legacy's favor: (1) legacy's tested/parity-verified feature-request path is /feature-requests, not /requests as the third-party reference names it -- every feature-request-scoped endpoint below (including the new feature_request_votes stream and its writes) uses /feature-requests; (2) the third-party reference documents a Beamer-Api-Key header while legacy's tested implementation and its own passing unit test (beamer_test.go:55, asserting 'Authorization: Bearer beamer_secret_123') use Authorization: Bearer -- this bundle keeps Bearer auth unchanged (a parity-locked, already-correct read path is not re-litigated by a third-party doc during a surface-expansion pass). New in this pass: post_reactions and feature_request_votes read streams (fan_out over posts/feature-requests respectively), a users read stream (Scale-plan-only per Beamer's docs, included since the endpoint itself is unconditional), and a full writes.json covering every JSON-bodied create/update/delete on posts, feature requests, their comments, reactions, and votes -- capabilities.write flips to true.",
+  "reviewed_at": "2026-08-09",
+  "operation_ledger_version": 2,
+  "scope": "Provider-artifact inventory generated from the cited html_reference artifact (49 documented operations across 1 provider-owned source document(s)). Every documented operation is represented; existing source-surface bindings absent from the artifact are retained and flagged with present-in-surface-absent-from-artifact.",
+  "artifacts": [
+    {
+      "id": "beamer-artifact-2026-08-09",
+      "url": "https://getbeamer-api.pages.dev/",
+      "kind": "html_reference",
+      "version": "0.1.0",
+      "retrieved_at": "2026-08-09",
+      "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985"
+    }
+  ],
   "endpoints": [
-    { "method": "GET", "path": "/v0/nps", "covered_by": { "stream": "nps" } },
-    { "method": "GET", "path": "/v0/nps/count", "excluded": { "category": "duplicate_of", "reason": "a count-only aggregate of the nps stream; no additional record data" } },
-    { "method": "GET", "path": "/v0/nps/check", "excluded": { "category": "non_data_endpoint", "reason": "a stateful eligibility check for whether a given end user should currently see the NPS prompt widget, not a data record" } },
-    { "method": "POST", "path": "/v0/nps/email", "excluded": { "category": "destructive_admin", "reason": "sends a real NPS survey email to a real end user immediately" } },
-    { "method": "GET", "path": "/v0/nps/link", "excluded": { "category": "non_data_endpoint", "reason": "returns a one-time NPS survey URL for a given user, not a data record" } },
-
-    { "method": "GET", "path": "/v0/posts", "covered_by": { "stream": "posts" } },
-    { "method": "GET", "path": "/v0/posts/count", "excluded": { "category": "duplicate_of", "reason": "a count-only aggregate of the posts stream; no additional record data" } },
-    { "method": "GET", "path": "/v0/posts/{postId}", "excluded": { "category": "duplicate_of", "reason": "single-post lookup by id; fully covered by the posts list stream" } },
-    { "method": "POST", "path": "/v0/posts", "covered_by": { "write": "create_post" } },
-    { "method": "PUT", "path": "/v0/posts/{postId}", "covered_by": { "write": "update_post" } },
-    { "method": "DELETE", "path": "/v0/posts/{postId}", "covered_by": { "write": "delete_post" } },
-
-    { "method": "GET", "path": "/v0/posts/{postId}/comments", "covered_by": { "stream": "comments" } },
-    { "method": "GET", "path": "/v0/posts/{postId}/comments/count", "excluded": { "category": "duplicate_of", "reason": "a count-only aggregate of a post's comments; no additional record data" } },
-    { "method": "GET", "path": "/v0/posts/{postId}/comments/{commentId}", "excluded": { "category": "duplicate_of", "reason": "single-comment lookup by id; fully covered by the comments list stream" } },
-    { "method": "POST", "path": "/v0/posts/{postId}/comments", "covered_by": { "write": "create_post_comment" } },
-    { "method": "DELETE", "path": "/v0/posts/{postId}/comments/{commentId}", "covered_by": { "write": "delete_post_comment" } },
-
-    { "method": "GET", "path": "/v0/posts/{postId}/reactions", "covered_by": { "stream": "post_reactions" } },
-    { "method": "GET", "path": "/v0/posts/{postId}/reactions/count", "excluded": { "category": "duplicate_of", "reason": "a count-only aggregate of a post's reactions; no additional record data" } },
-    { "method": "GET", "path": "/v0/posts/{postId}/reactions/{reactionId}", "excluded": { "category": "duplicate_of", "reason": "single-reaction lookup by id; fully covered by the post_reactions stream" } },
-    { "method": "POST", "path": "/v0/posts/{postId}/reactions", "covered_by": { "write": "create_post_reaction" } },
-    { "method": "DELETE", "path": "/v0/posts/{postId}/reactions/{reactionId}", "covered_by": { "write": "delete_post_reaction" } },
-
-    { "method": "GET", "path": "/v0/unread", "excluded": { "category": "duplicate_of", "reason": "a filtered, stateful view over the posts stream (which posts this specific end user has not yet seen); defaults to marking those posts as read as a GET-time side effect, which a read-only sync connector must never trigger implicitly" } },
-    { "method": "GET", "path": "/v0/unread/count", "excluded": { "category": "duplicate_of", "reason": "count-only aggregate of the unread view; same reasoning as /unread" } },
-
-    { "method": "GET", "path": "/v0/feature-requests", "covered_by": { "stream": "feature_requests" } },
-    { "method": "GET", "path": "/v0/feature-requests/count", "excluded": { "category": "duplicate_of", "reason": "a count-only aggregate of the feature_requests stream; no additional record data" } },
-    { "method": "GET", "path": "/v0/feature-requests/{featureRequestId}", "excluded": { "category": "duplicate_of", "reason": "single-feature-request lookup by id; fully covered by the feature_requests list stream" } },
-    { "method": "POST", "path": "/v0/feature-requests", "covered_by": { "write": "create_feature_request" } },
-    { "method": "PUT", "path": "/v0/feature-requests/{featureRequestId}", "covered_by": { "write": "update_feature_request" } },
-    { "method": "DELETE", "path": "/v0/feature-requests/{featureRequestId}", "covered_by": { "write": "delete_feature_request" } },
-
-    { "method": "GET", "path": "/v0/feature-requests/{featureRequestId}/comments", "excluded": { "category": "duplicate_of", "reason": "comments here are already unified into the bundle's single comments stream (matching legacy's own combined /comments endpoint, which serves both post and feature-request comments); the per-feature-request comments listing is redundant surface, kept read-side to the single comments stream while its write actions are still modeled separately below since Beamer's write API is genuinely split by parent resource" } },
-    { "method": "GET", "path": "/v0/feature-requests/{featureRequestId}/comments/count", "excluded": { "category": "duplicate_of", "reason": "count-only aggregate; see /feature-requests/{featureRequestId}/comments" } },
-    { "method": "GET", "path": "/v0/feature-requests/{featureRequestId}/comments/{commentId}", "excluded": { "category": "duplicate_of", "reason": "single-comment lookup by id; see /feature-requests/{featureRequestId}/comments" } },
-    { "method": "POST", "path": "/v0/feature-requests/{featureRequestId}/comments", "covered_by": { "write": "create_feature_request_comment" } },
-    { "method": "DELETE", "path": "/v0/feature-requests/{featureRequestId}/comments/{commentId}", "covered_by": { "write": "delete_feature_request_comment" } },
-
-    { "method": "GET", "path": "/v0/feature-requests/{featureRequestId}/votes", "covered_by": { "stream": "feature_request_votes" } },
-    { "method": "GET", "path": "/v0/feature-requests/{featureRequestId}/votes/count", "excluded": { "category": "duplicate_of", "reason": "a count-only aggregate of a feature request's votes; no additional record data" } },
-    { "method": "GET", "path": "/v0/feature-requests/{featureRequestId}/votes/{voteId}", "excluded": { "category": "duplicate_of", "reason": "single-vote lookup by id; fully covered by the feature_request_votes stream" } },
-    { "method": "POST", "path": "/v0/feature-requests/{featureRequestId}/votes", "covered_by": { "write": "create_feature_request_vote" } },
-    { "method": "DELETE", "path": "/v0/feature-requests/{featureRequestId}/votes/{voteId}", "covered_by": { "write": "delete_feature_request_vote" } },
-
-    { "method": "GET", "path": "/v0/users", "covered_by": { "stream": "users" } },
-    { "method": "POST", "path": "/v0/users", "excluded": { "category": "requires_elevated_scope", "reason": "Scale-plan-only end-user identity registration; creates/overwrites Beamer's own end-user profile store, a distinct concern from this connector's post/feature-request/NPS data sync and gated behind a specific paid plan tier not universally available" } },
-    { "method": "PUT", "path": "/v0/users", "excluded": { "category": "requires_elevated_scope", "reason": "bulk end-user profile update, addressed by a query-string filter (userId/beamerId/userEmail) rather than a single record id; see POST /users" } },
-    { "method": "DELETE", "path": "/v0/users", "excluded": { "category": "destructive_admin", "reason": "bulk end-user deletion by semicolon-separated id list, addressed by a query-string filter rather than a single record id; irreversible end-user data removal" } },
-
-    { "method": "POST", "path": "/v0/team", "excluded": { "category": "requires_elevated_scope", "reason": "invites a new BigMailer-account-style team member into the Beamer workspace itself (account administration, not product data); the third-party reference could not fully document its body schema, and legacy has no precedent for it" } },
-    { "method": "PUT", "path": "/v0/team", "excluded": { "category": "requires_elevated_scope", "reason": "changes a team member's role/permissions; account administration, not product data; see POST /team" } },
-    { "method": "DELETE", "path": "/v0/team", "excluded": { "category": "destructive_admin", "reason": "removes a team member from the Beamer workspace; account administration with no data-record shape, irreversible" } },
-
-    { "method": "DELETE", "path": "/v0/privacy", "excluded": { "category": "destructive_admin", "reason": "a GDPR/CCPA-style irreversible erasure of a specific end user's data across the whole Beamer account; a compliance action, not a routine reverse-ETL data mutation" } }
+    {
+      "method": "GET",
+      "path": "/nps",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "https://getbeamer-api.pages.dev/#GET /nps"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/nps/check",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "https://getbeamer-api.pages.dev/#GET /nps/check"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/nps/count",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "https://getbeamer-api.pages.dev/#GET /nps/count"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/nps/email",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "https://getbeamer-api.pages.dev/#POST /nps/email"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/nps/link",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "https://getbeamer-api.pages.dev/#GET /nps/link"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ping",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "https://getbeamer-api.pages.dev/#POST /ping"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/posts",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "https://getbeamer-api.pages.dev/#GET /posts"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/posts",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "https://getbeamer-api.pages.dev/#POST /posts"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/posts/count",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "https://getbeamer-api.pages.dev/#GET /posts/count"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/posts/{postId}",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "https://getbeamer-api.pages.dev/#GET /posts/{postId}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/posts/{postId}",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "https://getbeamer-api.pages.dev/#PUT /posts/{postId}"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/posts/{postId}",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "https://getbeamer-api.pages.dev/#DELETE /posts/{postId}"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/posts/{postId}/comments",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "https://getbeamer-api.pages.dev/#GET /posts/{postId}/comments"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/posts/{postId}/comments",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "https://getbeamer-api.pages.dev/#POST /posts/{postId}/comments"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/posts/{postId}/comments/count",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "https://getbeamer-api.pages.dev/#GET /posts/{postId}/comments/count"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/posts/{postId}/comments/{commentId}",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "https://getbeamer-api.pages.dev/#GET /posts/{postId}/comments/{commentId}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/posts/{postId}/comments/{commentId}",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "https://getbeamer-api.pages.dev/#DELETE /posts/{postId}/comments/{commentId}"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/posts/{postId}/reactions",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "https://getbeamer-api.pages.dev/#GET /posts/{postId}/reactions"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/posts/{postId}/reactions",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "https://getbeamer-api.pages.dev/#POST /posts/{postId}/reactions"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/posts/{postId}/reactions/count",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "https://getbeamer-api.pages.dev/#GET /posts/{postId}/reactions/count"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/posts/{postId}/reactions/{reactionId}",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "https://getbeamer-api.pages.dev/#GET /posts/{postId}/reactions/{reactionId}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/posts/{postId}/reactions/{reactionId}",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "https://getbeamer-api.pages.dev/#DELETE /posts/{postId}/reactions/{reactionId}"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/privacy",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "https://getbeamer-api.pages.dev/#DELETE /privacy"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/requests",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "https://getbeamer-api.pages.dev/#GET /requests"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/requests",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "https://getbeamer-api.pages.dev/#POST /requests"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/requests/count",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "https://getbeamer-api.pages.dev/#GET /requests/count"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/requests/{featureRequestId}",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "https://getbeamer-api.pages.dev/#GET /requests/{featureRequestId}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/requests/{featureRequestId}",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "https://getbeamer-api.pages.dev/#PUT /requests/{featureRequestId}"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/requests/{featureRequestId}",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "https://getbeamer-api.pages.dev/#DELETE /requests/{featureRequestId}"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/requests/{featureRequestId}/comments",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "https://getbeamer-api.pages.dev/#GET /requests/{featureRequestId}/comments"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/requests/{featureRequestId}/comments",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "https://getbeamer-api.pages.dev/#POST /requests/{featureRequestId}/comments"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/requests/{featureRequestId}/comments/count",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "https://getbeamer-api.pages.dev/#GET /requests/{featureRequestId}/comments/count"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/requests/{featureRequestId}/comments/{commentId}",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "https://getbeamer-api.pages.dev/#GET /requests/{featureRequestId}/comments/{commentId}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/requests/{featureRequestId}/comments/{commentId}",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "https://getbeamer-api.pages.dev/#DELETE /requests/{featureRequestId}/comments/{commentId}"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/requests/{featureRequestId}/votes",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "https://getbeamer-api.pages.dev/#GET /requests/{featureRequestId}/votes"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/requests/{featureRequestId}/votes",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "https://getbeamer-api.pages.dev/#POST /requests/{featureRequestId}/votes"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/requests/{featureRequestId}/votes/count",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "https://getbeamer-api.pages.dev/#GET /requests/{featureRequestId}/votes/count"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/requests/{featureRequestId}/votes/{voteId}",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "https://getbeamer-api.pages.dev/#GET /requests/{featureRequestId}/votes/{voteId}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/requests/{featureRequestId}/votes/{voteId}",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "https://getbeamer-api.pages.dev/#DELETE /requests/{featureRequestId}/votes/{voteId}"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/team",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "https://getbeamer-api.pages.dev/#POST /team"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/team",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "https://getbeamer-api.pages.dev/#PUT /team"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/team",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "https://getbeamer-api.pages.dev/#DELETE /team"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/unread",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "https://getbeamer-api.pages.dev/#GET /unread"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/unread/count",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "https://getbeamer-api.pages.dev/#GET /unread/count"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/url",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "https://getbeamer-api.pages.dev/#GET /url"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "https://getbeamer-api.pages.dev/#GET /users"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "https://getbeamer-api.pages.dev/#POST /users"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/users",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "https://getbeamer-api.pages.dev/#PUT /users"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/users",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "https://getbeamer-api.pages.dev/#DELETE /users"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v0/feature-requests",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "existing-surface[GET /v0/feature-requests]"
+      },
+      "covered_by": {
+        "stream": "feature_requests"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v0/feature-requests",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "existing-surface[POST /v0/feature-requests]"
+      },
+      "covered_by": {
+        "write": "create_feature_request"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v0/feature-requests/count",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "existing-surface[GET /v0/feature-requests/count]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "a count-only aggregate of the feature_requests stream; no additional record data",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v0/feature-requests/{featureRequestId}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "existing-surface[GET /v0/feature-requests/{featureRequestId}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-feature-request lookup by id; fully covered by the feature_requests list stream",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v0/feature-requests/{featureRequestId}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "existing-surface[PUT /v0/feature-requests/{featureRequestId}]"
+      },
+      "covered_by": {
+        "write": "update_feature_request"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v0/feature-requests/{featureRequestId}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "existing-surface[DELETE /v0/feature-requests/{featureRequestId}]"
+      },
+      "covered_by": {
+        "write": "delete_feature_request"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v0/feature-requests/{featureRequestId}/comments",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "existing-surface[GET /v0/feature-requests/{featureRequestId}/comments]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "comments here are already unified into the bundle's single comments stream (matching legacy's own combined /comments endpoint, which serves both post and feature-request comments); the per-feature-request comments listing is redundant surface, kept read-side to the single comments stream while its write actions are still modeled separately below since Beamer's write API is genuinely split by parent resource",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v0/feature-requests/{featureRequestId}/comments",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "existing-surface[POST /v0/feature-requests/{featureRequestId}/comments]"
+      },
+      "covered_by": {
+        "write": "create_feature_request_comment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v0/feature-requests/{featureRequestId}/comments/count",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "existing-surface[GET /v0/feature-requests/{featureRequestId}/comments/count]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "count-only aggregate; see /feature-requests/{featureRequestId}/comments",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v0/feature-requests/{featureRequestId}/comments/{commentId}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "existing-surface[GET /v0/feature-requests/{featureRequestId}/comments/{commentId}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-comment lookup by id; see /feature-requests/{featureRequestId}/comments",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v0/feature-requests/{featureRequestId}/comments/{commentId}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "existing-surface[DELETE /v0/feature-requests/{featureRequestId}/comments/{commentId}]"
+      },
+      "covered_by": {
+        "write": "delete_feature_request_comment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v0/feature-requests/{featureRequestId}/votes",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "existing-surface[GET /v0/feature-requests/{featureRequestId}/votes]"
+      },
+      "covered_by": {
+        "stream": "feature_request_votes"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v0/feature-requests/{featureRequestId}/votes",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "existing-surface[POST /v0/feature-requests/{featureRequestId}/votes]"
+      },
+      "covered_by": {
+        "write": "create_feature_request_vote"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v0/feature-requests/{featureRequestId}/votes/count",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "existing-surface[GET /v0/feature-requests/{featureRequestId}/votes/count]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "a count-only aggregate of a feature request's votes; no additional record data",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v0/feature-requests/{featureRequestId}/votes/{voteId}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "existing-surface[GET /v0/feature-requests/{featureRequestId}/votes/{voteId}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-vote lookup by id; fully covered by the feature_request_votes stream",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v0/feature-requests/{featureRequestId}/votes/{voteId}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "existing-surface[DELETE /v0/feature-requests/{featureRequestId}/votes/{voteId}]"
+      },
+      "covered_by": {
+        "write": "delete_feature_request_vote"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v0/nps",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "existing-surface[GET /v0/nps]"
+      },
+      "covered_by": {
+        "stream": "nps"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v0/nps/check",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "existing-surface[GET /v0/nps/check]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "a stateful eligibility check for whether a given end user should currently see the NPS prompt widget, not a data record",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v0/nps/count",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "existing-surface[GET /v0/nps/count]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "a count-only aggregate of the nps stream; no additional record data",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v0/nps/email",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "existing-surface[POST /v0/nps/email]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "sends a real NPS survey email to a real end user immediately",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v0/nps/link",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "existing-surface[GET /v0/nps/link]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "returns a one-time NPS survey URL for a given user, not a data record",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v0/posts",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "existing-surface[GET /v0/posts]"
+      },
+      "covered_by": {
+        "stream": "posts"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v0/posts",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "existing-surface[POST /v0/posts]"
+      },
+      "covered_by": {
+        "write": "create_post"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v0/posts/count",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "existing-surface[GET /v0/posts/count]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "a count-only aggregate of the posts stream; no additional record data",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v0/posts/{postId}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "existing-surface[GET /v0/posts/{postId}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-post lookup by id; fully covered by the posts list stream",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v0/posts/{postId}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "existing-surface[PUT /v0/posts/{postId}]"
+      },
+      "covered_by": {
+        "write": "update_post"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v0/posts/{postId}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "existing-surface[DELETE /v0/posts/{postId}]"
+      },
+      "covered_by": {
+        "write": "delete_post"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v0/posts/{postId}/comments",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "existing-surface[GET /v0/posts/{postId}/comments]"
+      },
+      "covered_by": {
+        "stream": "comments"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v0/posts/{postId}/comments",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "existing-surface[POST /v0/posts/{postId}/comments]"
+      },
+      "covered_by": {
+        "write": "create_post_comment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v0/posts/{postId}/comments/count",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "existing-surface[GET /v0/posts/{postId}/comments/count]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "a count-only aggregate of a post's comments; no additional record data",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v0/posts/{postId}/comments/{commentId}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "existing-surface[GET /v0/posts/{postId}/comments/{commentId}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-comment lookup by id; fully covered by the comments list stream",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v0/posts/{postId}/comments/{commentId}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "existing-surface[DELETE /v0/posts/{postId}/comments/{commentId}]"
+      },
+      "covered_by": {
+        "write": "delete_post_comment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v0/posts/{postId}/reactions",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "existing-surface[GET /v0/posts/{postId}/reactions]"
+      },
+      "covered_by": {
+        "stream": "post_reactions"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v0/posts/{postId}/reactions",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "existing-surface[POST /v0/posts/{postId}/reactions]"
+      },
+      "covered_by": {
+        "write": "create_post_reaction"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v0/posts/{postId}/reactions/count",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "existing-surface[GET /v0/posts/{postId}/reactions/count]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "a count-only aggregate of a post's reactions; no additional record data",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v0/posts/{postId}/reactions/{reactionId}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "existing-surface[GET /v0/posts/{postId}/reactions/{reactionId}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-reaction lookup by id; fully covered by the post_reactions stream",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v0/posts/{postId}/reactions/{reactionId}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "existing-surface[DELETE /v0/posts/{postId}/reactions/{reactionId}]"
+      },
+      "covered_by": {
+        "write": "delete_post_reaction"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v0/privacy",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "existing-surface[DELETE /v0/privacy]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "a GDPR/CCPA-style irreversible erasure of a specific end user's data across the whole Beamer account; a compliance action, not a routine reverse-ETL data mutation",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v0/team",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "existing-surface[POST /v0/team]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "invites a new BigMailer-account-style team member into the Beamer workspace itself (account administration, not product data); the third-party reference could not fully document its body schema, and legacy has no precedent for it",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v0/team",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "existing-surface[PUT /v0/team]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "changes a team member's role/permissions; account administration, not product data; see POST /team",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v0/team",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "existing-surface[DELETE /v0/team]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "removes a team member from the Beamer workspace; account administration with no data-record shape, irreversible",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v0/unread",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "existing-surface[GET /v0/unread]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "a filtered, stateful view over the posts stream (which posts this specific end user has not yet seen); defaults to marking those posts as read as a GET-time side effect, which a read-only sync connector must never trigger implicitly",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v0/unread/count",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "existing-surface[GET /v0/unread/count]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "count-only aggregate of the unread view; same reasoning as /unread",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v0/users",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "existing-surface[GET /v0/users]"
+      },
+      "covered_by": {
+        "stream": "users"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v0/users",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "existing-surface[POST /v0/users]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Scale-plan-only end-user identity registration; creates/overwrites Beamer's own end-user profile store, a distinct concern from this connector's post/feature-request/NPS data sync and gated behind a specific paid plan tier not universally available",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v0/users",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "existing-surface[PUT /v0/users]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "bulk end-user profile update, addressed by a query-string filter (userId/beamerId/userEmail) rather than a single record id; see POST /users",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v0/users",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "beamer-artifact-2026-08-09",
+        "source_url": "https://getbeamer-api.pages.dev/",
+        "source_kind": "html_reference",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985",
+        "coordinate": "existing-surface[DELETE /v0/users]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "bulk end-user deletion by semicolon-separated id list, addressed by a query-string filter rather than a single record id; irreversible end-user data removal",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    }
   ]
 }

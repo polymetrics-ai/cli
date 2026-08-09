@@ -1,0 +1,707 @@
+{
+  "tagline": "Run Mailosaur's declared streams and reverse-ETL actions.",
+  "usage": "pm mailosaur \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "api get analysis spam id",
+        "api get api analysis deliverability id",
+        "api get api devices",
+        "api get api devices id otp",
+        "api get api files attachments id",
+        "api get api files email id",
+        "api get api messages",
+        "api get api messages id",
+        "api get api servers",
+        "api get api servers id",
+        "api get api servers id password",
+        "api get api usage limits",
+        "api get api usage transactions",
+        "api get messages id",
+        "api get usage limits",
+        "messages list",
+        "servers list",
+        "transactions list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "api delete api devices id",
+        "api delete api messages",
+        "api delete api messages id",
+        "api delete api servers id",
+        "api delete messages id",
+        "api delete servers id",
+        "api post api devices",
+        "api post api devices otp",
+        "api post api messages",
+        "api post api messages id forward",
+        "api post api messages id reply",
+        "api post api messages search",
+        "api post api servers",
+        "api post servers",
+        "api put api servers id"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "api delete api devices id",
+      "summary": "Documented DELETE /api/devices/:id (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://mailosaur.com/docs/api",
+      "examples": [
+        "pm mailosaur api delete api devices id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/devices/:id"
+        }
+      ],
+      "operation": "mailosaur.delete.api-devices-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete api messages",
+      "summary": "Documented DELETE /api/messages (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://mailosaur.com/docs/api",
+      "examples": [
+        "pm mailosaur api delete api messages --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/messages"
+        }
+      ],
+      "operation": "mailosaur.delete.api-messages",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete api messages id",
+      "summary": "Documented DELETE /api/messages/:id (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://mailosaur.com/docs/api",
+      "examples": [
+        "pm mailosaur api delete api messages id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/messages/:id"
+        }
+      ],
+      "operation": "mailosaur.delete.api-messages-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete api servers id",
+      "summary": "Documented DELETE /api/servers/:id (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://mailosaur.com/docs/api",
+      "examples": [
+        "pm mailosaur api delete api servers id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/servers/:id"
+        }
+      ],
+      "operation": "mailosaur.delete.api-servers-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete messages id",
+      "summary": "Documented DELETE /messages/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://mailosaur.com/docs/api",
+      "examples": [
+        "pm mailosaur api delete messages id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/messages/{id}"
+        }
+      ],
+      "operation": "mailosaur.delete.messages-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete servers id",
+      "summary": "Documented DELETE /servers/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://mailosaur.com/docs/api",
+      "examples": [
+        "pm mailosaur api delete servers id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/servers/{id}"
+        }
+      ],
+      "operation": "mailosaur.delete.servers-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api get analysis spam id",
+      "summary": "Documented GET /analysis/spam/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://mailosaur.com/docs/api",
+      "examples": [
+        "pm mailosaur api get analysis spam id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/analysis/spam/{id}"
+        }
+      ],
+      "operation": "mailosaur.get.analysis-spam-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api analysis deliverability id",
+      "summary": "Documented GET /api/analysis/deliverability/:id (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://mailosaur.com/docs/api",
+      "examples": [
+        "pm mailosaur api get api analysis deliverability id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/analysis/deliverability/:id"
+        }
+      ],
+      "operation": "mailosaur.get.api-analysis-deliverability-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api devices",
+      "summary": "Documented GET /api/devices (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://mailosaur.com/docs/api",
+      "examples": [
+        "pm mailosaur api get api devices --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/devices"
+        }
+      ],
+      "operation": "mailosaur.get.api-devices",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api devices id otp",
+      "summary": "Documented GET /api/devices/:id/otp (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://mailosaur.com/docs/api",
+      "examples": [
+        "pm mailosaur api get api devices id otp --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/devices/:id/otp"
+        }
+      ],
+      "operation": "mailosaur.get.api-devices-id-otp",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api files attachments id",
+      "summary": "Documented GET /api/files/attachments/:id (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://mailosaur.com/docs/api",
+      "examples": [
+        "pm mailosaur api get api files attachments id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/files/attachments/:id"
+        }
+      ],
+      "operation": "mailosaur.get.api-files-attachments-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api files email id",
+      "summary": "Documented GET /api/files/email/:id (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://mailosaur.com/docs/api",
+      "examples": [
+        "pm mailosaur api get api files email id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/files/email/:id"
+        }
+      ],
+      "operation": "mailosaur.get.api-files-email-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api messages",
+      "summary": "Documented GET /api/messages (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://mailosaur.com/docs/api",
+      "examples": [
+        "pm mailosaur api get api messages --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/messages"
+        }
+      ],
+      "operation": "mailosaur.get.api-messages",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api messages id",
+      "summary": "Documented GET /api/messages/:id (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://mailosaur.com/docs/api",
+      "examples": [
+        "pm mailosaur api get api messages id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/messages/:id"
+        }
+      ],
+      "operation": "mailosaur.get.api-messages-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api servers",
+      "summary": "Documented GET /api/servers (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://mailosaur.com/docs/api",
+      "examples": [
+        "pm mailosaur api get api servers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/servers"
+        }
+      ],
+      "operation": "mailosaur.get.api-servers",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api servers id",
+      "summary": "Documented GET /api/servers/:id (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://mailosaur.com/docs/api",
+      "examples": [
+        "pm mailosaur api get api servers id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/servers/:id"
+        }
+      ],
+      "operation": "mailosaur.get.api-servers-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api servers id password",
+      "summary": "Documented GET /api/servers/:id/password (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://mailosaur.com/docs/api",
+      "examples": [
+        "pm mailosaur api get api servers id password --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/servers/:id/password"
+        }
+      ],
+      "operation": "mailosaur.get.api-servers-id-password",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api usage limits",
+      "summary": "Documented GET /api/usage/limits (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://mailosaur.com/docs/api",
+      "examples": [
+        "pm mailosaur api get api usage limits --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/usage/limits"
+        }
+      ],
+      "operation": "mailosaur.get.api-usage-limits",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api usage transactions",
+      "summary": "Documented GET /api/usage/transactions (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://mailosaur.com/docs/api",
+      "examples": [
+        "pm mailosaur api get api usage transactions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/usage/transactions"
+        }
+      ],
+      "operation": "mailosaur.get.api-usage-transactions",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get messages id",
+      "summary": "Documented GET /messages/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://mailosaur.com/docs/api",
+      "examples": [
+        "pm mailosaur api get messages id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/messages/{id}"
+        }
+      ],
+      "operation": "mailosaur.get.messages-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get usage limits",
+      "summary": "Documented GET /usage/limits (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://mailosaur.com/docs/api",
+      "examples": [
+        "pm mailosaur api get usage limits --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/usage/limits"
+        }
+      ],
+      "operation": "mailosaur.get.usage-limits",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api post api devices",
+      "summary": "Documented POST /api/devices (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://mailosaur.com/docs/api",
+      "examples": [
+        "pm mailosaur api post api devices --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/devices"
+        }
+      ],
+      "operation": "mailosaur.post.api-devices",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api devices otp",
+      "summary": "Documented POST /api/devices/otp (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://mailosaur.com/docs/api",
+      "examples": [
+        "pm mailosaur api post api devices otp --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/devices/otp"
+        }
+      ],
+      "operation": "mailosaur.post.api-devices-otp",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api messages",
+      "summary": "Documented POST /api/messages (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://mailosaur.com/docs/api",
+      "examples": [
+        "pm mailosaur api post api messages --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/messages"
+        }
+      ],
+      "operation": "mailosaur.post.api-messages",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api messages id forward",
+      "summary": "Documented POST /api/messages/:id/forward (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://mailosaur.com/docs/api",
+      "examples": [
+        "pm mailosaur api post api messages id forward --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/messages/:id/forward"
+        }
+      ],
+      "operation": "mailosaur.post.api-messages-id-forward",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api messages id reply",
+      "summary": "Documented POST /api/messages/:id/reply (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://mailosaur.com/docs/api",
+      "examples": [
+        "pm mailosaur api post api messages id reply --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/messages/:id/reply"
+        }
+      ],
+      "operation": "mailosaur.post.api-messages-id-reply",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api messages search",
+      "summary": "Documented POST /api/messages/search (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://mailosaur.com/docs/api",
+      "examples": [
+        "pm mailosaur api post api messages search --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/messages/search"
+        }
+      ],
+      "operation": "mailosaur.post.api-messages-search",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api servers",
+      "summary": "Documented POST /api/servers (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://mailosaur.com/docs/api",
+      "examples": [
+        "pm mailosaur api post api servers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/servers"
+        }
+      ],
+      "operation": "mailosaur.post.api-servers",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post servers",
+      "summary": "Documented POST /servers (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://mailosaur.com/docs/api",
+      "examples": [
+        "pm mailosaur api post servers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/servers"
+        }
+      ],
+      "operation": "mailosaur.post.servers",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put api servers id",
+      "summary": "Documented PUT /api/servers/:id (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://mailosaur.com/docs/api",
+      "examples": [
+        "pm mailosaur api put api servers id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/servers/:id"
+        }
+      ],
+      "operation": "mailosaur.put.api-servers-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "messages list",
+      "summary": "Run the messages ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "messages",
+      "source_url": "https://mailosaur.com/docs/api",
+      "examples": [
+        "pm mailosaur messages list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/messages"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "servers list",
+      "summary": "Run the servers ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "servers",
+      "source_url": "https://mailosaur.com/docs/api",
+      "examples": [
+        "pm mailosaur servers list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/servers"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "transactions list",
+      "summary": "Run the transactions ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "transactions",
+      "source_url": "https://mailosaur.com/docs/api",
+      "examples": [
+        "pm mailosaur transactions list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/usage/transactions"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    }
+  ]
+}

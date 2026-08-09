@@ -1,0 +1,1950 @@
+{
+  "tagline": "Run CallRail's declared streams and reverse-ETL actions.",
+  "usage": "pm callrail \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "accounts list",
+        "api get a account-id caller-ids caller-ids-id json",
+        "api get a account-id calls call-id json",
+        "api get a account-id calls call-id recording-json",
+        "api get a account-id calls summary-json",
+        "api get a account-id calls timeseries-json",
+        "api get a account-id companies company-id json",
+        "api get a account-id form-submissions ignored-fields-json",
+        "api get a account-id forms summary-json",
+        "api get a account-id integration-triggers integration-trigger-id json",
+        "api get a account-id integrations configurations",
+        "api get a account-id integrations integration-id json",
+        "api get a account-id json",
+        "api get a account-id message-flows configurations",
+        "api get a account-id message-flows message-flow-id json",
+        "api get a account-id sms-threads thread-id json",
+        "api get a account-id summary-emails summary-email-id json",
+        "api get a account-id summary-emails-json",
+        "api get a account-id text-messages conversation-id json",
+        "api get a account-id trackers request-number-json",
+        "api get a account-id trackers tracker-id json",
+        "api get a account-id users user-id json",
+        "api get v3 a account-id calls 444941612-json",
+        "api get v3 a account-id integration-triggers integration-triggers-id json",
+        "api get v3 a account-id summary-emails",
+        "caller ids list",
+        "calls list",
+        "companies list",
+        "form submissions list",
+        "integration filters list",
+        "integrations list",
+        "lead timeline list",
+        "leads list",
+        "message flows list",
+        "notifications list",
+        "page views list",
+        "sms threads list",
+        "tags list",
+        "text messages list",
+        "trackers list",
+        "users list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "api delete a account-id companies company-id json",
+        "api delete a account-id summary-emails summary-email-id json",
+        "api delete a account-id trackers tracker-id json",
+        "api delete v3 a account-id integration-triggers integration-triggers-id json",
+        "api post a account-id form-submissions-json",
+        "api post a account-id summary-emails-json",
+        "api post a account-id trackers-json",
+        "api post a agency-id trackers-json",
+        "api post v3 a account-id companies bulk-update-json",
+        "api post v3 a account-id form-submissions ignored-fields-json",
+        "api put a account-id companies bulk-update-json",
+        "api put a account-id form-submissions form-submission-id json",
+        "api put a account-id summary-emails summary-email-id json",
+        "api put v3 a account-id message-flows message-flow-id json",
+        "create caller id apply",
+        "create company apply",
+        "create integration apply",
+        "create integration filter apply",
+        "create message flow apply",
+        "create notification apply",
+        "create outbound call apply",
+        "create tag apply",
+        "create user apply",
+        "delete caller id apply",
+        "delete integration filter apply",
+        "delete message flow apply",
+        "delete notification apply",
+        "delete tag apply",
+        "delete user apply",
+        "disable integration apply",
+        "send text message apply",
+        "update call apply",
+        "update company apply",
+        "update integration apply",
+        "update integration filter apply",
+        "update message flow apply",
+        "update notification apply",
+        "update sms thread apply",
+        "update tag apply",
+        "update tracker apply",
+        "update user apply"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "accounts list",
+      "summary": "Run the accounts ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "accounts",
+      "source_url": "https://apidocs.callrail.com/",
+      "examples": [
+        "pm callrail accounts list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/a.json"
+        }
+      ]
+    },
+    {
+      "path": "api delete a account-id companies company-id json",
+      "summary": "Documented DELETE /a/{account_id}/companies/{company_id}.json (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.callrail.com/",
+      "examples": [
+        "pm callrail api delete a account-id companies company-id json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/a/{account_id}/companies/{company_id}.json"
+        }
+      ],
+      "operation": "callrail.delete.a-account-id-companies-company-id-json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete a account-id summary-emails summary-email-id json",
+      "summary": "Documented DELETE /a/{account_id}/summary_emails/{summary_email_id}.json (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.callrail.com/",
+      "examples": [
+        "pm callrail api delete a account-id summary-emails summary-email-id json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/a/{account_id}/summary_emails/{summary_email_id}.json"
+        }
+      ],
+      "operation": "callrail.delete.a-account-id-summary-emails-summary-email-id-json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete a account-id trackers tracker-id json",
+      "summary": "Documented DELETE /a/{account_id}/trackers/{tracker_id}.json (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.callrail.com/",
+      "examples": [
+        "pm callrail api delete a account-id trackers tracker-id json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/a/{account_id}/trackers/{tracker_id}.json"
+        }
+      ],
+      "operation": "callrail.delete.a-account-id-trackers-tracker-id-json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v3 a account-id integration-triggers integration-triggers-id json",
+      "summary": "Documented DELETE /v3/a/{account_id}/integration_triggers/{integration_triggers_id}.json (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.callrail.com/",
+      "examples": [
+        "pm callrail api delete v3 a account-id integration-triggers integration-triggers-id json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v3/a/{account_id}/integration_triggers/{integration_triggers_id}.json"
+        }
+      ],
+      "operation": "callrail.delete.v3-a-account-id-integration-triggers-integration-triggers-id-json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api get a account-id caller-ids caller-ids-id json",
+      "summary": "Documented GET /a/{account_id}/caller_ids/{caller_ids_id}.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.callrail.com/",
+      "examples": [
+        "pm callrail api get a account-id caller-ids caller-ids-id json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/a/{account_id}/caller_ids/{caller_ids_id}.json"
+        }
+      ],
+      "operation": "callrail.get.a-account-id-caller-ids-caller-ids-id-json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get a account-id calls call-id json",
+      "summary": "Documented GET /a/{account_id}/calls/{call_id}.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.callrail.com/",
+      "examples": [
+        "pm callrail api get a account-id calls call-id json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/a/{account_id}/calls/{call_id}.json"
+        }
+      ],
+      "operation": "callrail.get.a-account-id-calls-call-id-json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get a account-id calls call-id recording-json",
+      "summary": "Documented GET /a/{account_id}/calls/{call_id}/recording.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.callrail.com/",
+      "examples": [
+        "pm callrail api get a account-id calls call-id recording-json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/a/{account_id}/calls/{call_id}/recording.json"
+        }
+      ],
+      "operation": "callrail.get.a-account-id-calls-call-id-recording-json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get a account-id calls summary-json",
+      "summary": "Documented GET /a/{account_id}/calls/summary.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.callrail.com/",
+      "examples": [
+        "pm callrail api get a account-id calls summary-json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/a/{account_id}/calls/summary.json"
+        }
+      ],
+      "operation": "callrail.get.a-account-id-calls-summary-json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get a account-id calls timeseries-json",
+      "summary": "Documented GET /a/{account_id}/calls/timeseries.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.callrail.com/",
+      "examples": [
+        "pm callrail api get a account-id calls timeseries-json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/a/{account_id}/calls/timeseries.json"
+        }
+      ],
+      "operation": "callrail.get.a-account-id-calls-timeseries-json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get a account-id companies company-id json",
+      "summary": "Documented GET /a/{account_id}/companies/{company_id}.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.callrail.com/",
+      "examples": [
+        "pm callrail api get a account-id companies company-id json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/a/{account_id}/companies/{company_id}.json"
+        }
+      ],
+      "operation": "callrail.get.a-account-id-companies-company-id-json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get a account-id form-submissions ignored-fields-json",
+      "summary": "Documented GET /a/{account_id}/form_submissions/ignored_fields.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.callrail.com/",
+      "examples": [
+        "pm callrail api get a account-id form-submissions ignored-fields-json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/a/{account_id}/form_submissions/ignored_fields.json"
+        }
+      ],
+      "operation": "callrail.get.a-account-id-form-submissions-ignored-fields-json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get a account-id forms summary-json",
+      "summary": "Documented GET /a/{account_id}/forms/summary.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.callrail.com/",
+      "examples": [
+        "pm callrail api get a account-id forms summary-json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/a/{account_id}/forms/summary.json"
+        }
+      ],
+      "operation": "callrail.get.a-account-id-forms-summary-json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get a account-id integration-triggers integration-trigger-id json",
+      "summary": "Documented GET /a/{account_id}/integration_triggers/{integration_trigger_id}.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.callrail.com/",
+      "examples": [
+        "pm callrail api get a account-id integration-triggers integration-trigger-id json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/a/{account_id}/integration_triggers/{integration_trigger_id}.json"
+        }
+      ],
+      "operation": "callrail.get.a-account-id-integration-triggers-integration-trigger-id-json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get a account-id integrations configurations",
+      "summary": "Documented GET /a/{account_id}/integrations/configurations (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.callrail.com/",
+      "examples": [
+        "pm callrail api get a account-id integrations configurations --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/a/{account_id}/integrations/configurations"
+        }
+      ],
+      "operation": "callrail.get.a-account-id-integrations-configurations",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get a account-id integrations integration-id json",
+      "summary": "Documented GET /a/{account_id}/integrations/{integration_id}.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.callrail.com/",
+      "examples": [
+        "pm callrail api get a account-id integrations integration-id json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/a/{account_id}/integrations/{integration_id}.json"
+        }
+      ],
+      "operation": "callrail.get.a-account-id-integrations-integration-id-json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get a account-id json",
+      "summary": "Documented GET /a/{account_id}.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.callrail.com/",
+      "examples": [
+        "pm callrail api get a account-id json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/a/{account_id}.json"
+        }
+      ],
+      "operation": "callrail.get.a-account-id-json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get a account-id message-flows configurations",
+      "summary": "Documented GET /a/{account_id}/message-flows/configurations (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.callrail.com/",
+      "examples": [
+        "pm callrail api get a account-id message-flows configurations --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/a/{account_id}/message-flows/configurations"
+        }
+      ],
+      "operation": "callrail.get.a-account-id-message-flows-configurations",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get a account-id message-flows message-flow-id json",
+      "summary": "Documented GET /a/{account_id}/message-flows/{message_flow_id}.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.callrail.com/",
+      "examples": [
+        "pm callrail api get a account-id message-flows message-flow-id json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/a/{account_id}/message-flows/{message_flow_id}.json"
+        }
+      ],
+      "operation": "callrail.get.a-account-id-message-flows-message-flow-id-json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get a account-id sms-threads thread-id json",
+      "summary": "Documented GET /a/{account_id}/sms-threads/{thread_id}.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.callrail.com/",
+      "examples": [
+        "pm callrail api get a account-id sms-threads thread-id json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/a/{account_id}/sms-threads/{thread_id}.json"
+        }
+      ],
+      "operation": "callrail.get.a-account-id-sms-threads-thread-id-json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get a account-id summary-emails summary-email-id json",
+      "summary": "Documented GET /a/{account_id}/summary_emails/{summary_email_id}.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.callrail.com/",
+      "examples": [
+        "pm callrail api get a account-id summary-emails summary-email-id json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/a/{account_id}/summary_emails/{summary_email_id}.json"
+        }
+      ],
+      "operation": "callrail.get.a-account-id-summary-emails-summary-email-id-json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get a account-id summary-emails-json",
+      "summary": "Documented GET /a/{account_id}/summary_emails.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.callrail.com/",
+      "examples": [
+        "pm callrail api get a account-id summary-emails-json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/a/{account_id}/summary_emails.json"
+        }
+      ],
+      "operation": "callrail.get.a-account-id-summary-emails-json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get a account-id text-messages conversation-id json",
+      "summary": "Documented GET /a/{account_id}/text-messages/{conversation_id}.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.callrail.com/",
+      "examples": [
+        "pm callrail api get a account-id text-messages conversation-id json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/a/{account_id}/text-messages/{conversation_id}.json"
+        }
+      ],
+      "operation": "callrail.get.a-account-id-text-messages-conversation-id-json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get a account-id trackers request-number-json",
+      "summary": "Documented GET /a/{account_id}/trackers/request_number.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.callrail.com/",
+      "examples": [
+        "pm callrail api get a account-id trackers request-number-json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/a/{account_id}/trackers/request_number.json"
+        }
+      ],
+      "operation": "callrail.get.a-account-id-trackers-request-number-json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get a account-id trackers tracker-id json",
+      "summary": "Documented GET /a/{account_id}/trackers/{tracker_id}.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.callrail.com/",
+      "examples": [
+        "pm callrail api get a account-id trackers tracker-id json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/a/{account_id}/trackers/{tracker_id}.json"
+        }
+      ],
+      "operation": "callrail.get.a-account-id-trackers-tracker-id-json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get a account-id users user-id json",
+      "summary": "Documented GET /a/{account_id}/users/{user_id}.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.callrail.com/",
+      "examples": [
+        "pm callrail api get a account-id users user-id json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/a/{account_id}/users/{user_id}.json"
+        }
+      ],
+      "operation": "callrail.get.a-account-id-users-user-id-json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 a account-id calls 444941612-json",
+      "summary": "Documented GET /v3/a/{account_id}/calls/444941612.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.callrail.com/",
+      "examples": [
+        "pm callrail api get v3 a account-id calls 444941612-json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/a/{account_id}/calls/444941612.json"
+        }
+      ],
+      "operation": "callrail.get.v3-a-account-id-calls-444941612-json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 a account-id integration-triggers integration-triggers-id json",
+      "summary": "Documented GET /v3/a/{account_id}/integration_triggers/{integration_triggers_id}.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.callrail.com/",
+      "examples": [
+        "pm callrail api get v3 a account-id integration-triggers integration-triggers-id json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/a/{account_id}/integration_triggers/{integration_triggers_id}.json"
+        }
+      ],
+      "operation": "callrail.get.v3-a-account-id-integration-triggers-integration-triggers-id-json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 a account-id summary-emails",
+      "summary": "Documented GET /v3/a/{account_id}/summary_emails (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.callrail.com/",
+      "examples": [
+        "pm callrail api get v3 a account-id summary-emails --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/a/{account_id}/summary_emails"
+        }
+      ],
+      "operation": "callrail.get.v3-a-account-id-summary-emails",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api post a account-id form-submissions-json",
+      "summary": "Documented POST /a/{account_id}/form_submissions.json (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.callrail.com/",
+      "examples": [
+        "pm callrail api post a account-id form-submissions-json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/a/{account_id}/form_submissions.json"
+        }
+      ],
+      "operation": "callrail.post.a-account-id-form-submissions-json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post a account-id summary-emails-json",
+      "summary": "Documented POST /a/{account_id}/summary_emails.json (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.callrail.com/",
+      "examples": [
+        "pm callrail api post a account-id summary-emails-json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/a/{account_id}/summary_emails.json"
+        }
+      ],
+      "operation": "callrail.post.a-account-id-summary-emails-json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post a account-id trackers-json",
+      "summary": "Documented POST /a/{account_id}/trackers.json (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.callrail.com/",
+      "examples": [
+        "pm callrail api post a account-id trackers-json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/a/{account_id}/trackers.json"
+        }
+      ],
+      "operation": "callrail.post.a-account-id-trackers-json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post a agency-id trackers-json",
+      "summary": "Documented POST /a/{agency_id}/trackers.json (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.callrail.com/",
+      "examples": [
+        "pm callrail api post a agency-id trackers-json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/a/{agency_id}/trackers.json"
+        }
+      ],
+      "operation": "callrail.post.a-agency-id-trackers-json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v3 a account-id companies bulk-update-json",
+      "summary": "Documented POST /v3/a/{account_id}/companies/bulk_update.json (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.callrail.com/",
+      "examples": [
+        "pm callrail api post v3 a account-id companies bulk-update-json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v3/a/{account_id}/companies/bulk_update.json"
+        }
+      ],
+      "operation": "callrail.post.v3-a-account-id-companies-bulk-update-json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v3 a account-id form-submissions ignored-fields-json",
+      "summary": "Documented POST /v3/a/{account_id}/form_submissions/ignored_fields.json (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.callrail.com/",
+      "examples": [
+        "pm callrail api post v3 a account-id form-submissions ignored-fields-json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v3/a/{account_id}/form_submissions/ignored_fields.json"
+        }
+      ],
+      "operation": "callrail.post.v3-a-account-id-form-submissions-ignored-fields-json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put a account-id companies bulk-update-json",
+      "summary": "Documented PUT /a/{account_id}/companies/bulk_update.json (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.callrail.com/",
+      "examples": [
+        "pm callrail api put a account-id companies bulk-update-json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/a/{account_id}/companies/bulk_update.json"
+        }
+      ],
+      "operation": "callrail.put.a-account-id-companies-bulk-update-json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put a account-id form-submissions form-submission-id json",
+      "summary": "Documented PUT /a/{account_id}/form_submissions/{form_submission_id}.json (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.callrail.com/",
+      "examples": [
+        "pm callrail api put a account-id form-submissions form-submission-id json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/a/{account_id}/form_submissions/{form_submission_id}.json"
+        }
+      ],
+      "operation": "callrail.put.a-account-id-form-submissions-form-submission-id-json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put a account-id summary-emails summary-email-id json",
+      "summary": "Documented PUT /a/{account_id}/summary_emails/{summary_email_id}.json (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.callrail.com/",
+      "examples": [
+        "pm callrail api put a account-id summary-emails summary-email-id json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/a/{account_id}/summary_emails/{summary_email_id}.json"
+        }
+      ],
+      "operation": "callrail.put.a-account-id-summary-emails-summary-email-id-json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v3 a account-id message-flows message-flow-id json",
+      "summary": "Documented PUT /v3/a/{account_id}/message-flows/{message_flow_id}.json (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.callrail.com/",
+      "examples": [
+        "pm callrail api put v3 a account-id message-flows message-flow-id json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v3/a/{account_id}/message-flows/{message_flow_id}.json"
+        }
+      ],
+      "operation": "callrail.put.v3-a-account-id-message-flows-message-flow-id-json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "caller ids list",
+      "summary": "Run the caller ids ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "caller_ids",
+      "source_url": "https://apidocs.callrail.com/",
+      "examples": [
+        "pm callrail caller ids list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/a/{account_id}/caller_ids.json"
+        }
+      ]
+    },
+    {
+      "path": "calls list",
+      "summary": "Run the calls ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "calls",
+      "source_url": "https://apidocs.callrail.com/",
+      "examples": [
+        "pm callrail calls list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/a/{account_id}/calls.json"
+        }
+      ]
+    },
+    {
+      "path": "companies list",
+      "summary": "Run the companies ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "companies",
+      "source_url": "https://apidocs.callrail.com/",
+      "examples": [
+        "pm callrail companies list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/a/{account_id}/companies.json"
+        }
+      ]
+    },
+    {
+      "path": "create caller id apply",
+      "summary": "Plan and execute the create caller id reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_caller_id",
+      "source_url": "https://apidocs.callrail.com/",
+      "flags": [
+        {
+          "name": "company_id",
+          "type": "string",
+          "summary": "Required company id record field.",
+          "maps_to": "record.company_id",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        },
+        {
+          "name": "phone_number",
+          "type": "string",
+          "summary": "Required phone number record field.",
+          "maps_to": "record.phone_number",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm callrail create caller id apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/a/{account_id}/caller_ids.json"
+        }
+      ],
+      "risk": "registers an outbound caller-id number and immediately triggers a real verification phone call to it; a real-world side effect, approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create company apply",
+      "summary": "Plan and execute the create company reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_company",
+      "source_url": "https://apidocs.callrail.com/",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm callrail create company apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/a/{account_id}/companies.json"
+        }
+      ],
+      "risk": "creates a new company (a billable tracking entity) within the account; approval recommended",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create integration apply",
+      "summary": "Plan and execute the create integration reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_integration",
+      "source_url": "https://apidocs.callrail.com/",
+      "flags": [
+        {
+          "name": "company_id",
+          "type": "string",
+          "summary": "Required company id record field.",
+          "maps_to": "record.company_id",
+          "required": true
+        },
+        {
+          "name": "type",
+          "type": "string",
+          "summary": "Required type record field.",
+          "maps_to": "record.type",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm callrail create integration apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/a/{account_id}/integrations.json"
+        }
+      ],
+      "risk": "creates and activates a Webhooks or Custom-cookie-capture integration for a company (the only 2 integration types the API can create); approval recommended since Webhooks integrations push call data to an external URL",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create integration filter apply",
+      "summary": "Plan and execute the create integration filter reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_integration_filter",
+      "source_url": "https://apidocs.callrail.com/",
+      "flags": [
+        {
+          "name": "company_id",
+          "type": "string",
+          "summary": "Required company id record field.",
+          "maps_to": "record.company_id",
+          "required": true
+        },
+        {
+          "name": "integration_id",
+          "type": "integer",
+          "summary": "Required integration id record field.",
+          "maps_to": "record.integration_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm callrail create integration filter apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/a/{account_id}/integration_triggers.json"
+        }
+      ],
+      "risk": "adds a filter narrowing which calls trigger an existing integration; low-risk external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create message flow apply",
+      "summary": "Plan and execute the create message flow reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_message_flow",
+      "source_url": "https://apidocs.callrail.com/",
+      "examples": [
+        "pm callrail create message flow apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/a/{account_id}/message-flows.json"
+        }
+      ],
+      "risk": "creates a new automated SMS message flow (a step-graph of tag/response actions) for a company; low-risk external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create notification apply",
+      "summary": "Plan and execute the create notification reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_notification",
+      "source_url": "https://apidocs.callrail.com/",
+      "examples": [
+        "pm callrail create notification apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/a/{account_id}/notifications.json"
+        }
+      ],
+      "risk": "creates a call/text alert subscription for a user; low-risk external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create outbound call apply",
+      "summary": "Plan and execute the create outbound call reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_outbound_call",
+      "source_url": "https://apidocs.callrail.com/",
+      "flags": [
+        {
+          "name": "business_phone_number",
+          "type": "string",
+          "summary": "Required business phone number record field.",
+          "maps_to": "record.business_phone_number",
+          "required": true
+        },
+        {
+          "name": "caller_id",
+          "type": "string",
+          "summary": "Required caller id record field.",
+          "maps_to": "record.caller_id",
+          "required": true
+        },
+        {
+          "name": "customer_phone_number",
+          "type": "string",
+          "summary": "Required customer phone number record field.",
+          "maps_to": "record.customer_phone_number",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm callrail create outbound call apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/a/{account_id}/calls.json"
+        }
+      ],
+      "risk": "places a real outbound phone call connecting a business and a customer number (US/Canada only); a real-world side effect outside the CallRail account itself, approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create tag apply",
+      "summary": "Plan and execute the create tag reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_tag",
+      "source_url": "https://apidocs.callrail.com/",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm callrail create tag apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/a/{account_id}/tags.json"
+        }
+      ],
+      "risk": "creates a new call/text tag definition visible account- or company-wide; low-risk external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create user apply",
+      "summary": "Plan and execute the create user reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_user",
+      "source_url": "https://apidocs.callrail.com/",
+      "flags": [
+        {
+          "name": "email",
+          "type": "string",
+          "summary": "Required email record field.",
+          "maps_to": "record.email",
+          "required": true
+        },
+        {
+          "name": "first_name",
+          "type": "string",
+          "summary": "Required first name record field.",
+          "maps_to": "record.first_name",
+          "required": true
+        },
+        {
+          "name": "last_name",
+          "type": "string",
+          "summary": "Required last name record field.",
+          "maps_to": "record.last_name",
+          "required": true
+        },
+        {
+          "name": "role",
+          "type": "string",
+          "summary": "Required role record field.",
+          "maps_to": "record.role",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm callrail create user apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/a/{account_id}/users.json"
+        }
+      ],
+      "risk": "creates a new CallRail user and emails them a password-setup prompt; requires an administrator-scoped API key; approval recommended",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete caller id apply",
+      "summary": "Plan and execute the delete caller id reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_caller_id",
+      "source_url": "https://apidocs.callrail.com/",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm callrail delete caller id apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/a/{account_id}/caller_ids/{caller_ids_id}.json"
+        }
+      ],
+      "risk": "removes an outbound caller id from the company; irreversible, low-risk, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete integration filter apply",
+      "summary": "Plan and execute the delete integration filter reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_integration_filter",
+      "source_url": "https://apidocs.callrail.com/",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm callrail delete integration filter apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/a/{account_id}/integration_triggers/{integration_trigger_id}.json"
+        }
+      ],
+      "risk": "removes a filter; the parent integration keeps firing for every call, unfiltered, once this is removed; low-risk, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete message flow apply",
+      "summary": "Plan and execute the delete message flow reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_message_flow",
+      "source_url": "https://apidocs.callrail.com/",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm callrail delete message flow apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/a/{account_id}/message-flows/{message_flow_id}.json"
+        }
+      ],
+      "risk": "permanently removes a message flow; any tracker still referencing it stops running the automated SMS steps; irreversible, approval recommended",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete notification apply",
+      "summary": "Plan and execute the delete notification reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_notification",
+      "source_url": "https://apidocs.callrail.com/",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm callrail delete notification apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/a/{account_id}/notifications/{notification_id}.json"
+        }
+      ],
+      "risk": "permanently removes a notification subscription (restricted to notifications managed by the current user); irreversible, low-risk, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete tag apply",
+      "summary": "Plan and execute the delete tag reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_tag",
+      "source_url": "https://apidocs.callrail.com/",
+      "examples": [
+        "pm callrail delete tag apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/a/{account_id}/tags/{tag_id}.json"
+        }
+      ],
+      "risk": "permanently removes a tag, including from every call/text interaction it has been applied to; irreversible, approval recommended",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete user apply",
+      "summary": "Plan and execute the delete user reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_user",
+      "source_url": "https://apidocs.callrail.com/",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm callrail delete user apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/a/{account_id}/users/{user_id}.json"
+        }
+      ],
+      "risk": "permanently removes a user's access to the account; requires an administrator-scoped API key; irreversible, approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "disable integration apply",
+      "summary": "Plan and execute the disable integration reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "disable_integration",
+      "source_url": "https://apidocs.callrail.com/",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm callrail disable integration apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/a/{account_id}/integrations/{integration_id}.json"
+        }
+      ],
+      "risk": "disables (the docs' own term; not a hard delete) an integration; stops any external data flow it previously drove; approval recommended",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "form submissions list",
+      "summary": "Run the form submissions ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "form_submissions",
+      "source_url": "https://apidocs.callrail.com/",
+      "examples": [
+        "pm callrail form submissions list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/a/{account_id}/form_submissions.json"
+        }
+      ]
+    },
+    {
+      "path": "integration filters list",
+      "summary": "Run the integration filters ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "integration_filters",
+      "source_url": "https://apidocs.callrail.com/",
+      "examples": [
+        "pm callrail integration filters list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/a/{account_id}/integration_triggers.json"
+        }
+      ]
+    },
+    {
+      "path": "integrations list",
+      "summary": "Run the integrations ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "integrations",
+      "source_url": "https://apidocs.callrail.com/",
+      "examples": [
+        "pm callrail integrations list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/a/{account_id}/integrations.json"
+        }
+      ]
+    },
+    {
+      "path": "lead timeline list",
+      "summary": "Run the lead timeline ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "lead_timeline",
+      "source_url": "https://apidocs.callrail.com/",
+      "examples": [
+        "pm callrail lead timeline list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/a/{agency_id}/leads/{lead_id}/timeline.json"
+        }
+      ]
+    },
+    {
+      "path": "leads list",
+      "summary": "Run the leads ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "leads",
+      "source_url": "https://apidocs.callrail.com/",
+      "examples": [
+        "pm callrail leads list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/a/{account_id}/leads.json"
+        }
+      ]
+    },
+    {
+      "path": "message flows list",
+      "summary": "Run the message flows ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "message_flows",
+      "source_url": "https://apidocs.callrail.com/",
+      "examples": [
+        "pm callrail message flows list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/a/{account_id}/message-flows.json"
+        }
+      ]
+    },
+    {
+      "path": "notifications list",
+      "summary": "Run the notifications ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "notifications",
+      "source_url": "https://apidocs.callrail.com/",
+      "examples": [
+        "pm callrail notifications list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/a/{account_id}/notifications.json"
+        }
+      ]
+    },
+    {
+      "path": "page views list",
+      "summary": "Run the page views ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "page_views",
+      "source_url": "https://apidocs.callrail.com/",
+      "examples": [
+        "pm callrail page views list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/a/{account_id}/calls/{call_id}/page_views.json"
+        }
+      ]
+    },
+    {
+      "path": "send text message apply",
+      "summary": "Plan and execute the send text message reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "send_text_message",
+      "source_url": "https://apidocs.callrail.com/",
+      "flags": [
+        {
+          "name": "company_id",
+          "type": "string",
+          "summary": "Required company id record field.",
+          "maps_to": "record.company_id",
+          "required": true
+        },
+        {
+          "name": "content",
+          "type": "string",
+          "summary": "Required content record field.",
+          "maps_to": "record.content",
+          "required": true
+        },
+        {
+          "name": "customer_phone_number",
+          "type": "string",
+          "summary": "Required customer phone number record field.",
+          "maps_to": "record.customer_phone_number",
+          "required": true
+        },
+        {
+          "name": "tracking_number",
+          "type": "string",
+          "summary": "Required tracking number record field.",
+          "maps_to": "record.tracking_number",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm callrail send text message apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/a/{account_id}/text-messages.json"
+        }
+      ],
+      "risk": "sends a real SMS/MMS text message to a customer's phone (subject to 10DLC business-registration compliance rules); a real-world side effect outside the CallRail account itself, approval required. Direct file-upload MMS (multipart media_file) is out of scope — see api_surface.json/docs.md; the media_url variant covers publicly-hosted-image MMS instead.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "sms threads list",
+      "summary": "Run the sms threads ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "sms_threads",
+      "source_url": "https://apidocs.callrail.com/",
+      "examples": [
+        "pm callrail sms threads list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/a/{account_id}/sms-threads.json"
+        }
+      ]
+    },
+    {
+      "path": "tags list",
+      "summary": "Run the tags ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tags",
+      "source_url": "https://apidocs.callrail.com/",
+      "examples": [
+        "pm callrail tags list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/a/{account_id}/tags.json"
+        }
+      ]
+    },
+    {
+      "path": "text messages list",
+      "summary": "Run the text messages ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "text_messages",
+      "source_url": "https://apidocs.callrail.com/",
+      "examples": [
+        "pm callrail text messages list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/a/{account_id}/text-messages.json"
+        }
+      ]
+    },
+    {
+      "path": "trackers list",
+      "summary": "Run the trackers ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "trackers",
+      "source_url": "https://apidocs.callrail.com/",
+      "examples": [
+        "pm callrail trackers list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/a/{account_id}/trackers.json"
+        }
+      ]
+    },
+    {
+      "path": "update call apply",
+      "summary": "Plan and execute the update call reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_call",
+      "source_url": "https://apidocs.callrail.com/",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm callrail update call apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/a/{account_id}/calls/{call_id}.json"
+        }
+      ],
+      "risk": "applies tags/notes/lead-status/value/customer-name metadata to an existing call record; low-risk external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update company apply",
+      "summary": "Plan and execute the update company reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_company",
+      "source_url": "https://apidocs.callrail.com/",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm callrail update company apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/a/{account_id}/companies/{company_id}.json"
+        }
+      ],
+      "risk": "updates company configuration; setting status to disabled deactivates all of the company's tracking numbers and its dynamic-number-insertion script — approval recommended for status changes",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update integration apply",
+      "summary": "Plan and execute the update integration reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_integration",
+      "source_url": "https://apidocs.callrail.com/",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm callrail update integration apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/a/{account_id}/integrations/{integration_id}.json"
+        }
+      ],
+      "risk": "updates an integration's active/disabled state or its webhook/cookie-capture configuration; approval recommended",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update integration filter apply",
+      "summary": "Plan and execute the update integration filter reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_integration_filter",
+      "source_url": "https://apidocs.callrail.com/",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm callrail update integration filter apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/a/{account_id}/integration_triggers/{integration_trigger_id}.json"
+        }
+      ],
+      "risk": "updates an integration filter's trigger criteria; low-risk external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update message flow apply",
+      "summary": "Plan and execute the update message flow reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_message_flow",
+      "source_url": "https://apidocs.callrail.com/",
+      "examples": [
+        "pm callrail update message flow apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/a/{account_id}/message-flows.json"
+        }
+      ],
+      "risk": "replaces an existing message flow's step graph; the docs' own endpoint takes no {message_flow_id} path segment, identifying the flow purely via the body's id field; low-risk external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update notification apply",
+      "summary": "Plan and execute the update notification reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_notification",
+      "source_url": "https://apidocs.callrail.com/",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm callrail update notification apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/a/{account_id}/notifications/{notification_id}.json"
+        }
+      ],
+      "risk": "updates an existing notification's scope/channel settings; low-risk external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update sms thread apply",
+      "summary": "Plan and execute the update sms thread reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_sms_thread",
+      "source_url": "https://apidocs.callrail.com/",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm callrail update sms thread apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/a/{account_id}/sms-threads/{thread_id}.json"
+        }
+      ],
+      "risk": "applies notes/value/tags/lead-qualification metadata to an existing SMS thread; low-risk external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update tag apply",
+      "summary": "Plan and execute the update tag reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_tag",
+      "source_url": "https://apidocs.callrail.com/",
+      "examples": [
+        "pm callrail update tag apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/a/{account_id}/tags/{tag_id}.json"
+        }
+      ],
+      "risk": "renames/recolors/disables a tag; renaming changes the tag everywhere it is currently assigned; low-risk external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update tracker apply",
+      "summary": "Plan and execute the update tracker reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_tracker",
+      "source_url": "https://apidocs.callrail.com/",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm callrail update tracker apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/a/{account_id}/trackers/{tracker_id}.json"
+        }
+      ],
+      "risk": "reconfigures an existing (already-provisioned) session or source tracker's call flow, whisper message, SMS setting, or source rules; does not provision/deprovision a phone number itself, unlike create/disable; low-risk external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update user apply",
+      "summary": "Plan and execute the update user reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_user",
+      "source_url": "https://apidocs.callrail.com/",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm callrail update user apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/a/{account_id}/users/{user_id}.json"
+        }
+      ],
+      "risk": "updates a user's profile/role/company access; name/email changes are restricted to the API key's own owning user by CallRail; approval recommended for role/company changes",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "users list",
+      "summary": "Run the users ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "users",
+      "source_url": "https://apidocs.callrail.com/",
+      "examples": [
+        "pm callrail users list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/a/{account_id}/users.json"
+        }
+      ]
+    }
+  ]
+}

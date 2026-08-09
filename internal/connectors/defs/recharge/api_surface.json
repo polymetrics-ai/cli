@@ -1,76 +1,2670 @@
 {
-  "api": "Recharge API 2021-11 (https://api.rechargeapps.com)",
+  "api": "Recharge API 2021-11 (https://api.rechargeapps.com); provider artifact version: Recharge API v.2021-11 current rendered reference",
   "docs": "https://developer.rechargepayments.com/2021-11/",
-  "reviewed_at": "2026-07-03",
-  "scope": "migration: the 3 legacy-parity read streams only (customers, subscriptions, orders); legacy itself ships no writes (capabilities.write is false) and no other Recharge resource is modeled.",
+  "reviewed_at": "2026-08-09",
+  "operation_ledger_version": 2,
+  "scope": "Provider-artifact inventory generated from the cited html_reference artifact (127 documented operations across 1 provider-owned source document(s)). Every documented operation is represented; existing source-surface bindings absent from the artifact are retained and flagged with present-in-surface-absent-from-artifact.",
+  "artifacts": [
+    {
+      "id": "recharge-artifact-2026-08-09",
+      "url": "https://developer.rechargepayments.com/2021-11/",
+      "kind": "html_reference",
+      "version": "Recharge API v.2021-11 current rendered reference",
+      "retrieved_at": "2026-08-09",
+      "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c"
+    }
+  ],
   "endpoints": [
     {
       "method": "GET",
+      "path": "/accounts",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#GET /accounts"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/accounts/{id}",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#GET /accounts/{id}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/addresses",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#GET /addresses"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "addresses not modeled by legacy; not implemented in this bundle",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/addresses",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#POST /addresses"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/addresses/merge",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#POST /addresses/merge"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/addresses/{id}",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#GET /addresses/{id}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/addresses/{id}",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#PUT /addresses/{id}"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/addresses/{id}",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#DELETE /addresses/{id}"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/addresses/{id}/charges/skip",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#POST /addresses/{id}/charges/skip"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/orders/",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#GET /api/orders/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/async_batches",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#GET /async_batches"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/async_batches",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#POST /async_batches"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/async_batches/{batch_id}",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#GET /async_batches/{batch_id}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/async_batches/{batch_id}/process",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#POST /async_batches/{batch_id}/process"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/async_batches/{batch_id}/tasks",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#GET /async_batches/{batch_id}/tasks"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/async_batches/{batch_id}/tasks",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#POST /async_batches/{batch_id}/tasks"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/async_batches/{id}",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#GET /async_batches/{id}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bundle_selections",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#GET /bundle_selections"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/bundle_selections",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#POST /bundle_selections"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bundle_selections/{id}",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#GET /bundle_selections/{id}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/bundle_selections/{id}",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#PUT /bundle_selections/{id}"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/bundle_selections/{id}",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#DELETE /bundle_selections/{id}"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/charges",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#GET /charges"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "charges not modeled by legacy; not implemented in this bundle",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/charges/{charge_id}/remove_discount/",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#POST /charges/{charge_id}/remove_discount/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/charges/{id}",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#GET /charges/{id}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/charges/{id}/add_free_gift",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#POST /charges/{id}/add_free_gift"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/charges/{id}/apply_discount",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#POST /charges/{id}/apply_discount"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/charges/{id}/capture_payment",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#POST /charges/{id}/capture_payment"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/charges/{id}/process",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#POST /charges/{id}/process"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/charges/{id}/refund",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#POST /charges/{id}/refund"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/charges/{id}/remove_discount",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#POST /charges/{id}/remove_discount"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/charges/{id}/remove_free_gift",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#POST /charges/{id}/remove_free_gift"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/charges/{id}/skip",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#POST /charges/{id}/skip"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/charges/{id}/unskip",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#POST /charges/{id}/unskip"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/checkout/{checkout_token}/shipping_rates",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#GET /checkout/{checkout_token}/shipping_rates"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/checkouts",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#POST /checkouts"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/checkouts/{token}",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#GET /checkouts/{token}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/checkouts/{token}",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#PUT /checkouts/{token}"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/checkouts/{token}/charge",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#POST /checkouts/{token}/charge"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/checkouts/{token}/shipping_rates",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#GET /checkouts/{token}/shipping_rates"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/collection_products",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#GET /collection_products"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/collections",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#GET /collections"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/collections",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#POST /collections"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/collections/{id}",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#GET /collections/{id}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/collections/{id}",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#PUT /collections/{id}"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/collections/{id}",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#DELETE /collections/{id}"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/collections/{id}/collection_products-bulk",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#POST /collections/{id}/collection_products-bulk"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/collections/{id}/collection_products-bulk",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#DELETE /collections/{id}/collection_products-bulk"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/credit_accounts",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#GET /credit_accounts"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/credit_accounts",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#POST /credit_accounts"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/credit_accounts/{id}",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#GET /credit_accounts/{id}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/credit_accounts/{id}",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#PUT /credit_accounts/{id}"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/credit_accounts/{id}/credit_adjustments",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#GET /credit_accounts/{id}/credit_adjustments"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/credit_accounts/{id}/credit_adjustments",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#POST /credit_accounts/{id}/credit_adjustments"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/credit_adjustments",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#GET /credit_adjustments"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customer_entitlements",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#GET /customer_entitlements"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/customer_entitlements",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#POST /customer_entitlements"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/customer_entitlements/{id}",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#PUT /customer_entitlements/{id}"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/customer_entitlements/{id}",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#DELETE /customer_entitlements/{id}"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/customers",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#GET /customers"
+      },
       "covered_by": {
         "stream": "customers"
       }
     },
     {
+      "method": "POST",
+      "path": "/customers",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#POST /customers"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "legacy is read-only; write actions never implemented",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
       "method": "GET",
-      "path": "/subscriptions",
-      "covered_by": {
-        "stream": "subscriptions"
+      "path": "/customers/{id}",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#GET /customers/{id}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/customers/{id}",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#PUT /customers/{id}"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/customers/{id}",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#DELETE /customers/{id}"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customers/{id}/credit_summary",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#GET /customers/{id}/credit_summary"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customers/{id}/delivery_schedule",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#GET /customers/{id}/delivery_schedule"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/customers/{id}/notifications",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#POST /customers/{id}/notifications"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/discounts",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#GET /discounts"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "discounts not modeled by legacy; not implemented in this bundle",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/discounts",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#POST /discounts"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/discounts/{id}",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#GET /discounts/{id}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/discounts/{id}",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#PUT /discounts/{id}"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/discounts/{id}",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#DELETE /discounts/{id}"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/events",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#GET /events"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/metafields",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#GET /metafields"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/metafields",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#POST /metafields"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/metafields/{id}",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#GET /metafields/{id}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/metafields/{id}",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#PUT /metafields/{id}"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/metafields/{id}",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#DELETE /metafields/{id}"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/metafields/{metafield_id}",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#GET /metafields/{metafield_id}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/onetimes",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#GET /onetimes"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/onetimes",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#POST /onetimes"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/onetimes/{id}",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#GET /onetimes/{id}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/onetimes/{id}",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#PUT /onetimes/{id}"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/onetimes/{id}",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#DELETE /onetimes/{id}"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     },
     {
       "method": "GET",
       "path": "/orders",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#GET /orders"
+      },
       "covered_by": {
         "stream": "orders"
       }
     },
     {
       "method": "GET",
-      "path": "/charges",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "charges not modeled by legacy; not implemented in this bundle"
+      "path": "/orders/",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#GET /orders/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
-      "path": "/discounts",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "discounts not modeled by legacy; not implemented in this bundle"
+      "path": "/orders/{id}",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#GET /orders/{id}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/orders/{id}",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#PUT /orders/{id}"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/orders/{id}",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#DELETE /orders/{id}"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/orders/{id}/clone",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#POST /orders/{id}/clone"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/orders/{id}/delay",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#POST /orders/{id}/delay"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/payment_methods",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#GET /payment_methods"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/payment_methods",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#POST /payment_methods"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/payment_methods/{id}",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#GET /payment_methods/{id}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/payment_methods/{id}",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#PUT /payment_methods/{id}"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/payment_methods/{id}",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#DELETE /payment_methods/{id}"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/plans",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#GET /plans"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/plans",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#POST /plans"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/plans/{id}",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#PUT /plans/{id}"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/plans/{id}",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#DELETE /plans/{id}"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     },
     {
       "method": "GET",
       "path": "/products",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "products not modeled by legacy; not implemented in this bundle"
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#GET /products"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "products not modeled by legacy; not implemented in this bundle",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/products",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#POST /products"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     },
     {
       "method": "GET",
-      "path": "/addresses",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "addresses not modeled by legacy; not implemented in this bundle"
+      "path": "/products/",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#GET /products/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/products/{external_product_id}",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#GET /products/{external_product_id}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/products/{external_product_id}",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#PUT /products/{external_product_id}"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/products/{external_product_id}",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#DELETE /products/{external_product_id}"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/products/{external_product_id}/plans-bulk",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#POST /products/{external_product_id}/plans-bulk"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/products/{external_product_id}/plans-bulk",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#PUT /products/{external_product_id}/plans-bulk"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/products/{external_product_id}/plans-bulk",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#DELETE /products/{external_product_id}/plans-bulk"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/store",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#GET /store"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/subscriptions",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#GET /subscriptions"
+      },
+      "covered_by": {
+        "stream": "subscriptions"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/subscriptions",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#POST /subscriptions"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/subscriptions/skip_gift",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#POST /subscriptions/skip_gift"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/subscriptions/{id}",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#GET /subscriptions/{id}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/subscriptions/{id}",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#PUT /subscriptions/{id}"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/subscriptions/{id}",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#DELETE /subscriptions/{id}"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/subscriptions/{id}/activate",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#POST /subscriptions/{id}/activate"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/subscriptions/{id}/cancel",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#POST /subscriptions/{id}/cancel"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/subscriptions/{id}/change_address",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#POST /subscriptions/{id}/change_address"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/subscriptions/{id}/set_next_charge_date",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#POST /subscriptions/{id}/set_next_charge_date"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/token_information",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#GET /token_information"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/webhooks",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "webhooks not modeled by legacy; not implemented in this bundle"
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#GET /webhooks"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "webhooks not modeled by legacy; not implemented in this bundle",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "POST",
-      "path": "/customers",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "legacy is read-only; write actions never implemented"
+      "path": "/webhooks",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#POST /webhooks"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/webhooks/{id}",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#GET /webhooks/{id}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/webhooks/{id}",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#PUT /webhooks/{id}"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/webhooks/{id}",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#DELETE /webhooks/{id}"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/webhooks/{id}/test",
+      "provenance": {
+        "artifact": "recharge-artifact-2026-08-09",
+        "source_url": "https://developer.rechargepayments.com/2021-11/",
+        "source_kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c",
+        "coordinate": "https://developer.rechargepayments.com/2021-11/#POST /webhooks/{id}/test"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     }
   ]

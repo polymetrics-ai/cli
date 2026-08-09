@@ -1,0 +1,3542 @@
+{
+  "operations": [
+    {
+      "id": "freshdesk.get.api-v2-account",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/account",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/account",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-admin-groups",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/admin/groups",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/admin/groups",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.post.api-v2-admin-groups",
+      "kind": "rest_write",
+      "summary": "POST /api/v2/admin/groups",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v2/admin/groups",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-admin-groups-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/admin/groups/[id]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/admin/groups/[id]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.put.api-v2-admin-groups-id",
+      "kind": "rest_write",
+      "summary": "PUT /api/v2/admin/groups/[id]",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v2/admin/groups/[id]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.delete.api-v2-admin-groups-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v2/admin/groups/[id]",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v2/admin/groups/[id]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-admin-groups-id-agents",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/admin/groups/[id]/agents",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/admin/groups/[id]/agents",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.patch.api-v2-admin-groups-id-agents",
+      "kind": "rest_write",
+      "summary": "PATCH /api/v2/admin/groups/[id]/agents",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/v2/admin/groups/[id]/agents",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.post.api-v2-admin-skills",
+      "kind": "rest_write",
+      "summary": "POST /api/v2/admin/skills",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v2/admin/skills",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-admin-skills",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/admin/skills/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/admin/skills/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-admin-skills-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/admin/skills/[id]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/admin/skills/[id]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.delete.api-v2-admin-skills-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v2/admin/skills/[id]",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v2/admin/skills/[id]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-admin-ticket-fields",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/admin/ticket_fields",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/admin/ticket_fields",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.post.api-v2-admin-ticket-fields",
+      "kind": "rest_write",
+      "summary": "POST /api/v2/admin/ticket_fields",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v2/admin/ticket_fields",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-admin-ticket-fields-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/admin/ticket_fields/[id]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/admin/ticket_fields/[id]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.put.api-v2-admin-ticket-fields-id",
+      "kind": "rest_write",
+      "summary": "PUT /api/v2/admin/ticket_fields/[id]",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v2/admin/ticket_fields/[id]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.delete.api-v2-admin-ticket-fields-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v2/admin/ticket_fields/[id]",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v2/admin/ticket_fields/[id]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-admin-ticket-fields-id-sections",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/admin/ticket_fields/[id]/sections",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/admin/ticket_fields/[id]/sections",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.post.api-v2-admin-ticket-fields-id-sections",
+      "kind": "rest_write",
+      "summary": "POST /api/v2/admin/ticket_fields/[id]/sections",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v2/admin/ticket_fields/[id]/sections",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-admin-ticket-fields-id-sections-section-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/admin/ticket_fields/[id]/sections/[section_id]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/admin/ticket_fields/[id]/sections/[section_id]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.put.api-v2-admin-ticket-fields-id-sections-section-id",
+      "kind": "rest_write",
+      "summary": "PUT /api/v2/admin/ticket_fields/[id]/sections/[section_id]",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v2/admin/ticket_fields/[id]/sections/[section_id]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.delete.api-v2-admin-ticket-fields-id-sections-section-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v2/admin/ticket_fields/[id]/sections/[section_id]",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v2/admin/ticket_fields/[id]/sections/[section_id]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-agents",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/agents",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/agents",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.post.api-v2-agents",
+      "kind": "rest_write",
+      "summary": "POST /api/v2/agents/",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v2/agents/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-agents-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/agents/[id]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/agents/[id]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.put.api-v2-agents-id",
+      "kind": "rest_write",
+      "summary": "PUT /api/v2/agents/[id]",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v2/agents/[id]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.delete.api-v2-agents-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v2/agents/[id]",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v2/agents/[id]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-agents-id-availability",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/agents/[id]/availability",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/agents/[id]/availability",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.put.api-v2-agents-id-availability",
+      "kind": "rest_write",
+      "summary": "PUT /api/v2/agents/[id]/availability",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v2/agents/[id]/availability",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-agents-autocomplete",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/agents/autocomplete",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/agents/autocomplete",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.post.api-v2-agents-bulk",
+      "kind": "rest_write",
+      "summary": "POST /api/v2/agents/bulk",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v2/agents/bulk",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-agents-me",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/agents/me",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/agents/me",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.delete.api-v2-attachments-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v2/attachments/[id]",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v2/attachments/[id]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-automations-automation-type-id-rules",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/automations/[automation_type_id]/rules",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/automations/[automation_type_id]/rules",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.post.api-v2-automations-automation-type-id-rules",
+      "kind": "rest_write",
+      "summary": "POST /api/v2/automations/[automation_type_id]/rules",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v2/automations/[automation_type_id]/rules",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-automations-automation-type-id-rules-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/automations/[automation_type_id]/rules/[id]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/automations/[automation_type_id]/rules/[id]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.put.api-v2-automations-automation-type-id-rules-id",
+      "kind": "rest_write",
+      "summary": "PUT /api/v2/automations/[automation_type_id]/rules/[id]",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v2/automations/[automation_type_id]/rules/[id]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.delete.api-v2-automations-automation-type-id-rules-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v2/automations/[automation_type_id]/rules/[id]",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v2/automations/[automation_type_id]/rules/[id]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-business-hours",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/business_hours",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/business_hours",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-business-hours-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/business_hours/[id]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/business_hours/[id]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.post.api-v2-canned-response-folder",
+      "kind": "rest_write",
+      "summary": "POST /api/v2/canned_response_folder",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v2/canned_response_folder",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.put.api-v2-canned-response-folder-id",
+      "kind": "rest_write",
+      "summary": "PUT /api/v2/canned_response_folder/[id]",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v2/canned_response_folder/[id]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.post.api-v2-canned-responses",
+      "kind": "rest_write",
+      "summary": "POST /api/v2/canned_responses",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v2/canned_responses",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-canned-responses-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/canned_responses/[id]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/canned_responses/[id]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.post.api-v2-canned-responses-bulk",
+      "kind": "rest_write",
+      "summary": "POST /api/v2/canned_responses/bulk",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v2/canned_responses/bulk",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.post.api-v2-channels-outbound-messages",
+      "kind": "rest_write",
+      "summary": "POST /api/v2/channels/outbound-messages",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v2/channels/outbound-messages",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-channels-outbound-messages-message-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/channels/outbound-messages/[message-id]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/channels/outbound-messages/[message-id]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-companies",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/companies",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/companies",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.post.api-v2-companies",
+      "kind": "rest_write",
+      "summary": "POST /api/v2/companies",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v2/companies",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-companies-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/companies/[id]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/companies/[id]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.put.api-v2-companies-id",
+      "kind": "rest_write",
+      "summary": "PUT /api/v2/companies/[id]",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v2/companies/[id]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.delete.api-v2-companies-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v2/companies/[id]",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v2/companies/[id]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-companies-autocomplete",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/companies/autocomplete",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/companies/autocomplete",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-company-fields",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/company_fields",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/company_fields",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-company-fields-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/company_fields/[id]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/company_fields/[id]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.post.api-v2-contact-activities",
+      "kind": "rest_write",
+      "summary": "POST /api/v2/contact-activities",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v2/contact-activities",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.delete.api-v2-contact-field-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v2/contact_field/[id]",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v2/contact_field/[id]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-contact-fields",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/contact_fields",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/contact_fields",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.post.api-v2-contact-fields",
+      "kind": "rest_write",
+      "summary": "POST /api/v2/contact_fields",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v2/contact_fields",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-contact-fields-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/contact_fields/[id]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/contact_fields/[id]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.put.api-v2-contact-fields-id",
+      "kind": "rest_write",
+      "summary": "PUT /api/v2/contact_fields/[id]",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v2/contact_fields/[id]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-contacts",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/contacts",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/contacts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.post.api-v2-contacts",
+      "kind": "rest_write",
+      "summary": "POST /api/v2/contacts",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v2/contacts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-contacts-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/contacts/[id]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/contacts/[id]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.put.api-v2-contacts-id",
+      "kind": "rest_write",
+      "summary": "PUT /api/v2/contacts/[id]",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v2/contacts/[id]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.delete.api-v2-contacts-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v2/contacts/[id]",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v2/contacts/[id]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.delete.api-v2-contacts-id-hard-delete",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v2/contacts/[id]/hard_delete",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v2/contacts/[id]/hard_delete",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.put.api-v2-contacts-id-make-agent",
+      "kind": "rest_write",
+      "summary": "PUT /api/v2/contacts/[id]/make_agent",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v2/contacts/[id]/make_agent",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-contacts-autocomplete",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/contacts/autocomplete",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/contacts/autocomplete",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.put.api-v2-conversations-id",
+      "kind": "rest_write",
+      "summary": "PUT /api/v2/conversations/[id]",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v2/conversations/[id]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.delete.api-v2-conversations-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v2/conversations/[id]",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v2/conversations/[id]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-custom-objects-schemas",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/custom_objects/schemas",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/custom_objects/schemas",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-custom-objects-schemas-schema-id-records",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/custom_objects/schemas/schema-id/records",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/custom_objects/schemas/schema-id/records",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.post.api-v2-custom-objects-schemas-schema-id-records",
+      "kind": "rest_write",
+      "summary": "POST /api/v2/custom_objects/schemas/schema-id/records/",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v2/custom_objects/schemas/schema-id/records/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.put.api-v2-custom-objects-schemas-schema-id-records-record-id",
+      "kind": "rest_write",
+      "summary": "PUT /api/v2/custom_objects/schemas/schema-id/records/{record-id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v2/custom_objects/schemas/schema-id/records/{record-id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.delete.api-v2-custom-objects-schemas-schema-id-records-record-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v2/custom_objects/schemas/schema-id/records/{record-id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v2/custom_objects/schemas/schema-id/records/{record-id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-custom-objects-schemas-schema-id-records-2",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/custom_objects/schemas/schema_id/records",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/custom_objects/schemas/schema_id/records",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-custom-objects-schemas-schema-id-records-count",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/custom_objects/schemas/schema_id/records/count",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/custom_objects/schemas/schema_id/records/count",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-custom-objects-schemas-schema-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/custom_objects/schemas/{schema-id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/custom_objects/schemas/{schema-id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-custom-objects-schemas-schema-id-records-record-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/custom_objects/schemas/{schema-id}/records/{record-id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/custom_objects/schemas/{schema-id}/records/{record-id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-customer-satisfaction-surveys",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/customer-satisfaction/surveys",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/customer-satisfaction/surveys",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-customer-satisfaction-surveys-survey-id-responses",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/customer-satisfaction/surveys/{survey_id}/responses",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/customer-satisfaction/surveys/{survey_id}/responses",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.post.api-v2-customer-satisfaction-surveys-survey-id-responses",
+      "kind": "rest_write",
+      "summary": "POST /api/v2/customer-satisfaction/surveys/{survey_id}/responses",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v2/customer-satisfaction/surveys/{survey_id}/responses",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-discussions-categories",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/discussions/categories",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/discussions/categories",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.post.api-v2-discussions-categories",
+      "kind": "rest_write",
+      "summary": "POST /api/v2/discussions/categories",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v2/discussions/categories",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.post.api-v2-discussions-categories-category-id-forums",
+      "kind": "rest_write",
+      "summary": "POST /api/v2/discussions/categories/[category_id]/forums",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v2/discussions/categories/[category_id]/forums",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-discussions-categories-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/discussions/categories/[id]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/discussions/categories/[id]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.put.api-v2-discussions-categories-id",
+      "kind": "rest_write",
+      "summary": "PUT /api/v2/discussions/categories/[id]",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v2/discussions/categories/[id]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.delete.api-v2-discussions-categories-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v2/discussions/categories/[id]",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v2/discussions/categories/[id]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-discussions-categories-id-forums",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/discussions/categories/[id]/forums",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/discussions/categories/[id]/forums",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.put.api-v2-discussions-comments-id",
+      "kind": "rest_write",
+      "summary": "PUT /api/v2/discussions/comments/[id]",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v2/discussions/comments/[id]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.delete.api-v2-discussions-comments-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v2/discussions/comments/[id]",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v2/discussions/comments/[id]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.delete.api-v2-discussions-forums-forum-id-follow",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v2/discussions/forums/[forum_id]/follow",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v2/discussions/forums/[forum_id]/follow",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.post.api-v2-discussions-forums-forum-id-topics",
+      "kind": "rest_write",
+      "summary": "POST /api/v2/discussions/forums/[forum_id]/topics",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v2/discussions/forums/[forum_id]/topics",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-discussions-forums-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/discussions/forums/[id]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/discussions/forums/[id]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.put.api-v2-discussions-forums-id",
+      "kind": "rest_write",
+      "summary": "PUT /api/v2/discussions/forums/[id]",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v2/discussions/forums/[id]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.delete.api-v2-discussions-forums-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v2/discussions/forums/[id]",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v2/discussions/forums/[id]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-discussions-forums-id-follow",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/discussions/forums/[id]/follow",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/discussions/forums/[id]/follow",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.post.api-v2-discussions-forums-id-follow",
+      "kind": "rest_write",
+      "summary": "POST /api/v2/discussions/forums/[id]/follow",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v2/discussions/forums/[id]/follow",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-discussions-forums-id-topics",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/discussions/forums/[id]/topics",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/discussions/forums/[id]/topics",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-discussions-topics-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/discussions/topics/[id]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/discussions/topics/[id]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.put.api-v2-discussions-topics-id",
+      "kind": "rest_write",
+      "summary": "PUT /api/v2/discussions/topics/[id]",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v2/discussions/topics/[id]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.delete.api-v2-discussions-topics-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v2/discussions/topics/[id]",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v2/discussions/topics/[id]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-discussions-topics-id-comments",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/discussions/topics/[id]/comments",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/discussions/topics/[id]/comments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-discussions-topics-id-follow",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/discussions/topics/[id]/follow",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/discussions/topics/[id]/follow",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.post.api-v2-discussions-topics-id-follow",
+      "kind": "rest_write",
+      "summary": "POST /api/v2/discussions/topics/[id]/follow",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v2/discussions/topics/[id]/follow",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.post.api-v2-discussions-topics-topic-id-comments",
+      "kind": "rest_write",
+      "summary": "POST /api/v2/discussions/topics/[topic_id]/comments",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v2/discussions/topics/[topic_id]/comments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.delete.api-v2-discussions-topics-topic-id-follow",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v2/discussions/topics/[topic_id]/follow",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v2/discussions/topics/[topic_id]/follow",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-discussions-topics-followed-by",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/discussions/topics/followed_by",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/discussions/topics/followed_by",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-discussions-topics-participated-by",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/discussions/topics/participated_by",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/discussions/topics/participated_by",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-email-mailboxes",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/email/mailboxes",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/email/mailboxes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.post.api-v2-email-mailboxes",
+      "kind": "rest_write",
+      "summary": "POST /api/v2/email/mailboxes",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v2/email/mailboxes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-email-mailboxes-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/email/mailboxes/[id]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/email/mailboxes/[id]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.put.api-v2-email-mailboxes-id",
+      "kind": "rest_write",
+      "summary": "PUT /api/v2/email/mailboxes/[id]",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v2/email/mailboxes/[id]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.delete.api-v2-email-mailboxes-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v2/email/mailboxes/[id]",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v2/email/mailboxes/[id]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-email-settings",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/email/settings",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/email/settings",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.put.api-v2-email-settings",
+      "kind": "rest_write",
+      "summary": "PUT /api/v2/email/settings",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v2/email/settings",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-email-configs",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/email_configs",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/email_configs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-email-configs-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/email_configs/[id]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/email_configs/[id]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-groups",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/groups",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/groups",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.post.api-v2-groups",
+      "kind": "rest_write",
+      "summary": "POST /api/v2/groups",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v2/groups",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-groups-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/groups/[id]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/groups/[id]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.put.api-v2-groups-id",
+      "kind": "rest_write",
+      "summary": "PUT /api/v2/groups/[id]",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v2/groups/[id]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.delete.api-v2-groups-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v2/groups/[id]",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v2/groups/[id]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-jobs-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/jobs/[id]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/jobs/[id]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-notifications-email-bcc",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/notifications/email/bcc",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/notifications/email/bcc",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.put.api-v2-notifications-email-bcc",
+      "kind": "rest_write",
+      "summary": "PUT /api/v2/notifications/email/bcc",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v2/notifications/email/bcc",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-products",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/products",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/products",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-products-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/products/[id]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/products/[id]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-roles",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/roles",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/roles",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-roles-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/roles/[id]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/roles/[id]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-search-companies",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/search/companies",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/search/companies",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-search-contacts",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/search/contacts",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/search/contacts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-search-solutions",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/search/solutions",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/search/solutions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-search-tickets",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/search/tickets",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/search/tickets",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-settings-helpdesk",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/settings/helpdesk",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/settings/helpdesk",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-sla-policies",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/sla_policies",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/sla_policies",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.post.api-v2-sla-policies",
+      "kind": "rest_write",
+      "summary": "POST /api/v2/sla_policies",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v2/sla_policies",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.put.api-v2-sla-policies-id",
+      "kind": "rest_write",
+      "summary": "PUT /api/v2/sla_policies/[id]",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v2/sla_policies/[id]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-solutions-articles-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/solutions/articles/[id]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/solutions/articles/[id]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.put.api-v2-solutions-articles-id",
+      "kind": "rest_write",
+      "summary": "PUT /api/v2/solutions/articles/[id]",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v2/solutions/articles/[id]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.delete.api-v2-solutions-articles-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v2/solutions/articles/[id]",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v2/solutions/articles/[id]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-solutions-articles-id-language-code",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/solutions/articles/[id]/[language_code]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/solutions/articles/[id]/[language_code]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.post.api-v2-solutions-articles-id-language-code",
+      "kind": "rest_write",
+      "summary": "POST /api/v2/solutions/articles/[id]/[language_code]",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v2/solutions/articles/[id]/[language_code]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.put.api-v2-solutions-articles-id-language-code",
+      "kind": "rest_write",
+      "summary": "PUT /api/v2/solutions/articles/[id]/[language_code]",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v2/solutions/articles/[id]/[language_code]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-solutions-categories",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/solutions/categories",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/solutions/categories",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.post.api-v2-solutions-categories",
+      "kind": "rest_write",
+      "summary": "POST /api/v2/solutions/categories",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v2/solutions/categories",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-solutions-categories-category-id-folders",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/solutions/categories/[category_id]/folders",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/solutions/categories/[category_id]/folders",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-solutions-categories-category-id-folders-language-code",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/solutions/categories/[category_id]/folders/[language_code]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/solutions/categories/[category_id]/folders/[language_code]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-solutions-categories-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/solutions/categories/[id]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/solutions/categories/[id]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.put.api-v2-solutions-categories-id",
+      "kind": "rest_write",
+      "summary": "PUT /api/v2/solutions/categories/[id]",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v2/solutions/categories/[id]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.delete.api-v2-solutions-categories-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v2/solutions/categories/[id]",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v2/solutions/categories/[id]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-solutions-categories-id-language-code",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/solutions/categories/[id]/[language_code]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/solutions/categories/[id]/[language_code]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.post.api-v2-solutions-categories-id-language-code",
+      "kind": "rest_write",
+      "summary": "POST /api/v2/solutions/categories/[id]/[language_code]",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v2/solutions/categories/[id]/[language_code]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.put.api-v2-solutions-categories-id-language-code",
+      "kind": "rest_write",
+      "summary": "PUT /api/v2/solutions/categories/[id]/[language_code]",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v2/solutions/categories/[id]/[language_code]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.post.api-v2-solutions-categories-id-folders",
+      "kind": "rest_write",
+      "summary": "POST /api/v2/solutions/categories/[id]/folders",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v2/solutions/categories/[id]/folders",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-solutions-categories-language-code",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/solutions/categories/[language_code]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/solutions/categories/[language_code]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-solutions-folders-folder-id-subfolders",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/solutions/folders/[folder_id]/subfolders",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/solutions/folders/[folder_id]/subfolders",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-solutions-folders-folder-id-subfolders-language-code",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/solutions/folders/[folder_id]/subfolders/[language_code]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/solutions/folders/[folder_id]/subfolders/[language_code]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-solutions-folders-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/solutions/folders/[id]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/solutions/folders/[id]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.put.api-v2-solutions-folders-id",
+      "kind": "rest_write",
+      "summary": "PUT /api/v2/solutions/folders/[id]",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v2/solutions/folders/[id]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.delete.api-v2-solutions-folders-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v2/solutions/folders/[id]",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v2/solutions/folders/[id]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-solutions-folders-id-language-code",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/solutions/folders/[id]/[language_code]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/solutions/folders/[id]/[language_code]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.post.api-v2-solutions-folders-id-language-code",
+      "kind": "rest_write",
+      "summary": "POST /api/v2/solutions/folders/[id]/[language_code]",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v2/solutions/folders/[id]/[language_code]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.put.api-v2-solutions-folders-id-language-code",
+      "kind": "rest_write",
+      "summary": "PUT /api/v2/solutions/folders/[id]/[language_code]",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v2/solutions/folders/[id]/[language_code]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-solutions-folders-id-articles",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/solutions/folders/[id]/articles",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/solutions/folders/[id]/articles",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.post.api-v2-solutions-folders-id-articles",
+      "kind": "rest_write",
+      "summary": "POST /api/v2/solutions/folders/[id]/articles",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v2/solutions/folders/[id]/articles",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-solutions-folders-id-articles-language-code",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/solutions/folders/[id]/articles/[language_code]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/solutions/folders/[id]/articles/[language_code]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-surveys",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/surveys",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/surveys",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-surveys-satisfaction-ratings",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/surveys/satisfaction_ratings",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/surveys/satisfaction_ratings",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-ticket-forms",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/ticket-forms",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/ticket-forms",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.post.api-v2-ticket-forms",
+      "kind": "rest_write",
+      "summary": "POST /api/v2/ticket-forms",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v2/ticket-forms",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-ticket-forms-form-id-fields-field-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/ticket-forms/[form-id]/fields/[field-id]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/ticket-forms/[form-id]/fields/[field-id]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.post.api-v2-ticket-forms-form-id-fields-field-id",
+      "kind": "rest_write",
+      "summary": "POST /api/v2/ticket-forms/[form-id]/fields/[field-id]",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v2/ticket-forms/[form-id]/fields/[field-id]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.delete.api-v2-ticket-forms-form-id-fields-field-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v2/ticket-forms/[form-id]/fields/[field-id]",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v2/ticket-forms/[form-id]/fields/[field-id]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-ticket-forms-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/ticket-forms/[id]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/ticket-forms/[id]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.put.api-v2-ticket-forms-id",
+      "kind": "rest_write",
+      "summary": "PUT /api/v2/ticket-forms/[id]",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v2/ticket-forms/[id]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.delete.api-v2-ticket-forms-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v2/ticket-forms/[id]",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v2/ticket-forms/[id]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-ticket-fields",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/ticket_fields",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/ticket_fields",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-tickets",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/tickets",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/tickets",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.post.api-v2-tickets",
+      "kind": "rest_write",
+      "summary": "POST /api/v2/tickets",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v2/tickets",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-tickets-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/tickets/[id]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/tickets/[id]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.put.api-v2-tickets-id",
+      "kind": "rest_write",
+      "summary": "PUT /api/v2/tickets/[id]",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v2/tickets/[id]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.delete.api-v2-tickets-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v2/tickets/[id]",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v2/tickets/[id]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-tickets-id-accesses",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/tickets/[id]/accesses",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/tickets/[id]/accesses",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.post.api-v2-tickets-id-accesses",
+      "kind": "rest_write",
+      "summary": "POST /api/v2/tickets/[id]/accesses",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v2/tickets/[id]/accesses",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.patch.api-v2-tickets-id-accesses",
+      "kind": "rest_write",
+      "summary": "PATCH /api/v2/tickets/[id]/accesses",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/v2/tickets/[id]/accesses",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.delete.api-v2-tickets-id-accesses",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v2/tickets/[id]/accesses",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v2/tickets/[id]/accesses",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-tickets-id-associated-tickets",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/tickets/[id]/associated_tickets",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/tickets/[id]/associated_tickets",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-tickets-id-conversations",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/tickets/[id]/conversations",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/tickets/[id]/conversations",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.post.api-v2-tickets-id-forward",
+      "kind": "rest_write",
+      "summary": "POST /api/v2/tickets/[id]/forward",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v2/tickets/[id]/forward",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-tickets-id-prime-association",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/tickets/[id]/prime_association",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/tickets/[id]/prime_association",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.post.api-v2-tickets-id-reply",
+      "kind": "rest_write",
+      "summary": "POST /api/v2/tickets/[id]/reply",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v2/tickets/[id]/reply",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.post.api-v2-tickets-id-reply-to-forward",
+      "kind": "rest_write",
+      "summary": "POST /api/v2/tickets/[id]/reply_to_forward",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v2/tickets/[id]/reply_to_forward",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.put.api-v2-tickets-id-restore",
+      "kind": "rest_write",
+      "summary": "PUT /api/v2/tickets/[id]/restore",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v2/tickets/[id]/restore",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-tickets-id-summary",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/tickets/[id]/summary",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/tickets/[id]/summary",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.put.api-v2-tickets-id-summary",
+      "kind": "rest_write",
+      "summary": "PUT /api/v2/tickets/[id]/summary",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v2/tickets/[id]/summary",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.delete.api-v2-tickets-id-summary",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v2/tickets/[id]/summary",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v2/tickets/[id]/summary",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-tickets-id-time-entries",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/tickets/[id]/time_entries",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/tickets/[id]/time_entries",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.put.api-v2-tickets-id-unwatch",
+      "kind": "rest_write",
+      "summary": "PUT /api/v2/tickets/[id]/unwatch",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v2/tickets/[id]/unwatch",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.post.api-v2-tickets-id-watch",
+      "kind": "rest_write",
+      "summary": "POST /api/v2/tickets/[id]/watch",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v2/tickets/[id]/watch",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-tickets-id-watchers",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/tickets/[id]/watchers",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/tickets/[id]/watchers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.post.api-v2-tickets-ticket-id-notes",
+      "kind": "rest_write",
+      "summary": "POST /api/v2/tickets/[ticket_id]/notes",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v2/tickets/[ticket_id]/notes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-tickets-ticket-id-satisfaction-ratings",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/tickets/[ticket_id]/satisfaction_ratings",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/tickets/[ticket_id]/satisfaction_ratings",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.post.api-v2-tickets-ticket-id-satisfaction-ratings",
+      "kind": "rest_write",
+      "summary": "POST /api/v2/tickets/[ticket_id]/satisfaction_ratings",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v2/tickets/[ticket_id]/satisfaction_ratings",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.post.api-v2-tickets-ticket-id-time-entries",
+      "kind": "rest_write",
+      "summary": "POST /api/v2/tickets/[ticket_id]/time_entries",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v2/tickets/[ticket_id]/time_entries",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-tickets-archived-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/tickets/archived/[id]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/tickets/archived/[id]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.delete.api-v2-tickets-archived-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v2/tickets/archived/[id]",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v2/tickets/archived/[id]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-tickets-archived-id-conversations",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/tickets/archived/[id]/conversations",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/tickets/archived/[id]/conversations",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.post.api-v2-tickets-bulk-delete",
+      "kind": "rest_write",
+      "summary": "POST /api/v2/tickets/bulk_delete",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v2/tickets/bulk_delete",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.put.api-v2-tickets-bulk-unwatch",
+      "kind": "rest_write",
+      "summary": "PUT /api/v2/tickets/bulk_unwatch",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v2/tickets/bulk_unwatch",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.post.api-v2-tickets-bulk-update",
+      "kind": "rest_write",
+      "summary": "POST /api/v2/tickets/bulk_update",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v2/tickets/bulk_update",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.put.api-v2-tickets-bulk-watch",
+      "kind": "rest_write",
+      "summary": "PUT /api/v2/tickets/bulk_watch",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v2/tickets/bulk_watch",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.put.api-v2-tickets-merge",
+      "kind": "rest_write",
+      "summary": "PUT /api/v2/tickets/merge",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v2/tickets/merge",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.post.api-v2-tickets-outbound-email",
+      "kind": "rest_write",
+      "summary": "POST /api/v2/tickets/outbound_email",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v2/tickets/outbound_email",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.api-v2-time-entries",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/time_entries",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/time_entries",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.put.api-v2-time-entries-id",
+      "kind": "rest_write",
+      "summary": "PUT /api/v2/time_entries/[id]",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v2/time_entries/[id]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.delete.api-v2-time-entries-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v2/time_entries/[id]",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v2/time_entries/[id]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.put.api-v2-time-entries-time-entry-id-toggle-timer",
+      "kind": "rest_write",
+      "summary": "PUT /api/v2/time_entries/[time_entry_id]/toggle_timer",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v2/time_entries/[time_entry_id]/toggle_timer",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.canned-response-folders",
+      "kind": "rest_read",
+      "summary": "GET /canned-response-folders",
+      "description": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/canned-response-folders",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.canned-response-folders-2",
+      "kind": "rest_read",
+      "summary": "GET /canned_response_folders",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/canned_response_folders",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.canned-response-folders-id",
+      "kind": "rest_read",
+      "summary": "GET /canned_response_folders/[id]",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/canned_response_folders/[id]",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.canned-response-folders-id-responses",
+      "kind": "rest_read",
+      "summary": "GET /canned_response_folders/[id]/responses",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/canned_response_folders/[id]/responses",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.scenario-automations-json",
+      "kind": "rest_read",
+      "summary": "GET /scenario_automations.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/scenario_automations.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.solutions-categories",
+      "kind": "rest_read",
+      "summary": "GET /solutions/categories",
+      "description": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/solutions/categories",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.post.tickets",
+      "kind": "rest_write",
+      "summary": "POST /tickets",
+      "description": "not implemented in this bundle; legacy is read-only",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/tickets",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.tickets-id-conversations",
+      "kind": "rest_read",
+      "summary": "GET /tickets/{id}/conversations",
+      "description": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/tickets/{id}/conversations",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshdesk.get.tickets-id-time-entries",
+      "kind": "rest_read",
+      "summary": "GET /tickets/{id}/time_entries",
+      "description": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/tickets/{id}/time_entries",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

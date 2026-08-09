@@ -1,0 +1,911 @@
+{
+  "tagline": "Run Tally's declared streams and reverse-ETL actions.",
+  "usage": "pm tally \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "api get forms formid",
+        "api get forms formid analytics dimensions",
+        "api get forms formid analytics drop-off",
+        "api get forms formid analytics metrics",
+        "api get forms formid analytics submissions",
+        "api get forms formid analytics visits",
+        "api get forms formid blocks",
+        "api get forms formid questions",
+        "api get forms formid submissions submissionid",
+        "api get organizations organizationid invites",
+        "api get organizations organizationid users",
+        "api get users me",
+        "api get webhooks webhookid events",
+        "api get workspaces workspaceid",
+        "api get workspaces workspaceid folders",
+        "forms list",
+        "submissions list",
+        "webhooks list",
+        "workspaces list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "api delete organizations organizationid invites inviteid",
+        "api delete organizations organizationid users userid",
+        "api delete workspaces workspaceid",
+        "api delete workspaces workspaceid folders id",
+        "api patch forms formid blocks",
+        "api patch forms formid questions questionid",
+        "api patch workspaces workspaceid",
+        "api patch workspaces workspaceid folders id",
+        "api post organizations organizationid invites",
+        "api post webhooks webhookid events eventid",
+        "api post workspaces workspaceid folders",
+        "create form apply",
+        "create webhook apply",
+        "create workspace apply",
+        "delete form apply",
+        "delete submission apply",
+        "delete webhook apply",
+        "update form apply",
+        "update webhook apply"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "api delete organizations organizationid invites inviteid",
+      "summary": "Documented DELETE /organizations/{organizationId}/invites/{inviteId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.tally.so/api-reference/introduction",
+      "examples": [
+        "pm tally api delete organizations organizationid invites inviteid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/organizations/{organizationId}/invites/{inviteId}"
+        }
+      ],
+      "operation": "tally.delete.organizations-organizationid-invites-inviteid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete organizations organizationid users userid",
+      "summary": "Documented DELETE /organizations/{organizationId}/users/{userId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.tally.so/api-reference/introduction",
+      "examples": [
+        "pm tally api delete organizations organizationid users userid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/organizations/{organizationId}/users/{userId}"
+        }
+      ],
+      "operation": "tally.delete.organizations-organizationid-users-userid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete workspaces workspaceid",
+      "summary": "Documented DELETE /workspaces/{workspaceId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.tally.so/api-reference/introduction",
+      "examples": [
+        "pm tally api delete workspaces workspaceid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/workspaces/{workspaceId}"
+        }
+      ],
+      "operation": "tally.delete.workspaces-workspaceid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete workspaces workspaceid folders id",
+      "summary": "Documented DELETE /workspaces/{workspaceId}/folders/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.tally.so/api-reference/introduction",
+      "examples": [
+        "pm tally api delete workspaces workspaceid folders id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/workspaces/{workspaceId}/folders/{id}"
+        }
+      ],
+      "operation": "tally.delete.workspaces-workspaceid-folders-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api get forms formid",
+      "summary": "Documented GET /forms/{formId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.tally.so/api-reference/introduction",
+      "examples": [
+        "pm tally api get forms formid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/forms/{formId}"
+        }
+      ],
+      "operation": "tally.get.forms-formid",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get forms formid analytics dimensions",
+      "summary": "Documented GET /forms/{formId}/analytics/dimensions (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.tally.so/api-reference/introduction",
+      "examples": [
+        "pm tally api get forms formid analytics dimensions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/forms/{formId}/analytics/dimensions"
+        }
+      ],
+      "operation": "tally.get.forms-formid-analytics-dimensions",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get forms formid analytics drop-off",
+      "summary": "Documented GET /forms/{formId}/analytics/drop-off (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.tally.so/api-reference/introduction",
+      "examples": [
+        "pm tally api get forms formid analytics drop-off --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/forms/{formId}/analytics/drop-off"
+        }
+      ],
+      "operation": "tally.get.forms-formid-analytics-drop-off",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get forms formid analytics metrics",
+      "summary": "Documented GET /forms/{formId}/analytics/metrics (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.tally.so/api-reference/introduction",
+      "examples": [
+        "pm tally api get forms formid analytics metrics --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/forms/{formId}/analytics/metrics"
+        }
+      ],
+      "operation": "tally.get.forms-formid-analytics-metrics",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get forms formid analytics submissions",
+      "summary": "Documented GET /forms/{formId}/analytics/submissions (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.tally.so/api-reference/introduction",
+      "examples": [
+        "pm tally api get forms formid analytics submissions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/forms/{formId}/analytics/submissions"
+        }
+      ],
+      "operation": "tally.get.forms-formid-analytics-submissions",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get forms formid analytics visits",
+      "summary": "Documented GET /forms/{formId}/analytics/visits (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.tally.so/api-reference/introduction",
+      "examples": [
+        "pm tally api get forms formid analytics visits --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/forms/{formId}/analytics/visits"
+        }
+      ],
+      "operation": "tally.get.forms-formid-analytics-visits",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get forms formid blocks",
+      "summary": "Documented GET /forms/{formId}/blocks (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.tally.so/api-reference/introduction",
+      "examples": [
+        "pm tally api get forms formid blocks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/forms/{formId}/blocks"
+        }
+      ],
+      "operation": "tally.get.forms-formid-blocks",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get forms formid questions",
+      "summary": "Documented GET /forms/{formId}/questions (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.tally.so/api-reference/introduction",
+      "examples": [
+        "pm tally api get forms formid questions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/forms/{formId}/questions"
+        }
+      ],
+      "operation": "tally.get.forms-formid-questions",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get forms formid submissions submissionid",
+      "summary": "Documented GET /forms/{formId}/submissions/{submissionId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.tally.so/api-reference/introduction",
+      "examples": [
+        "pm tally api get forms formid submissions submissionid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/forms/{formId}/submissions/{submissionId}"
+        }
+      ],
+      "operation": "tally.get.forms-formid-submissions-submissionid",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get organizations organizationid invites",
+      "summary": "Documented GET /organizations/{organizationId}/invites (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.tally.so/api-reference/introduction",
+      "examples": [
+        "pm tally api get organizations organizationid invites --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/organizations/{organizationId}/invites"
+        }
+      ],
+      "operation": "tally.get.organizations-organizationid-invites",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get organizations organizationid users",
+      "summary": "Documented GET /organizations/{organizationId}/users (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.tally.so/api-reference/introduction",
+      "examples": [
+        "pm tally api get organizations organizationid users --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/organizations/{organizationId}/users"
+        }
+      ],
+      "operation": "tally.get.organizations-organizationid-users",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get users me",
+      "summary": "Documented GET /users/me (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.tally.so/api-reference/introduction",
+      "examples": [
+        "pm tally api get users me --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users/me"
+        }
+      ],
+      "operation": "tally.get.users-me",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get webhooks webhookid events",
+      "summary": "Documented GET /webhooks/{webhookId}/events (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.tally.so/api-reference/introduction",
+      "examples": [
+        "pm tally api get webhooks webhookid events --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/webhooks/{webhookId}/events"
+        }
+      ],
+      "operation": "tally.get.webhooks-webhookid-events",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get workspaces workspaceid",
+      "summary": "Documented GET /workspaces/{workspaceId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.tally.so/api-reference/introduction",
+      "examples": [
+        "pm tally api get workspaces workspaceid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/workspaces/{workspaceId}"
+        }
+      ],
+      "operation": "tally.get.workspaces-workspaceid",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get workspaces workspaceid folders",
+      "summary": "Documented GET /workspaces/{workspaceId}/folders (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.tally.so/api-reference/introduction",
+      "examples": [
+        "pm tally api get workspaces workspaceid folders --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/workspaces/{workspaceId}/folders"
+        }
+      ],
+      "operation": "tally.get.workspaces-workspaceid-folders",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api patch forms formid blocks",
+      "summary": "Documented PATCH /forms/{formId}/blocks (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.tally.so/api-reference/introduction",
+      "examples": [
+        "pm tally api patch forms formid blocks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/forms/{formId}/blocks"
+        }
+      ],
+      "operation": "tally.patch.forms-formid-blocks",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch forms formid questions questionid",
+      "summary": "Documented PATCH /forms/{formId}/questions/{questionId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.tally.so/api-reference/introduction",
+      "examples": [
+        "pm tally api patch forms formid questions questionid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/forms/{formId}/questions/{questionId}"
+        }
+      ],
+      "operation": "tally.patch.forms-formid-questions-questionid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch workspaces workspaceid",
+      "summary": "Documented PATCH /workspaces/{workspaceId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.tally.so/api-reference/introduction",
+      "examples": [
+        "pm tally api patch workspaces workspaceid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/workspaces/{workspaceId}"
+        }
+      ],
+      "operation": "tally.patch.workspaces-workspaceid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch workspaces workspaceid folders id",
+      "summary": "Documented PATCH /workspaces/{workspaceId}/folders/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.tally.so/api-reference/introduction",
+      "examples": [
+        "pm tally api patch workspaces workspaceid folders id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/workspaces/{workspaceId}/folders/{id}"
+        }
+      ],
+      "operation": "tally.patch.workspaces-workspaceid-folders-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post organizations organizationid invites",
+      "summary": "Documented POST /organizations/{organizationId}/invites (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.tally.so/api-reference/introduction",
+      "examples": [
+        "pm tally api post organizations organizationid invites --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/organizations/{organizationId}/invites"
+        }
+      ],
+      "operation": "tally.post.organizations-organizationid-invites",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post webhooks webhookid events eventid",
+      "summary": "Documented POST /webhooks/{webhookId}/events/{eventId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.tally.so/api-reference/introduction",
+      "examples": [
+        "pm tally api post webhooks webhookid events eventid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/webhooks/{webhookId}/events/{eventId}"
+        }
+      ],
+      "operation": "tally.post.webhooks-webhookid-events-eventid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post workspaces workspaceid folders",
+      "summary": "Documented POST /workspaces/{workspaceId}/folders (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.tally.so/api-reference/introduction",
+      "examples": [
+        "pm tally api post workspaces workspaceid folders --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/workspaces/{workspaceId}/folders"
+        }
+      ],
+      "operation": "tally.post.workspaces-workspaceid-folders",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "create form apply",
+      "summary": "Plan and execute the create form reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_form",
+      "source_url": "https://developers.tally.so/api-reference/introduction",
+      "examples": [
+        "pm tally create form apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/forms"
+        }
+      ],
+      "risk": "creates a new live form in the Tally account",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create webhook apply",
+      "summary": "Plan and execute the create webhook reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_webhook",
+      "source_url": "https://developers.tally.so/api-reference/introduction",
+      "flags": [
+        {
+          "name": "eventTypes",
+          "type": "string_array",
+          "summary": "Required eventTypes record field.",
+          "maps_to": "record.eventTypes",
+          "required": true
+        },
+        {
+          "name": "formId",
+          "type": "string",
+          "summary": "Required formId record field.",
+          "maps_to": "record.formId",
+          "required": true
+        },
+        {
+          "name": "url",
+          "type": "string",
+          "summary": "Required url record field.",
+          "maps_to": "record.url",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm tally create webhook apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/webhooks"
+        }
+      ],
+      "risk": "registers an external endpoint to receive form submission events",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create workspace apply",
+      "summary": "Plan and execute the create workspace reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_workspace",
+      "source_url": "https://developers.tally.so/api-reference/introduction",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm tally create workspace apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/workspaces"
+        }
+      ],
+      "risk": "creates a new workspace; requires the account to have a Pro subscription",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete form apply",
+      "summary": "Plan and execute the delete form reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_form",
+      "source_url": "https://developers.tally.so/api-reference/introduction",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm tally delete form apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/forms/{formId}"
+        }
+      ],
+      "risk": "moves a form to the trash, stopping new submissions",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete submission apply",
+      "summary": "Plan and execute the delete submission reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_submission",
+      "source_url": "https://developers.tally.so/api-reference/introduction",
+      "flags": [
+        {
+          "name": "form_id",
+          "type": "string",
+          "summary": "Required form id record field.",
+          "maps_to": "record.form_id",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm tally delete submission apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/forms/{formId}/submissions/{submissionId}"
+        }
+      ],
+      "risk": "permanently removes a respondent's submission and its answers from Tally",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete webhook apply",
+      "summary": "Plan and execute the delete webhook reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_webhook",
+      "source_url": "https://developers.tally.so/api-reference/introduction",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm tally delete webhook apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/webhooks/{webhookId}"
+        }
+      ],
+      "risk": "stops delivery of form submission events to the webhook's registered endpoint; if this is the form's last webhook, the webhooks integration is also marked deleted",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "forms list",
+      "summary": "Run the forms ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "forms",
+      "source_url": "https://developers.tally.so/api-reference/introduction",
+      "examples": [
+        "pm tally forms list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/forms"
+        }
+      ]
+    },
+    {
+      "path": "submissions list",
+      "summary": "Run the submissions ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "submissions",
+      "source_url": "https://developers.tally.so/api-reference/introduction",
+      "examples": [
+        "pm tally submissions list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/forms/{formId}/submissions"
+        }
+      ]
+    },
+    {
+      "path": "update form apply",
+      "summary": "Plan and execute the update form reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_form",
+      "source_url": "https://developers.tally.so/api-reference/introduction",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm tally update form apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/forms/{formId}"
+        }
+      ],
+      "risk": "changes a live form's name, status, blocks, or settings",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update webhook apply",
+      "summary": "Plan and execute the update webhook reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_webhook",
+      "source_url": "https://developers.tally.so/api-reference/introduction",
+      "flags": [
+        {
+          "name": "eventTypes",
+          "type": "string_array",
+          "summary": "Required eventTypes record field.",
+          "maps_to": "record.eventTypes",
+          "required": true
+        },
+        {
+          "name": "formId",
+          "type": "string",
+          "summary": "Required formId record field.",
+          "maps_to": "record.formId",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        },
+        {
+          "name": "isEnabled",
+          "type": "boolean",
+          "summary": "Required isEnabled record field.",
+          "maps_to": "record.isEnabled",
+          "required": true
+        },
+        {
+          "name": "url",
+          "type": "string",
+          "summary": "Required url record field.",
+          "maps_to": "record.url",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm tally update webhook apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/webhooks/{webhookId}"
+        }
+      ],
+      "risk": "changes where and whether an existing webhook delivers form submission events",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "webhooks list",
+      "summary": "Run the webhooks ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "webhooks",
+      "source_url": "https://developers.tally.so/api-reference/introduction",
+      "examples": [
+        "pm tally webhooks list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/webhooks"
+        }
+      ]
+    },
+    {
+      "path": "workspaces list",
+      "summary": "Run the workspaces ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "workspaces",
+      "source_url": "https://developers.tally.so/api-reference/introduction",
+      "examples": [
+        "pm tally workspaces list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/workspaces"
+        }
+      ]
+    }
+  ]
+}

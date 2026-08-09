@@ -1,0 +1,1026 @@
+{
+  "operations": [
+    {
+      "id": "coassemble.get.api-v1-headless-client-identifier",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/headless/client/{identifier}",
+      "description": "single-client detail is a strict subset of the clients stream's own per-record shape already returned by GET /api/v1/headless/clients",
+      "source_url": "https://developers.coassemble.com/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/headless/client/{identifier}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coassemble.get.api-v1-headless-collection-tracking-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/headless/collection/tracking/{id}",
+      "description": "single-collection-tracking detail is a strict subset of the collection_trackings stream's own per-record shape already returned by GET /api/v1/headless/collection/trackings",
+      "source_url": "https://developers.coassemble.com/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/headless/collection/tracking/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coassemble.get.api-v1-headless-collections-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/headless/collections/{id}",
+      "description": "single-collection detail is a strict subset of the collections stream's own per-record shape already returned by GET /api/v1/headless/collections",
+      "source_url": "https://developers.coassemble.com/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/headless/collections/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coassemble.get.api-v1-headless-course-content-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/headless/course/content/{id}",
+      "description": "returns a course's raw content-asset manifest (languages/variants/assets with signed CDN URLs) for embedding a learner-facing player, not a catalog/record-sync resource; no stable per-record shape suitable for a list stream",
+      "source_url": "https://developers.coassemble.com/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/headless/course/content/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coassemble.post.api-v1-headless-course-generate",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/headless/course/generate",
+      "description": "the API reference marks this endpoint deprecated",
+      "source_url": "https://developers.coassemble.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/headless/course/generate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coassemble.get.api-v1-headless-course-scorm-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/headless/course/scorm/{id}",
+      "description": "returns a downloadable SCORM package zip file, not a JSON record",
+      "source_url": "https://developers.coassemble.com/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/headless/course/scorm/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coassemble.post.api-v1-headless-course-url",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/headless/course/url",
+      "description": "the API reference marks this endpoint deprecated",
+      "source_url": "https://developers.coassemble.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/headless/course/url",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coassemble.get.api-v1-headless-course-action",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/headless/course/{action}",
+      "description": "the API reference marks this endpoint deprecated",
+      "source_url": "https://developers.coassemble.com/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/headless/course/{action}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coassemble.post.api-v1-headless-course-id-revert",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/headless/course/{id}/revert",
+      "description": "reverts a course to a prior content revision; a content-authoring/versioning action with no bounded, declarable request body documented (revision target is implicit/unspecified), not a plain record mutation",
+      "source_url": "https://developers.coassemble.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/headless/course/{id}/revert",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coassemble.get.api-v1-headless-courses-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/headless/courses/{id}",
+      "description": "single-course detail is a strict subset of the courses stream's own per-record shape already returned by GET /api/v1/headless/courses",
+      "source_url": "https://developers.coassemble.com/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/headless/courses/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coassemble.get.api-v1-headless-screen-trackings",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/headless/screen/trackings",
+      "description": "requires a screen id (a per-embed screen resource distinct from the screen_types lookup enum this connector already exposes); Coassemble's own API reference never defines a list/id endpoint for this screen-id resource, so there is no way to enumerate valid ids to read this stream against without an unverifiable guess at the id's source",
+      "source_url": "https://developers.coassemble.com/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/headless/screen/trackings",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coassemble.get.api-v1-headless-tracking-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/headless/tracking/{id}",
+      "description": "single-tracking detail is a strict subset of the trackings stream's own per-record shape already returned by GET /api/v1/headless/trackings",
+      "source_url": "https://developers.coassemble.com/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/headless/tracking/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coassemble.get.api-v1-headless-user-identifier",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/headless/user/{identifier}",
+      "description": "single-user detail is a strict subset of the users stream's own per-record shape already returned by GET /api/v1/headless/users",
+      "source_url": "https://developers.coassemble.com/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/headless/user/{identifier}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coassemble.get.v1-headless-client-identifier",
+      "kind": "rest_read",
+      "summary": "GET /v1/headless/client/{identifier}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.coassemble.com/api/identities",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/headless/client/{identifier}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coassemble.put.v1-headless-client-identifier",
+      "kind": "rest_write",
+      "summary": "PUT /v1/headless/client/{identifier}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.coassemble.com/api/identities",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v1/headless/client/{identifier}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coassemble.delete.v1-headless-client-identifier",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/headless/client/{identifier}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developers.coassemble.com/api/identities",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/headless/client/{identifier}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coassemble.get.v1-headless-clients",
+      "kind": "rest_read",
+      "summary": "GET /v1/headless/clients",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.coassemble.com/api/identities",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/headless/clients",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coassemble.post.v1-headless-collection",
+      "kind": "rest_write",
+      "summary": "POST /v1/headless/collection",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.coassemble.com/api/collections",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/headless/collection",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coassemble.get.v1-headless-collection-tracking-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/headless/collection/tracking/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.coassemble.com/api/tracking",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/headless/collection/tracking/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coassemble.get.v1-headless-collection-trackings",
+      "kind": "rest_read",
+      "summary": "GET /v1/headless/collection/trackings",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.coassemble.com/api/tracking",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/headless/collection/trackings",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coassemble.delete.v1-headless-collection-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/headless/collection/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developers.coassemble.com/api/collections",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/headless/collection/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coassemble.post.v1-headless-collection-id-restore",
+      "kind": "rest_write",
+      "summary": "POST /v1/headless/collection/{id}/restore",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.coassemble.com/api/collections",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/headless/collection/{id}/restore",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coassemble.get.v1-headless-collections",
+      "kind": "rest_read",
+      "summary": "GET /v1/headless/collections",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.coassemble.com/api/collections",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/headless/collections",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coassemble.get.v1-headless-collections-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/headless/collections/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.coassemble.com/api/collections",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/headless/collections/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coassemble.get.v1-headless-course-content-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/headless/course/content/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.coassemble.com/api/courses",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/headless/course/content/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coassemble.post.v1-headless-course-generate",
+      "kind": "rest_write",
+      "summary": "POST /v1/headless/course/generate",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.coassemble.com/api/courses",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/headless/course/generate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coassemble.get.v1-headless-course-scorm-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/headless/course/scorm/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.coassemble.com/api/courses",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/headless/course/scorm/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coassemble.post.v1-headless-course-url",
+      "kind": "rest_write",
+      "summary": "POST /v1/headless/course/url",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.coassemble.com/api/courses",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/headless/course/url",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coassemble.get.v1-headless-course-action",
+      "kind": "rest_read",
+      "summary": "GET /v1/headless/course/{action}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.coassemble.com/api/courses",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/headless/course/{action}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coassemble.delete.v1-headless-course-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/headless/course/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developers.coassemble.com/api/courses",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/headless/course/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coassemble.post.v1-headless-course-id-duplicate",
+      "kind": "rest_write",
+      "summary": "POST /v1/headless/course/{id}/duplicate",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.coassemble.com/api/courses",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/headless/course/{id}/duplicate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coassemble.post.v1-headless-course-id-publish",
+      "kind": "rest_write",
+      "summary": "POST /v1/headless/course/{id}/publish",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.coassemble.com/api/courses",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/headless/course/{id}/publish",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coassemble.post.v1-headless-course-id-restore",
+      "kind": "rest_write",
+      "summary": "POST /v1/headless/course/{id}/restore",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.coassemble.com/api/courses",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/headless/course/{id}/restore",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coassemble.post.v1-headless-course-id-revert",
+      "kind": "rest_write",
+      "summary": "POST /v1/headless/course/{id}/revert",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.coassemble.com/api/courses",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/headless/course/{id}/revert",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coassemble.get.v1-headless-courses",
+      "kind": "rest_read",
+      "summary": "GET /v1/headless/courses",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.coassemble.com/api/courses",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/headless/courses",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coassemble.get.v1-headless-courses-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/headless/courses/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.coassemble.com/api/courses",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/headless/courses/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coassemble.post.v1-headless-embed-course",
+      "kind": "rest_write",
+      "summary": "POST /v1/headless/embed/course",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.coassemble.com/api/courses",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/headless/embed/course",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coassemble.post.v1-headless-generate-course",
+      "kind": "rest_write",
+      "summary": "POST /v1/headless/generate/course",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.coassemble.com/api/courses",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/headless/generate/course",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coassemble.post.v1-headless-generate-course-id-quiz",
+      "kind": "rest_write",
+      "summary": "POST /v1/headless/generate/course/{id}/quiz",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.coassemble.com/api/generate",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/headless/generate/course/{id}/quiz",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coassemble.post.v1-headless-generate-course-id-screen",
+      "kind": "rest_write",
+      "summary": "POST /v1/headless/generate/course/{id}/screen",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.coassemble.com/api/generate",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/headless/generate/course/{id}/screen",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coassemble.get.v1-headless-screen-trackings",
+      "kind": "rest_read",
+      "summary": "GET /v1/headless/screen/trackings",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.coassemble.com/api/tracking",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/headless/screen/trackings",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coassemble.get.v1-headless-themes",
+      "kind": "rest_read",
+      "summary": "GET /v1/headless/themes",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.coassemble.com/api/themes",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/headless/themes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coassemble.post.v1-headless-themes",
+      "kind": "rest_write",
+      "summary": "POST /v1/headless/themes",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.coassemble.com/api/themes",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/headless/themes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coassemble.get.v1-headless-themes-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/headless/themes/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.coassemble.com/api/themes",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/headless/themes/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coassemble.put.v1-headless-themes-id",
+      "kind": "rest_write",
+      "summary": "PUT /v1/headless/themes/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.coassemble.com/api/themes",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v1/headless/themes/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coassemble.delete.v1-headless-themes-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/headless/themes/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developers.coassemble.com/api/themes",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/headless/themes/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coassemble.delete.v1-headless-tracking",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/headless/tracking",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developers.coassemble.com/api/tracking",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/headless/tracking",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coassemble.get.v1-headless-tracking-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/headless/tracking/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.coassemble.com/api/tracking",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/headless/tracking/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coassemble.get.v1-headless-trackings",
+      "kind": "rest_read",
+      "summary": "GET /v1/headless/trackings",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.coassemble.com/api/tracking",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/headless/trackings",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coassemble.post.v1-headless-translation-default-id-language",
+      "kind": "rest_write",
+      "summary": "POST /v1/headless/translation/default/{id}/{language}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.coassemble.com/api/translations",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/headless/translation/default/{id}/{language}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coassemble.post.v1-headless-translation-sync-id-language",
+      "kind": "rest_write",
+      "summary": "POST /v1/headless/translation/sync/{id}/{language}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.coassemble.com/api/translations",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/headless/translation/sync/{id}/{language}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coassemble.post.v1-headless-translation-translate-id",
+      "kind": "rest_write",
+      "summary": "POST /v1/headless/translation/translate/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.coassemble.com/api/translations",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/headless/translation/translate/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coassemble.delete.v1-headless-translation-id-language",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/headless/translation/{id}/{language}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developers.coassemble.com/api/translations",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/headless/translation/{id}/{language}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coassemble.get.v1-headless-translations-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/headless/translations/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.coassemble.com/api/translations",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/headless/translations/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coassemble.get.v1-headless-usage-allowances",
+      "kind": "rest_read",
+      "summary": "GET /v1/headless/usage/allowances",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.coassemble.com/api/usage",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/headless/usage/allowances",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coassemble.get.v1-headless-usage-client-identifier",
+      "kind": "rest_read",
+      "summary": "GET /v1/headless/usage/client/{identifier}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.coassemble.com/api/usage",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/headless/usage/client/{identifier}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coassemble.put.v1-headless-usage-client-identifier",
+      "kind": "rest_write",
+      "summary": "PUT /v1/headless/usage/client/{identifier}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.coassemble.com/api/usage",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v1/headless/usage/client/{identifier}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coassemble.get.v1-headless-usage-clients",
+      "kind": "rest_read",
+      "summary": "GET /v1/headless/usage/clients",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.coassemble.com/api/usage",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/headless/usage/clients",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coassemble.get.v1-headless-user-trackings",
+      "kind": "rest_read",
+      "summary": "GET /v1/headless/user/trackings",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.coassemble.com/api/tracking",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/headless/user/trackings",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coassemble.get.v1-headless-user-identifier",
+      "kind": "rest_read",
+      "summary": "GET /v1/headless/user/{identifier}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.coassemble.com/api/identities",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/headless/user/{identifier}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coassemble.put.v1-headless-user-identifier",
+      "kind": "rest_write",
+      "summary": "PUT /v1/headless/user/{identifier}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.coassemble.com/api/identities",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v1/headless/user/{identifier}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coassemble.delete.v1-headless-user-identifier",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/headless/user/{identifier}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developers.coassemble.com/api/identities",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/headless/user/{identifier}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coassemble.get.v1-headless-users",
+      "kind": "rest_read",
+      "summary": "GET /v1/headless/users",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.coassemble.com/api/identities",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/headless/users",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coassemble.get.v1-headless-webhooks",
+      "kind": "rest_read",
+      "summary": "GET /v1/headless/webhooks",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.coassemble.com/api/webhooks",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/headless/webhooks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coassemble.post.v1-headless-webhooks",
+      "kind": "rest_write",
+      "summary": "POST /v1/headless/webhooks",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.coassemble.com/api/webhooks",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/headless/webhooks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coassemble.delete.v1-headless-webhooks-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/headless/webhooks/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developers.coassemble.com/api/webhooks",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/headless/webhooks/{id}",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

@@ -1,0 +1,2977 @@
+{
+  "tagline": "Run Aircall's declared streams and reverse-ETL actions.",
+  "usage": "pm aircall \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "api get v1 analytics report export export-id",
+        "api get v1 analytics report-exports id",
+        "api get v1 calls call-id action-items",
+        "api get v1 calls call-id custom-summary-result",
+        "api get v1 calls call-id evaluations",
+        "api get v1 calls call-id playbook-result",
+        "api get v1 calls call-id predicted-csat",
+        "api get v1 calls call-id realtime-transcription",
+        "api get v1 calls call-id sentiments",
+        "api get v1 calls call-id summary",
+        "api get v1 calls call-id topics",
+        "api get v1 calls call-id transcription",
+        "api get v1 calls id",
+        "api get v1 calls search",
+        "api get v1 company",
+        "api get v1 contacts id",
+        "api get v1 contacts search",
+        "api get v1 dialer-campaigns id",
+        "api get v1 dialer-campaigns id phone-numbers",
+        "api get v1 integrations me",
+        "api get v1 integrations name",
+        "api get v1 number-configurations id",
+        "api get v1 numbers id",
+        "api get v1 numbers id messages configuration",
+        "api get v1 numbers id operation",
+        "api get v1 numbers id registration-status",
+        "api get v1 numbers id templates",
+        "api get v1 numbers id whatsapp-status",
+        "api get v1 numbers id whatsapp-templates",
+        "api get v1 tags id",
+        "api get v1 teams id",
+        "api get v1 users 456",
+        "api get v1 users availabilities",
+        "api get v1 users id",
+        "api get v1 users id availability",
+        "api get v1 users john-doe-aircall-io",
+        "api get v1 users user-id",
+        "api get v1 users user-id dialer-campaign",
+        "api get v1 users user-id dialer-campaign phone-numbers",
+        "api get v1 webhooks id",
+        "api get v1 webhooks webhook-id",
+        "api get v2 users",
+        "api get v2 users 456",
+        "api get v2 users id",
+        "api get v2 users id numbers",
+        "api get v2 users john-doe-aircall-io",
+        "api get v2 users user-id numbers",
+        "calls list",
+        "contacts list",
+        "numbers list",
+        "tags list",
+        "teams list",
+        "users list",
+        "webhooks list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "add user to team apply",
+        "api delete v1 calls id recording",
+        "api delete v1 calls id voicemail",
+        "api delete v1 contacts id email-details email-id",
+        "api delete v1 contacts id emails email-id",
+        "api delete v1 contacts id phone-details phone-number-id",
+        "api delete v1 contacts id phone-numbers phone-number-id",
+        "api delete v1 dialer-campaigns id",
+        "api delete v1 dialer-campaigns id phone-numbers phone-number-id",
+        "api delete v1 number-configurations id",
+        "api delete v1 numbers id messages configuration",
+        "api delete v1 users user-id dialer-campaign",
+        "api delete v1 users user-id dialer-campaign phone-numbers id",
+        "api delete v1 webhooks webhook-id",
+        "api post v1 ai-voice-agents id trigger-outbound-call",
+        "api post v1 analytics report export",
+        "api post v1 analytics report-exports",
+        "api post v1 calls id insight-cards",
+        "api post v1 calls id pause-recording",
+        "api post v1 calls id resume-recording",
+        "api post v1 calls id transfers",
+        "api post v1 contacts id",
+        "api post v1 contacts id email-details",
+        "api post v1 contacts id emails",
+        "api post v1 contacts id phone-details",
+        "api post v1 contacts id phone-numbers",
+        "api post v1 conversations conversation-id group-messages",
+        "api post v1 conversations conversation-id group-messages skip-inbox",
+        "api post v1 conversations conversation-id messages",
+        "api post v1 conversations conversation-id messages skip-inbox",
+        "api post v1 conversations conversation-id whatsapp-messages",
+        "api post v1 conversations conversation-id whatsapp-messages skip-inbox",
+        "api post v1 dialer-campaigns",
+        "api post v1 dialer-campaigns id phone-numbers",
+        "api post v1 integrations disable",
+        "api post v1 integrations enable",
+        "api post v1 integrations name disable",
+        "api post v1 integrations name enable",
+        "api post v1 messages send whatsapp native",
+        "api post v1 messages whatsapp send",
+        "api post v1 number-configurations",
+        "api post v1 numbers id messages configuration",
+        "api post v1 numbers id messages group native send",
+        "api post v1 numbers id messages group send",
+        "api post v1 numbers id messages native send",
+        "api post v1 numbers id messages send",
+        "api post v1 outbound-calls agents agent-id",
+        "api post v1 users id calls",
+        "api post v1 users id dial",
+        "api post v1 users user-id dialer-campaign",
+        "api post v1 users user-id dialer-campaign phone-numbers",
+        "api post v2 users",
+        "api put v1 contacts id email-details email-id",
+        "api put v1 contacts id emails email-id",
+        "api put v1 contacts id phone-details phone-number-id",
+        "api put v1 contacts id phone-numbers phone-number-id",
+        "api put v1 numbers id",
+        "api put v1 numbers id messages",
+        "api put v1 webhooks webhook-id",
+        "api put v2 users id",
+        "archive call apply",
+        "comment call apply",
+        "create contact apply",
+        "create tag apply",
+        "create team apply",
+        "create user apply",
+        "create webhook apply",
+        "delete contact apply",
+        "delete tag apply",
+        "delete team apply",
+        "delete user apply",
+        "delete webhook apply",
+        "remove user from team apply",
+        "tag call apply",
+        "unarchive call apply",
+        "update contact apply",
+        "update tag apply",
+        "update user apply",
+        "update webhook apply"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "add user to team apply",
+      "summary": "Plan and execute the add user to team reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "add_user_to_team",
+      "source_url": "https://developers.aircall.io/api-references",
+      "flags": [
+        {
+          "name": "team_id",
+          "type": "integer",
+          "summary": "Required team id record field.",
+          "maps_to": "record.team_id",
+          "required": true
+        },
+        {
+          "name": "user_id",
+          "type": "integer",
+          "summary": "Required user id record field.",
+          "maps_to": "record.user_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm aircall add user to team apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/teams/:team_id/users/:user_id"
+        }
+      ],
+      "risk": "adds an agent to a team, changing that agent's call routing/membership; low-risk, reversible via remove_user_from_team",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "api delete v1 calls id recording",
+      "summary": "Documented DELETE /v1/calls/:id/recording (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api delete v1 calls id recording --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/calls/:id/recording"
+        }
+      ],
+      "operation": "aircall.delete.v1-calls-id-recording",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v1 calls id voicemail",
+      "summary": "Documented DELETE /v1/calls/:id/voicemail (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api delete v1 calls id voicemail --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/calls/:id/voicemail"
+        }
+      ],
+      "operation": "aircall.delete.v1-calls-id-voicemail",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v1 contacts id email-details email-id",
+      "summary": "Documented DELETE /v1/contacts/:id/email_details/:email_id (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api delete v1 contacts id email-details email-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/contacts/:id/email_details/:email_id"
+        }
+      ],
+      "operation": "aircall.delete.v1-contacts-id-email-details-email-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v1 contacts id emails email-id",
+      "summary": "Documented DELETE /v1/contacts/:id/emails/:email_id (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api delete v1 contacts id emails email-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/contacts/:id/emails/:email_id"
+        }
+      ],
+      "operation": "aircall.delete.v1-contacts-id-emails-email-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v1 contacts id phone-details phone-number-id",
+      "summary": "Documented DELETE /v1/contacts/:id/phone_details/:phone_number_id (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api delete v1 contacts id phone-details phone-number-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/contacts/:id/phone_details/:phone_number_id"
+        }
+      ],
+      "operation": "aircall.delete.v1-contacts-id-phone-details-phone-number-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v1 contacts id phone-numbers phone-number-id",
+      "summary": "Documented DELETE /v1/contacts/:id/phone_numbers/:phone_number_id (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api delete v1 contacts id phone-numbers phone-number-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/contacts/:id/phone_numbers/:phone_number_id"
+        }
+      ],
+      "operation": "aircall.delete.v1-contacts-id-phone-numbers-phone-number-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v1 dialer-campaigns id",
+      "summary": "Documented DELETE /v1/dialer_campaigns/:id (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api delete v1 dialer-campaigns id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/dialer_campaigns/:id"
+        }
+      ],
+      "operation": "aircall.delete.v1-dialer-campaigns-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v1 dialer-campaigns id phone-numbers phone-number-id",
+      "summary": "Documented DELETE /v1/dialer_campaigns/:id/phone_numbers/:phone_number_id (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api delete v1 dialer-campaigns id phone-numbers phone-number-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/dialer_campaigns/:id/phone_numbers/:phone_number_id"
+        }
+      ],
+      "operation": "aircall.delete.v1-dialer-campaigns-id-phone-numbers-phone-number-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v1 number-configurations id",
+      "summary": "Documented DELETE /v1/number_configurations/:id (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api delete v1 number-configurations id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/number_configurations/:id"
+        }
+      ],
+      "operation": "aircall.delete.v1-number-configurations-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v1 numbers id messages configuration",
+      "summary": "Documented DELETE /v1/numbers/:id/messages/configuration (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api delete v1 numbers id messages configuration --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/numbers/:id/messages/configuration"
+        }
+      ],
+      "operation": "aircall.delete.v1-numbers-id-messages-configuration",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v1 users user-id dialer-campaign",
+      "summary": "Documented DELETE /v1/users/:user_id/dialer_campaign (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api delete v1 users user-id dialer-campaign --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/users/:user_id/dialer_campaign"
+        }
+      ],
+      "operation": "aircall.delete.v1-users-user-id-dialer-campaign",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v1 users user-id dialer-campaign phone-numbers id",
+      "summary": "Documented DELETE /v1/users/:user_id/dialer_campaign/phone_numbers/:id (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api delete v1 users user-id dialer-campaign phone-numbers id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/users/:user_id/dialer_campaign/phone_numbers/:id"
+        }
+      ],
+      "operation": "aircall.delete.v1-users-user-id-dialer-campaign-phone-numbers-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v1 webhooks webhook-id",
+      "summary": "Documented DELETE /v1/webhooks/:webhook_id (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api delete v1 webhooks webhook-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/webhooks/:webhook_id"
+        }
+      ],
+      "operation": "aircall.delete.v1-webhooks-webhook-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api get v1 analytics report export export-id",
+      "summary": "Documented GET /v1/analytics/report/export/:export_id (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api get v1 analytics report export export-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/analytics/report/export/:export_id"
+        }
+      ],
+      "operation": "aircall.get.v1-analytics-report-export-export-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 analytics report-exports id",
+      "summary": "Documented GET /v1/analytics/report_exports/:id (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api get v1 analytics report-exports id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/analytics/report_exports/:id"
+        }
+      ],
+      "operation": "aircall.get.v1-analytics-report-exports-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 calls call-id action-items",
+      "summary": "Documented GET /v1/calls/:call_id/action_items (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api get v1 calls call-id action-items --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/calls/:call_id/action_items"
+        }
+      ],
+      "operation": "aircall.get.v1-calls-call-id-action-items",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 calls call-id custom-summary-result",
+      "summary": "Documented GET /v1/calls/:call_id/custom_summary_result (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api get v1 calls call-id custom-summary-result --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/calls/:call_id/custom_summary_result"
+        }
+      ],
+      "operation": "aircall.get.v1-calls-call-id-custom-summary-result",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 calls call-id evaluations",
+      "summary": "Documented GET /v1/calls/:call_id/evaluations (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api get v1 calls call-id evaluations --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/calls/:call_id/evaluations"
+        }
+      ],
+      "operation": "aircall.get.v1-calls-call-id-evaluations",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 calls call-id playbook-result",
+      "summary": "Documented GET /v1/calls/:call_id/playbook_result (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api get v1 calls call-id playbook-result --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/calls/:call_id/playbook_result"
+        }
+      ],
+      "operation": "aircall.get.v1-calls-call-id-playbook-result",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 calls call-id predicted-csat",
+      "summary": "Documented GET /v1/calls/:call_id/predicted_csat (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api get v1 calls call-id predicted-csat --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/calls/:call_id/predicted_csat"
+        }
+      ],
+      "operation": "aircall.get.v1-calls-call-id-predicted-csat",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 calls call-id realtime-transcription",
+      "summary": "Documented GET /v1/calls/:call_id/realtime_transcription (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api get v1 calls call-id realtime-transcription --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/calls/:call_id/realtime_transcription"
+        }
+      ],
+      "operation": "aircall.get.v1-calls-call-id-realtime-transcription",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 calls call-id sentiments",
+      "summary": "Documented GET /v1/calls/:call_id/sentiments (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api get v1 calls call-id sentiments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/calls/:call_id/sentiments"
+        }
+      ],
+      "operation": "aircall.get.v1-calls-call-id-sentiments",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 calls call-id summary",
+      "summary": "Documented GET /v1/calls/:call_id/summary (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api get v1 calls call-id summary --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/calls/:call_id/summary"
+        }
+      ],
+      "operation": "aircall.get.v1-calls-call-id-summary",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 calls call-id topics",
+      "summary": "Documented GET /v1/calls/:call_id/topics (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api get v1 calls call-id topics --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/calls/:call_id/topics"
+        }
+      ],
+      "operation": "aircall.get.v1-calls-call-id-topics",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 calls call-id transcription",
+      "summary": "Documented GET /v1/calls/:call_id/transcription (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api get v1 calls call-id transcription --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/calls/:call_id/transcription"
+        }
+      ],
+      "operation": "aircall.get.v1-calls-call-id-transcription",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 calls id",
+      "summary": "Documented GET /v1/calls/:id (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api get v1 calls id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/calls/:id"
+        }
+      ],
+      "operation": "aircall.get.v1-calls-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 calls search",
+      "summary": "Documented GET /v1/calls/search (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api get v1 calls search --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/calls/search"
+        }
+      ],
+      "operation": "aircall.get.v1-calls-search",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 company",
+      "summary": "Documented GET /v1/company (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api get v1 company --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/company"
+        }
+      ],
+      "operation": "aircall.get.v1-company",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 contacts id",
+      "summary": "Documented GET /v1/contacts/:id (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api get v1 contacts id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/contacts/:id"
+        }
+      ],
+      "operation": "aircall.get.v1-contacts-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 contacts search",
+      "summary": "Documented GET /v1/contacts/search (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api get v1 contacts search --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/contacts/search"
+        }
+      ],
+      "operation": "aircall.get.v1-contacts-search",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 dialer-campaigns id",
+      "summary": "Documented GET /v1/dialer_campaigns/:id (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api get v1 dialer-campaigns id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/dialer_campaigns/:id"
+        }
+      ],
+      "operation": "aircall.get.v1-dialer-campaigns-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 dialer-campaigns id phone-numbers",
+      "summary": "Documented GET /v1/dialer_campaigns/:id/phone_numbers (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api get v1 dialer-campaigns id phone-numbers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/dialer_campaigns/:id/phone_numbers"
+        }
+      ],
+      "operation": "aircall.get.v1-dialer-campaigns-id-phone-numbers",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 integrations me",
+      "summary": "Documented GET /v1/integrations/me (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api get v1 integrations me --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/integrations/me"
+        }
+      ],
+      "operation": "aircall.get.v1-integrations-me",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 integrations name",
+      "summary": "Documented GET /v1/integrations/:name (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api get v1 integrations name --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/integrations/:name"
+        }
+      ],
+      "operation": "aircall.get.v1-integrations-name",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 number-configurations id",
+      "summary": "Documented GET /v1/number_configurations/:id (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api get v1 number-configurations id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/number_configurations/:id"
+        }
+      ],
+      "operation": "aircall.get.v1-number-configurations-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 numbers id",
+      "summary": "Documented GET /v1/numbers/:id (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api get v1 numbers id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/numbers/:id"
+        }
+      ],
+      "operation": "aircall.get.v1-numbers-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 numbers id messages configuration",
+      "summary": "Documented GET /v1/numbers/:id/messages/configuration (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api get v1 numbers id messages configuration --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/numbers/:id/messages/configuration"
+        }
+      ],
+      "operation": "aircall.get.v1-numbers-id-messages-configuration",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 numbers id operation",
+      "summary": "Documented GET /v1/numbers/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api get v1 numbers id operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/numbers/{id}"
+        }
+      ],
+      "operation": "aircall.get.v1-numbers-id-2",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 numbers id registration-status",
+      "summary": "Documented GET /v1/numbers/:id/registration_status (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api get v1 numbers id registration-status --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/numbers/:id/registration_status"
+        }
+      ],
+      "operation": "aircall.get.v1-numbers-id-registration-status",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 numbers id templates",
+      "summary": "Documented GET /v1/numbers/:id/templates (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api get v1 numbers id templates --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/numbers/:id/templates"
+        }
+      ],
+      "operation": "aircall.get.v1-numbers-id-templates",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 numbers id whatsapp-status",
+      "summary": "Documented GET /v1/numbers/:id/whatsapp_status (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api get v1 numbers id whatsapp-status --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/numbers/:id/whatsapp_status"
+        }
+      ],
+      "operation": "aircall.get.v1-numbers-id-whatsapp-status",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 numbers id whatsapp-templates",
+      "summary": "Documented GET /v1/numbers/:id/whatsapp_templates (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api get v1 numbers id whatsapp-templates --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/numbers/:id/whatsapp_templates"
+        }
+      ],
+      "operation": "aircall.get.v1-numbers-id-whatsapp-templates",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 tags id",
+      "summary": "Documented GET /v1/tags/:id (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api get v1 tags id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/tags/:id"
+        }
+      ],
+      "operation": "aircall.get.v1-tags-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 teams id",
+      "summary": "Documented GET /v1/teams/:id (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api get v1 teams id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/teams/:id"
+        }
+      ],
+      "operation": "aircall.get.v1-teams-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 users 456",
+      "summary": "Documented GET /v1/users/456 (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api get v1 users 456 --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/users/456"
+        }
+      ],
+      "operation": "aircall.get.v1-users-456",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 users availabilities",
+      "summary": "Documented GET /v1/users/availabilities (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api get v1 users availabilities --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/users/availabilities"
+        }
+      ],
+      "operation": "aircall.get.v1-users-availabilities",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 users id",
+      "summary": "Documented GET /v1/users/:id (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api get v1 users id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/users/:id"
+        }
+      ],
+      "operation": "aircall.get.v1-users-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 users id availability",
+      "summary": "Documented GET /v1/users/:id/availability (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api get v1 users id availability --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/users/:id/availability"
+        }
+      ],
+      "operation": "aircall.get.v1-users-id-availability",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 users john-doe-aircall-io",
+      "summary": "Documented GET /v1/users/john.doe@aircall.io (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api get v1 users john-doe-aircall-io --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/users/john.doe@aircall.io"
+        }
+      ],
+      "operation": "aircall.get.v1-users-john-doe-aircall-io",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 users user-id",
+      "summary": "Documented GET /v1/users/{user_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api get v1 users user-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/users/{user_id}"
+        }
+      ],
+      "operation": "aircall.get.v1-users-user-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 users user-id dialer-campaign",
+      "summary": "Documented GET /v1/users/:user_id/dialer_campaign (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api get v1 users user-id dialer-campaign --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/users/:user_id/dialer_campaign"
+        }
+      ],
+      "operation": "aircall.get.v1-users-user-id-dialer-campaign",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 users user-id dialer-campaign phone-numbers",
+      "summary": "Documented GET /v1/users/:user_id/dialer_campaign/phone_numbers (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api get v1 users user-id dialer-campaign phone-numbers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/users/:user_id/dialer_campaign/phone_numbers"
+        }
+      ],
+      "operation": "aircall.get.v1-users-user-id-dialer-campaign-phone-numbers",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 webhooks id",
+      "summary": "Documented GET /v1/webhooks/:id (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api get v1 webhooks id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/webhooks/:id"
+        }
+      ],
+      "operation": "aircall.get.v1-webhooks-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 webhooks webhook-id",
+      "summary": "Documented GET /v1/webhooks/:webhook_id (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api get v1 webhooks webhook-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/webhooks/:webhook_id"
+        }
+      ],
+      "operation": "aircall.get.v1-webhooks-webhook-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 users",
+      "summary": "Documented GET /v2/users (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api get v2 users --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/users"
+        }
+      ],
+      "operation": "aircall.get.v2-users",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 users 456",
+      "summary": "Documented GET /v2/users/456 (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api get v2 users 456 --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/users/456"
+        }
+      ],
+      "operation": "aircall.get.v2-users-456",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 users id",
+      "summary": "Documented GET /v2/users/:id (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api get v2 users id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/users/:id"
+        }
+      ],
+      "operation": "aircall.get.v2-users-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 users id numbers",
+      "summary": "Documented GET /v2/users/:id/numbers (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api get v2 users id numbers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/users/:id/numbers"
+        }
+      ],
+      "operation": "aircall.get.v2-users-id-numbers",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 users john-doe-aircall-io",
+      "summary": "Documented GET /v2/users/john.doe@aircall.io (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api get v2 users john-doe-aircall-io --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/users/john.doe@aircall.io"
+        }
+      ],
+      "operation": "aircall.get.v2-users-john-doe-aircall-io",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 users user-id numbers",
+      "summary": "Documented GET /v2/users/{user_id}/numbers (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api get v2 users user-id numbers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/users/{user_id}/numbers"
+        }
+      ],
+      "operation": "aircall.get.v2-users-user-id-numbers",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api post v1 ai-voice-agents id trigger-outbound-call",
+      "summary": "Documented POST /v1/ai_voice_agents/:id/trigger_outbound_call (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api post v1 ai-voice-agents id trigger-outbound-call --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/ai_voice_agents/:id/trigger_outbound_call"
+        }
+      ],
+      "operation": "aircall.post.v1-ai-voice-agents-id-trigger-outbound-call",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 analytics report export",
+      "summary": "Documented POST /v1/analytics/report/export (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api post v1 analytics report export --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/analytics/report/export"
+        }
+      ],
+      "operation": "aircall.post.v1-analytics-report-export",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 analytics report-exports",
+      "summary": "Documented POST /v1/analytics/report_exports (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api post v1 analytics report-exports --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/analytics/report_exports"
+        }
+      ],
+      "operation": "aircall.post.v1-analytics-report-exports",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 calls id insight-cards",
+      "summary": "Documented POST /v1/calls/:id/insight_cards (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api post v1 calls id insight-cards --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/calls/:id/insight_cards"
+        }
+      ],
+      "operation": "aircall.post.v1-calls-id-insight-cards",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 calls id pause-recording",
+      "summary": "Documented POST /v1/calls/:id/pause_recording (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api post v1 calls id pause-recording --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/calls/:id/pause_recording"
+        }
+      ],
+      "operation": "aircall.post.v1-calls-id-pause-recording",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 calls id resume-recording",
+      "summary": "Documented POST /v1/calls/:id/resume_recording (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api post v1 calls id resume-recording --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/calls/:id/resume_recording"
+        }
+      ],
+      "operation": "aircall.post.v1-calls-id-resume-recording",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 calls id transfers",
+      "summary": "Documented POST /v1/calls/:id/transfers (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api post v1 calls id transfers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/calls/:id/transfers"
+        }
+      ],
+      "operation": "aircall.post.v1-calls-id-transfers",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 contacts id",
+      "summary": "Documented POST /v1/contacts/:id (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api post v1 contacts id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/contacts/:id"
+        }
+      ],
+      "operation": "aircall.post.v1-contacts-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 contacts id email-details",
+      "summary": "Documented POST /v1/contacts/:id/email_details (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api post v1 contacts id email-details --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/contacts/:id/email_details"
+        }
+      ],
+      "operation": "aircall.post.v1-contacts-id-email-details",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 contacts id emails",
+      "summary": "Documented POST /v1/contacts/:id/emails (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api post v1 contacts id emails --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/contacts/:id/emails"
+        }
+      ],
+      "operation": "aircall.post.v1-contacts-id-emails",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 contacts id phone-details",
+      "summary": "Documented POST /v1/contacts/:id/phone_details (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api post v1 contacts id phone-details --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/contacts/:id/phone_details"
+        }
+      ],
+      "operation": "aircall.post.v1-contacts-id-phone-details",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 contacts id phone-numbers",
+      "summary": "Documented POST /v1/contacts/:id/phone_numbers (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api post v1 contacts id phone-numbers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/contacts/:id/phone_numbers"
+        }
+      ],
+      "operation": "aircall.post.v1-contacts-id-phone-numbers",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 conversations conversation-id group-messages",
+      "summary": "Documented POST /v1/conversations/:conversation_id/group_messages (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api post v1 conversations conversation-id group-messages --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/conversations/:conversation_id/group_messages"
+        }
+      ],
+      "operation": "aircall.post.v1-conversations-conversation-id-group-messages",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 conversations conversation-id group-messages skip-inbox",
+      "summary": "Documented POST /v1/conversations/:conversation_id/group_messages/skip_inbox (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api post v1 conversations conversation-id group-messages skip-inbox --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/conversations/:conversation_id/group_messages/skip_inbox"
+        }
+      ],
+      "operation": "aircall.post.v1-conversations-conversation-id-group-messages-skip-inbox",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 conversations conversation-id messages",
+      "summary": "Documented POST /v1/conversations/:conversation_id/messages (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api post v1 conversations conversation-id messages --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/conversations/:conversation_id/messages"
+        }
+      ],
+      "operation": "aircall.post.v1-conversations-conversation-id-messages",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 conversations conversation-id messages skip-inbox",
+      "summary": "Documented POST /v1/conversations/:conversation_id/messages/skip_inbox (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api post v1 conversations conversation-id messages skip-inbox --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/conversations/:conversation_id/messages/skip_inbox"
+        }
+      ],
+      "operation": "aircall.post.v1-conversations-conversation-id-messages-skip-inbox",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 conversations conversation-id whatsapp-messages",
+      "summary": "Documented POST /v1/conversations/:conversation_id/whatsapp_messages (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api post v1 conversations conversation-id whatsapp-messages --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/conversations/:conversation_id/whatsapp_messages"
+        }
+      ],
+      "operation": "aircall.post.v1-conversations-conversation-id-whatsapp-messages",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 conversations conversation-id whatsapp-messages skip-inbox",
+      "summary": "Documented POST /v1/conversations/:conversation_id/whatsapp_messages/skip_inbox (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api post v1 conversations conversation-id whatsapp-messages skip-inbox --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/conversations/:conversation_id/whatsapp_messages/skip_inbox"
+        }
+      ],
+      "operation": "aircall.post.v1-conversations-conversation-id-whatsapp-messages-skip-inbox",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 dialer-campaigns",
+      "summary": "Documented POST /v1/dialer_campaigns (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api post v1 dialer-campaigns --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/dialer_campaigns"
+        }
+      ],
+      "operation": "aircall.post.v1-dialer-campaigns",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 dialer-campaigns id phone-numbers",
+      "summary": "Documented POST /v1/dialer_campaigns/:id/phone_numbers (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api post v1 dialer-campaigns id phone-numbers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/dialer_campaigns/:id/phone_numbers"
+        }
+      ],
+      "operation": "aircall.post.v1-dialer-campaigns-id-phone-numbers",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 integrations disable",
+      "summary": "Documented POST /v1/integrations/disable (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api post v1 integrations disable --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/integrations/disable"
+        }
+      ],
+      "operation": "aircall.post.v1-integrations-disable",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 integrations enable",
+      "summary": "Documented POST /v1/integrations/enable (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api post v1 integrations enable --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/integrations/enable"
+        }
+      ],
+      "operation": "aircall.post.v1-integrations-enable",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 integrations name disable",
+      "summary": "Documented POST /v1/integrations/:name/disable (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api post v1 integrations name disable --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/integrations/:name/disable"
+        }
+      ],
+      "operation": "aircall.post.v1-integrations-name-disable",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 integrations name enable",
+      "summary": "Documented POST /v1/integrations/:name/enable (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api post v1 integrations name enable --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/integrations/:name/enable"
+        }
+      ],
+      "operation": "aircall.post.v1-integrations-name-enable",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 messages send whatsapp native",
+      "summary": "Documented POST /v1/messages/send/whatsapp/native (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api post v1 messages send whatsapp native --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/messages/send/whatsapp/native"
+        }
+      ],
+      "operation": "aircall.post.v1-messages-send-whatsapp-native",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 messages whatsapp send",
+      "summary": "Documented POST /v1/messages/whatsapp/send (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api post v1 messages whatsapp send --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/messages/whatsapp/send"
+        }
+      ],
+      "operation": "aircall.post.v1-messages-whatsapp-send",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 number-configurations",
+      "summary": "Documented POST /v1/number_configurations (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api post v1 number-configurations --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/number_configurations"
+        }
+      ],
+      "operation": "aircall.post.v1-number-configurations",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 numbers id messages configuration",
+      "summary": "Documented POST /v1/numbers/:id/messages/configuration (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api post v1 numbers id messages configuration --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/numbers/:id/messages/configuration"
+        }
+      ],
+      "operation": "aircall.post.v1-numbers-id-messages-configuration",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 numbers id messages group native send",
+      "summary": "Documented POST /v1/numbers/:id/messages/group/native/send (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api post v1 numbers id messages group native send --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/numbers/:id/messages/group/native/send"
+        }
+      ],
+      "operation": "aircall.post.v1-numbers-id-messages-group-native-send",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 numbers id messages group send",
+      "summary": "Documented POST /v1/numbers/:id/messages/group/send (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api post v1 numbers id messages group send --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/numbers/:id/messages/group/send"
+        }
+      ],
+      "operation": "aircall.post.v1-numbers-id-messages-group-send",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 numbers id messages native send",
+      "summary": "Documented POST /v1/numbers/:id/messages/native/send (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api post v1 numbers id messages native send --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/numbers/:id/messages/native/send"
+        }
+      ],
+      "operation": "aircall.post.v1-numbers-id-messages-native-send",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 numbers id messages send",
+      "summary": "Documented POST /v1/numbers/:id/messages/send (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api post v1 numbers id messages send --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/numbers/:id/messages/send"
+        }
+      ],
+      "operation": "aircall.post.v1-numbers-id-messages-send",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 outbound-calls agents agent-id",
+      "summary": "Documented POST /v1/outbound-calls/agents/:agent_id (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api post v1 outbound-calls agents agent-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/outbound-calls/agents/:agent_id"
+        }
+      ],
+      "operation": "aircall.post.v1-outbound-calls-agents-agent-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 users id calls",
+      "summary": "Documented POST /v1/users/:id/calls (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api post v1 users id calls --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/users/:id/calls"
+        }
+      ],
+      "operation": "aircall.post.v1-users-id-calls",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 users id dial",
+      "summary": "Documented POST /v1/users/:id/dial (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api post v1 users id dial --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/users/:id/dial"
+        }
+      ],
+      "operation": "aircall.post.v1-users-id-dial",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 users user-id dialer-campaign",
+      "summary": "Documented POST /v1/users/:user_id/dialer_campaign (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api post v1 users user-id dialer-campaign --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/users/:user_id/dialer_campaign"
+        }
+      ],
+      "operation": "aircall.post.v1-users-user-id-dialer-campaign",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 users user-id dialer-campaign phone-numbers",
+      "summary": "Documented POST /v1/users/:user_id/dialer_campaign/phone_numbers (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api post v1 users user-id dialer-campaign phone-numbers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/users/:user_id/dialer_campaign/phone_numbers"
+        }
+      ],
+      "operation": "aircall.post.v1-users-user-id-dialer-campaign-phone-numbers",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 users",
+      "summary": "Documented POST /v2/users (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api post v2 users --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/users"
+        }
+      ],
+      "operation": "aircall.post.v2-users",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v1 contacts id email-details email-id",
+      "summary": "Documented PUT /v1/contacts/:id/email_details/:email_id (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api put v1 contacts id email-details email-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v1/contacts/:id/email_details/:email_id"
+        }
+      ],
+      "operation": "aircall.put.v1-contacts-id-email-details-email-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v1 contacts id emails email-id",
+      "summary": "Documented PUT /v1/contacts/:id/emails/:email_id (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api put v1 contacts id emails email-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v1/contacts/:id/emails/:email_id"
+        }
+      ],
+      "operation": "aircall.put.v1-contacts-id-emails-email-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v1 contacts id phone-details phone-number-id",
+      "summary": "Documented PUT /v1/contacts/:id/phone_details/:phone_number_id (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api put v1 contacts id phone-details phone-number-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v1/contacts/:id/phone_details/:phone_number_id"
+        }
+      ],
+      "operation": "aircall.put.v1-contacts-id-phone-details-phone-number-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v1 contacts id phone-numbers phone-number-id",
+      "summary": "Documented PUT /v1/contacts/:id/phone_numbers/:phone_number_id (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api put v1 contacts id phone-numbers phone-number-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v1/contacts/:id/phone_numbers/:phone_number_id"
+        }
+      ],
+      "operation": "aircall.put.v1-contacts-id-phone-numbers-phone-number-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v1 numbers id",
+      "summary": "Documented PUT /v1/numbers/:id (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api put v1 numbers id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v1/numbers/:id"
+        }
+      ],
+      "operation": "aircall.put.v1-numbers-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v1 numbers id messages",
+      "summary": "Documented PUT /v1/numbers/:id/messages (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api put v1 numbers id messages --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v1/numbers/:id/messages"
+        }
+      ],
+      "operation": "aircall.put.v1-numbers-id-messages",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v1 webhooks webhook-id",
+      "summary": "Documented PUT /v1/webhooks/:webhook_id (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api put v1 webhooks webhook-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v1/webhooks/:webhook_id"
+        }
+      ],
+      "operation": "aircall.put.v1-webhooks-webhook-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v2 users id",
+      "summary": "Documented PUT /v2/users/:id (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall api put v2 users id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/users/:id"
+        }
+      ],
+      "operation": "aircall.put.v2-users-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "archive call apply",
+      "summary": "Plan and execute the archive call reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "archive_call",
+      "source_url": "https://developers.aircall.io/api-references",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm aircall archive call apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v1/calls/:id/archive"
+        }
+      ],
+      "risk": "marks a call as archived, hiding it from default call-list views; reversible via unarchive_call",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "calls list",
+      "summary": "Run the calls ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "calls",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall calls list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/calls"
+        }
+      ]
+    },
+    {
+      "path": "comment call apply",
+      "summary": "Plan and execute the comment call reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "comment_call",
+      "source_url": "https://developers.aircall.io/api-references",
+      "flags": [
+        {
+          "name": "content",
+          "type": "string",
+          "summary": "Required content record field.",
+          "maps_to": "record.content",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm aircall comment call apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/calls/:id/comments"
+        }
+      ],
+      "risk": "adds an internal comment note to a call record; visible to other agents with call access, no external side effect",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "contacts list",
+      "summary": "Run the contacts ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "contacts",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall contacts list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/contacts"
+        }
+      ]
+    },
+    {
+      "path": "create contact apply",
+      "summary": "Plan and execute the create contact reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_contact",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall create contact apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/contacts"
+        }
+      ],
+      "risk": "creates a new shared/personal directory contact; low-risk external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create tag apply",
+      "summary": "Plan and execute the create tag reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_tag",
+      "source_url": "https://developers.aircall.io/api-references",
+      "flags": [
+        {
+          "name": "color",
+          "type": "string",
+          "summary": "Required color record field.",
+          "maps_to": "record.color",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm aircall create tag apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/tags"
+        }
+      ],
+      "risk": "creates a new call-tagging label; low-risk external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create team apply",
+      "summary": "Plan and execute the create team reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_team",
+      "source_url": "https://developers.aircall.io/api-references",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm aircall create team apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/teams"
+        }
+      ],
+      "risk": "creates a new team container; low-risk external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create user apply",
+      "summary": "Plan and execute the create user reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_user",
+      "source_url": "https://developers.aircall.io/api-references",
+      "flags": [
+        {
+          "name": "email",
+          "type": "string",
+          "summary": "Required email record field.",
+          "maps_to": "record.email",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm aircall create user apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/users"
+        }
+      ],
+      "risk": "creates a new Aircall agent seat, which may consume a billable license; external mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create webhook apply",
+      "summary": "Plan and execute the create webhook reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_webhook",
+      "source_url": "https://developers.aircall.io/api-references",
+      "flags": [
+        {
+          "name": "events",
+          "type": "string_array",
+          "summary": "Required events record field.",
+          "maps_to": "record.events",
+          "required": true
+        },
+        {
+          "name": "url",
+          "type": "string",
+          "summary": "Required url record field.",
+          "maps_to": "record.url",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm aircall create webhook apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/webhooks"
+        }
+      ],
+      "risk": "registers a new outbound webhook that will POST live call/event data to an external URL of the caller's choosing; verify the target endpoint before enabling",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete contact apply",
+      "summary": "Plan and execute the delete contact reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_contact",
+      "source_url": "https://developers.aircall.io/api-references",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm aircall delete contact apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/contacts/:id"
+        }
+      ],
+      "risk": "permanently removes a directory contact; irreversible",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete tag apply",
+      "summary": "Plan and execute the delete tag reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_tag",
+      "source_url": "https://developers.aircall.io/api-references",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm aircall delete tag apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/tags/:id"
+        }
+      ],
+      "risk": "permanently removes a tag; it is un-applied from every call that previously carried it",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete team apply",
+      "summary": "Plan and execute the delete team reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_team",
+      "source_url": "https://developers.aircall.io/api-references",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm aircall delete team apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/teams/:id"
+        }
+      ],
+      "risk": "permanently removes a team; agents assigned to it lose that team's routing/membership immediately",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete user apply",
+      "summary": "Plan and execute the delete user reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_user",
+      "source_url": "https://developers.aircall.io/api-references",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm aircall delete user apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/users/:id"
+        }
+      ],
+      "risk": "permanently removes an Aircall agent seat; irreversible, frees the associated license; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete webhook apply",
+      "summary": "Plan and execute the delete webhook reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_webhook",
+      "source_url": "https://developers.aircall.io/api-references",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm aircall delete webhook apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/webhooks/:id"
+        }
+      ],
+      "risk": "permanently removes a webhook subscription; event delivery to its target URL stops immediately",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "numbers list",
+      "summary": "Run the numbers ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "numbers",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall numbers list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/numbers"
+        }
+      ]
+    },
+    {
+      "path": "remove user from team apply",
+      "summary": "Plan and execute the remove user from team reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "remove_user_from_team",
+      "source_url": "https://developers.aircall.io/api-references",
+      "flags": [
+        {
+          "name": "team_id",
+          "type": "integer",
+          "summary": "Required team id record field.",
+          "maps_to": "record.team_id",
+          "required": true
+        },
+        {
+          "name": "user_id",
+          "type": "integer",
+          "summary": "Required user id record field.",
+          "maps_to": "record.user_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm aircall remove user from team apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/teams/:team_id/users/:user_id"
+        }
+      ],
+      "risk": "removes an agent from a team, changing that agent's call routing/membership immediately",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "tag call apply",
+      "summary": "Plan and execute the tag call reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "tag_call",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall tag call apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/calls/:id/tags"
+        }
+      ],
+      "risk": "applies the given tags to a call; additive, does not remove tags already present",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "tags list",
+      "summary": "Run the tags ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tags",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall tags list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/tags"
+        }
+      ]
+    },
+    {
+      "path": "teams list",
+      "summary": "Run the teams ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "teams",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall teams list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/teams"
+        }
+      ]
+    },
+    {
+      "path": "unarchive call apply",
+      "summary": "Plan and execute the unarchive call reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "unarchive_call",
+      "source_url": "https://developers.aircall.io/api-references",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm aircall unarchive call apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v1/calls/:id/unarchive"
+        }
+      ],
+      "risk": "restores a previously archived call to default call-list views",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update contact apply",
+      "summary": "Plan and execute the update contact reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_contact",
+      "source_url": "https://developers.aircall.io/api-references",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm aircall update contact apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v1/contacts/:id"
+        }
+      ],
+      "risk": "mutates an existing contact's directory record, including its full phone_numbers/emails arrays (a partial array here replaces the previous set)",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update tag apply",
+      "summary": "Plan and execute the update tag reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_tag",
+      "source_url": "https://developers.aircall.io/api-references",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm aircall update tag apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v1/tags/:id"
+        }
+      ],
+      "risk": "renames or recolors an existing tag; a visible change everywhere the tag is already applied",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update user apply",
+      "summary": "Plan and execute the update user reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_user",
+      "source_url": "https://developers.aircall.io/api-references",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm aircall update user apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v1/users/:id"
+        }
+      ],
+      "risk": "mutates an existing agent's profile/availability; a visible change for that agent's call routing",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update webhook apply",
+      "summary": "Plan and execute the update webhook reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_webhook",
+      "source_url": "https://developers.aircall.io/api-references",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm aircall update webhook apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v1/webhooks/:id"
+        }
+      ],
+      "risk": "mutates an existing webhook's target URL, subscribed events, or active state; a changed url redirects future event deliveries to a different endpoint",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "users list",
+      "summary": "Run the users ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "users",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall users list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/users"
+        }
+      ]
+    },
+    {
+      "path": "webhooks list",
+      "summary": "Run the webhooks ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "webhooks",
+      "source_url": "https://developers.aircall.io/api-references",
+      "examples": [
+        "pm aircall webhooks list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/webhooks"
+        }
+      ]
+    }
+  ]
+}

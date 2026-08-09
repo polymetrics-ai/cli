@@ -1,11 +1,11 @@
 {
-  "authority": "CAPTAIN-ORDER-unblock-to-mergeable-20260809.md",
+  "authority": "CAPTAIN-ORDER-fast-426-terra-20260809.md",
   "counts": {
     "already_complete": 5,
-    "foundation_pending": 191,
-    "genuinely_blocked": 0,
-    "materialized_total": 205,
-    "newly_materialized": 189,
+    "foundation_pending": 217,
+    "genuinely_blocked": 195,
+    "materialized_total": 231,
+    "newly_materialized": 215,
     "rate_limits_declared": 3,
     "rate_limits_file_total": 426,
     "rate_limits_not_applicable": 1,
@@ -13,8 +13,8 @@
     "reachable": 24,
     "recovered_pilot": 4,
     "recovered_seven": 7,
-    "remaining": 221,
-    "retry_pending": 221
+    "remaining": 0,
+    "retry_pending": 0
   },
   "execution_mode": "inline_manual_gsd_fallback_single_worker",
   "phase": "cli-mass-artifact-materialize-r1",

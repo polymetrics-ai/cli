@@ -1,188 +1,96 @@
 {
-  "api": "Notion API (OpenAPI 3.1.0)",
+  "api": "Notion API (OpenAPI 3.1.0); provider artifact version: provider-published reference without an explicit version",
   "docs": "https://developers.notion.com/openapi.json",
-  "reviewed_at": "2026-08-07",
-  "operation_ledger_version": 1,
-  "scope": "Full documented-operation parity for the Notion API. 51 documented operations, re-derived 2026-08-07 from the provider's official OpenAPI 3.1.0 document at https://developers.notion.com/openapi.json: 49 HTTP operations across 34 paths plus the 2 legacy endpoints documented only under the reference nav's 'Databases (deprecated)' group. The document's 31 top-level webhooks entries are webhook EVENTS and are excluded per the sweep counting policy; Notion publishes no webhook management endpoints. Every endpoint below is partitioned exactly once.",
+  "reviewed_at": "2026-08-09",
+  "operation_ledger_version": 2,
+  "scope": "Provider-artifact inventory generated from the cited html_reference artifact (51 documented operations across 1 provider-owned source document(s)). Every documented operation is represented; existing source-surface bindings absent from the artifact are retained and flagged with present-in-surface-absent-from-artifact.",
+  "artifacts": [
+    {
+      "id": "notion-artifact-2026-08-09",
+      "url": "https://developers.notion.com/reference/intro",
+      "kind": "html_reference",
+      "version": "provider-published reference without an explicit version",
+      "retrieved_at": "2026-08-09",
+      "sha256": "012d0475f85801aaea450b4f6d30253fabee909d839afe21bd82995819aed096"
+    }
+  ],
   "endpoints": [
-    {
-      "method": "POST",
-      "path": "/v1/search (object=database)",
-      "covered_by": {
-        "stream": "databases"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v1/search (object=page)",
-      "covered_by": {
-        "stream": "pages"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v1/users",
-      "covered_by": {
-        "stream": "users"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v1/custom_emojis",
-      "covered_by": {
-        "stream": "custom_emojis"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v1/file_uploads",
-      "covered_by": {
-        "stream": "file_uploads"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v1/views",
-      "covered_by": {
-        "stream": "views"
-      }
-    },
     {
       "method": "GET",
       "path": "/v1/async_tasks/{task_id}",
+      "provenance": {
+        "artifact": "notion-artifact-2026-08-09",
+        "source_url": "https://developers.notion.com/reference/intro",
+        "source_kind": "html_reference",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "012d0475f85801aaea450b4f6d30253fabee909d839afe21bd82995819aed096",
+        "coordinate": "https://developers.notion.com/reference/intro#GET /v1/async_tasks/{task_id}"
+      },
       "covered_by": {
         "direct_read": "async-task get"
       }
     },
     {
-      "method": "GET",
-      "path": "/v1/blocks/{block_id}",
-      "covered_by": {
-        "direct_read": "block get"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v1/blocks/{block_id}/children",
-      "covered_by": {
-        "direct_read": "block children list"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v1/comments",
-      "covered_by": {
-        "direct_read": "comment list"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v1/comments/{comment_id}",
-      "covered_by": {
-        "direct_read": "comment get"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v1/data_sources/{data_source_id}",
-      "covered_by": {
-        "direct_read": "data-source get"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v1/data_sources/{data_source_id}/templates",
-      "covered_by": {
-        "direct_read": "data-source templates list"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v1/databases/{database_id}",
-      "covered_by": {
-        "direct_read": "database get"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v1/file_uploads/{file_upload_id}",
-      "covered_by": {
-        "direct_read": "file-upload get"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v1/pages/{page_id}",
-      "covered_by": {
-        "direct_read": "page get"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v1/pages/{page_id}/markdown",
-      "covered_by": {
-        "direct_read": "page markdown get"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v1/pages/{page_id}/properties/{property_id}",
-      "covered_by": {
-        "direct_read": "page property get"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v1/users/me",
-      "covered_by": {
-        "direct_read": "user me get"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v1/users/{user_id}",
-      "covered_by": {
-        "direct_read": "user get"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v1/views/{view_id}",
-      "covered_by": {
-        "direct_read": "view get"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v1/views/{view_id}/queries/{query_id}",
-      "covered_by": {
-        "direct_read": "view query results get"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v1/data_sources/{data_source_id}/query",
-      "covered_by": {
-        "direct_read": "data-source query"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v1/blocks/meeting_notes/query",
-      "covered_by": {
-        "direct_read": "meeting-note query"
-      }
-    },
-    {
       "method": "POST",
       "path": "/v1/blocks/meeting_notes",
+      "provenance": {
+        "artifact": "notion-artifact-2026-08-09",
+        "source_url": "https://developers.notion.com/reference/intro",
+        "source_kind": "html_reference",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "012d0475f85801aaea450b4f6d30253fabee909d839afe21bd82995819aed096",
+        "coordinate": "https://developers.notion.com/reference/intro#POST /v1/blocks/meeting_notes"
+      },
       "covered_by": {
         "write": "create_meeting_note"
       }
     },
     {
+      "method": "POST",
+      "path": "/v1/blocks/meeting_notes/query",
+      "provenance": {
+        "artifact": "notion-artifact-2026-08-09",
+        "source_url": "https://developers.notion.com/reference/intro",
+        "source_kind": "html_reference",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "012d0475f85801aaea450b4f6d30253fabee909d839afe21bd82995819aed096",
+        "coordinate": "https://developers.notion.com/reference/intro#POST /v1/blocks/meeting_notes/query"
+      },
+      "covered_by": {
+        "direct_read": "meeting-note query"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/blocks/{block_id}",
+      "provenance": {
+        "artifact": "notion-artifact-2026-08-09",
+        "source_url": "https://developers.notion.com/reference/intro",
+        "source_kind": "html_reference",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "012d0475f85801aaea450b4f6d30253fabee909d839afe21bd82995819aed096",
+        "coordinate": "https://developers.notion.com/reference/intro#GET /v1/blocks/{block_id}"
+      },
+      "covered_by": {
+        "direct_read": "block get"
+      }
+    },
+    {
       "method": "PATCH",
       "path": "/v1/blocks/{block_id}",
+      "provenance": {
+        "artifact": "notion-artifact-2026-08-09",
+        "source_url": "https://developers.notion.com/reference/intro",
+        "source_kind": "html_reference",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "012d0475f85801aaea450b4f6d30253fabee909d839afe21bd82995819aed096",
+        "coordinate": "https://developers.notion.com/reference/intro#PATCH /v1/blocks/{block_id}"
+      },
       "covered_by": {
         "write": "update_block"
       }
@@ -190,153 +98,394 @@
     {
       "method": "DELETE",
       "path": "/v1/blocks/{block_id}",
+      "provenance": {
+        "artifact": "notion-artifact-2026-08-09",
+        "source_url": "https://developers.notion.com/reference/intro",
+        "source_kind": "html_reference",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "012d0475f85801aaea450b4f6d30253fabee909d839afe21bd82995819aed096",
+        "coordinate": "https://developers.notion.com/reference/intro#DELETE /v1/blocks/{block_id}"
+      },
       "covered_by": {
         "write": "delete_block"
       }
     },
     {
+      "method": "GET",
+      "path": "/v1/blocks/{block_id}/children",
+      "provenance": {
+        "artifact": "notion-artifact-2026-08-09",
+        "source_url": "https://developers.notion.com/reference/intro",
+        "source_kind": "html_reference",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "012d0475f85801aaea450b4f6d30253fabee909d839afe21bd82995819aed096",
+        "coordinate": "https://developers.notion.com/reference/intro#GET /v1/blocks/{block_id}/children"
+      },
+      "covered_by": {
+        "direct_read": "block children list"
+      }
+    },
+    {
       "method": "PATCH",
       "path": "/v1/blocks/{block_id}/children",
+      "provenance": {
+        "artifact": "notion-artifact-2026-08-09",
+        "source_url": "https://developers.notion.com/reference/intro",
+        "source_kind": "html_reference",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "012d0475f85801aaea450b4f6d30253fabee909d839afe21bd82995819aed096",
+        "coordinate": "https://developers.notion.com/reference/intro#PATCH /v1/blocks/{block_id}/children"
+      },
       "covered_by": {
         "write": "append_block_children"
       }
     },
     {
+      "method": "GET",
+      "path": "/v1/comments",
+      "provenance": {
+        "artifact": "notion-artifact-2026-08-09",
+        "source_url": "https://developers.notion.com/reference/intro",
+        "source_kind": "html_reference",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "012d0475f85801aaea450b4f6d30253fabee909d839afe21bd82995819aed096",
+        "coordinate": "https://developers.notion.com/reference/intro#GET /v1/comments"
+      },
+      "covered_by": {
+        "direct_read": "comment list"
+      }
+    },
+    {
       "method": "POST",
       "path": "/v1/comments",
+      "provenance": {
+        "artifact": "notion-artifact-2026-08-09",
+        "source_url": "https://developers.notion.com/reference/intro",
+        "source_kind": "html_reference",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "012d0475f85801aaea450b4f6d30253fabee909d839afe21bd82995819aed096",
+        "coordinate": "https://developers.notion.com/reference/intro#POST /v1/comments"
+      },
       "covered_by": {
         "write": "create_comment"
       }
     },
     {
+      "method": "GET",
+      "path": "/v1/comments/{comment_id}",
+      "provenance": {
+        "artifact": "notion-artifact-2026-08-09",
+        "source_url": "https://developers.notion.com/reference/intro",
+        "source_kind": "html_reference",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "012d0475f85801aaea450b4f6d30253fabee909d839afe21bd82995819aed096",
+        "coordinate": "https://developers.notion.com/reference/intro#GET /v1/comments/{comment_id}"
+      },
+      "covered_by": {
+        "direct_read": "comment get"
+      }
+    },
+    {
       "method": "PATCH",
       "path": "/v1/comments/{comment_id}",
+      "provenance": {
+        "artifact": "notion-artifact-2026-08-09",
+        "source_url": "https://developers.notion.com/reference/intro",
+        "source_kind": "html_reference",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "012d0475f85801aaea450b4f6d30253fabee909d839afe21bd82995819aed096",
+        "coordinate": "https://developers.notion.com/reference/intro#PATCH /v1/comments/{comment_id}"
+      },
       "covered_by": {
         "write": "update_comment"
       }
     },
     {
-      "method": "PATCH",
-      "path": "/v1/comments/{comment_id} (body=markdown)",
-      "covered_by": {
-        "write": "update_comment_markdown"
-      }
-    },
-    {
       "method": "DELETE",
       "path": "/v1/comments/{comment_id}",
+      "provenance": {
+        "artifact": "notion-artifact-2026-08-09",
+        "source_url": "https://developers.notion.com/reference/intro",
+        "source_kind": "html_reference",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "012d0475f85801aaea450b4f6d30253fabee909d839afe21bd82995819aed096",
+        "coordinate": "https://developers.notion.com/reference/intro#DELETE /v1/comments/{comment_id}"
+      },
       "covered_by": {
         "write": "delete_comment"
       }
     },
     {
+      "method": "PATCH",
+      "path": "/v1/comments/{comment_id} (body=markdown)",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "notion-artifact-2026-08-09",
+        "source_url": "https://developers.notion.com/reference/intro",
+        "source_kind": "html_reference",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "012d0475f85801aaea450b4f6d30253fabee909d839afe21bd82995819aed096",
+        "coordinate": "existing-surface[PATCH /v1/comments/{comment_id} (body=markdown)]"
+      },
+      "covered_by": {
+        "write": "update_comment_markdown"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/custom_emojis",
+      "provenance": {
+        "artifact": "notion-artifact-2026-08-09",
+        "source_url": "https://developers.notion.com/reference/intro",
+        "source_kind": "html_reference",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "012d0475f85801aaea450b4f6d30253fabee909d839afe21bd82995819aed096",
+        "coordinate": "https://developers.notion.com/reference/intro#GET /v1/custom_emojis"
+      },
+      "covered_by": {
+        "stream": "custom_emojis"
+      }
+    },
+    {
       "method": "POST",
       "path": "/v1/data_sources",
+      "provenance": {
+        "artifact": "notion-artifact-2026-08-09",
+        "source_url": "https://developers.notion.com/reference/intro",
+        "source_kind": "html_reference",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "012d0475f85801aaea450b4f6d30253fabee909d839afe21bd82995819aed096",
+        "coordinate": "https://developers.notion.com/reference/intro#POST /v1/data_sources"
+      },
       "covered_by": {
         "write": "create_data_source"
       }
     },
     {
+      "method": "GET",
+      "path": "/v1/data_sources/{data_source_id}",
+      "provenance": {
+        "artifact": "notion-artifact-2026-08-09",
+        "source_url": "https://developers.notion.com/reference/intro",
+        "source_kind": "html_reference",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "012d0475f85801aaea450b4f6d30253fabee909d839afe21bd82995819aed096",
+        "coordinate": "https://developers.notion.com/reference/intro#GET /v1/data_sources/{data_source_id}"
+      },
+      "covered_by": {
+        "direct_read": "data-source get"
+      }
+    },
+    {
       "method": "PATCH",
       "path": "/v1/data_sources/{data_source_id}",
+      "provenance": {
+        "artifact": "notion-artifact-2026-08-09",
+        "source_url": "https://developers.notion.com/reference/intro",
+        "source_kind": "html_reference",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "012d0475f85801aaea450b4f6d30253fabee909d839afe21bd82995819aed096",
+        "coordinate": "https://developers.notion.com/reference/intro#PATCH /v1/data_sources/{data_source_id}"
+      },
       "covered_by": {
         "write": "update_data_source"
       }
     },
     {
       "method": "POST",
+      "path": "/v1/data_sources/{data_source_id}/query",
+      "provenance": {
+        "artifact": "notion-artifact-2026-08-09",
+        "source_url": "https://developers.notion.com/reference/intro",
+        "source_kind": "html_reference",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "012d0475f85801aaea450b4f6d30253fabee909d839afe21bd82995819aed096",
+        "coordinate": "https://developers.notion.com/reference/intro#POST /v1/data_sources/{data_source_id}/query"
+      },
+      "covered_by": {
+        "direct_read": "data-source query"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/data_sources/{data_source_id}/templates",
+      "provenance": {
+        "artifact": "notion-artifact-2026-08-09",
+        "source_url": "https://developers.notion.com/reference/intro",
+        "source_kind": "html_reference",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "012d0475f85801aaea450b4f6d30253fabee909d839afe21bd82995819aed096",
+        "coordinate": "https://developers.notion.com/reference/intro#GET /v1/data_sources/{data_source_id}/templates"
+      },
+      "covered_by": {
+        "direct_read": "data-source templates list"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/v1/databases",
+      "provenance": {
+        "artifact": "notion-artifact-2026-08-09",
+        "source_url": "https://developers.notion.com/reference/intro",
+        "source_kind": "html_reference",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "012d0475f85801aaea450b4f6d30253fabee909d839afe21bd82995819aed096",
+        "coordinate": "https://developers.notion.com/reference/intro#GET /v1/databases"
+      },
+      "operation": {
+        "model": "deprecated",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Legacy 'List databases' endpoint, documented only under the reference nav's explicit 'Databases (deprecated)' group and absent from the current OpenAPI document. Superseded by POST /v1/search, which this bundle implements as the databases stream. Source: https://developers.notion.com/reference/get-databases",
+        "notes": "named_dependency=none - provider-deprecated, superseded by POST /v1/search; artifact=https://developers.notion.com/openapi.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/databases",
+      "provenance": {
+        "artifact": "notion-artifact-2026-08-09",
+        "source_url": "https://developers.notion.com/reference/intro",
+        "source_kind": "html_reference",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "012d0475f85801aaea450b4f6d30253fabee909d839afe21bd82995819aed096",
+        "coordinate": "https://developers.notion.com/reference/intro#POST /v1/databases"
+      },
       "covered_by": {
         "write": "create_database"
       }
     },
     {
+      "method": "GET",
+      "path": "/v1/databases/{database_id}",
+      "provenance": {
+        "artifact": "notion-artifact-2026-08-09",
+        "source_url": "https://developers.notion.com/reference/intro",
+        "source_kind": "html_reference",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "012d0475f85801aaea450b4f6d30253fabee909d839afe21bd82995819aed096",
+        "coordinate": "https://developers.notion.com/reference/intro#GET /v1/databases/{database_id}"
+      },
+      "covered_by": {
+        "direct_read": "database get"
+      }
+    },
+    {
       "method": "PATCH",
       "path": "/v1/databases/{database_id}",
+      "provenance": {
+        "artifact": "notion-artifact-2026-08-09",
+        "source_url": "https://developers.notion.com/reference/intro",
+        "source_kind": "html_reference",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "012d0475f85801aaea450b4f6d30253fabee909d839afe21bd82995819aed096",
+        "coordinate": "https://developers.notion.com/reference/intro#PATCH /v1/databases/{database_id}"
+      },
       "covered_by": {
         "write": "update_database"
       }
     },
     {
       "method": "POST",
-      "path": "/v1/pages",
-      "covered_by": {
-        "write": "create_page"
+      "path": "/v1/databases/{database_id}/query",
+      "provenance": {
+        "artifact": "notion-artifact-2026-08-09",
+        "source_url": "https://developers.notion.com/reference/intro",
+        "source_kind": "html_reference",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "012d0475f85801aaea450b4f6d30253fabee909d839afe21bd82995819aed096",
+        "coordinate": "https://developers.notion.com/reference/intro#POST /v1/databases/{database_id}/query"
+      },
+      "operation": {
+        "model": "deprecated",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Legacy 'Query a database' endpoint, documented only under the reference nav's explicit 'Databases (deprecated)' group and absent from the current OpenAPI document. Superseded by POST /v1/data_sources/{data_source_id}/query, which this bundle implements as the data-source query direct read. Source: https://developers.notion.com/reference/post-database-query",
+        "notes": "named_dependency=none - provider-deprecated, superseded by the data source query; artifact=https://developers.notion.com/openapi.json"
       }
     },
     {
-      "method": "PATCH",
-      "path": "/v1/pages/{page_id}",
+      "method": "GET",
+      "path": "/v1/file_uploads",
+      "provenance": {
+        "artifact": "notion-artifact-2026-08-09",
+        "source_url": "https://developers.notion.com/reference/intro",
+        "source_kind": "html_reference",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "012d0475f85801aaea450b4f6d30253fabee909d839afe21bd82995819aed096",
+        "coordinate": "https://developers.notion.com/reference/intro#GET /v1/file_uploads"
+      },
       "covered_by": {
-        "write": "update_page"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/v1/pages/{page_id}/markdown",
-      "covered_by": {
-        "write": "update_page_markdown"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v1/pages/{page_id}/move",
-      "covered_by": {
-        "write": "move_page"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v1/pages/{page_id}/move (parent=data_source_id)",
-      "covered_by": {
-        "write": "move_page_to_data_source"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v1/views",
-      "covered_by": {
-        "write": "create_view"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/v1/views/{view_id}",
-      "covered_by": {
-        "write": "update_view"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/v1/views/{view_id}",
-      "covered_by": {
-        "write": "delete_view"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v1/views/{view_id}/queries",
-      "covered_by": {
-        "write": "create_view_query"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/v1/views/{view_id}/queries/{query_id}",
-      "covered_by": {
-        "write": "delete_view_query"
+        "stream": "file_uploads"
       }
     },
     {
       "method": "POST",
       "path": "/v1/file_uploads",
+      "provenance": {
+        "artifact": "notion-artifact-2026-08-09",
+        "source_url": "https://developers.notion.com/reference/intro",
+        "source_kind": "html_reference",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "012d0475f85801aaea450b4f6d30253fabee909d839afe21bd82995819aed096",
+        "coordinate": "https://developers.notion.com/reference/intro#POST /v1/file_uploads"
+      },
       "covered_by": {
         "write": "create_file_upload"
       }
     },
     {
+      "method": "GET",
+      "path": "/v1/file_uploads/{file_upload_id}",
+      "provenance": {
+        "artifact": "notion-artifact-2026-08-09",
+        "source_url": "https://developers.notion.com/reference/intro",
+        "source_kind": "html_reference",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "012d0475f85801aaea450b4f6d30253fabee909d839afe21bd82995819aed096",
+        "coordinate": "https://developers.notion.com/reference/intro#GET /v1/file_uploads/{file_upload_id}"
+      },
+      "covered_by": {
+        "direct_read": "file-upload get"
+      }
+    },
+    {
       "method": "POST",
       "path": "/v1/file_uploads/{file_upload_id}/complete",
+      "provenance": {
+        "artifact": "notion-artifact-2026-08-09",
+        "source_url": "https://developers.notion.com/reference/intro",
+        "source_kind": "html_reference",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "012d0475f85801aaea450b4f6d30253fabee909d839afe21bd82995819aed096",
+        "coordinate": "https://developers.notion.com/reference/intro#POST /v1/file_uploads/{file_upload_id}/complete"
+      },
       "covered_by": {
         "write": "complete_file_upload"
       }
@@ -344,79 +493,445 @@
     {
       "method": "POST",
       "path": "/v1/file_uploads/{file_upload_id}/send",
+      "provenance": {
+        "artifact": "notion-artifact-2026-08-09",
+        "source_url": "https://developers.notion.com/reference/intro",
+        "source_kind": "html_reference",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "012d0475f85801aaea450b4f6d30253fabee909d839afe21bd82995819aed096",
+        "coordinate": "https://developers.notion.com/reference/intro#POST /v1/file_uploads/{file_upload_id}/send"
+      },
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
         "reason": "Notion multipart file upload is in scope and bounded in operations.json, but execution is blocked until the shared file upload runner can bind provider paths to approved payload digests without adding connector-local runtime code.",
-        "source_url": "https://developers.notion.com/reference/upload-file",
         "notes": "named_dependency=shared file upload runner; operation_id=notion.send_file_upload; artifact=https://developers.notion.com/openapi.json"
       }
     },
     {
       "method": "POST",
-      "path": "/v1/oauth/token",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "OAuth token issuance/refresh mints a caller credential rather than moving provider data. Exposing it as a CLI command would emit a token-derived value, which this repository forbids outright. Source: https://developers.notion.com/reference/create-a-token",
-        "source_url": "https://developers.notion.com/reference/create-a-token",
-        "notes": "named_dependency=none - permanently disallowed by the no-credential-output rule; artifact=https://developers.notion.com/openapi.json"
-      }
-    },
-    {
-      "method": "POST",
       "path": "/v1/oauth/introspect",
+      "provenance": {
+        "artifact": "notion-artifact-2026-08-09",
+        "source_url": "https://developers.notion.com/reference/intro",
+        "source_kind": "html_reference",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "012d0475f85801aaea450b4f6d30253fabee909d839afe21bd82995819aed096",
+        "coordinate": "https://developers.notion.com/reference/intro#POST /v1/oauth/introspect"
+      },
       "operation": {
         "model": "disallowed",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
         "reason": "OAuth token introspection reports the caller credential's active status, scope and issue time. Its response is entirely token-derived, so it is never rendered. Source: https://developers.notion.com/reference/introspect-token",
-        "source_url": "https://developers.notion.com/reference/introspect-token",
         "notes": "named_dependency=none - permanently disallowed by the no-credential-output rule; artifact=https://developers.notion.com/openapi.json"
       }
     },
     {
       "method": "POST",
       "path": "/v1/oauth/revoke",
+      "provenance": {
+        "artifact": "notion-artifact-2026-08-09",
+        "source_url": "https://developers.notion.com/reference/intro",
+        "source_kind": "html_reference",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "012d0475f85801aaea450b4f6d30253fabee909d839afe21bd82995819aed096",
+        "coordinate": "https://developers.notion.com/reference/intro#POST /v1/oauth/revoke"
+      },
       "operation": {
         "model": "disallowed",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
         "reason": "OAuth token revocation is credential lifecycle, not provider data, and is handled by pm credentials rather than a connector command. Source: https://developers.notion.com/reference/revoke-token",
-        "source_url": "https://developers.notion.com/reference/revoke-token",
         "notes": "named_dependency=none - permanently disallowed by the no-credential-output rule; artifact=https://developers.notion.com/openapi.json"
       }
     },
     {
-      "method": "GET",
-      "path": "/v1/databases",
+      "method": "POST",
+      "path": "/v1/oauth/token",
+      "provenance": {
+        "artifact": "notion-artifact-2026-08-09",
+        "source_url": "https://developers.notion.com/reference/intro",
+        "source_kind": "html_reference",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "012d0475f85801aaea450b4f6d30253fabee909d839afe21bd82995819aed096",
+        "coordinate": "https://developers.notion.com/reference/intro#POST /v1/oauth/token"
+      },
       "operation": {
-        "model": "deprecated",
+        "model": "disallowed",
         "status": "blocked",
-        "risk": "low",
+        "risk": "high",
         "blocked_by_default": true,
-        "reason": "Legacy 'List databases' endpoint, documented only under the reference nav's explicit 'Databases (deprecated)' group and absent from the current OpenAPI document. Superseded by POST /v1/search, which this bundle implements as the databases stream. Source: https://developers.notion.com/reference/get-databases",
-        "source_url": "https://developers.notion.com/reference/get-databases",
-        "notes": "named_dependency=none - provider-deprecated, superseded by POST /v1/search; artifact=https://developers.notion.com/openapi.json"
+        "reason": "OAuth token issuance/refresh mints a caller credential rather than moving provider data. Exposing it as a CLI command would emit a token-derived value, which this repository forbids outright. Source: https://developers.notion.com/reference/create-a-token",
+        "notes": "named_dependency=none - permanently disallowed by the no-credential-output rule; artifact=https://developers.notion.com/openapi.json"
       }
     },
     {
       "method": "POST",
-      "path": "/v1/databases/{database_id}/query",
+      "path": "/v1/pages",
+      "provenance": {
+        "artifact": "notion-artifact-2026-08-09",
+        "source_url": "https://developers.notion.com/reference/intro",
+        "source_kind": "html_reference",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "012d0475f85801aaea450b4f6d30253fabee909d839afe21bd82995819aed096",
+        "coordinate": "https://developers.notion.com/reference/intro#POST /v1/pages"
+      },
+      "covered_by": {
+        "write": "create_page"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/pages/{page_id}",
+      "provenance": {
+        "artifact": "notion-artifact-2026-08-09",
+        "source_url": "https://developers.notion.com/reference/intro",
+        "source_kind": "html_reference",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "012d0475f85801aaea450b4f6d30253fabee909d839afe21bd82995819aed096",
+        "coordinate": "https://developers.notion.com/reference/intro#GET /v1/pages/{page_id}"
+      },
+      "covered_by": {
+        "direct_read": "page get"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/pages/{page_id}",
+      "provenance": {
+        "artifact": "notion-artifact-2026-08-09",
+        "source_url": "https://developers.notion.com/reference/intro",
+        "source_kind": "html_reference",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "012d0475f85801aaea450b4f6d30253fabee909d839afe21bd82995819aed096",
+        "coordinate": "https://developers.notion.com/reference/intro#PATCH /v1/pages/{page_id}"
+      },
+      "covered_by": {
+        "write": "update_page"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/pages/{page_id}/markdown",
+      "provenance": {
+        "artifact": "notion-artifact-2026-08-09",
+        "source_url": "https://developers.notion.com/reference/intro",
+        "source_kind": "html_reference",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "012d0475f85801aaea450b4f6d30253fabee909d839afe21bd82995819aed096",
+        "coordinate": "https://developers.notion.com/reference/intro#GET /v1/pages/{page_id}/markdown"
+      },
+      "covered_by": {
+        "direct_read": "page markdown get"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/pages/{page_id}/markdown",
+      "provenance": {
+        "artifact": "notion-artifact-2026-08-09",
+        "source_url": "https://developers.notion.com/reference/intro",
+        "source_kind": "html_reference",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "012d0475f85801aaea450b4f6d30253fabee909d839afe21bd82995819aed096",
+        "coordinate": "https://developers.notion.com/reference/intro#PATCH /v1/pages/{page_id}/markdown"
+      },
+      "covered_by": {
+        "write": "update_page_markdown"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/pages/{page_id}/move",
+      "provenance": {
+        "artifact": "notion-artifact-2026-08-09",
+        "source_url": "https://developers.notion.com/reference/intro",
+        "source_kind": "html_reference",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "012d0475f85801aaea450b4f6d30253fabee909d839afe21bd82995819aed096",
+        "coordinate": "https://developers.notion.com/reference/intro#POST /v1/pages/{page_id}/move"
+      },
+      "covered_by": {
+        "write": "move_page"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/pages/{page_id}/move (parent=data_source_id)",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "notion-artifact-2026-08-09",
+        "source_url": "https://developers.notion.com/reference/intro",
+        "source_kind": "html_reference",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "012d0475f85801aaea450b4f6d30253fabee909d839afe21bd82995819aed096",
+        "coordinate": "existing-surface[POST /v1/pages/{page_id}/move (parent=data_source_id)]"
+      },
+      "covered_by": {
+        "write": "move_page_to_data_source"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/pages/{page_id}/properties/{property_id}",
+      "provenance": {
+        "artifact": "notion-artifact-2026-08-09",
+        "source_url": "https://developers.notion.com/reference/intro",
+        "source_kind": "html_reference",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "012d0475f85801aaea450b4f6d30253fabee909d839afe21bd82995819aed096",
+        "coordinate": "https://developers.notion.com/reference/intro#GET /v1/pages/{page_id}/properties/{property_id}"
+      },
+      "covered_by": {
+        "direct_read": "page property get"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/search",
+      "provenance": {
+        "artifact": "notion-artifact-2026-08-09",
+        "source_url": "https://developers.notion.com/reference/intro",
+        "source_kind": "html_reference",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "012d0475f85801aaea450b4f6d30253fabee909d839afe21bd82995819aed096",
+        "coordinate": "https://developers.notion.com/reference/intro#POST /v1/search"
+      },
       "operation": {
-        "model": "deprecated",
+        "model": "disallowed",
         "status": "blocked",
-        "risk": "low",
+        "risk": "high",
         "blocked_by_default": true,
-        "reason": "Legacy 'Query a database' endpoint, documented only under the reference nav's explicit 'Databases (deprecated)' group and absent from the current OpenAPI document. Superseded by POST /v1/data_sources/{data_source_id}/query, which this bundle implements as the data-source query direct read. Source: https://developers.notion.com/reference/post-database-query",
-        "source_url": "https://developers.notion.com/reference/post-database-query",
-        "notes": "named_dependency=none - provider-deprecated, superseded by the data source query; artifact=https://developers.notion.com/openapi.json"
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/search (object=database)",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "notion-artifact-2026-08-09",
+        "source_url": "https://developers.notion.com/reference/intro",
+        "source_kind": "html_reference",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "012d0475f85801aaea450b4f6d30253fabee909d839afe21bd82995819aed096",
+        "coordinate": "existing-surface[POST /v1/search (object=database)]"
+      },
+      "covered_by": {
+        "stream": "databases"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/search (object=page)",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "notion-artifact-2026-08-09",
+        "source_url": "https://developers.notion.com/reference/intro",
+        "source_kind": "html_reference",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "012d0475f85801aaea450b4f6d30253fabee909d839afe21bd82995819aed096",
+        "coordinate": "existing-surface[POST /v1/search (object=page)]"
+      },
+      "covered_by": {
+        "stream": "pages"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/users",
+      "provenance": {
+        "artifact": "notion-artifact-2026-08-09",
+        "source_url": "https://developers.notion.com/reference/intro",
+        "source_kind": "html_reference",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "012d0475f85801aaea450b4f6d30253fabee909d839afe21bd82995819aed096",
+        "coordinate": "https://developers.notion.com/reference/intro#GET /v1/users"
+      },
+      "covered_by": {
+        "stream": "users"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/users/me",
+      "provenance": {
+        "artifact": "notion-artifact-2026-08-09",
+        "source_url": "https://developers.notion.com/reference/intro",
+        "source_kind": "html_reference",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "012d0475f85801aaea450b4f6d30253fabee909d839afe21bd82995819aed096",
+        "coordinate": "https://developers.notion.com/reference/intro#GET /v1/users/me"
+      },
+      "covered_by": {
+        "direct_read": "user me get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/users/{user_id}",
+      "provenance": {
+        "artifact": "notion-artifact-2026-08-09",
+        "source_url": "https://developers.notion.com/reference/intro",
+        "source_kind": "html_reference",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "012d0475f85801aaea450b4f6d30253fabee909d839afe21bd82995819aed096",
+        "coordinate": "https://developers.notion.com/reference/intro#GET /v1/users/{user_id}"
+      },
+      "covered_by": {
+        "direct_read": "user get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/views",
+      "provenance": {
+        "artifact": "notion-artifact-2026-08-09",
+        "source_url": "https://developers.notion.com/reference/intro",
+        "source_kind": "html_reference",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "012d0475f85801aaea450b4f6d30253fabee909d839afe21bd82995819aed096",
+        "coordinate": "https://developers.notion.com/reference/intro#GET /v1/views"
+      },
+      "covered_by": {
+        "stream": "views"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/views",
+      "provenance": {
+        "artifact": "notion-artifact-2026-08-09",
+        "source_url": "https://developers.notion.com/reference/intro",
+        "source_kind": "html_reference",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "012d0475f85801aaea450b4f6d30253fabee909d839afe21bd82995819aed096",
+        "coordinate": "https://developers.notion.com/reference/intro#POST /v1/views"
+      },
+      "covered_by": {
+        "write": "create_view"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/views/{view_id}",
+      "provenance": {
+        "artifact": "notion-artifact-2026-08-09",
+        "source_url": "https://developers.notion.com/reference/intro",
+        "source_kind": "html_reference",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "012d0475f85801aaea450b4f6d30253fabee909d839afe21bd82995819aed096",
+        "coordinate": "https://developers.notion.com/reference/intro#GET /v1/views/{view_id}"
+      },
+      "covered_by": {
+        "direct_read": "view get"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/views/{view_id}",
+      "provenance": {
+        "artifact": "notion-artifact-2026-08-09",
+        "source_url": "https://developers.notion.com/reference/intro",
+        "source_kind": "html_reference",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "012d0475f85801aaea450b4f6d30253fabee909d839afe21bd82995819aed096",
+        "coordinate": "https://developers.notion.com/reference/intro#PATCH /v1/views/{view_id}"
+      },
+      "covered_by": {
+        "write": "update_view"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/views/{view_id}",
+      "provenance": {
+        "artifact": "notion-artifact-2026-08-09",
+        "source_url": "https://developers.notion.com/reference/intro",
+        "source_kind": "html_reference",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "012d0475f85801aaea450b4f6d30253fabee909d839afe21bd82995819aed096",
+        "coordinate": "https://developers.notion.com/reference/intro#DELETE /v1/views/{view_id}"
+      },
+      "covered_by": {
+        "write": "delete_view"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/views/{view_id}/queries",
+      "provenance": {
+        "artifact": "notion-artifact-2026-08-09",
+        "source_url": "https://developers.notion.com/reference/intro",
+        "source_kind": "html_reference",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "012d0475f85801aaea450b4f6d30253fabee909d839afe21bd82995819aed096",
+        "coordinate": "https://developers.notion.com/reference/intro#POST /v1/views/{view_id}/queries"
+      },
+      "covered_by": {
+        "write": "create_view_query"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/views/{view_id}/queries/{query_id}",
+      "provenance": {
+        "artifact": "notion-artifact-2026-08-09",
+        "source_url": "https://developers.notion.com/reference/intro",
+        "source_kind": "html_reference",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "012d0475f85801aaea450b4f6d30253fabee909d839afe21bd82995819aed096",
+        "coordinate": "https://developers.notion.com/reference/intro#GET /v1/views/{view_id}/queries/{query_id}"
+      },
+      "covered_by": {
+        "direct_read": "view query results get"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/views/{view_id}/queries/{query_id}",
+      "provenance": {
+        "artifact": "notion-artifact-2026-08-09",
+        "source_url": "https://developers.notion.com/reference/intro",
+        "source_kind": "html_reference",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "012d0475f85801aaea450b4f6d30253fabee909d839afe21bd82995819aed096",
+        "coordinate": "https://developers.notion.com/reference/intro#DELETE /v1/views/{view_id}/queries/{query_id}"
+      },
+      "covered_by": {
+        "write": "delete_view_query"
       }
     }
   ]

@@ -1,0 +1,674 @@
+{
+  "tagline": "Run Easypromos's declared streams and reverse-ETL actions.",
+  "usage": "pm easypromos \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "api get coin-transactions promotion-id",
+        "api get coin-transactions promotion-id users user-id",
+        "api get coins promotion-id users user-id",
+        "api get organizing-brands organizing-brand-id",
+        "api get organizing-brands organizing-brand-id promotions",
+        "api get participations promotion-id participation-id",
+        "api get participations promotion-id remaining stage-id user-id",
+        "api get participations promotion-id users user-id",
+        "api get pos promotion-id",
+        "api get prizes inventory promotion-id",
+        "api get prizes promotion-id users user-id",
+        "api get promotions promotion-id",
+        "api get promotions promotion-id registration-fields",
+        "api get ranking promotion-id",
+        "api get stages promotion-id stage-id",
+        "api get users logintoken promotion-id user-id",
+        "api get users promotion-id user-id",
+        "organizing brands list",
+        "participations list",
+        "prizes list",
+        "promotions list",
+        "stages list",
+        "users list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "api delete users segments promotion-id",
+        "api post coin-transactions promotion-id",
+        "api post participations promotion-id",
+        "api post participations promotion-id check-requirement stage-id",
+        "api post participations promotion-id participate stage-id",
+        "api post participations promotion-id validate-code stage-id",
+        "api post users autologin promotion-id",
+        "api post users segments promotion-id",
+        "api put coins promotion-id"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "api delete users segments promotion-id",
+      "summary": "Documented DELETE /users/segments/{promotion_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://easypromos-apiref.redoc.ly/",
+      "examples": [
+        "pm easypromos api delete users segments promotion-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/users/segments/{promotion_id}"
+        }
+      ],
+      "operation": "easypromos.delete.users-segments-promotion-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api get coin-transactions promotion-id",
+      "summary": "Documented GET /coin_transactions/{promotion_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://easypromos-apiref.redoc.ly/",
+      "examples": [
+        "pm easypromos api get coin-transactions promotion-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/coin_transactions/{promotion_id}"
+        }
+      ],
+      "operation": "easypromos.get.coin-transactions-promotion-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get coin-transactions promotion-id users user-id",
+      "summary": "Documented GET /coin_transactions/{promotion_id}/users/{user_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://easypromos-apiref.redoc.ly/",
+      "examples": [
+        "pm easypromos api get coin-transactions promotion-id users user-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/coin_transactions/{promotion_id}/users/{user_id}"
+        }
+      ],
+      "operation": "easypromos.get.coin-transactions-promotion-id-users-user-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get coins promotion-id users user-id",
+      "summary": "Documented GET /coins/{promotion_id}/users/{user_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://easypromos-apiref.redoc.ly/",
+      "examples": [
+        "pm easypromos api get coins promotion-id users user-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/coins/{promotion_id}/users/{user_id}"
+        }
+      ],
+      "operation": "easypromos.get.coins-promotion-id-users-user-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get organizing-brands organizing-brand-id",
+      "summary": "Documented GET /organizing_brands/{organizing_brand_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://easypromos-apiref.redoc.ly/",
+      "examples": [
+        "pm easypromos api get organizing-brands organizing-brand-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/organizing_brands/{organizing_brand_id}"
+        }
+      ],
+      "operation": "easypromos.get.organizing-brands-organizing-brand-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get organizing-brands organizing-brand-id promotions",
+      "summary": "Documented GET /organizing_brands/{organizing_brand_id}/promotions (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://easypromos-apiref.redoc.ly/",
+      "examples": [
+        "pm easypromos api get organizing-brands organizing-brand-id promotions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/organizing_brands/{organizing_brand_id}/promotions"
+        }
+      ],
+      "operation": "easypromos.get.organizing-brands-organizing-brand-id-promotions",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get participations promotion-id participation-id",
+      "summary": "Documented GET /participations/{promotion_id}/{participation_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://easypromos-apiref.redoc.ly/",
+      "examples": [
+        "pm easypromos api get participations promotion-id participation-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/participations/{promotion_id}/{participation_id}"
+        }
+      ],
+      "operation": "easypromos.get.participations-promotion-id-participation-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get participations promotion-id remaining stage-id user-id",
+      "summary": "Documented GET /participations/{promotion_id}/remaining/{stage_id}/{user_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://easypromos-apiref.redoc.ly/",
+      "examples": [
+        "pm easypromos api get participations promotion-id remaining stage-id user-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/participations/{promotion_id}/remaining/{stage_id}/{user_id}"
+        }
+      ],
+      "operation": "easypromos.get.participations-promotion-id-remaining-stage-id-user-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get participations promotion-id users user-id",
+      "summary": "Documented GET /participations/{promotion_id}/users/{user_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://easypromos-apiref.redoc.ly/",
+      "examples": [
+        "pm easypromos api get participations promotion-id users user-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/participations/{promotion_id}/users/{user_id}"
+        }
+      ],
+      "operation": "easypromos.get.participations-promotion-id-users-user-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get pos promotion-id",
+      "summary": "Documented GET /pos/{promotion_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://easypromos-apiref.redoc.ly/",
+      "examples": [
+        "pm easypromos api get pos promotion-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/pos/{promotion_id}"
+        }
+      ],
+      "operation": "easypromos.get.pos-promotion-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get prizes inventory promotion-id",
+      "summary": "Documented GET /prizes/inventory/{promotion_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://easypromos-apiref.redoc.ly/",
+      "examples": [
+        "pm easypromos api get prizes inventory promotion-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/prizes/inventory/{promotion_id}"
+        }
+      ],
+      "operation": "easypromos.get.prizes-inventory-promotion-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get prizes promotion-id users user-id",
+      "summary": "Documented GET /prizes/{promotion_id}/users/{user_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://easypromos-apiref.redoc.ly/",
+      "examples": [
+        "pm easypromos api get prizes promotion-id users user-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/prizes/{promotion_id}/users/{user_id}"
+        }
+      ],
+      "operation": "easypromos.get.prizes-promotion-id-users-user-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get promotions promotion-id",
+      "summary": "Documented GET /promotions/{promotion_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://easypromos-apiref.redoc.ly/",
+      "examples": [
+        "pm easypromos api get promotions promotion-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/promotions/{promotion_id}"
+        }
+      ],
+      "operation": "easypromos.get.promotions-promotion-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get promotions promotion-id registration-fields",
+      "summary": "Documented GET /promotions/{promotion_id}/registration_fields (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://easypromos-apiref.redoc.ly/",
+      "examples": [
+        "pm easypromos api get promotions promotion-id registration-fields --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/promotions/{promotion_id}/registration_fields"
+        }
+      ],
+      "operation": "easypromos.get.promotions-promotion-id-registration-fields",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get ranking promotion-id",
+      "summary": "Documented GET /ranking/{promotion_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://easypromos-apiref.redoc.ly/",
+      "examples": [
+        "pm easypromos api get ranking promotion-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/ranking/{promotion_id}"
+        }
+      ],
+      "operation": "easypromos.get.ranking-promotion-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get stages promotion-id stage-id",
+      "summary": "Documented GET /stages/{promotion_id}/{stage_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://easypromos-apiref.redoc.ly/",
+      "examples": [
+        "pm easypromos api get stages promotion-id stage-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/stages/{promotion_id}/{stage_id}"
+        }
+      ],
+      "operation": "easypromos.get.stages-promotion-id-stage-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get users logintoken promotion-id user-id",
+      "summary": "Documented GET /users/logintoken/{promotion_id}/{user_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://easypromos-apiref.redoc.ly/",
+      "examples": [
+        "pm easypromos api get users logintoken promotion-id user-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users/logintoken/{promotion_id}/{user_id}"
+        }
+      ],
+      "operation": "easypromos.get.users-logintoken-promotion-id-user-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get users promotion-id user-id",
+      "summary": "Documented GET /users/{promotion_id}/{user_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://easypromos-apiref.redoc.ly/",
+      "examples": [
+        "pm easypromos api get users promotion-id user-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users/{promotion_id}/{user_id}"
+        }
+      ],
+      "operation": "easypromos.get.users-promotion-id-user-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api post coin-transactions promotion-id",
+      "summary": "Documented POST /coin_transactions/{promotion_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://easypromos-apiref.redoc.ly/",
+      "examples": [
+        "pm easypromos api post coin-transactions promotion-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/coin_transactions/{promotion_id}"
+        }
+      ],
+      "operation": "easypromos.post.coin-transactions-promotion-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post participations promotion-id",
+      "summary": "Documented POST /participations/{promotion_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://easypromos-apiref.redoc.ly/",
+      "examples": [
+        "pm easypromos api post participations promotion-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/participations/{promotion_id}"
+        }
+      ],
+      "operation": "easypromos.post.participations-promotion-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post participations promotion-id check-requirement stage-id",
+      "summary": "Documented POST /participations/{promotion_id}/check_requirement/{stage_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://easypromos-apiref.redoc.ly/",
+      "examples": [
+        "pm easypromos api post participations promotion-id check-requirement stage-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/participations/{promotion_id}/check_requirement/{stage_id}"
+        }
+      ],
+      "operation": "easypromos.post.participations-promotion-id-check-requirement-stage-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post participations promotion-id participate stage-id",
+      "summary": "Documented POST /participations/{promotion_id}/participate/{stage_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://easypromos-apiref.redoc.ly/",
+      "examples": [
+        "pm easypromos api post participations promotion-id participate stage-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/participations/{promotion_id}/participate/{stage_id}"
+        }
+      ],
+      "operation": "easypromos.post.participations-promotion-id-participate-stage-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post participations promotion-id validate-code stage-id",
+      "summary": "Documented POST /participations/{promotion_id}/validate_code/{stage_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://easypromos-apiref.redoc.ly/",
+      "examples": [
+        "pm easypromos api post participations promotion-id validate-code stage-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/participations/{promotion_id}/validate_code/{stage_id}"
+        }
+      ],
+      "operation": "easypromos.post.participations-promotion-id-validate-code-stage-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post users autologin promotion-id",
+      "summary": "Documented POST /users/autologin/{promotion_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://easypromos-apiref.redoc.ly/",
+      "examples": [
+        "pm easypromos api post users autologin promotion-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/users/autologin/{promotion_id}"
+        }
+      ],
+      "operation": "easypromos.post.users-autologin-promotion-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post users segments promotion-id",
+      "summary": "Documented POST /users/segments/{promotion_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://easypromos-apiref.redoc.ly/",
+      "examples": [
+        "pm easypromos api post users segments promotion-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/users/segments/{promotion_id}"
+        }
+      ],
+      "operation": "easypromos.post.users-segments-promotion-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put coins promotion-id",
+      "summary": "Documented PUT /coins/{promotion_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://easypromos-apiref.redoc.ly/",
+      "examples": [
+        "pm easypromos api put coins promotion-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/coins/{promotion_id}"
+        }
+      ],
+      "operation": "easypromos.put.coins-promotion-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "organizing brands list",
+      "summary": "Run the organizing brands ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "organizing_brands",
+      "source_url": "https://easypromos-apiref.redoc.ly/",
+      "examples": [
+        "pm easypromos organizing brands list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/organizing_brands"
+        }
+      ]
+    },
+    {
+      "path": "participations list",
+      "summary": "Run the participations ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "participations",
+      "source_url": "https://easypromos-apiref.redoc.ly/",
+      "examples": [
+        "pm easypromos participations list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/participations/{promotion_id}"
+        }
+      ]
+    },
+    {
+      "path": "prizes list",
+      "summary": "Run the prizes ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "prizes",
+      "source_url": "https://easypromos-apiref.redoc.ly/",
+      "examples": [
+        "pm easypromos prizes list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/prizes/{promotion_id}"
+        }
+      ]
+    },
+    {
+      "path": "promotions list",
+      "summary": "Run the promotions ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "promotions",
+      "source_url": "https://easypromos-apiref.redoc.ly/",
+      "examples": [
+        "pm easypromos promotions list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/promotions"
+        }
+      ]
+    },
+    {
+      "path": "stages list",
+      "summary": "Run the stages ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "stages",
+      "source_url": "https://easypromos-apiref.redoc.ly/",
+      "examples": [
+        "pm easypromos stages list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/stages/{promotion_id}"
+        }
+      ]
+    },
+    {
+      "path": "users list",
+      "summary": "Run the users ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "users",
+      "source_url": "https://easypromos-apiref.redoc.ly/",
+      "examples": [
+        "pm easypromos users list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users/{promotion_id}"
+        }
+      ]
+    }
+  ]
+}

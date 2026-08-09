@@ -32,13 +32,12 @@ const (
 	notionDocumentedPATCH      = 8
 	notionDocumentedDELETE     = 4
 
-	// Three operations are carried on two rows each, because covered_by names a
-	// single target and no bundle leaves a declared stream or write without a
-	// row: POST /v1/search (object=page and object=database),
-	// PATCH /v1/comments/{comment_id} (its two modelled union arms), and
-	// POST /v1/pages/{page_id}/move (likewise). Rows therefore exceed
-	// operations by exactly this much.
-	notionDuplicateRows = 3
+	// Four endpoint rows represent qualified bindings rather than additional
+	// provider operations. POST /v1/search has two covered stream arms plus one
+	// separately blocked generic body contract; PATCH /v1/comments/{comment_id}
+	// and POST /v1/pages/{page_id}/move each have two modelled union arms.
+	// Rows therefore exceed the 51 documented method/path operations by four.
+	notionDuplicateRows = 4
 	notionSurfaceRows   = notionDocumentedOperations + notionDuplicateRows
 )
 
@@ -51,14 +50,16 @@ func TestNotionAPISurfaceOperationLedger(t *testing.T) {
 	var surface struct {
 		OperationLedgerVersion int `json:"operation_ledger_version"`
 		Endpoints              []struct {
-			Method    string         `json:"method"`
-			Path      string         `json:"path"`
-			CoveredBy map[string]any `json:"covered_by"`
-			Excluded  map[string]any `json:"excluded"`
+			Method     string         `json:"method"`
+			Path       string         `json:"path"`
+			CoveredBy  map[string]any `json:"covered_by"`
+			Excluded   map[string]any `json:"excluded"`
+			Provenance *struct {
+				SourceURL string `json:"source_url"`
+			} `json:"provenance"`
 			Operation *struct {
 				Model            string `json:"model"`
 				Status           string `json:"status"`
-				SourceURL        string `json:"source_url"`
 				Notes            string `json:"notes"`
 				BlockedByDefault bool   `json:"blocked_by_default"`
 			} `json:"operation"`
@@ -68,8 +69,8 @@ func TestNotionAPISurfaceOperationLedger(t *testing.T) {
 		t.Fatalf("unmarshal notion api_surface.json: %v", err)
 	}
 
-	if surface.OperationLedgerVersion != 1 {
-		t.Errorf("operation_ledger_version = %d, want 1", surface.OperationLedgerVersion)
+	if surface.OperationLedgerVersion != 2 {
+		t.Errorf("operation_ledger_version = %d, want 2", surface.OperationLedgerVersion)
 	}
 	if got := len(surface.Endpoints); got != notionSurfaceRows {
 		t.Errorf("api_surface declares %d rows, want %d (%d documented operations + %d duplicate rows)",
@@ -113,7 +114,7 @@ func TestNotionAPISurfaceOperationLedger(t *testing.T) {
 			if !ep.Operation.BlockedByDefault || ep.Operation.Status != "blocked" {
 				t.Errorf("%s: operation row must be blocked_by_default with status blocked", key)
 			}
-			if strings.TrimSpace(ep.Operation.SourceURL) == "" {
+			if ep.Provenance == nil || strings.TrimSpace(ep.Provenance.SourceURL) == "" {
 				t.Errorf("%s: blocked row has no source citation", key)
 			}
 			if !strings.HasPrefix(ep.Operation.Notes, "named_dependency=") {

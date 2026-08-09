@@ -1,0 +1,208 @@
+{
+  "schema_version": 1,
+  "manifest": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-043-public-machine-manifest.json",
+  "candidates": 40,
+  "included": [],
+  "dropped": [
+    {
+      "connector": "ebay-finance",
+      "stage": "artifact_fetch",
+      "reason": "artifact cache has no ebay-finance.{json,yaml,yml,txt,md,html,htm}"
+    },
+    {
+      "connector": "countercyclical",
+      "stage": "existing_surface_evidence",
+      "reason": "existing source surface has 13 operation(s), not the immutable ledger count 12"
+    },
+    {
+      "connector": "ebay-fulfillment",
+      "stage": "artifact_fetch",
+      "reason": "artifact cache has no ebay-fulfillment.{json,yaml,yml,txt,md,html,htm}"
+    },
+    {
+      "connector": "eventzilla",
+      "stage": "existing_surface_evidence",
+      "reason": "existing source surface has 19 operation(s), not the immutable ledger count 20"
+    },
+    {
+      "connector": "datascope",
+      "stage": "existing_surface_evidence",
+      "reason": "existing source surface has 21 operation(s), not the immutable ledger count 22"
+    },
+    {
+      "connector": "appsflyer",
+      "stage": "existing_surface_evidence",
+      "reason": "existing source surface has 5 operation(s), not the immutable ledger count 23"
+    },
+    {
+      "connector": "clazar",
+      "stage": "existing_surface_evidence",
+      "reason": "existing source surface has 29 operation(s), not the immutable ledger count 28"
+    },
+    {
+      "connector": "eventee",
+      "stage": "existing_surface_evidence",
+      "reason": "existing source surface has 36 operation(s), not the immutable ledger count 30"
+    },
+    {
+      "connector": "chargedesk",
+      "stage": "existing_surface_evidence",
+      "reason": "existing source surface has 35 operation(s), not the immutable ledger count 37"
+    },
+    {
+      "connector": "drift",
+      "stage": "existing_surface_evidence",
+      "reason": "existing source surface has 38 operation(s), not the immutable ledger count 41"
+    },
+    {
+      "connector": "appfollow",
+      "stage": "existing_surface_evidence",
+      "reason": "existing source surface has 44 operation(s), not the immutable ledger count 43"
+    },
+    {
+      "connector": "finnworlds",
+      "stage": "existing_surface_evidence",
+      "reason": "existing source surface has 4 operation(s), not the immutable ledger count 45"
+    },
+    {
+      "connector": "feishu",
+      "stage": "existing_surface_evidence",
+      "reason": "existing source surface has 3 operation(s), not the immutable ledger count 47"
+    },
+    {
+      "connector": "appfigures",
+      "stage": "existing_surface_evidence",
+      "reason": "existing source surface has 41 operation(s), not the immutable ledger count 49"
+    },
+    {
+      "connector": "beamer",
+      "stage": "existing_surface_evidence",
+      "reason": "existing source surface has 47 operation(s), not the immutable ledger count 49"
+    },
+    {
+      "connector": "canny",
+      "stage": "existing_surface_evidence",
+      "reason": "existing source surface has 5 operation(s), not the immutable ledger count 51"
+    },
+    {
+      "connector": "coassemble",
+      "stage": "existing_surface_evidence",
+      "reason": "existing source surface has 38 operation(s), not the immutable ledger count 52"
+    },
+    {
+      "connector": "fastbill",
+      "stage": "existing_surface_evidence",
+      "reason": "existing source surface has 5 operation(s), not the immutable ledger count 53"
+    },
+    {
+      "connector": "breezy-hr",
+      "stage": "existing_surface_evidence",
+      "reason": "existing source surface has 54 operation(s), not the immutable ledger count 64"
+    },
+    {
+      "connector": "callrail",
+      "stage": "existing_surface_evidence",
+      "reason": "existing source surface has 75 operation(s), not the immutable ledger count 66"
+    },
+    {
+      "connector": "appcues",
+      "stage": "existing_surface_evidence",
+      "reason": "existing source surface has 71 operation(s), not the immutable ledger count 69"
+    },
+    {
+      "connector": "finage",
+      "stage": "existing_surface_evidence",
+      "reason": "existing source surface has 24 operation(s), not the immutable ledger count 72"
+    },
+    {
+      "connector": "apple-search-ads",
+      "stage": "existing_surface_evidence",
+      "reason": "existing source surface has 9 operation(s), not the immutable ledger count 73"
+    },
+    {
+      "connector": "agilecrm",
+      "stage": "existing_surface_evidence",
+      "reason": "existing source surface has 71 operation(s), not the immutable ledger count 75"
+    },
+    {
+      "connector": "aircall",
+      "stage": "existing_surface_evidence",
+      "reason": "existing source surface has 93 operation(s), not the immutable ledger count 89"
+    },
+    {
+      "connector": "chameleon",
+      "stage": "existing_surface_evidence",
+      "reason": "existing source surface has 49 operation(s), not the immutable ledger count 99"
+    },
+    {
+      "connector": "everhour",
+      "stage": "existing_surface_evidence",
+      "reason": "existing source surface has 103 operation(s), not the immutable ledger count 101"
+    },
+    {
+      "connector": "chartmogul",
+      "stage": "existing_surface_evidence",
+      "reason": "existing source surface has 101 operation(s), not the immutable ledger count 104"
+    },
+    {
+      "connector": "easypost",
+      "stage": "existing_surface_evidence",
+      "reason": "existing source surface has 112 operation(s), not the immutable ledger count 111"
+    },
+    {
+      "connector": "campaign-monitor",
+      "stage": "existing_surface_evidence",
+      "reason": "existing source surface has 106 operation(s), not the immutable ledger count 117"
+    },
+    {
+      "connector": "dixa",
+      "stage": "existing_surface_evidence",
+      "reason": "existing source surface has 4 operation(s), not the immutable ledger count 125"
+    },
+    {
+      "connector": "buildkite",
+      "stage": "existing_surface_evidence",
+      "reason": "existing source surface has 99 operation(s), not the immutable ledger count 128"
+    },
+    {
+      "connector": "castor-edc",
+      "stage": "existing_surface_evidence",
+      "reason": "existing source surface has 98 operation(s), not the immutable ledger count 172"
+    },
+    {
+      "connector": "clockify",
+      "stage": "existing_surface_evidence",
+      "reason": "existing source surface has 168 operation(s), not the immutable ledger count 175"
+    },
+    {
+      "connector": "confluence",
+      "stage": "artifact_fetch",
+      "reason": "artifact cache has no confluence.{json,yaml,yml,txt,md,html,htm}"
+    },
+    {
+      "connector": "bing-ads",
+      "stage": "existing_surface_evidence",
+      "reason": "existing source surface has 12 operation(s), not the immutable ledger count 222"
+    },
+    {
+      "connector": "discord",
+      "stage": "existing_surface_evidence",
+      "reason": "existing source surface has 7 operation(s), not the immutable ledger count 232"
+    },
+    {
+      "connector": "box",
+      "stage": "existing_surface_evidence",
+      "reason": "existing source surface has 294 operation(s), not the immutable ledger count 338"
+    },
+    {
+      "connector": "box-data-extract",
+      "stage": "existing_surface_evidence",
+      "reason": "existing source surface has 10 operation(s), not the immutable ledger count 338"
+    },
+    {
+      "connector": "fastly",
+      "stage": "existing_surface_evidence",
+      "reason": "existing source surface has 54 operation(s), not the immutable ledger count 716"
+    }
+  ]
+}
